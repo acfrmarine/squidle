@@ -1,0 +1,5 @@
+{{ object.short_name }}
+{{ object.description }}
+{{ object.associated_publications }}
+{{ object.associated_researchers }}
+{{ object.associated_research_grant }}

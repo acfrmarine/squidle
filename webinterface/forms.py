@@ -1,0 +1,83 @@
+from django import forms
+from annotations.models import POINT_METHODOLOGIES
+from annotations.models import PointAnnotationSet
+
+#class CreateCollectionForm(forms.Form):
+#    collection_name = forms.CharField(label=u'Name', widget=forms.TextInput(attrs={'placeholder': 'Enter a descriptive name'}))
+#    description = forms.CharField(label=u'Description', required=False, widget=forms.Textarea(attrs={'rows': 2, 'placeholder': 'Longer description (optional)'}))
+#    #deployment_ids = forms.CharField(label=u'Deployments', required=False, widget=forms.SelectMultiple())
+#    deployment_ids = forms.CharField(label=u'Deployments', widget=forms.SelectMultiple())
+
+class CreateCollectionForm(forms.Form):
+    collection_name = forms.CharField(label=u'Name',widget=forms.TextInput(attrs={'placeholder': 'Enter a descriptive name'}))
+    description = forms.CharField(label=u'Description', required=False, widget=forms.Textarea(attrs={'rows': 5, 'placeholder': 'Longer description (optional)'}))
+    deployment_ids = forms.CharField(widget=forms.HiddenInput(), required=False)
+    depth = forms.CharField(widget=forms.HiddenInput(), required=False)
+    altitude = forms.CharField(widget=forms.HiddenInput(), required=False)
+    date_time = forms.CharField(widget=forms.HiddenInput(), required=False)
+    bboxes = forms.CharField(widget=forms.HiddenInput(), required=False)
+
+class CreateCollectionExploreForm(forms.Form):
+    deployment_ids = forms.CharField()
+    collection_name = forms.CharField()
+    depth__gte = forms.CharField()
+    depth__lte = forms.CharField()
+    temperature__gte = forms.CharField()
+    temperature__lte = forms.CharField()
+    salinity__gte = forms.CharField()
+    salinity__lte = forms.CharField()
+    altitude__gte = forms.CharField()
+    altitude__lte = forms.CharField()
+
+#class CreateWorksetForm(forms.Form):
+#    name = forms.CharField()
+#    description = forms.CharField(required=False)
+#    ispublic = forms.BooleanField(required=False)
+#    c_id = forms.IntegerField()
+#    n = forms.IntegerField()
+
+
+class CreateWorksetFromImagelist (forms.Form) :
+    name = forms.CharField(label=u'Name', widget=forms.TextInput(attrs={'placeholder': 'Enter a descriptive name'}))
+    description = forms.CharField(label=u'Description', required=False, widget=forms.Textarea(attrs={'rows': 2, 'placeholder': 'Longer description (optional)'}))
+    imglist = forms.CharField(label=u'Image List', widget=forms.Textarea(attrs={'rows': 10, 'placeholder': 'List of image names...'}))
+    c_id = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
+
+
+class CreateWorksetForm(forms.Form):
+    name = forms.CharField(label=u'Name', widget=forms.TextInput(attrs={'placeholder': 'Enter a descriptive name'}))
+    #ispublic = forms.BooleanField(label=u'Make public?', required=False)
+    method = forms.ChoiceField(label=u'Sub-sample', choices=(('random', 'N random images'),('stratified','Every Nth image')), initial='random', help_text=u'Currently only two options. More to come including: spatial strat and GRTS, etc...')
+    n = forms.IntegerField(label=u'N', min_value=1, help_text=u'Number of images or spacing between images (depends on sub-sample method)')
+    #start_ind = forms.IntegerField(label=u'Start Index', min_value=0)
+    #stop_ind = forms.IntegerField(label=u'Stop Index', min_value=0)
+    description = forms.CharField(label=u'Description', required=False, widget=forms.Textarea(attrs={'rows': 3, 'placeholder': 'Longer description (optional)'}))
+    #method = forms.CharField(widget=forms.HiddenInput())
+    c_id = forms.IntegerField(widget=forms.HiddenInput())
+
+
+class CreatePointAnnotationSet (forms.Form):
+    collection = forms.IntegerField(widget=forms.HiddenInput())
+    owner = forms.CharField(widget=forms.HiddenInput())
+    name = forms.CharField(label=u'Name', widget=forms.TextInput(attrs={'placeholder': 'Enter a descriptive name'}))
+    methodology = forms.ChoiceField(label=u'Methodology', choices=POINT_METHODOLOGIES, initial=0, help_text=u'The method for positioning the points')
+    count = forms.IntegerField(label=u'N', min_value=1, help_text=u'Number of points')
+
+
+class CreateWorksetAndAnnotation(forms.Form):
+    name = forms.CharField(label=u'Name', widget=forms.TextInput(attrs={'placeholder': 'Enter a descriptive name'}))
+    #ispublic = forms.BooleanField(label=u'Make public?', required=False)
+    method = forms.ChoiceField(label=u'Sub-sample', choices=(('random','N random images'),('stratified','Every Nth image')), initial='random')
+    n = forms.IntegerField(label=u'N images', min_value=1)
+    methodology = forms.ChoiceField(label=u'Annotation method', choices=POINT_METHODOLOGIES, initial=0)
+    #methodology = forms.ChoiceField(label=u'Image points', choices=(0,'Random'), initial=0)
+    count = forms.IntegerField(label=u'# points', min_value=1)
+    description = forms.CharField(label=u'Description', required=False, widget=forms.Textarea(attrs={'rows': 3, 'placeholder': 'Longer description (optional)'}))
+    owner = forms.CharField(widget=forms.HiddenInput())
+    c_id = forms.IntegerField(widget=forms.HiddenInput())
+
+
+
+    #class CreatePointAnnotationSet (forms.ModelForm):
+#    class Meta:
+#        model = PointAnnotationSet

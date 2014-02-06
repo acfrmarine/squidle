@@ -1,0 +1,33 @@
+{% extends 'userena/base_userena.html' %}
+{% load i18n %}
+
+{% block title %}Sign In{% endblock %}
+
+{% block content %}
+<form action="" method="post">
+  {% csrf_token %}
+  <fieldset>
+    <legend>Sign in to Catami</legend>
+    <br>
+    {{ form.non_field_errors }}
+    {% for field in form %}
+	    {{ field.errors }}
+	    {% comment %} Displaying checkboxes differently {% endcomment %}
+	    {% if field.name == 'remember_me' %}
+		    <p class="checkbox">
+		    <label for="id_{{ field.name }}">{{ field.label }}{{ field }}</label>
+		    </p>
+	    {% else %}
+		    <p>{{ field.label_tag }}{{ field }}</p>
+	    {% endif %}
+    {% endfor %}
+  </fieldset>
+  <input type="submit" value="Sign In" />
+
+  <br>
+  <p class="login-extras"><a href='{% url "userena_password_reset" %}' title="{% trans "Forgot your password?" %}"><i class="icon-angle-right"></i> {% trans "Forgot your password?" %}</a></p>
+  <p class="login-extras"><a href='{% url "userena_signup" %}' title="{% trans "Make a new account" %}"><i class="icon-angle-right"></i> {% trans "Make a new account" %}</a></p>
+
+  {% if next %}<input type="hidden" name="next" value="{{ next }}" />{% endif %}
+</form>
+{% endblock %}

@@ -1,0 +1,3563 @@
+[
+    {
+        "pk": 1,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "00000000",
+            "cpc_code": "NC",
+            "point_colour": "FFFFFF",
+            "code_name": "Not Considered",
+            "description": "Item has not been considered/looked at.",
+            "parent": null
+        }
+    },
+    {
+        "pk": 2,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80000000",
+            "cpc_code": "BIOTA",
+            "point_colour": "8F8F8F",
+            "code_name": "Biota",
+            "description": "No description.",
+            "parent": 1
+        }
+
+    },
+    {
+        "pk": 3,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80600901",
+            "cpc_code": "W",
+            "point_colour": "8F8F8F",
+            "code_name": "Worms",
+            "description": "No description.",
+            "parent": 2
+        }
+
+    },
+    {
+        "pk": 4,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "22000000",
+            "cpc_code": "WPO",
+            "point_colour": "8F8F8F",
+            "code_name": "Worms: Polychaetes",
+            "description": "No description.",
+            "parent": 3
+        }
+
+    },
+    {
+        "pk": 5,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "22000901",
+            "cpc_code": "WPOT",
+            "point_colour": "8F8F8F",
+            "code_name": "Worms: Polychaetes: Tube worms",
+            "description": "No description.",
+            "parent": 4
+        }
+
+    },
+    {
+        "pk": 6,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "22000902",
+            "cpc_code": "WPOO",
+            "point_colour": "8F8F8F",
+            "code_name": "Worms: Polychaetes: Other polychaetes",
+            "description": "No description.",
+            "parent": 4
+        }
+
+    },
+    {
+        "pk": 7,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "15400000",
+            "cpc_code": "WPE",
+            "point_colour": "8F8F8F",
+            "code_name": "Worms: Penisworms",
+            "description": "No description.",
+            "parent": 3
+        }
+
+    },
+    {
+        "pk": 8,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "13000000",
+            "cpc_code": "WF",
+            "point_colour": "8F8F8F",
+            "code_name": "Worms: Flatworms",
+            "description": "No description.",
+            "parent": 3
+        }
+
+    },
+    {
+        "pk": 9,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80600902",
+            "cpc_code": "WE",
+            "point_colour": "8F8F8F",
+            "code_name": "Worms: Echiura / Sipuncula",
+            "description": "No description.",
+            "parent": 3
+        }
+
+    },
+    {
+        "pk": 10,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "17000000",
+            "cpc_code": "WES",
+            "point_colour": "8F8F8F",
+            "code_name": "Worms: Echiura / Sipuncula: Sipuncula",
+            "description": "No description.",
+            "parent": 9
+        }
+
+    },
+    {
+        "pk": 11,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "17020000",
+            "cpc_code": "WEE",
+            "point_colour": "8F8F8F",
+            "code_name": "Worms: Echiura / Sipuncula: Echiura",
+            "description": "No description.",
+            "parent": 9
+        }
+
+    },
+    {
+        "pk": 12,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "36110000",
+            "cpc_code": "WA",
+            "point_colour": "8F8F8F",
+            "code_name": "Worms: Acorn worms",
+            "description": "No description.",
+            "parent": 3
+        }
+
+    },
+    {
+        "pk": 13,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "10000000",
+            "cpc_code": "SP",
+            "point_colour": "8F8F8F",
+            "code_name": "Sponges",
+            "description": "No description.",
+            "parent": 2
+        }
+
+    },
+    {
+        "pk": 14,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "10000903",
+            "cpc_code": "SPM",
+            "point_colour": "8F8F8F",
+            "code_name": "Sponges: Massive forms",
+            "description": "No description.",
+            "parent": 13
+        }
+
+    },
+    {
+        "pk": 15,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "10000906",
+            "cpc_code": "SPMST",
+            "point_colour": "8F8F8F",
+            "code_name": "Sponges: Massive forms: Stalked",
+            "description": "No description.",
+            "parent": 14
+        }
+
+    },
+    {
+        "pk": 16,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "10000904",
+            "cpc_code": "SPMSI",
+            "point_colour": "8F8F8F",
+            "code_name": "Sponges: Massive forms: Simple",
+            "description": "No description.",
+            "parent": 14
+        }
+
+    },
+    {
+        "pk": 17,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "10000905",
+            "cpc_code": "SPMR",
+            "point_colour": "8F8F8F",
+            "code_name": "Sponges: Massive forms: Radially organised",
+            "description": "No description.",
+            "parent": 14
+        }
+
+    },
+    {
+        "pk": 18,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "10000908",
+            "cpc_code": "SPMC",
+            "point_colour": "8F8F8F",
+            "code_name": "Sponges: Massive forms: Cryptic",
+            "description": "No description.",
+            "parent": 14
+        }
+
+    },
+    {
+        "pk": 19,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "10000907",
+            "cpc_code": "SPMB",
+            "point_colour": "8F8F8F",
+            "code_name": "Sponges: Massive forms: Barrels",
+            "description": "No description.",
+            "parent": 14
+        }
+
+    },
+    {
+        "pk": 20,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "10000909",
+            "cpc_code": "SPH",
+            "point_colour": "8F8F8F",
+            "code_name": "Sponges: Hollow forms",
+            "description": "No description.",
+            "parent": 13
+        }
+
+    },
+    {
+        "pk": 21,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "10000911",
+            "cpc_code": "SPHT",
+            "point_colour": "8F8F8F",
+            "code_name": "Sponges: Hollow forms: Tubes and chimneys",
+            "description": "No description.",
+            "parent": 20
+        }
+
+    },
+    {
+        "pk": 22,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "10000910",
+            "cpc_code": "SPHC",
+            "point_colour": "8F8F8F",
+            "code_name": "Sponges: Hollow forms: Cups and alikes",
+            "description": "No description.",
+            "parent": 20
+        }
+
+    },
+    {
+        "pk": 23,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "10000912",
+            "cpc_code": "SPE",
+            "point_colour": "8F8F8F",
+            "code_name": "Sponges: Erect forms",
+            "description": "No description.",
+            "parent": 13
+        }
+
+    },
+    {
+        "pk": 24,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "10000916",
+            "cpc_code": "SPES",
+            "point_colour": "8F8F8F",
+            "code_name": "Sponges: Erect forms: Simple",
+            "description": "No description.",
+            "parent": 23
+        }
+
+    },
+    {
+        "pk": 25,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "10000914",
+            "cpc_code": "SPEP",
+            "point_colour": "8F8F8F",
+            "code_name": "Sponges: Erect forms: Palmate",
+            "description": "No description.",
+            "parent": 23
+        }
+
+    },
+    {
+        "pk": 26,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "10000913",
+            "cpc_code": "SPEL",
+            "point_colour": "8F8F8F",
+            "code_name": "Sponges: Erect forms: Laminar",
+            "description": "No description.",
+            "parent": 23
+        }
+
+    },
+    {
+        "pk": 27,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "10000915",
+            "cpc_code": "SPEB",
+            "point_colour": "8F8F8F",
+            "code_name": "Sponges: Erect forms: Branching",
+            "description": "No description.",
+            "parent": 23
+        }
+
+    },
+    {
+        "pk": 28,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "10000901",
+            "cpc_code": "SPC",
+            "point_colour": "8F8F8F",
+            "code_name": "Sponges: Crusts",
+            "description": "No description.",
+            "parent": 13
+        }
+
+    },
+    {
+        "pk": 29,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "10000902",
+            "cpc_code": "SPCE",
+            "point_colour": "8F8F8F",
+            "code_name": "Sponges: Crusts: Encrusting",
+            "description": "No description.",
+            "parent": 28
+        }
+
+    },
+    {
+        "pk": 30,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "63600901",
+            "cpc_code": "SEAG",
+            "point_colour": "8F8F8F",
+            "code_name": "Seagrasses",
+            "description": "No description.",
+            "parent": 2
+        }
+
+    },
+    {
+        "pk": 31,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "33000000",
+            "cpc_code": "SS",
+            "point_colour": "8F8F8F",
+            "code_name": "Sea spiders",
+            "description": "No description.",
+            "parent": 2
+        }
+
+    },
+    {
+        "pk": 32,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "23000000",
+            "cpc_code": "MO",
+            "point_colour": "8F8F8F",
+            "code_name": "Molluscs",
+            "description": "No description.",
+            "parent": 2
+        }
+
+    },
+    {
+        "pk": 33,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "24000000",
+            "cpc_code": "MOG",
+            "point_colour": "8F8F8F",
+            "code_name": "Molluscs: Gastropods",
+            "description": "No description.",
+            "parent": 32
+        }
+
+    },
+    {
+        "pk": 34,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "23100000",
+            "cpc_code": "MOCH",
+            "point_colour": "8F8F8F",
+            "code_name": "Molluscs: Chitons",
+            "description": "No description.",
+            "parent": 32
+        }
+
+    },
+    {
+        "pk": 35,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "23590000",
+            "cpc_code": "MOCE",
+            "point_colour": "8F8F8F",
+            "code_name": "Molluscs: Cephalopods",
+            "description": "No description.",
+            "parent": 32
+        }
+
+    },
+    {
+        "pk": 36,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "23615000",
+            "cpc_code": "MOCES",
+            "point_colour": "8F8F8F",
+            "code_name": "Molluscs: Cephalopods: Squid",
+            "description": "No description.",
+            "parent": 35
+        }
+
+    },
+    {
+        "pk": 37,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "23650000",
+            "cpc_code": "MOCEO",
+            "point_colour": "8F8F8F",
+            "code_name": "Molluscs: Cephalopods: Octopods",
+            "description": "No description.",
+            "parent": 35
+        }
+
+    },
+    {
+        "pk": 38,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "23199000",
+            "cpc_code": "MOB",
+            "point_colour": "8F8F8F",
+            "code_name": "Molluscs: Bivalves",
+            "description": "No description.",
+            "parent": 32
+        }
+
+    },
+    {
+        "pk": 39,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300000",
+            "cpc_code": "MA",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae",
+            "description": "No description.",
+            "parent": 2
+        }
+
+    },
+    {
+        "pk": 40,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300922",
+            "cpc_code": "MAS",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Sheet-like / membraneous",
+            "description": "No description.",
+            "parent": 39
+        }
+
+    },
+    {
+        "pk": 41,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300925",
+            "cpc_code": "MASR",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Sheet-like / membraneous: Red",
+            "description": "No description.",
+            "parent": 40
+        }
+
+    },
+    {
+        "pk": 42,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300924",
+            "cpc_code": "MASG",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Sheet-like / membraneous: Green",
+            "description": "No description.",
+            "parent": 40
+        }
+
+    },
+    {
+        "pk": 43,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300923",
+            "cpc_code": "MASB",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Sheet-like / membraneous: Brown",
+            "description": "No description.",
+            "parent": 40
+        }
+
+    },
+    {
+        "pk": 44,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300901",
+            "cpc_code": "MALC",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Large canopy-forming",
+            "description": "No description.",
+            "parent": 39
+        }
+
+    },
+    {
+        "pk": 45,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300902",
+            "cpc_code": "MALCB",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Large canopy-forming: Brown",
+            "description": "No description.",
+            "parent": 44
+        }
+
+    },
+    {
+        "pk": 46,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300918",
+            "cpc_code": "MALA",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Laminate",
+            "description": "No description.",
+            "parent": 39
+        }
+
+    },
+    {
+        "pk": 47,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300921",
+            "cpc_code": "MALAR",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Laminate: Red",
+            "description": "No description.",
+            "parent": 46
+        }
+
+    },
+    {
+        "pk": 48,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300920",
+            "cpc_code": "MALAG",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Laminate: Green",
+            "description": "No description.",
+            "parent": 46
+        }
+
+    },
+    {
+        "pk": 49,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300919",
+            "cpc_code": "MALAB",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Laminate: Brown",
+            "description": "No description.",
+            "parent": 46
+        }
+
+    },
+    {
+        "pk": 50,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300914",
+            "cpc_code": "MAG",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Globose / saccate",
+            "description": "No description.",
+            "parent": 39
+        }
+
+    },
+    {
+        "pk": 51,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300917",
+            "cpc_code": "MAGR",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Globose / saccate: Red",
+            "description": "No description.",
+            "parent": 50
+        }
+
+    },
+    {
+        "pk": 52,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300916",
+            "cpc_code": "MAGG",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Globose / saccate: Green",
+            "description": "No description.",
+            "parent": 50
+        }
+
+    },
+    {
+        "pk": 53,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300915",
+            "cpc_code": "MAGB",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Globose / saccate: Brown",
+            "description": "No description.",
+            "parent": 50
+        }
+
+    },
+    {
+        "pk": 54,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300930",
+            "cpc_code": "MAF",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Filamentous / filiform",
+            "description": "No description.",
+            "parent": 39
+        }
+
+    },
+    {
+        "pk": 55,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300933",
+            "cpc_code": "MAFR",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Filamentous / filiform: Red",
+            "description": "No description.",
+            "parent": 54
+        }
+
+    },
+    {
+        "pk": 56,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300932",
+            "cpc_code": "MAFG",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Filamentous / filiform: Green",
+            "description": "No description.",
+            "parent": 54
+        }
+
+    },
+    {
+        "pk": 57,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300931",
+            "cpc_code": "MAFB",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Filamentous / filiform: Brown",
+            "description": "No description.",
+            "parent": 54
+        }
+
+    },
+    {
+        "pk": 58,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300907",
+            "cpc_code": "MAEF",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Erect fine branching",
+            "description": "No description.",
+            "parent": 39
+        }
+
+    },
+    {
+        "pk": 59,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300910",
+            "cpc_code": "MAEFR",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Erect fine branching: Red",
+            "description": "No description.",
+            "parent": 58
+        }
+
+    },
+    {
+        "pk": 60,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300909",
+            "cpc_code": "MAEFG",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Erect fine branching: Green",
+            "description": "No description.",
+            "parent": 58
+        }
+
+    },
+    {
+        "pk": 61,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300908",
+            "cpc_code": "MAEFB",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Erect fine branching: Brown",
+            "description": "No description.",
+            "parent": 58
+        }
+
+    },
+    {
+        "pk": 62,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300903",
+            "cpc_code": "MAEC",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Erect coarse branching",
+            "description": "No description.",
+            "parent": 39
+        }
+
+    },
+    {
+        "pk": 63,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300906",
+            "cpc_code": "MAECR",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Erect coarse branching: Red",
+            "description": "No description.",
+            "parent": 62
+        }
+
+    },
+    {
+        "pk": 64,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300905",
+            "cpc_code": "MAECG",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Erect coarse branching: Green",
+            "description": "No description.",
+            "parent": 62
+        }
+
+    },
+    {
+        "pk": 65,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300904",
+            "cpc_code": "MAECB",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Erect coarse branching: Brown",
+            "description": "No description.",
+            "parent": 62
+        }
+
+    },
+    {
+        "pk": 66,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300926",
+            "cpc_code": "MAEN",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Encrusting",
+            "description": "No description.",
+            "parent": 39
+        }
+
+    },
+    {
+        "pk": 67,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300929",
+            "cpc_code": "MAENR",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Encrusting: Red",
+            "description": "No description.",
+            "parent": 66
+        }
+
+    },
+    {
+        "pk": 68,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300928",
+            "cpc_code": "MAENG",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Encrusting: Green",
+            "description": "No description.",
+            "parent": 66
+        }
+
+    },
+    {
+        "pk": 69,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300927",
+            "cpc_code": "MAENB",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Encrusting: Brown",
+            "description": "No description.",
+            "parent": 66
+        }
+
+    },
+    {
+        "pk": 70,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300911",
+            "cpc_code": "MAA",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Articulated calcareous",
+            "description": "No description.",
+            "parent": 39
+        }
+
+    },
+    {
+        "pk": 71,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300913",
+            "cpc_code": "MAAR",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Articulated calcareous: Red",
+            "description": "No description.",
+            "parent": 70
+        }
+
+    },
+    {
+        "pk": 72,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80300912",
+            "cpc_code": "MAAG",
+            "point_colour": "8F8F8F",
+            "code_name": "Macroalgae: Articulated calcareous: Green",
+            "description": "No description.",
+            "parent": 70
+        }
+
+    },
+    {
+        "pk": 73,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "80600903",
+            "cpc_code": "J",
+            "point_colour": "8F8F8F",
+            "code_name": "Jellies",
+            "description": "No description.",
+            "parent": 2
+        }
+
+    },
+    {
+        "pk": 74,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11090000",
+            "cpc_code": "JSI",
+            "point_colour": "8F8F8F",
+            "code_name": "Jellies: Siphonophores",
+            "description": "No description.",
+            "parent": 73
+        }
+
+    },
+    {
+        "pk": 75,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11120000",
+            "cpc_code": "JSC",
+            "point_colour": "8F8F8F",
+            "code_name": "Jellies: Scyphozoa",
+            "description": "No description.",
+            "parent": 73
+        }
+
+    },
+    {
+        "pk": 76,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "35100000",
+            "cpc_code": "JSA",
+            "point_colour": "8F8F8F",
+            "code_name": "Jellies: Salps",
+            "description": "No description.",
+            "parent": 73
+        }
+
+    },
+    {
+        "pk": 77,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "35101000",
+            "cpc_code": "JP",
+            "point_colour": "8F8F8F",
+            "code_name": "Jellies: Pyrosomes",
+            "description": "No description.",
+            "parent": 73
+        }
+
+    },
+    {
+        "pk": 78,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11000901",
+            "cpc_code": "JH",
+            "point_colour": "8F8F8F",
+            "code_name": "Jellies: Hydromedusae",
+            "description": "No description.",
+            "parent": 73
+        }
+
+    },
+    {
+        "pk": 79,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11150000",
+            "cpc_code": "JCU",
+            "point_colour": "8F8F8F",
+            "code_name": "Jellies: Cubozoa",
+            "description": "No description.",
+            "parent": 73
+        }
+
+    },
+    {
+        "pk": 80,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "12000000",
+            "cpc_code": "JCT",
+            "point_colour": "8F8F8F",
+            "code_name": "Jellies: Ctenophores",
+            "description": "No description.",
+            "parent": 73
+        }
+
+    },
+    {
+        "pk": 81,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "37000000",
+            "cpc_code": "F",
+            "point_colour": "8F8F8F",
+            "code_name": "Fishes",
+            "description": "No description.",
+            "parent": 2
+        }
+
+    },
+    {
+        "pk": 82,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "37990082",
+            "cpc_code": "FEL",
+            "point_colour": "8F8F8F",
+            "code_name": "Fishes: Elasmobranchs",
+            "description": "No description.",
+            "parent": 81
+        }
+
+    },
+    {
+        "pk": 83,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "37990016",
+            "cpc_code": "FELS",
+            "point_colour": "8F8F8F",
+            "code_name": "Fishes: Elasmobranchs: Sharks",
+            "description": "No description.",
+            "parent": 82
+        }
+
+    },
+    {
+        "pk": 84,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "37990030",
+            "cpc_code": "FELR",
+            "point_colour": "8F8F8F",
+            "code_name": "Fishes: Elasmobranchs: Rays & skates",
+            "description": "No description.",
+            "parent": 82
+        }
+
+    },
+    {
+        "pk": 85,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "37990028",
+            "cpc_code": "FELC",
+            "point_colour": "8F8F8F",
+            "code_name": "Fishes: Elasmobranchs: Chimaeras",
+            "description": "No description.",
+            "parent": 82
+        }
+
+    },
+    {
+        "pk": 86,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "37990025",
+            "cpc_code": "FEE",
+            "point_colour": "8F8F8F",
+            "code_name": "Fishes: Eels",
+            "description": "No description.",
+            "parent": 81
+        }
+
+    },
+    {
+        "pk": 87,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "37990083",
+            "cpc_code": "FB",
+            "point_colour": "8F8F8F",
+            "code_name": "Fishes: Bony fishes",
+            "description": "No description.",
+            "parent": 81
+        }
+
+    },
+    {
+        "pk": 88,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "25000000",
+            "cpc_code": "E",
+            "point_colour": "8F8F8F",
+            "code_name": "Echinoderms",
+            "description": "No description.",
+            "parent": 2
+        }
+
+    },
+    {
+        "pk": 89,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "25200000",
+            "cpc_code": "ESU",
+            "point_colour": "8F8F8F",
+            "code_name": "Echinoderms: Sea urchins",
+            "description": "No description.",
+            "parent": 88
+        }
+
+    },
+    {
+        "pk": 90,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "25200901",
+            "cpc_code": "ESUR",
+            "point_colour": "8F8F8F",
+            "code_name": "Echinoderms: Sea urchins: Regular urchins",
+            "description": "No description.",
+            "parent": 89
+        }
+
+    },
+    {
+        "pk": 91,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "25200902",
+            "cpc_code": "ESUI",
+            "point_colour": "8F8F8F",
+            "code_name": "Echinoderms: Sea urchins: Irregular urchins",
+            "description": "No description.",
+            "parent": 89
+        }
+
+    },
+    {
+        "pk": 92,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "25102000",
+            "cpc_code": "ESS",
+            "point_colour": "8F8F8F",
+            "code_name": "Echinoderms: Sea stars",
+            "description": "No description.",
+            "parent": 88
+        }
+
+    },
+    {
+        "pk": 93,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "25400000",
+            "cpc_code": "ESC",
+            "point_colour": "8F8F8F",
+            "code_name": "Echinoderms: Sea cucumbers",
+            "description": "No description.",
+            "parent": 88
+        }
+
+    },
+    {
+        "pk": 94,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "25400902",
+            "cpc_code": "ESCP",
+            "point_colour": "8F8F8F",
+            "code_name": "Echinoderms: Sea cucumbers: Pelagic / swimming",
+            "description": "No description.",
+            "parent": 93
+        }
+
+    },
+    {
+        "pk": 95,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "25400901",
+            "cpc_code": "ESCB",
+            "point_colour": "8F8F8F",
+            "code_name": "Echinoderms: Sea cucumbers: Benthic",
+            "description": "No description.",
+            "parent": 93
+        }
+
+    },
+    {
+        "pk": 96,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "25160000",
+            "cpc_code": "EO",
+            "point_colour": "8F8F8F",
+            "code_name": "Echinoderms: Ophiuroids",
+            "description": "No description.",
+            "parent": 88
+        }
+
+    },
+    {
+        "pk": 97,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "25160901",
+            "cpc_code": "EOBSS",
+            "point_colour": "8F8F8F",
+            "code_name": "Echinoderms: Ophiuroids: Brittle / snake stars",
+            "description": "No description.",
+            "parent": 96
+        }
+
+    },
+    {
+        "pk": 98,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "25160902",
+            "cpc_code": "EOBS",
+            "point_colour": "8F8F8F",
+            "code_name": "Echinoderms: Ophiuroids: Basket stars",
+            "description": "No description.",
+            "parent": 96
+        }
+
+    },
+    {
+        "pk": 99,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "25001000",
+            "cpc_code": "EF",
+            "point_colour": "8F8F8F",
+            "code_name": "Echinoderms: Feather stars",
+            "description": "No description.",
+            "parent": 88
+        }
+
+    },
+    {
+        "pk": 100,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "25001902",
+            "cpc_code": "EFU",
+            "point_colour": "8F8F8F",
+            "code_name": "Echinoderms: Feather stars: Unstalked crinoids",
+            "description": "No description.",
+            "parent": 99
+        }
+
+    },
+    {
+        "pk": 101,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "25001901",
+            "cpc_code": "EFS",
+            "point_colour": "8F8F8F",
+            "code_name": "Echinoderms: Feather stars: Stalked crinoids",
+            "description": "No description.",
+            "parent": 99
+        }
+
+    },
+    {
+        "pk": 102,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "27000000",
+            "cpc_code": "CR",
+            "point_colour": "8F8F8F",
+            "code_name": "Crustacea",
+            "description": "No description.",
+            "parent": 2
+        }
+
+    },
+    {
+        "pk": 103,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "28000901",
+            "cpc_code": "CRP",
+            "point_colour": "8F8F8F",
+            "code_name": "Crustacea: Prawns / shrimps / mysids",
+            "description": "No description.",
+            "parent": 102
+        }
+
+    },
+    {
+        "pk": 104,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "28000902",
+            "cpc_code": "CRL",
+            "point_colour": "8F8F8F",
+            "code_name": "Crustacea: Lobsters",
+            "description": "No description.",
+            "parent": 102
+        }
+
+    },
+    {
+        "pk": 105,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "28786000",
+            "cpc_code": "CRLT",
+            "point_colour": "8F8F8F",
+            "code_name": "Crustacea: Lobsters: True lobsters",
+            "description": "No description.",
+            "parent": 104
+        }
+
+    },
+    {
+        "pk": 106,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "28825904",
+            "cpc_code": "CRLSQ",
+            "point_colour": "8F8F8F",
+            "code_name": "Crustacea: Lobsters: Squat lobsters",
+            "description": "No description.",
+            "parent": 104
+        }
+
+    },
+    {
+        "pk": 107,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "28821000",
+            "cpc_code": "CRLSL",
+            "point_colour": "8F8F8F",
+            "code_name": "Crustacea: Lobsters: Slipper lobsters / bugs",
+            "description": "No description.",
+            "parent": 104
+        }
+
+    },
+    {
+        "pk": 108,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "28820000",
+            "cpc_code": "CRLR",
+            "point_colour": "8F8F8F",
+            "code_name": "Crustacea: Lobsters: Rock lobsters",
+            "description": "No description.",
+            "parent": 104
+        }
+
+    },
+    {
+        "pk": 109,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "28825901",
+            "cpc_code": "CRH",
+            "point_colour": "8F8F8F",
+            "code_name": "Crustacea: Hermit crabs",
+            "description": "No description.",
+            "parent": 102
+        }
+
+    },
+    {
+        "pk": 110,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "28825903",
+            "cpc_code": "CRHWZ",
+            "point_colour": "8F8F8F",
+            "code_name": "Crustacea: Hermit crabs: With zoanthid",
+            "description": "No description.",
+            "parent": 109
+        }
+
+    },
+    {
+        "pk": 111,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "28825902",
+            "cpc_code": "CRHGS",
+            "point_colour": "8F8F8F",
+            "code_name": "Crustacea: Hermit crabs: With gastropod shell",
+            "description": "No description.",
+            "parent": 109
+        }
+
+    },
+    {
+        "pk": 112,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "28000903",
+            "cpc_code": "CRC",
+            "point_colour": "8F8F8F",
+            "code_name": "Crustacea: Crabs",
+            "description": "No description.",
+            "parent": 102
+        }
+
+    },
+    {
+        "pk": 113,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "28850000",
+            "cpc_code": "CRCT",
+            "point_colour": "8F8F8F",
+            "code_name": "Crustacea: Crabs: True crabs",
+            "description": "No description.",
+            "parent": 112
+        }
+
+    },
+    {
+        "pk": 114,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "28843000",
+            "cpc_code": "CRCP",
+            "point_colour": "8F8F8F",
+            "code_name": "Crustacea: Crabs: Porcelain crabs",
+            "description": "No description.",
+            "parent": 112
+        }
+
+    },
+    {
+        "pk": 115,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "27500000",
+            "cpc_code": "CRB",
+            "point_colour": "8F8F8F",
+            "code_name": "Crustacea: Barnacles",
+            "description": "No description.",
+            "parent": 102
+        }
+
+    },
+    {
+        "pk": 116,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "27500901",
+            "cpc_code": "CRBS",
+            "point_colour": "8F8F8F",
+            "code_name": "Crustacea: Barnacles: Stalked",
+            "description": "No description.",
+            "parent": 115
+        }
+
+    },
+    {
+        "pk": 117,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "27500902",
+            "cpc_code": "CRBA",
+            "point_colour": "8F8F8F",
+            "code_name": "Crustacea: Barnacles: Acorn",
+            "description": "No description.",
+            "parent": 115
+        }
+
+    },
+    {
+        "pk": 118,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11500000",
+            "cpc_code": "CN",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria",
+            "description": "No description.",
+            "parent": 2
+        }
+
+    },
+    {
+        "pk": 119,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11164000",
+            "cpc_code": "CNTU",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Tube anemones",
+            "description": "No description.",
+            "parent": 118
+        }
+
+    },
+    {
+        "pk": 120,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11229000",
+            "cpc_code": "CNTR",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: True anemones",
+            "description": "No description.",
+            "parent": 118
+        }
+
+    },
+    {
+        "pk": 121,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11229903",
+            "cpc_code": "CNTRO",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: True anemones: Other anemones",
+            "description": "No description.",
+            "parent": 120
+        }
+
+    },
+    {
+        "pk": 122,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11229902",
+            "cpc_code": "CNTFL",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: True anemones: Fourlobed",
+            "description": "No description.",
+            "parent": 120
+        }
+
+    },
+    {
+        "pk": 123,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11229901",
+            "cpc_code": "CNTFT",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: True anemones: Flytrap",
+            "description": "No description.",
+            "parent": 120
+        }
+
+    },
+    {
+        "pk": 124,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11001000",
+            "cpc_code": "CNHYD",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Hydroids",
+            "description": "No description.",
+            "parent": 118
+        }
+
+    },
+    {
+        "pk": 125,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11077000",
+            "cpc_code": "CNHYC",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Hydrocorals",
+            "description": "No description.",
+            "parent": 118
+        }
+
+    },
+    {
+        "pk": 126,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11168000",
+            "cpc_code": "C",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals",
+            "description": "No description.",
+            "parent": 118
+        }
+
+    },
+    {
+        "pk": 127,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11290000",
+            "cpc_code": "CS",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Stony corals",
+            "description": "No description.",
+            "parent": 126
+        }
+
+    },
+    {
+        "pk": 128,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11290911",
+            "cpc_code": "CST",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Stony corals: Tabulate",
+            "description": "No description.",
+            "parent": 127
+        }
+
+    },
+    {
+        "pk": 129,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11290905",
+            "cpc_code": "CSSU",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Stony corals: Sub-massive",
+            "description": "No description.",
+            "parent": 127
+        }
+
+    },
+    {
+        "pk": 130,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11290913",
+            "cpc_code": "CSST",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Stony corals: Staghorn",
+            "description": "No description.",
+            "parent": 127
+        }
+
+    },
+    {
+        "pk": 131,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11290901",
+            "cpc_code": "CSSO",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Stony corals: Solitary / mushroom",
+            "description": "No description.",
+            "parent": 127
+        }
+
+    },
+    {
+        "pk": 132,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11290902",
+            "cpc_code": "CSSOF",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Stony corals: Solitary / mushroom: Free-living",
+            "description": "No description.",
+            "parent": 131
+        }
+
+    },
+    {
+        "pk": 133,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11290903",
+            "cpc_code": "CSSOA",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Stony corals: Solitary / mushroom: Attached",
+            "description": "No description.",
+            "parent": 131
+        }
+
+    },
+    {
+        "pk": 134,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11290906",
+            "cpc_code": "CSM",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Stony corals: Massive",
+            "description": "No description.",
+            "parent": 127
+        }
+
+    },
+    {
+        "pk": 135,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11290914",
+            "cpc_code": "CSL",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Stony corals: Lattice-forming",
+            "description": "No description.",
+            "parent": 127
+        }
+
+    },
+    {
+        "pk": 136,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11290907",
+            "cpc_code": "CSF",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Stony corals: Foliose / plate",
+            "description": "No description.",
+            "parent": 127
+        }
+
+    },
+    {
+        "pk": 137,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11290908",
+            "cpc_code": "CSE",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Stony corals: Encrusting",
+            "description": "No description.",
+            "parent": 127
+        }
+
+    },
+    {
+        "pk": 138,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11290909",
+            "cpc_code": "CSD",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Stony corals: Digitate",
+            "description": "No description.",
+            "parent": 127
+        }
+
+    },
+    {
+        "pk": 139,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11290910",
+            "cpc_code": "CSCOR",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Stony corals: Corymbose",
+            "description": "No description.",
+            "parent": 127
+        }
+
+    },
+    {
+        "pk": 140,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11290915",
+            "cpc_code": "CSCOL",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Stony corals: Columnar",
+            "description": "No description.",
+            "parent": 127
+        }
+
+    },
+    {
+        "pk": 141,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11290912",
+            "cpc_code": "CSBR",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Stony corals: Branching",
+            "description": "No description.",
+            "parent": 127
+        }
+
+    },
+    {
+        "pk": 142,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11290904",
+            "cpc_code": "CSBO",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Stony corals: Bottlebrush",
+            "description": "No description.",
+            "parent": 127
+        }
+
+    },
+    {
+        "pk": 143,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11168901",
+            "cpc_code": "CB",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Black & Octocorals",
+            "description": "No description.",
+            "parent": 126
+        }
+
+    },
+    {
+        "pk": 144,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11168917",
+            "cpc_code": "CBW",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Black & Octocorals: Whip",
+            "description": "No description.",
+            "parent": 143
+        }
+
+    },
+    {
+        "pk": 145,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11168918",
+            "cpc_code": "CBQ",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Black & Octocorals: Quill (seapen)",
+            "description": "No description.",
+            "parent": 143
+        }
+
+    },
+    {
+        "pk": 146,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11168912",
+            "cpc_code": "CBF",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Black & Octocorals: Fan (2D)",
+            "description": "No description.",
+            "parent": 143
+        }
+
+    },
+    {
+        "pk": 147,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11168916",
+            "cpc_code": "CBFR",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Black & Octocorals: Fan (2D): Rigid",
+            "description": "No description.",
+            "parent": 146
+        }
+
+    },
+    {
+        "pk": 148,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11168913",
+            "cpc_code": "CBFF",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Black & Octocorals: Fan (2D): Fern-frond",
+            "description": "No description.",
+            "parent": 146
+        }
+
+    },
+    {
+        "pk": 149,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11168914",
+            "cpc_code": "CBFFS",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Black & Octocorals: Fan (2D): Fern-frond: Simple",
+            "description": "No description.",
+            "parent": 148
+        }
+
+    },
+    {
+        "pk": 150,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11168915",
+            "cpc_code": "CBFFC",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Black & Octocorals: Fan (2D): Fern-frond: Complex",
+            "description": "No description.",
+            "parent": 148
+        }
+
+    },
+    {
+        "pk": 151,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11168919",
+            "cpc_code": "CBE",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Black & Octocorals: Encrusting",
+            "description": "No description.",
+            "parent": 143
+        }
+
+    },
+    {
+        "pk": 152,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11168902",
+            "cpc_code": "CBB",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Black & Octocorals: Branching (3D)",
+            "description": "No description.",
+            "parent": 143
+        }
+
+    },
+    {
+        "pk": 153,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11168903",
+            "cpc_code": "CBBN",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Black & Octocorals: Branching (3D): Non-fleshy",
+            "description": "No description.",
+            "parent": 152
+        }
+
+    },
+    {
+        "pk": 154,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11168908",
+            "cpc_code": "CBNBU",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Black & Octocorals: Branching (3D): Non-fleshy: Bushy",
+            "description": "No description.",
+            "parent": 153
+        }
+
+    },
+    {
+        "pk": 155,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11168905",
+            "cpc_code": "CBNB",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Black & Octocorals: Branching (3D): Non-fleshy: Bottle-brush",
+            "description": "No description.",
+            "parent": 153
+        }
+
+    },
+    {
+        "pk": 156,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11168906",
+            "cpc_code": "CBNBS",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Black & Octocorals: Branching (3D): Non-fleshy: Bottle-brush: Simple",
+            "description": "No description.",
+            "parent": 155
+        }
+
+    },
+    {
+        "pk": 157,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11168907",
+            "cpc_code": "CBNBC",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Black & Octocorals: Branching (3D): Non-fleshy: Bottle-brush: Complex",
+            "description": "No description.",
+            "parent": 155
+        }
+
+    },
+    {
+        "pk": 158,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11168904",
+            "cpc_code": "CBBNA",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Black & Octocorals: Branching (3D): Non-fleshy: Arborescent",
+            "description": "No description.",
+            "parent": 153
+        }
+
+    },
+    {
+        "pk": 159,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11168909",
+            "cpc_code": "CBBF",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Black & Octocorals: Branching (3D): Fleshy",
+            "description": "No description.",
+            "parent": 152
+        }
+
+    },
+    {
+        "pk": 160,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11168910",
+            "cpc_code": "CBBFM",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Black & Octocorals: Branching (3D): Fleshy: Mushroom",
+            "description": "No description.",
+            "parent": 159
+        }
+
+    },
+    {
+        "pk": 161,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11168911",
+            "cpc_code": "CBBFA",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Corals: Black & Octocorals: Branching (3D): Fleshy: Arborescent",
+            "description": "No description.",
+            "parent": 159
+        }
+
+    },
+    {
+        "pk": 162,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11500901",
+            "cpc_code": "CNCA",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Colonial anemones",
+            "description": "No description.",
+            "parent": 118
+        }
+
+    },
+    {
+        "pk": 163,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11284000",
+            "cpc_code": "CNCAZ",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Colonial anemones: Zoanthids",
+            "description": "No description.",
+            "parent": 162
+        }
+
+    },
+    {
+        "pk": 164,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "11280000",
+            "cpc_code": "CNCAC",
+            "point_colour": "8F8F8F",
+            "code_name": "Cnidaria: Colonial anemones: Corallimorphs",
+            "description": "No description.",
+            "parent": 162
+        }
+
+    },
+    {
+        "pk": 165,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "20000000",
+            "cpc_code": "BRY",
+            "point_colour": "8F8F8F",
+            "code_name": "Bryozoa",
+            "description": "No description.",
+            "parent": 2
+        }
+
+    },
+    {
+        "pk": 166,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "20000905",
+            "cpc_code": "BRYS",
+            "point_colour": "8F8F8F",
+            "code_name": "Bryozoa: Soft",
+            "description": "No description.",
+            "parent": 165
+        }
+
+    },
+    {
+        "pk": 167,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "20000907",
+            "cpc_code": "BRYSF",
+            "point_colour": "8F8F8F",
+            "code_name": "Bryozoa: Soft: Foliaceous",
+            "description": "No description.",
+            "parent": 166
+        }
+
+    },
+    {
+        "pk": 168,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "20000906",
+            "cpc_code": "BRYSD",
+            "point_colour": "8F8F8F",
+            "code_name": "Bryozoa: Soft: Dendroid",
+            "description": "No description.",
+            "parent": 166
+        }
+
+    },
+    {
+        "pk": 169,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "20000901",
+            "cpc_code": "BRYH",
+            "point_colour": "8F8F8F",
+            "code_name": "Bryozoa: Hard",
+            "description": "No description.",
+            "parent": 165
+        }
+
+    },
+    {
+        "pk": 170,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "20000904",
+            "cpc_code": "BRYHM",
+            "point_colour": "8F8F8F",
+            "code_name": "Bryozoa: Hard: Massive",
+            "description": "No description.",
+            "parent": 169
+        }
+
+    },
+    {
+        "pk": 171,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "20000903",
+            "cpc_code": "BRYHF",
+            "point_colour": "8F8F8F",
+            "code_name": "Bryozoa: Hard: Fenestrate",
+            "description": "No description.",
+            "parent": 169
+        }
+
+    },
+    {
+        "pk": 172,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "20000902",
+            "cpc_code": "BRYHE",
+            "point_colour": "8F8F8F",
+            "code_name": "Bryozoa: Hard: Encrusting",
+            "description": "No description.",
+            "parent": 169
+        }
+
+    },
+    {
+        "pk": 173,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "19100000",
+            "cpc_code": "BRA",
+            "point_colour": "8F8F8F",
+            "code_name": "Brachiopods",
+            "description": "No description.",
+            "parent": 2
+        }
+
+    },
+    {
+        "pk": 174,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81000000",
+            "cpc_code": "BI",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation",
+            "description": "No description.",
+            "parent": 2
+        }
+
+    },
+    {
+        "pk": 175,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81002000",
+            "cpc_code": "BIW",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Waste casts",
+            "description": "No description.",
+            "parent": 174
+        }
+
+    },
+    {
+        "pk": 176,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81002002",
+            "cpc_code": "BIWW",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Waste casts: Wavy casts",
+            "description": "No description.",
+            "parent": 175
+        }
+
+    },
+    {
+        "pk": 177,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81002008",
+            "cpc_code": "BIWSW",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Waste casts: Switchbacks",
+            "description": "No description.",
+            "parent": 175
+        }
+
+    },
+    {
+        "pk": 178,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81002007",
+            "cpc_code": "BIWSP",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Waste casts: Spirals",
+            "description": "No description.",
+            "parent": 175
+        }
+
+    },
+    {
+        "pk": 179,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81002003",
+            "cpc_code": "BIWR",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Waste casts: Round casts",
+            "description": "No description.",
+            "parent": 175
+        }
+
+    },
+    {
+        "pk": 180,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81002006",
+            "cpc_code": "BIWN",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Waste casts: Nest casts",
+            "description": "No description.",
+            "parent": 175
+        }
+
+    },
+    {
+        "pk": 181,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81002004",
+            "cpc_code": "BIWM",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Waste casts: Mounded casts",
+            "description": "No description.",
+            "parent": 175
+        }
+
+    },
+    {
+        "pk": 182,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81002005",
+            "cpc_code": "BIWCU",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Waste casts: Curly casts",
+            "description": "No description.",
+            "parent": 175
+        }
+
+    },
+    {
+        "pk": 183,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81002001",
+            "cpc_code": "BIWCO",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Waste casts: Coiled casts",
+            "description": "No description.",
+            "parent": 175
+        }
+
+    },
+    {
+        "pk": 184,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81007000",
+            "cpc_code": "BIU",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Unknown origin",
+            "description": "No description.",
+            "parent": 174
+        }
+
+    },
+    {
+        "pk": 185,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81007004",
+            "cpc_code": "BIUS",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Unknown origin: Spider",
+            "description": "No description.",
+            "parent": 184
+        }
+
+    },
+    {
+        "pk": 186,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81007002",
+            "cpc_code": "BIUR",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Unknown origin: Round pinnate",
+            "description": "No description.",
+            "parent": 184
+        }
+
+    },
+    {
+        "pk": 187,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81007007",
+            "cpc_code": "BIUP",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Unknown origin: Pogostick",
+            "description": "No description.",
+            "parent": 184
+        }
+
+    },
+    {
+        "pk": 188,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81007001",
+            "cpc_code": "BIUO",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Unknown origin: Ovoid pinnate",
+            "description": "No description.",
+            "parent": 184
+        }
+
+    },
+    {
+        "pk": 189,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81007003",
+            "cpc_code": "BIUME",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Unknown origin: Mesh",
+            "description": "No description.",
+            "parent": 184
+        }
+
+    },
+    {
+        "pk": 190,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81007005",
+            "cpc_code": "BIUMA",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Unknown origin: Matchstick",
+            "description": "No description.",
+            "parent": 184
+        }
+
+    },
+    {
+        "pk": 191,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81007006",
+            "cpc_code": "BIUF",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Unknown origin: Fern",
+            "description": "No description.",
+            "parent": 184
+        }
+
+    },
+    {
+        "pk": 192,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81003000",
+            "cpc_code": "BIR",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Resting traces",
+            "description": "No description.",
+            "parent": 174
+        }
+
+    },
+    {
+        "pk": 193,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81003001",
+            "cpc_code": "BIRU",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Resting traces: Urchin trace",
+            "description": "No description.",
+            "parent": 192
+        }
+
+    },
+    {
+        "pk": 194,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81003002",
+            "cpc_code": "BIRS",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Resting traces: Star impression",
+            "description": "No description.",
+            "parent": 192
+        }
+
+    },
+    {
+        "pk": 195,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81003003",
+            "cpc_code": "BIRL",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Resting traces: Large depression",
+            "description": "No description.",
+            "parent": 192
+        }
+
+    },
+    {
+        "pk": 196,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81006000",
+            "cpc_code": "BIO",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Organism tests",
+            "description": "No description.",
+            "parent": 174
+        }
+
+    },
+    {
+        "pk": 197,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81006001",
+            "cpc_code": "BIOL",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Organism tests: Lumpy xenophyophore",
+            "description": "No description.",
+            "parent": 196
+        }
+
+    },
+    {
+        "pk": 198,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81006002",
+            "cpc_code": "BIOG",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Organism tests: Globule xenophyophore",
+            "description": "No description.",
+            "parent": 196
+        }
+
+    },
+    {
+        "pk": 199,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81004000",
+            "cpc_code": "BIF",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Feeding traces",
+            "description": "No description.",
+            "parent": 174
+        }
+
+    },
+    {
+        "pk": 200,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81004002",
+            "cpc_code": "BIFS",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Feeding traces: Small rosette",
+            "description": "No description.",
+            "parent": 199
+        }
+
+    },
+    {
+        "pk": 201,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81004004",
+            "cpc_code": "BIFR",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Feeding traces: Rayed mound",
+            "description": "No description.",
+            "parent": 199
+        }
+
+    },
+    {
+        "pk": 202,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81004005",
+            "cpc_code": "BIFPI",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Feeding traces: Pincushion rosette",
+            "description": "No description.",
+            "parent": 199
+        }
+
+    },
+    {
+        "pk": 203,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81004003",
+            "cpc_code": "BIFPE",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Feeding traces: Petal rosette",
+            "description": "No description.",
+            "parent": 199
+        }
+
+    },
+    {
+        "pk": 204,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81004001",
+            "cpc_code": "BIFL",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Feeding traces: Large rosette",
+            "description": "No description.",
+            "parent": 199
+        }
+
+    },
+    {
+        "pk": 205,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81001000",
+            "cpc_code": "BID",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Dwelling traces",
+            "description": "No description.",
+            "parent": 174
+        }
+
+    },
+    {
+        "pk": 206,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81001008",
+            "cpc_code": "BIDV",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Dwelling traces: Vertical burrow",
+            "description": "No description.",
+            "parent": 205
+        }
+
+    },
+    {
+        "pk": 207,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81001009",
+            "cpc_code": "BIDT",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Dwelling traces: Trapdoor burrow",
+            "description": "No description.",
+            "parent": 205
+        }
+
+    },
+    {
+        "pk": 208,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81001014",
+            "cpc_code": "BIDSP",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Dwelling traces: Spotted mound",
+            "description": "No description.",
+            "parent": 205
+        }
+
+    },
+    {
+        "pk": 209,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81001011",
+            "cpc_code": "BIDSC",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Dwelling traces: Spiked crater ring",
+            "description": "No description.",
+            "parent": 205
+        }
+
+    },
+    {
+        "pk": 210,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81001003",
+            "cpc_code": "BIDSM",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Dwelling traces: Small mound",
+            "description": "No description.",
+            "parent": 205
+        }
+
+    },
+    {
+        "pk": 211,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81001006",
+            "cpc_code": "BIDSB",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Dwelling traces: Single burrow",
+            "description": "No description.",
+            "parent": 205
+        }
+
+    },
+    {
+        "pk": 212,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81001010",
+            "cpc_code": "BIDR",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Dwelling traces: Rounded crater ring",
+            "description": "No description.",
+            "parent": 205
+        }
+
+    },
+    {
+        "pk": 213,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81001007",
+            "cpc_code": "BIDP",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Dwelling traces: Paired burrow",
+            "description": "No description.",
+            "parent": 205
+        }
+
+    },
+    {
+        "pk": 214,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81001005",
+            "cpc_code": "BIDO",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Dwelling traces: Oblique burrow",
+            "description": "No description.",
+            "parent": 205
+        }
+
+    },
+    {
+        "pk": 215,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81001002",
+            "cpc_code": "BIDL",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Dwelling traces: Large mound",
+            "description": "No description.",
+            "parent": 205
+        }
+
+    },
+    {
+        "pk": 216,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81001013",
+            "cpc_code": "BIDF",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Dwelling traces: Fractured mound",
+            "description": "No description.",
+            "parent": 205
+        }
+
+    },
+    {
+        "pk": 217,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81001001",
+            "cpc_code": "BIDE",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Dwelling traces: Elongate depression",
+            "description": "No description.",
+            "parent": 205
+        }
+
+    },
+    {
+        "pk": 218,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81001012",
+            "cpc_code": "BIDC",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Dwelling traces: Crater cone",
+            "description": "No description.",
+            "parent": 205
+        }
+
+    },
+    {
+        "pk": 219,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81001004",
+            "cpc_code": "BIDB",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Dwelling traces: Burrow cluster",
+            "description": "No description.",
+            "parent": 205
+        }
+
+    },
+    {
+        "pk": 220,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81005000",
+            "cpc_code": "BIC",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Crawling traces",
+            "description": "No description.",
+            "parent": 174
+        }
+
+    },
+    {
+        "pk": 221,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81005001",
+            "cpc_code": "BICTN",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Crawling traces: Thin trail",
+            "description": "No description.",
+            "parent": 220
+        }
+
+    },
+    {
+        "pk": 222,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81005002",
+            "cpc_code": "BICTK",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Crawling traces: Thick trail",
+            "description": "No description.",
+            "parent": 220
+        }
+
+    },
+    {
+        "pk": 223,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81005005",
+            "cpc_code": "BICP",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Crawling traces: Perforated trail",
+            "description": "No description.",
+            "parent": 220
+        }
+
+    },
+    {
+        "pk": 224,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81005004",
+            "cpc_code": "BICM",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Crawling traces: Mounded trail",
+            "description": "No description.",
+            "parent": 220
+        }
+
+    },
+    {
+        "pk": 225,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81005007",
+            "cpc_code": "BICD",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Crawling traces: Disturbed trace",
+            "description": "No description.",
+            "parent": 220
+        }
+
+    },
+    {
+        "pk": 226,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81005006",
+            "cpc_code": "BICCR",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Crawling traces: Crater row",
+            "description": "No description.",
+            "parent": 220
+        }
+
+    },
+    {
+        "pk": 227,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "81005003",
+            "cpc_code": "BICCT",
+            "point_colour": "8F8F8F",
+            "code_name": "Bioturbation: Crawling traces: Complex trail",
+            "description": "No description.",
+            "parent": 220
+        }
+
+    },
+    {
+        "pk": 228,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "72000901",
+            "cpc_code": "BM",
+            "point_colour": "8F8F8F",
+            "code_name": "Bacterial mats",
+            "description": "No description.",
+            "parent": 2
+        }
+
+    },
+    {
+        "pk": 229,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "72000902",
+            "cpc_code": "BMO",
+            "point_colour": "8F8F8F",
+            "code_name": "Bacterial mats: Other",
+            "description": "No description.",
+            "parent": 228
+        }
+
+    },
+    {
+        "pk": 230,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "70000901",
+            "cpc_code": "BMC",
+            "point_colour": "8F8F8F",
+            "code_name": "Bacterial mats: Cyanobacteria",
+            "description": "No description.",
+            "parent": 228
+        }
+
+    },
+    {
+        "pk": 231,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "35000000",
+            "cpc_code": "A",
+            "point_colour": "8F8F8F",
+            "code_name": "Ascidians",
+            "description": "No description.",
+            "parent": 2
+        }
+
+    },
+    {
+        "pk": 232,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "35000901",
+            "cpc_code": "AU",
+            "point_colour": "8F8F8F",
+            "code_name": "Ascidians: Unstalked",
+            "description": "No description.",
+            "parent": 231
+        }
+
+    },
+    {
+        "pk": 233,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "35000902",
+            "cpc_code": "AUS",
+            "point_colour": "8F8F8F",
+            "code_name": "Ascidians: Unstalked: Solitary",
+            "description": "No description.",
+            "parent": 232
+        }
+
+    },
+    {
+        "pk": 234,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "35000903",
+            "cpc_code": "AUC",
+            "point_colour": "8F8F8F",
+            "code_name": "Ascidians: Unstalked: Colonial",
+            "description": "No description.",
+            "parent": 232
+        }
+
+    },
+    {
+        "pk": 235,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "35000904",
+            "cpc_code": "AS",
+            "point_colour": "8F8F8F",
+            "code_name": "Ascidians: Stalked",
+            "description": "No description.",
+            "parent": 231
+        }
+
+    },
+    {
+        "pk": 236,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "35000905",
+            "cpc_code": "ASS",
+            "point_colour": "8F8F8F",
+            "code_name": "Ascidians: Stalked: Solitary",
+            "description": "No description.",
+            "parent": 235
+        }
+
+    },
+    {
+        "pk": 237,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "35000906",
+            "cpc_code": "ASC",
+            "point_colour": "8F8F8F",
+            "code_name": "Ascidians: Stalked: Colonial",
+            "description": "No description.",
+            "parent": 235
+        }
+
+    },
+    {
+        "pk": 238,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82000000",
+            "cpc_code": "P",
+            "point_colour": "8F8F8F",
+            "code_name": "Physical",
+            "description": "No description.",
+            "parent": 1
+        }
+
+    },
+    {
+        "pk": 239,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82001000",
+            "cpc_code": "S",
+            "point_colour": "8F8F8F",
+            "code_name": "Substrate",
+            "description": "No description.",
+            "parent": 238
+        }
+
+    },
+    {
+        "pk": 240,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82001005",
+            "cpc_code": "SU",
+            "point_colour": "8F8F8F",
+            "code_name": "Substrate: Unconsolidated (soft)",
+            "description": "No description.",
+            "parent": 239
+        }
+
+    },
+    {
+        "pk": 241,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82001013",
+            "cpc_code": "SUS",
+            "point_colour": "8F8F8F",
+            "code_name": "Substrate: Unconsolidated (soft): Sand / mud (<2mm)",
+            "description": "No description.",
+            "parent": 240
+        }
+
+    },
+    {
+        "pk": 242,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82001016",
+            "cpc_code": "SUSM",
+            "point_colour": "8F8F8F",
+            "code_name": "Substrate: Unconsolidated (soft): Sand / mud (<2mm): Mud / silt (<64um)",
+            "description": "No description.",
+            "parent": 241
+        }
+
+    },
+    {
+        "pk": 243,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82001015",
+            "cpc_code": "SUSF",
+            "point_colour": "8F8F8F",
+            "code_name": "Substrate: Unconsolidated (soft): Sand / mud (<2mm): Fine sand (no shell fragments)",
+            "description": "No description.",
+            "parent": 241
+        }
+
+    },
+    {
+        "pk": 244,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82001014",
+            "cpc_code": "SUSC",
+            "point_colour": "8F8F8F",
+            "code_name": "Substrate: Unconsolidated (soft): Sand / mud (<2mm): Coarse sand (with shell fragments)",
+            "description": "No description.",
+            "parent": 241
+        }
+
+    },
+    {
+        "pk": 245,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82001006",
+            "cpc_code": "SUP",
+            "point_colour": "8F8F8F",
+            "code_name": "Substrate: Unconsolidated (soft): Pebble / gravel",
+            "description": "No description.",
+            "parent": 240
+        }
+
+    },
+    {
+        "pk": 246,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82001012",
+            "cpc_code": "SUPP",
+            "point_colour": "8F8F8F",
+            "code_name": "Substrate: Unconsolidated (soft): Pebble / gravel: Pebble (10-64mm)",
+            "description": "No description.",
+            "parent": 245
+        }
+
+    },
+    {
+        "pk": 247,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82001011",
+            "cpc_code": "SUPG",
+            "point_colour": "8F8F8F",
+            "code_name": "Substrate: Unconsolidated (soft): Pebble / gravel: Gravel (2-10mm)",
+            "description": "No description.",
+            "parent": 245
+        }
+
+    },
+    {
+        "pk": 248,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82001007",
+            "cpc_code": "SUPB",
+            "point_colour": "8F8F8F",
+            "code_name": "Substrate: Unconsolidated (soft): Pebble / gravel: Biologenic",
+            "description": "No description.",
+            "parent": 245
+        }
+
+    },
+    {
+        "pk": 249,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82001009",
+            "cpc_code": "SUPBR",
+            "point_colour": "8F8F8F",
+            "code_name": "Substrate: Unconsolidated (soft): Pebble / gravel: Biologenic: Coral rubble",
+            "description": "No description.",
+            "parent": 248
+        }
+
+    },
+    {
+        "pk": 250,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82001008",
+            "cpc_code": "SUPBC",
+            "point_colour": "8F8F8F",
+            "code_name": "Substrate: Unconsolidated (soft): Pebble / gravel: Biologenic: Coquina / shellhash",
+            "description": "No description.",
+            "parent": 248
+        }
+
+    },
+    {
+        "pk": 251,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82001010",
+            "cpc_code": "SUPBB",
+            "point_colour": "8F8F8F",
+            "code_name": "Substrate: Unconsolidated (soft): Pebble / gravel: Biologenic: Barnacle plates",
+            "description": "No description.",
+            "parent": 248
+        }
+
+    },
+    {
+        "pk": 252,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82001001",
+            "cpc_code": "SC",
+            "point_colour": "8F8F8F",
+            "code_name": "Substrate: Consolidated (hard)",
+            "description": "No description.",
+            "parent": 239
+        }
+
+    },
+    {
+        "pk": 253,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82001002",
+            "cpc_code": "SCR",
+            "point_colour": "8F8F8F",
+            "code_name": "Substrate: Consolidated (hard): Rock",
+            "description": "No description.",
+            "parent": 252
+        }
+
+    },
+    {
+        "pk": 254,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82001004",
+            "cpc_code": "SCC",
+            "point_colour": "8F8F8F",
+            "code_name": "Substrate: Consolidated (hard): Cobbles",
+            "description": "No description.",
+            "parent": 252
+        }
+
+    },
+    {
+        "pk": 255,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82001003",
+            "cpc_code": "SCB",
+            "point_colour": "8F8F8F",
+            "code_name": "Substrate: Consolidated (hard): Boulders",
+            "description": "No description.",
+            "parent": 252
+        }
+
+    },
+    {
+        "pk": 256,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82003000",
+            "cpc_code": "R",
+            "point_colour": "8F8F8F",
+            "code_name": "Relief",
+            "description": "No description.",
+            "parent": 238
+        }
+
+    },
+    {
+        "pk": 257,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82003002",
+            "cpc_code": "RL",
+            "point_colour": "8F8F8F",
+            "code_name": "Relief: Low / moderate",
+            "description": "No description.",
+            "parent": 256
+        }
+
+    },
+    {
+        "pk": 258,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82003004",
+            "cpc_code": "RLM",
+            "point_colour": "8F8F8F",
+            "code_name": "Relief: Low / moderate: Moderate (1-3m)",
+            "description": "No description.",
+            "parent": 257
+        }
+
+    },
+    {
+        "pk": 259,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82003003",
+            "cpc_code": "RLL",
+            "point_colour": "8F8F8F",
+            "code_name": "Relief: Low / moderate: Low (<1m)",
+            "description": "No description.",
+            "parent": 257
+        }
+
+    },
+    {
+        "pk": 260,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82003005",
+            "cpc_code": "RH",
+            "point_colour": "8F8F8F",
+            "code_name": "Relief: High",
+            "description": "No description.",
+            "parent": 256
+        }
+
+    },
+    {
+        "pk": 261,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82003007",
+            "cpc_code": "RHR",
+            "point_colour": "8F8F8F",
+            "code_name": "Relief: High: Rock wall",
+            "description": "No description.",
+            "parent": 260
+        }
+
+    },
+    {
+        "pk": 262,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82003006",
+            "cpc_code": "RHH",
+            "point_colour": "8F8F8F",
+            "code_name": "Relief: High: High (>3m)",
+            "description": "No description.",
+            "parent": 260
+        }
+
+    },
+    {
+        "pk": 263,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82003001",
+            "cpc_code": "RF",
+            "point_colour": "8F8F8F",
+            "code_name": "Relief: Flat",
+            "description": "No description.",
+            "parent": 256
+        }
+
+    },
+    {
+        "pk": 264,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82002000",
+            "cpc_code": "B",
+            "point_colour": "8F8F8F",
+            "code_name": "Bedforms",
+            "description": "No description.",
+            "parent": 238
+        }
+
+    },
+    {
+        "pk": 265,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82002001",
+            "cpc_code": "BN",
+            "point_colour": "8F8F8F",
+            "code_name": "Bedforms: None",
+            "description": "No description.",
+            "parent": 264
+        }
+
+    },
+    {
+        "pk": 266,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82002005",
+            "cpc_code": "BB",
+            "point_colour": "8F8F8F",
+            "code_name": "Bedforms: Bioturbated",
+            "description": "No description.",
+            "parent": 264
+        }
+
+    },
+    {
+        "pk": 267,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82002006",
+            "cpc_code": "B3",
+            "point_colour": "8F8F8F",
+            "code_name": "Bedforms: 3D",
+            "description": "No description.",
+            "parent": 264
+        }
+
+    },
+    {
+        "pk": 268,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82002008",
+            "cpc_code": "B3W",
+            "point_colour": "8F8F8F",
+            "code_name": "Bedforms: 3D: Waves (>10cm height)",
+            "description": "No description.",
+            "parent": 267
+        }
+
+    },
+    {
+        "pk": 269,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82002007",
+            "cpc_code": "B3R",
+            "point_colour": "8F8F8F",
+            "code_name": "Bedforms: 3D: Ripples (<10cm height)",
+            "description": "No description.",
+            "parent": 267
+        }
+
+    },
+    {
+        "pk": 270,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82002002",
+            "cpc_code": "B2",
+            "point_colour": "8F8F8F",
+            "code_name": "Bedforms: 2D",
+            "description": "No description.",
+            "parent": 264
+        }
+
+    },
+    {
+        "pk": 271,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82002004",
+            "cpc_code": "B2W",
+            "point_colour": "8F8F8F",
+            "code_name": "Bedforms: 2D: Waves (>10cm height)",
+            "description": "No description.",
+            "parent": 270
+        }
+
+    },
+    {
+        "pk": 272,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "82002003",
+            "cpc_code": "B2R",
+            "point_colour": "8F8F8F",
+            "code_name": "Bedforms: 2D: Ripples (<10cm height)",
+            "description": "No description.",
+            "parent": 270
+        }
+
+    },
+    {
+        "pk": 273,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "00000001",
+            "cpc_code": "UNS",
+            "point_colour": "8F8F8F",
+            "code_name": "Unscorable.",
+            "description": "Item is not recognisable/too dark/too bright.",
+            "parent": 1
+        }
+
+    },
+    {
+        "pk": 274,
+        "model": "annotations.AnnotationCode",
+        "fields": {
+            "caab_code": "00000002",
+            "cpc_code": "NOI",
+            "point_colour": "8F8F8F",
+            "code_name": "Not of Interest",
+            "description": "Item is not of interest to labeller.",
+            "parent": 1
+        }
+
+    }
+]

@@ -1,0 +1,28 @@
+{% extends "base-blank.html" %}
+{% load i18n %}
+
+{% block content %}
+<form action="" method="post" class="form-horizontal-old">
+  {% csrf_token %}
+  <fieldset>
+    {{ form.non_field_errors }}
+    {% for field in form %}
+    {{ field.errors }}
+    {% comment %} Displaying checkboxes differently {% endcomment %}
+    {% if field.name == 'tos' %}
+    <p class="checkbox">
+    <label for="id_{{ field.name }}">{{ field }} {{ field.label }}</label>
+    </p>
+    {% else %}
+    <p class = "control">
+    {{ field.label_tag }} 
+    {{ field }}
+    </p>
+    {% endif %}
+    {% endfor %}
+  </fieldset>
+   <p class="form-btn">
+  <input class="btn btn-default" type="submit" value="{% trans "Signup"%}" />
+</p>
+</form>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block sidebar %}
+        <div id="sidebar-nav" class="span3" style="padding-left:10px;">
+    
+          <h1>Spatial Search Example</h1>  
+          <div class="well well-small" style="align:center;">
+
+            <p class="lead">Find deployments by location</p>
+            <p>options</p>
+          </div><!--/.well -->
+    
+        </div>
+{% endblock %}
+
+{% block content %}
+<form action="" method="post">{% csrf_token %}
+    <table>
+        {{ form.as_table }}
+    </table>
+    <input type="submit" value="Search"/>
+    <br><br>
+    {% if deployment_points %}
+    	<div id='map_container2'></div>
+    {% else %}
+    	<p>Search returned no deployments</p>
+    {% endif %}
+    
+    {% if deployment_objects %}
+     <table class="table table-striped">
+      <tbody>
+	    {% for deployment in deployment_objects %}
+	    <tr>
+	        <td>{{deployment}}</td><td></td>
+        </tr>
+	    {% endfor %}
+      </tbody>
+      </table>
+    {% endif %}
+
+</form>
+{% endblock %}
+
+{% block add_script %}
+    <script src='{{ STATIC_URL }}assets/openlayers/OpenLayers.js'> </script>
+    <script src='{{ STATIC_URL }}assets/esriOceanBasemap/map.js'></script>
+    
+    <script type="text/javascript">
+        var lon = {{longitude}};
+        var lat = {{latitude}} ;
+        var zoom = 4;
+        var map, layer;
+
+
+ function init(){
+           var bounds;
+
+            map = new OpenLayers.Map('map_container2');
+            layer = new OpenLayers.Layer.WMS( "OpenLayers WMS", 
+                    "http://vmap0.tiles.osgeo.org/wms/vmap0",
+                    {layers: 'basic'} );
+            
+            map.addLayer(layer);
+            map.setCenter(new OpenLayers.LonLat(lon, lat), zoom);
+var geojson_data = '{ "type": "FeatureCollection", "features": [ {"geometry": { "type": "GeometryCollection", "geometries": [\
+{% for deployment in deployment_points %}{% if not forloop.last %}{{deployment|safe}},{% else %}{{deployment|safe}}{% endif %}{% endfor %}] }, "type": "Feature", "properties": {}} ] }';
+           
+           var geojson_format = new OpenLayers.Format.GeoJSON();
+           var featurecollection = geojson_format.read(geojson_data);
+
+           if (featurecollection) {
+           
+           	   var vector_layer = new OpenLayers.Layer.Vector(); 
+	           map.addLayer(vector_layer);
+	           vector_layer.addFeatures(geojson_format.read(geojson_data));
+	           for(var i=0; i<featurecollection.length; ++i) {
+					if (!bounds) {
+					    bounds = featurecollection[i].geometry.getBounds();
+					} else {
+					    bounds.extend(featurecollection[i].geometry.getBounds());
+					}
+	
+					//map.fitBounds(feature_collection.features.geometry.getBounds());
+		       }
+		   	   map.zoomToExtent(bounds);
+		   }
+
+        }
+    </script>
+   
+
+{% endblock %}   

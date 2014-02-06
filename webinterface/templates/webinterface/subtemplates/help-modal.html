@@ -1,0 +1,115 @@
+<div id="info-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="TaskModalLabel"  aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4><i class="icon-info-sign"></i> Info / about</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="alert alert-info">
+                    <b>UNDER CONSTRUCTION:</b> This website is currently under development by the Marine Robotics group at the Australian Centre
+                    for Field Robotics. It is intended to provide an easy to use system that facilitates exploration and
+                    management of AUV data, improved annotation interfaces and access to our suite of machine learning
+                    tools, including clustering, supervised classification and automated percentage cover estimation.
+                    It is still a work in progress, and at this stage we have mainly been focussing on the
+                    annotation interface. There may still be a few bugs and todos, so any feedback and comments would
+                    be greatly appreciated.
+                </div>
+
+                <br><b>Current features/tools:</b><br>
+                <ul>
+                    <li>Advanced map-based project creation interface. Create projects from AUV deployment(s) using filter search tools on depth, altitude, data or bounding boxes</li>
+                    <li>Subset images in the project using temporally stratified (every Nth image) or random selection (N random images)</li>
+                    <li>Set up annotation runs using N random points</li>
+                    <li>Easy to use annotation interface with searchable tags, zoom tool, marquee multiple select tool, and other useful tools.</li>
+                    <li>Basic map interface - once you have a dataset selected, you can view the selected project/subset/image on a map.</li>
+                </ul>
+
+               <br><b>Proposed future features/tools:</b><br>
+                <ul>
+                    <li>Data exploration interface: explore all the data and the labels in the system through a map with
+                        the ability to view relevant images and annotation information. Similar to the current IMOS data
+                        portal, but with more information, including image mosaics underlaid, multibeam bathy and
+                        classification/annotation information.</li>
+                    <li>Spatial sampling techniques for sub-setting images including spatial stratified, GRTS, etc...</li>
+                    <li>Automated clustering tool to help with selecting images for further analysis</li>
+                    <li>Supervised classification tools to help automate the labelling of points/pixels and extrapolating percentage coverage estimation.</li>
+                    <li>Data import and export tools, and reporting tools for summaries and statistics: make it
+                        easy to import existing labeled data from CPCe (and other common programs).</li>
+                    <li>Ability to export annotation and survey data in formats suitable for further analysis.</li>
+                    <li>Image brightness and contrast adjustment in image viewer.</li>
+                </ul>
+               <br><b>About:</b><br>
+                <ul>
+                	<li>IMOS was established in 2007 and includes participants from all of Australia’s main university and 
+                	government research organizations involved in marine science research. IMOS is designed to be a 
+                	fully-integrated, national system, observing at ocean-basin and regional scales, and covering physical, 
+                	chemical and biological variables.</li>
+
+					<li>IMOS brings together researchers from a variety of institutions and disciplines. Represented within 
+					this group are benthic ecologists, geoscientists, computer scientists and engineers from multiple 
+					institutions who have come together by the shared understanding that a collaborative approach is 
+					essential for effective marine habitat monitoring at a national scale. Collaborators  include the 
+					Australian Centre for Field Robotics (ACFR) at Sydney University; the Institute for Marine and 
+					Antarctic Studies (IMAS) at the University of Tasmania; the Sydney Institute of Marine Science (SIMS) 
+					at the University of New South Wales; the Oceans Institute at the University of Western Australia; 
+					CSIRO Marine and Atmospheric Research; and the Australian Institute for Marine Science.</li>
+
+					<li>IMOS is supported by the Department of Industry, Innovation, Climate Change, Science, Research 
+					and Tertiary Education; the National Environmental Research Program Marine Biodiversity Hub; the 
+					Australian Research Council;  the Department of Sustainability, Environment, Water, Population and Communities; 
+					the Australian National Data Service (ANDS); NSW DPI Fisheries; Department of Fisheries WA; Department 
+					of Primary Industries, Parks, Water and Environment.</li>
+                </ul>
+
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn pull-right" aria-hidden="true" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="help-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="TaskModalLabel" aria-hidden="true" data-backdrop="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4><i class="icon-question-sign"></i> Help / How to</h4>
+            </div>
+
+            <div class="modal-body">
+                <b>How to sign in:</b><br>
+                <ul>
+                    <li>In order to create projects and view annotations, you need to sign in.</li>
+                    <li>If you are not signed in, you will see a red icon on the top right of the nav bar. Click it to sign in or create an account (you will have to close this modal window first).</li>
+                </ul>
+
+                <br><b>How to access data:</b><br>
+                <ul>
+                    <li>Select/create project, subset and annotation run by clicking the dropdown link in the top nav bar.</li>
+                    <li>Create subsets and annotation runs by clicking the grey buttons at the bottom of the "Choose a Dataset" modal window.</li>
+                </ul>
+
+                <br><b>How to annotate images:</b><br>
+                <ul>
+                    <li>Once you have an annotation run selected (using the steps above), you will see a list of thumbnails in the "View Images" tab on the top nav bar.</li>
+                    <li>Click one of the thumnails to open the image viewer.</li>
+                    <li>The nav bar on the image viewer provided access to "Image Info", "Image Tools" and "Annotation Tools"</li>
+                    <li>Click the "Annotation Tools" button to start annotating. The nav bar in the annotation pane provides additional options.</li>
+                </ul>
+
+
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn pull-right" aria-hidden="true" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

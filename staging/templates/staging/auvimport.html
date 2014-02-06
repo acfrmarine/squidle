@@ -1,0 +1,77 @@
+{% extends "base-topmenu.html" %}
+{% block title %}Catami Project - AUV Import {% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>AUV Import</h1>
+    </div>
+    <div class="span4">
+        <form class="well" action="" method="post">{% csrf_token %}
+            {% if form.errors %}
+                <div class="alert alert-error">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong> Error!</strong> {{ form.errors }}
+                </div>
+            {% endif %}
+            {% for field in form %}
+                <div class="control-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    <span class="help-block">{{ field.help_text }}</span>
+                </div>
+            {% endfor %}
+            <input class="btn" type="submit" value="Import"/>
+        </form>
+    </div>
+
+    <div id="upload_panel"></div>
+    </div>
+
+{% endblock %}
+
+{% block add_script %}
+    <script>
+        // uuid generation function
+        function get_uuid() {
+            var uuid = "";
+            for (var i = 0; i < 32; i++) {
+                uuid += Math.floor(Math.random() * 16).toString(16);
+            }
+            return uuid;
+        }
+
+        $(document).ready(function () { // on page load completion
+
+            var freq = 1000;
+            var progress_url = '{% url "staging.views.auvprogress" %}';
+            var uuid = get_uuid();
+
+            progress_url += '?uuid=' + uuid;
+
+            // this is the function that does the updating
+            function update_progress() {
+                $('#upload_panel').load(progress_url, function () {
+                    // queue the next update
+                    window.setTimeout(update_progress, freq); // the timer to update it
+                });
+            };
+
+            $("form").submit(function () { // set a trigger on a button
+
+                // only submit if not already submitted...
+                if ($.data(this, 'submitted')) return false;
+
+                // set the timer to update the progress section
+                window.setTimeout(update_progress, freq);
+
+
+                this.action += (this.action.indexOf('?') == -1 ? '?' : '&') + 'uuid=' + uuid;
+
+                // mark form as submitted
+                $.data(this, 'submitted', true);
+            });
+        });
+
+    </script>
+
+{% endblock %}

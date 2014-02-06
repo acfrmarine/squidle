@@ -1,0 +1,37 @@
+{% extends "base-topmenu.html" %}
+{% block title %}Catami Project - AUV Import {% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>File Import</h1>
+    </div>
+    <div class="span4">
+        <form enctype="multipart/form-data" class="well" action="" method="post">{% csrf_token %}
+            {% if form.errors %}
+                <div class="alert alert-error">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong> Error!</strong> {{ form.errors }}
+                </div>
+            {% endif %}
+            {% for field in form %}
+                <div class="control-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    <span class="help-block">{{ field.help_text }}</span>
+                </div>
+            {% endfor %}
+            <input class="btn" type="submit" value="Import"/>
+
+            <div id="upload_container" class="">
+                <div id="upload_progress" class="bar" style="width: 0%;"></div>
+            </div>
+        </form>
+
+        {{ errors }}
+    </div>
+    </div>
+
+    <script type="text/javascript" src="{{ STATIC_URL }}assets/js/progress.js"></script>
+
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+
+{% block sidebar %}
+  <div id="sidebar-nav" class="span3" style="padding-left:10px;">
+
+    <h1>Data</h1>
+    <div class="well well-small" style="align:center;">
+
+      <p class="lead">Data Error</p>
+      <p>options</p>
+    </div><!--/.well -->
+
+  </div>
+{% endblock %}
+
+{% block content_header %}
+  <ul class="breadcrumb">
+    <li><a href="/data/">Data</a> <span class="divider">></span></li>
+  </ul>
+
+{% endblock %}
+
+{% block content %}
+    <div class="alert">
+      <strong>Warning!</strong> Cannot connect to database
+    </div>
+{% endblock %}
+
+{% block add_script %}
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "hacks/base.html" %}
+{% block content %}
+<h1>Feedback</h1>
+
+<form class="well span3" action="" method="post">{% csrf_token %}
+{{ form }}
+<br>
+<input class="btn" type="submit" value="Add Feedback" />
+</form>
+
+{% endblock %}

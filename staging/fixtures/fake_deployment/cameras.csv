@@ -1,0 +1,3 @@
+name,angle,filename,columnname
+Front,Horizontal,images.csv,front
+Rear,horizontal,images.csv,rear

@@ -1,0 +1,131 @@
+{% extends "base-front.html" %}
+
+{% load force_extras %}
+
+{% block leadtitle %}Catami Apps{% endblock %}
+
+
+{% block content %}
+
+    <div class="content-container">
+
+        <!header image >
+        <div id="header" align="center">
+            <img src="{{ STATIC_URL }}assets/img/catamiheader-blue.png" alt="catami_icon_small" width="400"/>
+        </div>
+        <hr class="fancy-style">
+        <div align="center">
+            <p class="lead">CATAMI is bringing together Australia's marine imagery and marine researchers</p>
+        </div>
+
+
+        <hr class="fancy-style">
+        <! accounts row>
+        <div class="row-fluid">
+            <div class="span3 offset2" align="right">
+                <a href="/accounts/signup/" class="btn btn-primary btn-large">I need to make an
+                    <br>account...</a><br><br>
+                <!--<p class="text-info">Why should I make an account?</p>-->
+            </div>
+            <div class="span2"></div>
+            <div class="span3" align="left">
+                <a href="/accounts/signin/" class="btn btn-primary btn-large">I already have an
+                    <br>account...</a><br><br>
+                <!--<p class="text-error">Forgot your account details?</p> -->
+            </div>
+        </div>
+
+        <hr class="fancy-style">
+
+        <div class="row-fluid">
+            <div class="span12">
+                <h3 style="color:#555;">Recent deployments </h3>
+            </div>
+            <div class="span10 offset1">
+                {% if styled_deployment_list|length != 0 %}
+                    {% for styled_deployment in styled_deployment_list %}
+                        <div class="span3 fancy-box wordwrap">
+                            <strong>{{ styled_deployment.deployment_type }}</strong>
+                            <small> {{ styled_deployment.deployment }}</small>
+                            <a href="{{ styled_deployment.deployment_url }}" class="btn btn-primary btn-block">Go</a>
+                        </div>
+                    {% endfor %}
+                    <div class="span1"><a href="/data" class="btn btn-large">See more ...</a></div>
+
+                    <br><br>
+
+                {% else %}
+                    <div class="alert alert-error">
+                        <p><strong>No Images found.</strong> You're seeing this error because there are no available
+                            images in the database to display. Please contact catami@ivec.org.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <hr class="fancy-style">
+
+        <div class="row-fluid"> <! pretty pictures row>
+            <div class="span12">
+                <h3 style="color:#555;">Recent imagery </h3>
+            </div>
+            <div class="span12" id="about">
+                {% if image_link_list|length != 0 %}
+                    <ul class="thumbnails">
+
+                        {% for image_link in image_link_list %}
+                            {% if forloop.first %}
+                                <li class="span4"><a href="{{ image_link.deployment_url }}"><img
+                                        src="{{ image_link.image.left_image_reference|websafe_image }}"
+                                        class="thumbnail"></a></li>
+                            {% else %}
+                                <li class="span2"><a href="{{ image_link.deployment_url }}"><img
+                                        src="{{ image_link.image.left_image_reference|websafe_image }}"
+                                        class="thumbnail"></a></li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="alert alert-error">
+                        <p><strong>No Images found.</strong> You're seeing this error because there are no available
+                            images in the database to display. Please contact catami@ivec.org.</p>
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+
+
+        <hr class="fancy-style">
+
+        <div class="row-fluid"> <!projects row>
+            <div class="span12">
+                <div class="span2 offset2" align="center"><a href="https://github.com/catami/catami"><img
+                        src="{{ STATIC_URL }}assets/img/github_cat_icon.png" height="200"></a><h4>source code</h4></div>
+                <div class="span2" align="center"><a href="https://github.com/catami/catami/wiki"><img
+                        src="{{ STATIC_URL }}assets/img/document-icon.png"></a><h4>documentation</h4></div>
+                <div class="span2" align="center"><a href="/attribution"><img
+                        src="{{ STATIC_URL }}assets/img/attribution-icon.png"></a><h4>attribution</h4></div>
+                <div class="span2" align="center"><a href="/contact"><img
+                        src="{{ STATIC_URL }}assets/img/contact-icon.png"></a><h4>contact</h4></div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+{% block add_script %}
+    <script type="text/javascript">
+        (function () {
+            var po = document.createElement('script');
+            po.type = 'text/javascript';
+            po.async = true;
+            po.src = 'https://apis.google.com/js/plusone.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(po, s);
+        })();
+    </script>
+
+{% endblock %}
+

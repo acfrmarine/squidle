@@ -1,0 +1,68 @@
+{% extends "base-nosidebar.html" %}
+
+{% block sidebar %}
+{% endblock %}
+
+{% block content_header %}
+  <ul class="breadcrumb">
+    <li><a href="/data/">Data</a> <span class="divider">></span></li>
+    <li><a href="/data/campaigns/">Campaign List</a> <span class="divider">></span></li>
+    <li><a href="/data/campaigns/{{auvdeployment_object.campaign.id}}">{{auvdeployment_object.campaign.short_name}}</a> <span class="divider">></span></li>
+    <li><a href="/data/auvdeployments/{{auvdeployment_object.id}}">{{auvdeployment_object.short_name}}</a> <span class="divider">></span></li>
+    <li class="active">Annotation View</li>
+  </ul>
+  
+{% endblock %}
+
+{% block content %}
+
+
+<h3>AUV Annotation Viewer</h3>
+
+<div class="row">
+	<div class="span9">
+		<div style="position:relative;width:800px;">
+	     	<img src="{{annotated_image.left_image_reference}}" width="800">
+	     	{% for note in styled_annotation_data %}
+	     		{{note|safe}}
+	     	{% endfor %}
+<!-- 	     	<p style="z-index:100; position:absolute;  color:white; font-size:12px; font-weight:normal; left:50%; top:50%;">sand</p> -->
+		</div>
+     </div>
+</div>
+<div class="row">
+		<div>
+	     <a href= "/data/auvdeployments/{{auvdeployment_object.id}}/annotationview/{{image_index_next}}">Next</a>
+	     <div class="well">
+	     <h5>Image Reference</h5>
+	     <p style="word-wrap: break-word;">{{annotated_image.left_image_reference}}</p>
+	     </div></div>
+</div>
+     <!--
+<div class="span3">
+        <table class="table table-striped table-condensed">
+          <thead>
+            <tr>
+              <th>Label</th>
+              <th>Position</th>
+            </tr>
+          </thead>
+          <tbody>
+    
+              {% for note in annotation_list %}
+                <tr>
+                  <td>{{note.code}}</v>
+                  <td>{{note.point}}</td>
+                <tr>
+    
+              {% endfor %}
+          </tbody>
+        </table>
+    </div>
+</div>
+-->
+ 
+{% endblock %}
+
+{% block add_script %}
+{% endblock %}

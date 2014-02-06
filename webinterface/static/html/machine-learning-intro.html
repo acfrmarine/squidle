@@ -1,0 +1,112 @@
+<h2>Superpixel-based automated estimation of benthic cover</h2>
+<p>This page briefly describes our superpixel-based classification framework for sub-image identification and percent
+    cover
+    estimation of benthic biota. The method is able to leverage existing expert annotation efforts. Typically less than
+    1 − 2 % of the collected images from benthic surveys end up being annotated and processed for science purposes, and
+    usually only a subset of pixels within each image are scored. This results in a tiny fraction of total amount of
+    collected data being utilised, O(0.00001%). The proposed framework uses these sparse, human-annotated point labels
+    to
+    train a superpixel-based automated classification system, which can be used to efficiently extrapolate the
+    classified
+    results to every pixel across all the images of an entire survey. The proposed framework has the potential to
+    broaden
+    the spatial extent and resolution for the identification and percent cover estimation of benthic biota.</p>
+
+<p>
+
+</p>
+<div class="well img">
+    <img src="/static/images/superpixels/sample-cpc.png" style="height: 250px">
+    <img src="/static/images/superpixels/sample-superpixel.png" style="height: 238px; margin-top: 5px">
+
+    <p>
+        LEFT: example of annotated image scored using sparse random points. RIGHT: example of image classified using the
+        system described here.
+    </p>
+</div>
+
+<p>
+    The following diagram provides an overview of the system:
+</p>
+<div class="well img">
+    <img src="/static/images/superpixels/superpixel-pipeline.png" style="width: 80%">
+
+    <p> Flow diagram of the proposed pipeline for sub-image classification of benthic biota.
+        The blue arrows show the ﬂow of unlabelled data and outputs from automated processing steps,
+        and the red arrows show the ﬂow of data that requires manual annotation by a human expert.
+    </p>
+</div>
+
+<p>Segmentation oﬀers some notable advantages over defining a fixed shaped and sized
+    pixel patch for classification. For example, if a patch is positioned over a boundary between two class types, it
+    may be
+    diﬃcult to determine the class label assignment, which may confound the data used for training and prediction. The
+    figure below
+    shows an illustrative example of this.
+</p>
+<div class="well img">
+    <img src="/static/images/superpixels/superpixel-rationale.png" style="width: 80%">
+
+    <p> Classification of sub-image regions using superpixels vs square patches. (a) shows
+        a sample image with a 100 × 100 pixel bounding box around a chosen region of interest, (b)
+        shows a zoomed in view of the chosen region and (c) shows the class ground truth. (d) shows
+        the classification possible with a superpixel / segmentation based approach and (e), (f) and (g)
+        show the classification possible using non-overlapping square patches of size 100 × 100, 50 × 50
+        & 25 × 25 pixels, respectively
+    </p>
+</div>
+
+<p>
+    It is evident
+    that the resolution of the classification results
+    may also be limited by the choice of patch size and the resolution of patch positioning. Large patches may contain
+    multiple classes making it more diﬃcult to assign
+    a single, specific class label and small patches may be diﬃcult to classify as they
+    lack context. These factors aﬀect both the ability to classify and the resolution of the
+    classification, which in turn may confound statistics, such as percent cover, which will
+    be computed from the classification results.
+    Examples of images classified using the superpixel framework are shown below.
+</p>
+
+<div class="well img">
+    <img src="/static/images/superpixels/superpixel-example.png" style="width: 80%">
+
+    <p>
+        Superpixel classification example images. The first row shows the original image examples; the second row shows
+        labels overlaid onto segmented images (with the unlabeled superpixels coloured randomly); and the third row
+        shows the
+        output from the automated classifier.
+    </p>
+</div>
+
+<p>In the image below, we can see the spatial layout of the classifier estimates vs the manually labeled points. The
+    results show good correspondence between manual label estimates (black circles) and automated estimates (filled
+    circles). In addition, the results appear to make sense scientifically: deeper regions are dominated by sand and the
+    photosynthesising classes tend to be limited to the photic zone ( < 60m).</p>
+<div class="well img">
+    <img src="/static/images/superpixels/superpixel-spatial.png" style="width: 95%">
+
+    <p>
+        Spatial layout of percentage cover, estimated by automated superpixel classification for every
+        pixel of all 7733 images in the survey compared to that
+        estimated using 50 point-count of the 75 images that were scored using CPCe.
+    </p>
+</div>
+
+<p>The classification results can also be used to query unannotated data. The image below show example images that have
+    been extracted from the unlabeled data.</p>
+<div class="well img">
+    <img src="/static/images/superpixels/sample-pc-images.png" style="width: 60%">
+
+    <p>
+        Non-overlapping unscored sample images for each class. Each row
+        shows thumbnails of the 5 images that contain the highest proportion for each class. The figure
+        also presents the range in percent cover across the images that are shown.
+    </p>
+</div>
+
+<p> For more details, refer to: <br>
+    <em><a href="https://www.dropbox.com/s/hzo6z50g68vorfs/thesis-reduced-100dpi.pdf">A. Friedman, "Automated
+        interpretation of benthic stereo imagery", PhD Thesis, University of Sydney,
+        March, 2013</a></em>
+</p>

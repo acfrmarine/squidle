@@ -1,0 +1,41 @@
+<form action="" method="post"> {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <div class="fieldWrapper">
+        {{ form.description.errors }}
+        <label for="id_description">Description:</label>
+        {{ form.description }}
+    </div>
+
+    <div class="fieldWrapper">
+        {{ form.associatedResearchers.errors }}
+        <label for="id_associatedResearchers">Associated Researchers:</label>
+        {{ form.associatedResearchers }}
+    </div>
+
+    <div class="fieldWrapper">
+        {{ form.associatedPublications.errors }}
+        <label for="id_associatedPublications">Associated Publications:</label>
+        {{ form.associatedPublications }}
+    </div>
+
+    <div class="fieldWrapper">
+        {{ form.associatedResearchGrant.errors }}
+        <label for="id_associatedResearchGrant">Associated Research Grant:</label>
+        {{ form.associatedResearchGrant }}
+    </div>
+
+    <div class="fieldWrapper">
+        {{ form.dateStart.errors }}
+        <label for="id_dateStart">Start Date:</label>
+        {{ form.dateStart }}
+    </div>
+
+    <div class="fieldWrapper">
+        {{ form.dateEnd.errors }}
+        <label for="id_dateEnd">End Date:</label>
+        {{ form.dateEnd }}
+    </div>
+
+    <p><input type="submit" value="Save Campaign" /></p>
+</form>

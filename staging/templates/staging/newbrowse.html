@@ -1,0 +1,21 @@
+{% extends "base-topmenu.html" %}
+{% block title %}{{ block.super }} : {{ request.path }}{% endblock %}
+
+{% block content %}
+    {% include "staging/browser.html" %}
+{% endblock %}
+
+{% block add_script %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+	        $('#close').click(function () {
+	           $('#campaignImport').modal('hide');
+	        });
+	        $('#import').click(function () {
+	           importCampaignDives();
+	        });
+            getCampaignFolderContents('');
+        });
+    </script>
+
+{% endblock %}

@@ -1,0 +1,16 @@
+import math
+
+xsep = 26/100.0
+
+imgx2y = 1360.0/1024.0
+ysep = xsep*imgx2y
+nx = int(math.floor(1 / xsep))
+ny = int(math.floor(1 / ysep))
+xstart = (1 - (nx-1) * xsep) / 2
+ystart = (1 - (ny-1) * ysep) / 2
+
+c=0
+for i in xrange(0,nx) :
+  for j in xrange(0,ny) :
+    c=c+1
+    print c,': ',xstart + i*xsep,',',ystart + j*ysep

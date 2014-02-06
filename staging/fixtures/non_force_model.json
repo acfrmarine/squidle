@@ -1,0 +1,13 @@
+[
+    {
+        "pk": 1,
+        "model": "staging.metadatafile",
+        "fields": {
+            "owner": 1,
+            "is_public": true,
+            "metadata_file": "staging/metadata/FILENAME.xls",
+            "description": "Invalid file."
+        }
+
+    }
+]

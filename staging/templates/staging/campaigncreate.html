@@ -1,0 +1,23 @@
+{% extends "base-topmenu.html" %}
+{% block title %}Catami Project - Campaign Create {% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Campaign Create</h1>
+    </div>
+    <div class="span4">
+        <form class="well" action="" method="post">{% csrf_token %}
+            {% if form.errors %}
+                <div class="alert alert-error">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong> Error!</strong> {{ form.errors }}
+                </div>
+            {% endif %}
+            {{ form }}
+            <input class="btn" type="submit" value="Import"/>
+        </form>
+    </div>
+    </div>
+
+{% endblock %}
+

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+
+{% block sidebar %}
+  <div id="sidebar-nav" class="span3" style="padding-left:10px;">
+
+    <h1>BRUV Deployment</h1>  
+    <div class="well well-small" style="align:center;">
+
+      <p class="lead">BRUV List</p>
+      <p>options</p>
+    </div><!--/.well -->
+  </div>
+{% endblock %}
+
+{% block content_header %}
+  <ul class="breadcrumb">
+    <li class="active">BRUV Deployment List</li>
+  </ul>
+{% endblock %}
+
+<!--{% block breadcrumbs %}
+  <li class="active">AUV Deployment List</li>
+{% endblock %}-->
+
+{% block content %}
+  {% if latest_bruvdeployment_list %}
+    <table class=table table-striped">
+      <thead>
+        <tr>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>Min Depth</th>
+          <th>Max Depth</th>
+          <th>Mission Aim</th>
+          <th>Start Location</th>
+          <th>Related Campaign</th>
+        </tr>
+      </thead>
+      <tbody>
+
+          {% for bruvdeployment in latest_bruvdeployment_list %}
+            <tr>
+              <td>{{bruvdeployment.start_time_stamp}}</td>
+              <td>{{bruvdeployment.end_time_stamp}}</td>
+              <td>{{bruvdeployment.min_depth}}</td>
+              <td>{{bruvdeployment.max_depth}}</td>
+              <td>{{bruvdeployment.mission_aim}}</td>
+              <td>{{bruvdeployment.start_position}}</td>
+              <td><a href="/data/campaigns/{{bruvdeployment.campaign.id}}" class="btn btn-large btn-primary">Campaign</a> <br><br>
+                  <a href="/data/bruvdeployments/{{bruvdeployment.id}}" class="btn btn-large btn-primary">Detail</a></td>
+
+            <tr>
+
+          {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+      <p>No BRUV deployments are available.</p>
+  {% endif %}
+{% endblock %}

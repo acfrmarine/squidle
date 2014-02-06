@@ -1,0 +1,6 @@
+{% with obj=result.object %}
+    <td>Campaign</td>
+    <td><strong>{{ obj.short_name }}</strong></td>
+    <td>{{ obj.description }}</td>
+    <td><a href="/data/campaigns/{{ obj.id }}/" class="btn btn-small btn-primary">Detail</a></td>
+{% endwith %}

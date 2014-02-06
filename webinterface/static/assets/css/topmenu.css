@@ -1,0 +1,168 @@
+body {
+
+}
+
+div.hero-unit {
+    padding: 20px;
+}
+
+.navbar .brand {
+    max-height: 75px;
+    overflow: visible;
+    padding-top: 0px;
+    padding-bottom: 0px
+}
+
+.title {
+    display: inline-block;
+    line-height: 10px;
+    height: 70px;
+    font-weight: bold;
+}
+.title-top {
+    display: block;
+    font-size: 20px;
+}
+.title-bottom {
+    display: block;
+    font-size: 21px;
+}
+
+ul.nav li.dropdown:hover ul.dropdown-menu {
+    display: block;
+}
+
+#content {
+    padding-top: 90px;
+}
+
+@media (max-width: 979px) {
+    #content {
+        padding-top: 10px;
+    }
+}
+
+#main-nav>li>a {
+    text-align: center !important;
+}
+#main-nav>li>a>i {
+    font-size: 30px;
+    display: block !important;
+    width: auto !important;
+}
+
+.navbar .dropdown-menu {
+    margin-top: 0px;
+}
+
+
+.brand img {
+    height: 72px;
+    width: auto;
+}
+.brand {
+    font-size: 50px !important;
+    line-height: 72px !important;
+    border-right: 3px solid #565656;
+}
+
+.navbar-text {
+    line-height: 70px;
+}
+
+/*
+.viewpane {
+    padding-left: 10px;
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-color: #ddd;
+}
+*/
+
+/*
+form {
+    margin: 15px auto 20px;
+    padding: 12px 0;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
+    width: 500px;
+
+}
+
+form p {
+    padding: 4px 0 4px;
+    margin: 0 0 0 0;
+    position: relative;
+    overflow: hidden;
+    font-size: 1.0em;
+    color: #999;
+}
+
+form p label {
+    width: 160px;
+    padding: 10px 20px 0 0;
+    float: left;
+    display: block;
+    font-weight: bold;
+    font-size: 0.9em;
+    color: #444;
+    text-align: right;
+}
+
+form p.checkbox {
+    border: none;
+}
+
+form p.checkbox label {
+    width: inherit;
+    float: none;
+    text-align: left;
+    padding: 0 0 0 175px;
+}
+
+input[type=submit] {
+    height: 35px;
+    line-height: 34px;
+    padding: 0 10px;
+    margin: 4px 0 0 180px;
+    min-width: 150px;
+    background-color: #0059cc;
+    display: block;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    border: 1px outset #02387f;
+    color: #f9f9f9;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-align: center;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    color: #f9f9f9;
+    cursor: pointer;
+}
+
+input[type=submit]:active {
+    line-height: 36px;
+    background-color: #4388e3;
+    line-height: 36px;
+    border: 1px inset #02387f;
+}
+*/
+
+
+#signin input[type=checkbox] {
+    display: block;
+    float: left;
+    padding: 0;
+    margin: 3px;
+    width: 10px;
+}
+
+p.login-extras {
+	padding: 5px 0 10px 180px;
+	margin: 0px;
+}

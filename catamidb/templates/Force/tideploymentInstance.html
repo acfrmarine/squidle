@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+
+
+{% block sidebar %}
+  <div id="sidebar-nav" class="span3" style="padding-left:10px;">
+
+    <h1>Deployment</h1>  
+    <div class="well well-small" style="align:center;">
+
+      <p class="lead">{{tideployment_object.short_name}}</p>
+      <p>options</p>
+    </div><!--/.well -->
+    <div class="alert">
+      <strong>Warning!</strong> This page loads slowly for large datasets. Please be patient.
+    </div>
+  </div>
+{% endblock %}
+
+{% block content_header %}
+  <ul class="breadcrumb">
+    <li><a href="/data/">Data</a> <span class="divider">></span></li>
+    <li><a href="/data/campaigns/">Campaign List</a> <span class="divider">></span></li>
+    <li><a href="/data/campaigns/{{tideployment_object.campaign.id}}">{{tideployment_object.campaign.short_name}}</a> <span class="divider">></span></li>
+    <li class="active">{{tideployment_object.short_name}}</li>
+  </ul>
+  
+{% endblock %}
+
+{% block content %}
+
+{% if tideployment_object %}
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Start Time</th>
+      <th>End Time</th>
+      <th>Min Depth</th>
+      <th>Max Depth</th>
+      <th>Mission Aim</th>
+    </tr>
+  </thead>
+  <tbody>
+
+        <tr>
+          <td>{{tideployment_object.start_time_stamp}}</td>
+          <td>{{tideployment_object.end_time_stamp}}</td>
+          <td>{{tideployment_object.min_depth}}</td>
+          <td>{{tideployment_object.max_depth}}</td>
+          <td>{{tideployment_object.mission_aim}}</td>
+        <tr>
+
+  </tbody>
+</table>
+{% else %}
+    <p>No TI deployments are available.</p>
+{% endif %}
+
+ <div class="accordion" id="accordion1">
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne">
+        GeoJSON Data
+      </a>
+    </div>
+    <div id="collapseOne" class="accordion-body collapse out">
+      <div class="accordion-inner">
+        {{deployment_as_geojson}}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+ <h3>TI Deployment Data</h3>
+
+{% if image_list %}
+<ul class="nav nav-tabs" id="myTab">
+  <li class="active"><a href="#list" data-toggle="tab">Data List</a></li>
+  <li><a href="#viewer" data-toggle="tab">Map Viewer</a></li>
+</ul>
+
+<div class="tab-content">
+  <div class="tab-pane active" id="viewer">
+  	<div id='map_container2'></div>
+  </div>
+  <div class="tab-pane" id="list">
+    <table class="table table-striped table-condensed">
+      <thead>
+        <tr>
+          <th>Left/Right Image</th>
+          <th>Date</th>
+          <th>Position</th>
+          <th>Temp</th>
+          <th>Salinity</th>
+          <th>Pitch</th>
+          <th>Roll</th>
+          <th>Yaw</th>
+          <th>Altitude</th>
+          <th>Depth</th>
+        </tr>
+      </thead>
+      <tbody>
+
+          {% for image in image_list %}
+            <tr>
+              <td>
+                <a class="btn" href="{{image.left_thumbnail_reference}}" > [L]<i class="icon-picture"></i></a>
+                <a class="btn" href="{{image.right_thumbnail_reference}}" > [R]<i class="icon-picture"></i></a>
+              </td>
+              <td>{{image.date_time}}</v>
+              <td>{{image.image_position}}</td>
+              <td>{{image.temperature}}</td>
+              <td>{{image.salinity}}</td>
+              <td>{{image.pitch}}</td>
+              <td>{{image.roll}}</td>
+              <td>{{image.yaw}}</td>
+              <td>{{image.altitude}}</td>
+              <td>{{image.depth}}</td>
+            <tr>
+
+          {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+      <p>No video data found for TI Deployment: {{tideployment_object.short_name}}</p>
+  {% endif %}
+
+
+  <!-- Modal -->
+  <div class="modal  fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3 id="myModalLabel">Modal header</h3>
+    </div>
+    <div class="modal-body">
+    </div>
+  </div>​
+
+ 
+    <!-- bootstrap-tab.js-->
+    <script>
+      $(function () {
+        $('#myTab a:last').tab('show');
+      })
+    </script>
+
+  <script type='text/javascript'>//<![CDATA[ 
+  $(window).load(function(){
+  $('a.btn').on('click', function(e) {
+      e.preventDefault();
+      var url = $(this).attr('href');
+      $(".modal-body").html('<iframe width="100%" height="100%" frameborder="0" scrolling="no" allowtransparency="true" src="'+url+'"></iframe>');
+  });
+  });//]]>  
+  </script>
+  {% endblock %}
+
+{% block add_script %}
+    <script src='{{ STATIC_URL }}assets/openlayers/OpenLayers.js'> </script>
+    <script src='{{ STATIC_URL }}assets/esriOceanBasemap/map.js'></script>
+    
+    <script type="text/javascript">
+        var lon = 148.3414;
+        var lat = -41.253318;
+        var zoom = 30;
+        var map, layer;
+
+ function init(){
+/* 			var mapoptions = {
+			    units: "m",
+			};
+            map = new OpenLayers.Map( 'map_container2',mapoptions);
+
+            
+            layer = new OpenLayers.Layer.WMS( "OpenLayers WMS", 
+                    "http://vmap0.tiles.osgeo.org/wms/vmap0",
+                    {layers: 'basic'} );
+*/
+                    
+                    
+    map = new OpenLayers.Map({
+        div: "map_container2",
+        projection: "EPSG:900913",
+        controls: [],
+        fractionalZoom: false
+    });
+
+    var osm = new OpenLayers.Layer.OSM("OpenLayers WMS", "http://vmap0.tiles.osgeo.org/wms/vmap0", {
+        resolutions: [156543.03390625, 78271.516953125, 39135.7584765625,
+                      19567.87923828125, 9783.939619140625, 4891.9698095703125,
+                      2445.9849047851562, 1222.9924523925781, 611.4962261962891,
+                      305.74811309814453, 152.87405654907226, 76.43702827453613,
+                      38.218514137268066, 19.109257068634033, 9.554628534317017,
+                      4.777314267158508, 2.388657133579254, 1.194328566789627,
+                      0.5971642833948135, 0.25, 0.1, 0.05,.01,.005,.001,.0005,.0001,.00005,.00001,.000007,.000003,.000001],
+        serverResolutions: [156543.03390625, 78271.516953125, 39135.7584765625,
+                            19567.87923828125, 9783.939619140625,
+                            4891.9698095703125, 2445.9849047851562,
+                            1222.9924523925781, 611.4962261962891,
+                            305.74811309814453, 152.87405654907226,
+                            76.43702827453613, 38.218514137268066,
+                            19.109257068634033, 9.554628534317017,
+                            4.777314267158508, 2.388657133579254,
+                            1.194328566789627, 0.5971642833948135],
+        transitionEffect: 'resize'
+    });        
+            map.addLayer(osm);
+            //map.setCenter(new OpenLayers.LonLat(lon, lat), zoom);
+
+var geojson_data = '{ "type": "FeatureCollection", "features": [ {"geometry": { "type": "GeometryCollection", "geometries": [\
+{% for image in image_list %}{% if not forloop.last %}{{image.image_position.geojson|safe}},{% else %}{{image.image_position.geojson|safe}}{% endif %}{% endfor %}] }, "type": "Feature", "properties": {}} ] }';
+
+           var geojson_format = new OpenLayers.Format.GeoJSON();
+           var feature_collection = geojson_format.read(geojson_data);
+           var bounds;
+
+           if (feature_collection) {
+	           var vector_layer = new OpenLayers.Layer.Vector(); 
+	           map.addLayer(vector_layer);
+	           vector_layer.addFeatures(geojson_format.read(geojson_data));
+	           
+	           for(var i=0; i<feature_collection.length; ++i) {
+                    if (!bounds) {
+                        bounds = feature_collection[i].geometry.getBounds();
+                    } else {
+                        bounds.extend(feature_collection[i].geometry.getBounds());
+                    }
+
+                }
+				//map.fitBounds(feature_collection.features.geometry.getBounds());
+				map.zoomToExtent(bounds);
+
+				map.addControls([
+				        new OpenLayers.Control.Navigation(),
+				        new OpenLayers.Control.PanZoomBar()
+				]);
+		   }
+        }
+    </script>
+{% endblock %}

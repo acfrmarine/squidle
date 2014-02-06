@@ -1,0 +1,12 @@
+{% extends "base-topmenu.html" %}
+{% block title %}Catami Project - Staging {% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Staging</h1>
+    </div>
+    <ul>
+        <li><a href="{% url "staging.views.campaigncreate" %}">Create Campaign</a></li>
+        <li><a href="{% url "staging.views.newbrowse" %}">New Local Browse</a></li>
+    </ul>
+{% endblock %}

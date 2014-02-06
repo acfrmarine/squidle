@@ -1,0 +1,1 @@
+STAGING_IMPORT_DIR = '/media/water/RELEASE_DATA'

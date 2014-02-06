@@ -1,0 +1,129 @@
+{% block content %}
+<div id="filecontainer" style="overflow:auto">
+    <!--<a id="parentlink" href="#">Parent</a>-->
+    <table class="table table-condensed">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody id="filecontainerbody">
+        </tbody>
+        <tfoot>
+        <tr>
+            <td id="filecontainerinfo"></td>
+        </tr>
+        </tfoot>
+    </table>
+	<div id="campaignImport" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="TaskModalLabel"
+	     aria-hidden="true">
+	    <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	        <h3 id="ImportCampaignModalLabel">Import Campaign</h3>
+	    </div>
+            <table class = "table table-condense">
+	      <tr><select id="campaignDiveList" name="campaignDiveList" multiple="multiple" style="width:100%;height:150px"></tr>
+              <tr><td>Campaign</td><td><select id="campaignSelect"></select></td></tr>
+	      <tr><td>License</td><td><input class="text" id="LicenseText"\></td></tr>
+	      <tr><td>Keywords</td><td><input class="text" id="KeywordsText"\></td></tr>
+	      <tr><td><input class="btn" id="close" value="Cancel"\></td><td><input class="btn" id="import" value="Import"\></td></tr>
+            </table>
+	</div>
+</div>
+{% endblock %}
+
+
+{% block add_script %}
+<script type="text/javascript">
+    // new targeted Campaign/Dive import
+    function getCampaignFolderContents(folder_id) {
+    	// for now extend the list of returned campaigns with the 'limit' argument to avoid having
+    	// to paginate the returned list
+        var apiurl = '/api/dev/stagingfiles/?folder=' + folder_id + '&limit=10000';
+        $("#filecontainerbody").html('');
+        //location.hash = folder_id;
+        appendCampaignFolderContents(apiurl);
+        $.getJSON('/api/dev/stagingfiles/' + folder_id, function (file) {
+            //$("#parentlink").attr("onclick", "getCampaignFolderContents('" + file.parent + "');");
+        });
+    }
+    function appendCampaignFolderContents(apiurl) {
+        $.getJSON(apiurl, function (files) {
+            var body_text = '';
+            // add a row in the table for every file/folder in current directory
+            for (var i = 0; i < files.objects.length; i++) {
+                if (files.objects[i].is_dir) {
+                    // show the name of the subfolder
+                    body_text += '<tr><td><a onclick="showCampaignDives(\'' + files.objects[i].pk + '\');" >' + files.objects[i].name + '</a></td>';
+                    // and any actions that can be performed
+                    body_text += '<td>';
+                    for (var prop in files.objects[i].actions) {
+                        body_text += "<a href='" + files.objects[i].actions[prop] + "'>" + prop + "</a>";
+                    }
+                    body_text += '</td></tr>';
+                }
+                else {
+                    // it is a file... so no contents browsing
+                    body_text += '<tr><td>' + files.objects[i].name + '</td><td></td></tr>';
+                }
+            }
+            $("#filecontainerbody").append(body_text);
+            $("#btnnext").attr("onclick", "appendFolderContents('" + files.meta.next + "');");
+            $("#filecontainerinfo").html('Viewing 1 to ' + Math.min(files.meta.offset + files.meta.limit, files.meta.total_count) + ' of ' + files.meta.total_count);
+        })
+    }
+    function getCampaignList() {
+        var apiurl = "/api/dev/campaign/?format=json";
+        $.getJSON(apiurl, function (campaigns) {
+            var options = '<option value="">--ALL--</option>';
+            for (var i = 0; i < campaigns.objects.length; i++) {
+                options += '<option value="' + campaigns.objects[i].id + '">' + campaigns.objects[i].short_name + '</option>';
+            }
+            $("#campaignSelect").html(options);
+            //$('#deploymentSelect option:first').attr('selected', 'selected');
+        })
+    }
+    function showCampaignDives( campaignFolderObject ) {
+        var apiurl = '/api/dev/stagingfiles/?folder=' + campaignFolderObject;
+        $("#campaignDiveList").html('');
+        $.getJSON(apiurl, function (files) {
+            var dive_list = '';
+            // add a row in the table for every file/folder in current directory
+        	//alert('Got ' + files.objects.length + ' dives for campaign');
+            for (var i = 0; i < files.objects.length; i++) {
+            	//alert('Dive: ' + files.objects[i].name + ' isdir: ' + files.objects[i].is_dir + ' actions ' + files.objects[i].actions)
+                if (files.objects[i].is_dir) {
+                    // show the name of the subfolder
+                    for (prop in files.objects[i].actions)
+                    	dive_list += '<option value =\'' + files.objects[i].actions[prop] + '\'>' + files.objects[i].name + '</option>';
+                }
+            }
+	        $("#campaignDiveList").append(dive_list);
+        });
+        getCampaignList();
+     	$('#campaignImport').modal('show');
+    }
+    function importCampaignDives( campaignFolderObject ) {
+    	var diveSelect = document.getElementById('campaignDiveList');
+        //alert('Selected ' + diveSelect.length + ' dives for import');
+    	for (i = 0; i < diveSelect.length; i++)
+    	{
+    		if (diveSelect.options[i].selected == true)
+    		{
+                   var importUrl = diveSelect.options[i].value;
+                   var dataString = "short_name=" + diveSelect.options[i].label + "&campaign=" + $("#campaignSelect option:selected").val() + "&license=" + $("#LicenseText").val() + "&descriptive_keywords=" + $("#KeywordsText").val();
+                   //alert('Importing dive ' + diveSelect.options[i].value + ' with name ' + diveSelect.options[i].label + ' and data ' + dataString);
+	           $.ajax({
+	               type: "POST",
+	               url: importUrl,
+	               data: dataString
+	               //success: alert("Succes!")
+	           });
+	        }
+    	}
+        // need to figure out if we're done
+     	$('#campaignImport').modal('hide');
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,22 @@
+{ "cluster_settings": {
+    "cluster_granularity": 1,
+    "verbose_output": true,
+    "nthreads": 1,
+    "dimensionality": 20,
+    "algorithm": "BGMM"
+},
+    "deployment_information": {
+        "start_position": [0.2 , 0.3],
+        "start_time_stamp": "12-12-09 12:00:12",
+        "end_time_stamp": "12-12-09 12:00:12",
+        "short_name": "rScottReef_deep",
+        "mission_aim": "Benthic mapping",
+        "min_depth": 12.0,
+        "max_depth": 40.0,
+        "campaign": "Tasmania2011",
+        "contact_person": "Daniel Steinberg",
+        "descriptive_keywords": "string",
+        "licence": "CC BY"
+    },
+    "image_primary_keys": ["00023231" , "00023232" , "00023232" , "00023234"]
+}

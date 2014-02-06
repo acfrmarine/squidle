@@ -1,0 +1,192 @@
+{% extends "base-blank.html" %}
+
+{% block tail_head %}
+{% endblock %}
+
+{% block content %}
+
+    <div id="banner-carousel" class="carousel carousel-fade slide">
+        <!-- Carousel items -->
+        <div class="carousel-inner">
+            <div class="item">
+                <img src="{{ STATIC_URL }}images/banner/corral-1.jpg" alt="">
+            </div>
+            <div class="item">
+                <img src="{{ STATIC_URL }}images/banner/cot-1.JPG" alt="">
+            </div>
+            <div class="item">
+                <img src="{{ STATIC_URL }}images/banner/fish-1.jpg" alt="">
+            </div>
+            <div class="item">
+                <img src="{{ STATIC_URL }}images/banner/fish-2.jpg" alt="">
+            </div>
+            <div class="item">
+                <img src="{{ STATIC_URL }}images/banner/fish-3.jpg" alt="">
+            </div>
+            <div class="item">
+                <img src="{{ STATIC_URL }}images/banner/fish-4.jpg" alt="">
+            </div>
+            <div class="item">
+                <img src="{{ STATIC_URL }}images/banner/fish-5.jpg" alt="">
+            </div>
+            <div class="item">
+                <img src="{{ STATIC_URL }}images/banner/jelly-1.jpg" alt="">
+            </div>
+            <div class="item">
+                <img src="{{ STATIC_URL }}images/banner/seahorse-1.jpg" alt="">
+            </div>
+            <!--
+            <div class="item">
+                <img src="{{ STATIC_URL }}images/banner/sharks-1.jpg" alt="">
+            </div>
+            -->
+            <div class="item">
+                <img src="{{ STATIC_URL }}images/banner/thingy-1.jpg" alt="">
+            </div>
+            <div class="item">
+                <img src="{{ STATIC_URL }}images/banner/turtle-1.jpg" alt="">
+            </div>
+
+        </div>
+        <div id="sitetitle">
+            <h1><i class="icon-edit-sign"></i> squidle</h1>
+            <p>explore &#8226; annotate &#8226; interpret &#8226; marine imagery</p>
+        </div>
+    </div>
+
+    <div class="alert alert-danger" style="margin: 0; position: absolute; top:0; left: 0; width: 100%; opacity:0.8; filter:alpha(opacity=80); z-index:999;"><b><i class="icon-cogs"></i>
+        UNDER CONSTRUCTION:</b> Please note that this website is currently under construction.
+    </div>
+
+
+    <div id="content" class="container" style="background-color: #131313; margin: 0; padding: 0;">
+    <div class="section-row">
+        <div class="section">
+            <a class="well" href="{% url "webinterface.views.project" %}">
+                <i class="icon-tags section-head"> Get started!</i>
+                Jump straight to exploring and working with the data using the map and annotation interface.
+                <span class="section-moreinfo"><i class="icon-chevron-sign-right"></i> Click to start</span>
+            </a>
+        </div>
+        <div class="section">
+            <a class="well" href="#" onclick="showInfoModal('{{ STATIC_URL }}html/howto.html', 'How to...')">
+                <i class="icon-hand-up section-head"> How to...</i>
+                Tutorials and videos that provide useful tips on how to use the system.
+                <span class="section-moreinfo"><i class="icon-chevron-sign-right"></i> Click for more</span>
+            </a>
+        </div>
+        <div class="section">
+            <a class="well" href="#" onclick="showInfoModal('{{ STATIC_URL }}html/about-sqidle.html','About squidle')">
+                <i class="icon-info-sign section-head"> About</i>
+                What is squidle, why does it exist and who made it?
+                <span class="section-moreinfo"><i class="icon-chevron-sign-right"></i> Click for more</span>
+            </a>
+        </div>
+
+        <div class="section">
+            <a class="well" href="#" onclick="showInfoModal('{{ STATIC_URL }}html/machine-learning-intro.html','The Magic!')">
+                <i class="icon-magic section-head"> The Magic</i>
+                Learn about some of the magic that happens under the hood. Machine learning, clustering, classification and data mining designed to make life easier.
+                <span class="section-moreinfo"><i class="icon-chevron-sign-right"></i> Click for more</span>
+            </a>
+        </div>
+    </div>
+    </div>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="info-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width: 840px">
+            <div class="modal-content" >
+                <div class="modal-header">
+                    <a class="pull-right modal-close" href="javascript:void(0)" data-dismiss="modal"><i class="icon-remove-sign"></i></a>
+                    <h1 class="modal-title"></h1>
+                </div>
+                <div class="modal-body" >
+
+                </div>
+                <!--
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+                -->
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+{% endblock %}
+
+
+{% block add_script %}
+<script>
+    $(document).ready(function () {
+        $('#banner-carousel .item').rand(1).addClass('active');
+        setHeights();
+        $('#banner-carousel').carousel({
+            interval: 7000,
+            pause: "false"
+        });
+    });
+
+    $(window).resize(function () {
+        setHeights();
+    });
+
+    function showInfoModal(src,title) {
+        $('#info-modal .modal-body').html('');
+        $('#info-modal .modal-body').load(src);
+        $('#info-modal .modal-title').html(title);
+        $('#info-modal').modal('show');
+    }
+
+
+    function setHeights() {
+        //var banner_height = 0.5;
+        //$('#banner-carousel').css('max-height', Math.min($(window).height() * banner_height, $('#banner-carousel .item:first').height()));
+        //$("#content").css('min-height', $(window).height() - $('#banner-carousel').height());
+        $('#banner-carousel').css('height', Math.min($(window).height() - $(".section:first").outerHeight(), $('#banner-carousel .item:first').height()));
+        $(".section-row").css('min-height', $(window).height() - $('#banner-carousel').height());
+        $('#info-modal .modal-dialog').width(0.9*$(window).width());
+        $('#info-modal .modal-body').css('max-height',0.9*$(window).height() - 60);
+    }
+
+    /**
+     * jQuery.rand v1.0
+     *
+     * Randomly filters any number of elements from a jQuery set.
+     *
+     * MIT License: @link http://www.afekenholm.se/license.txt
+     *
+     * @author: Alexander Wallin (http://www.afekenholm.se)
+     * @version: 1.0
+     * @url: http://www.afekenholm.se/jquery-rand
+     */
+    (function ($) {
+        $.fn.rand = function (k) {
+            var b = this,
+                    n = b.size(), k = k ? parseInt(k) : 1;
+
+            // Special cases
+            if (k > n) return b.pushStack(b);
+            else if (k == 1) return b.filter(":eq("
+                    + Math.floor(Math.random() * n) + ")");
+
+            // Create a randomized copy of the set of elements,
+            // using Fisher-Yates sorting
+            r = b.get();
+            for (var i = 0; i < n - 1; i++) {
+                var swap = Math.floor(Math.random() * (n - i)) + i;
+                r[swap] = r.splice(i, 1, r[swap])[0];
+            }
+            r = r.slice(0, k);
+
+            // Finally, filter jQuery stack
+            return b.filter(function (i) {
+                return $.inArray(b.get(i), r) > -1;
+            });
+        };
+    })(jQuery);
+</script>
+{% endblock %}

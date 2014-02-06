@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+
+{% block sidebar %}
+{% endblock %}
+
+{% block content_header %}
+  <ul class="breadcrumb">
+    <li><a href="/data/">Data</a> <span class="divider">></span></li>
+    <li><a href="/data/campaigns/">Campaign List</a> <span class="divider">></span></li>
+    <li><a href="/data/campaigns/{{auvdeploymentObject.campaign.id}}">{{auvdeployment_object.campaign.short_name}}</a> <span class="divider">></span></li>
+    <li><a href="/data/campaigns/{{auvdeploymentObject.campaign.id}}/{{auvdeployment_object.short_name}}">{{auvdeployment_object.short_name}}</a> <span class="divider">></span></li>
+    <li class="active">Annotation View</li>
+
+  </ul>
+  
+{% endblock %}
+
+{% block content %}
+
+
+ <h3>AUV Annotation Viewer</h3>
+
+  	<table class="table table-striped table-condensed">
+      <thead>
+        <tr>
+          <th>date time</th>
+          <th>position</th>
+        </tr>
+      </thead>
+      <tbody>
+
+          {% for image in annotated_imagelist %}
+            <tr>
+              <td>{{image.date_time}}</v>
+              <td>{{image.image_position}}</td>
+            <tr>
+
+          {% endfor %}
+      </tbody>
+    </table>
+
+
+
+ 
+
+  <script type='text/javascript'>//<![CDATA[ 
+  $(window).load(function(){
+  $('a.btn').on('click', function(e) {
+      e.preventDefault();
+      var url = $(this).attr('href');
+      $(".modal-body").html('<iframe width="100%" height="100%" frameborder="0" scrolling="no" allowtransparency="true" src="'+url+'"></iframe>');
+  });
+  });//]]>  
+  </script>
+  {% endblock %}
+
+{% block add_script %}
+    <script src='{{ STATIC_URL }}assets/openlayers/OpenLayers.js'> </script>
+    <script src='{{ STATIC_URL }}assets/esriOceanBasemap/map.js'></script>
+    
+    <script type="text/javascript">
+        var lon = 148.3414;
+        var lat = -41.253318;
+        var zoom = 30;
+        var map, layer;
+
+ function init(){
+/* 			var mapoptions = {
+			    units: "m",
+			};
+            map = new OpenLayers.Map( 'map_container2',mapoptions);
+
+            
+            layer = new OpenLayers.Layer.WMS( "OpenLayers WMS", 
+                    "http://vmap0.tiles.osgeo.org/wms/vmap0",
+                    {layers: 'basic'} );
+*/
+                    
+                    
+    map = new OpenLayers.Map({
+        div: "map_container2",
+        projection: "EPSG:900913",
+        controls: [],
+        fractionalZoom: false
+    });
+
+    var osm = new OpenLayers.Layer.OSM("OpenLayers WMS", "http://vmap0.tiles.osgeo.org/wms/vmap0", {
+        resolutions: [156543.03390625, 78271.516953125, 39135.7584765625,
+                      19567.87923828125, 9783.939619140625, 4891.9698095703125,
+                      2445.9849047851562, 1222.9924523925781, 611.4962261962891,
+                      305.74811309814453, 152.87405654907226, 76.43702827453613,
+                      38.218514137268066, 19.109257068634033, 9.554628534317017,
+                      4.777314267158508, 2.388657133579254, 1.194328566789627,
+                      0.5971642833948135, 0.25, 0.1, 0.05,.01,.005,.001,.0005,.0001,.00005,.00001,.000007,.000003,.000001],
+        serverResolutions: [156543.03390625, 78271.516953125, 39135.7584765625,
+                            19567.87923828125, 9783.939619140625,
+                            4891.9698095703125, 2445.9849047851562,
+                            1222.9924523925781, 611.4962261962891,
+                            305.74811309814453, 152.87405654907226,
+                            76.43702827453613, 38.218514137268066,
+                            19.109257068634033, 9.554628534317017,
+                            4.777314267158508, 2.388657133579254,
+                            1.194328566789627, 0.5971642833948135],
+        transitionEffect: 'resize'
+    });        
+            map.addLayer(osm);
+            //map.setCenter(new OpenLayers.LonLat(lon, lat), zoom);
+
+var geojson_data = '{ "type": "FeatureCollection", "features": [ {"geometry": { "type": "GeometryCollection", "geometries": [\
+{% for image in image_list %}{% if not forloop.last %}{{image.image_position.geojson|safe}},{% else %}{{image.image_position.geojson|safe}}{% endif %}{% endfor %}] }, "type": "Feature", "properties": {}} ] }';
+
+           var geojson_format = new OpenLayers.Format.GeoJSON();
+           var feature_collection = geojson_format.read(geojson_data);
+           var bounds;
+
+           if (feature_collection) {
+	           var vector_layer = new OpenLayers.Layer.Vector(); 
+	           map.addLayer(vector_layer);
+	           vector_layer.addFeatures(geojson_format.read(geojson_data));
+	           
+	           for(var i=0; i<feature_collection.length; ++i) {
+                    if (!bounds) {
+                        bounds = feature_collection[i].geometry.getBounds();
+                    } else {
+                        bounds.extend(feature_collection[i].geometry.getBounds());
+                    }
+
+                }
+				//map.fitBounds(feature_collection.features.geometry.getBounds());
+				map.zoomToExtent(bounds);
+
+				map.addControls([
+				        new OpenLayers.Control.Navigation(),
+				        new OpenLayers.Control.PanZoomBar()
+				]);
+		   }
+        }
+    </script>
+{% endblock %}

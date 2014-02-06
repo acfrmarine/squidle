@@ -1,0 +1,525 @@
+.og-grid {
+	list-style: none;
+	/*padding: 20px 0;*/
+    padding: 0;
+	margin: 0 auto;
+	text-align: center;
+	width: 100%;
+}
+
+.og-grid li.thm {
+	display: inline-block;
+	margin: 10px 5px 0 5px;
+	vertical-align: top;
+	height: 75px;
+}
+
+.og-grid li.thm > a,
+.og-grid li.thm > a img {
+	border: none;
+	outline: none;
+	display: block;
+	position: relative;
+}
+
+.og-grid li.thm > a > .og-annotation-count {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    font-size: 10px;
+    font-weight: bold;
+    /*width: 15px;*/
+    /*height: 12px;*/
+    padding: 0 3px 0 0;
+    text-shadow: 0 0 3px #000;
+}
+
+
+.og-grid li.og-expanded > a::after {
+	top: auto;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+	border-bottom-color: #272b30;
+	border-width: 16px;
+	left: 50%;
+	margin: -20px 0 0 -15px;
+}
+
+.og-expander {
+	position: absolute;
+	background: #272b30;
+	top: auto;
+	left: 0;
+	width: 100%;
+	margin-top: 10px;
+	text-align: left;
+	height: 0;
+	overflow: hidden;
+}
+
+.og-expander-inner {
+	padding: 20px 20px;
+	height: 100%;
+}
+
+#og-infinite-loader {
+    padding-top: 30px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 20px;
+}
+#og-infinite-loader i {
+    display: none;
+}
+/*
+.og-close {
+	position: absolute;
+	width: 30px;
+	height: 30px;
+	top: 10px;
+	right: 10px;
+	cursor: pointer;
+}
+
+.og-close::before,
+.og-close::after {
+	content: '';
+	position: absolute;
+	width: 100%;
+	top: 50%;
+	height: 1px;
+	background: #888;
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	transform: rotate(45deg);
+}
+
+.og-close::after {
+	-webkit-transform: rotate(-45deg);
+	-moz-transform: rotate(-45deg);
+	transform: rotate(-45deg);
+}
+
+.og-close:hover::before,
+.og-close:hover::after {
+	background: #333;
+}
+*/
+
+.og-fullimg,
+.og-details {
+	/*width: 50%;*/
+	height: 100%;
+	overflow: hidden;
+	position: relative;
+}
+
+.og-details {
+    float: right;
+    padding: 0;
+    padding-left: 10px;
+    width: 30%;
+    min-width: 320px;
+    /*overflow-y: auto;*/
+}
+
+.og-fullimg {
+    float: left;
+	text-align: center;
+    width: 70%;
+    overflow: visible;
+}
+
+.og-fullimg img {
+	display: inline-block;
+	max-height: 100%;
+	max-width: 100%;
+}
+
+.og-details h3 {
+	font-weight: 300;
+	font-size: 52px;
+	padding: 40px 0 10px;
+	margin-bottom: 10px;
+}
+
+.og-details p {
+	font-weight: 400;
+	font-size: 16px;
+	line-height: 22px;
+	color: #999;
+}
+
+/*
+.og-details a {
+	font-weight: 700;
+	font-size: 16px;
+	color: #333;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	padding: 10px 20px;
+	border: 3px solid #333;
+	display: inline-block;
+	margin: 30px 0 0;
+	outline: none;
+}
+
+.og-details a::before {
+	content: '\2192';
+	display: inline-block;
+	margin-right: 10px;
+}
+*/
+
+.og-details .nav > li > a {
+    padding: 15px 10px;
+}
+
+.og-details a:hover {
+	border-color: #999;
+	color: #999;
+}
+
+.og-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+	height: 40px;
+    margin: -20px 0 0 -20px;
+    opacity: 0.5;
+    z-index: 1001;
+    /*border-radius: 50%;*/
+	/*background: #ddd;*/
+	/*box-shadow: 0 0 1px #ccc, 15px 30px 1px #ccc, -15px 30px 1px #ccc;*/
+	/*-webkit-animation: loader 0.5s infinite ease-in-out both;*/
+	/*-moz-animation: loader 0.5s infinite ease-in-out both;*/
+	/*animation: loader 0.5s infinite ease-in-out both;*/
+
+}
+
+.og-loading>i {
+    color: #aaaaaa;
+    font-size: 40px;
+    text-shadow: 0 0 5px #000;
+}
+
+.og-sidepanel {
+    margin-bottom: 20px;
+    background-color: #1c1e22;
+    border: 1px solid #0c0d0e;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    padding: 10px;
+    /*padding: 19px;*/
+}
+
+
+
+.og-panel .navbar {
+    background-image: linear-gradient(#111111, #242323 60%, #151616);
+}
+
+.og-panel .navbar-brand {
+    padding: 5px 5px;
+    font-size: 12px;
+    line-height: 14px;
+}
+.og-panel .navbar-nav > li > a {
+    line-height: 14px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding: 5px 5px;
+    font-size: 14px;
+}
+.og-panel .navbar-nav > li.active > a {
+    background-color: #000000;
+}
+
+.drawnBox {
+    border: 1px solid #222;
+    background: #e1e1e1;
+    opacity: 0.5;
+    position: absolute;
+    z-index: 3000;
+    top: 0px;
+    left: 0px;
+}
+.hide {
+    visibility: hidden;
+}
+
+.og-sidepane {
+    margin-bottom: 15px;
+    display: none;
+}
+
+.og-panel {
+    font-size: 12px;
+}
+
+.og-panel .label{
+    font-size: 100%;
+}
+
+.og-panel .tab-pane {
+    border: 1px solid #0c0d0e;
+    padding: 3px;
+    min-height: 100px;
+}
+.og-panel .alert {
+    padding: 10px;
+    font-size: 14px;
+}
+.antag-taglist {
+    /*max-height: 250px;*/
+    overflow-y: visible;
+    /*overflow-x: hidden;*/
+}
+
+#imganot .tab-pane {
+    overflow-y: auto;
+}
+
+
+.annotation-tag {
+    color: #FFF;
+    text-shadow: 0 0 3px #000;
+}
+
+.og-dragpane {
+    /*well*/
+    min-height: 20px;
+    margin-bottom: 20px;
+    background-color: #1c1e22;
+    border: 1px solid #0c0d0e;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    padding: 0.5em;
+
+    /*Outer glow*/
+    -moz-box-shadow:    0 0 10px 3px #000;
+    -webkit-box-shadow: 0 0 10px 3px #000;
+    box-shadow:         0 0 10px 3px #000;
+
+    /*background-color: #1c1e22;
+    border: 1px solid #0c0d0e; */
+    width: 310px;
+    /*height: 180px;*/
+    float: left;
+    margin: 0;
+    position: absolute;
+    /*top: 0;*/
+    /*left: 0;*/
+    color: #999;
+    z-index: 1000;
+    display: none;
+
+}
+.popover {
+    z-index: 3000;
+}
+
+.og-dragpane .navbar-brand { cursor: move; }
+
+
+#btn-previm > a, #btn-nextim > a { /*, #btn-closeim > a*/
+   /*
+    padding-left: 10px;
+    padding-right: 10px;
+    */
+}
+
+.zoompanel {
+    background-repeat:no-repeat;
+    height:200px;
+    line-height: 200px;
+    width: 100%;
+    overflow: hidden;
+    font-size: 12px;
+    color: #fff;
+    text-shadow: 0 0 5px #000000;
+    text-align: center;
+    position: relative;
+}
+.zoompanel i {
+    position: absolute;
+    font-size: 10px;
+    color: #28ff00;
+    text-shadow: 0 0 8px #000000;
+    margin-left: -5px;
+    margin-top: -5px;
+    display: none;
+    -webkit-animation: blink 2s linear infinite;
+    -moz-animation: blink 2s linear infinite;
+    animation: blink 2s linear infinite;
+
+    /*animation: blink 1s steps(5, start) infinite;*/
+}
+/*.zoompanel i {
+    font-size: 35px;
+    color: #fff;
+    text-shadow: 0 0 5px #000000;
+    font-weight: lighter;
+    opacity: 0.2;
+    margin-left: 30px;
+    margin-top: 10px;
+}*/
+
+
+#zoomslider{
+    height: 180px;
+    float:left;
+    margin: 10px;
+}
+/*#zoomslider .ui-slider-handle {*/
+    /*overflow: visible;*/
+    /*text-align: center;*/
+    /*font-size: 9px;*/
+/*}*/
+
+.og-contextmenu {
+    position: absolute;
+    z-index: 1001;
+    background-color: #34363b;
+    color: #9ca3a8;
+    text-align: left;
+    font-size: 12px;
+    margin-top: -11px;
+    margin-left: 8px;
+
+    /*well*/
+    min-height: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #0c0d0e;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    padding: 0.5em;
+
+    /*Outer glow*/
+    -moz-box-shadow:    0 0 10px 3px #000;
+    -webkit-box-shadow: 0 0 10px 3px #000;
+    box-shadow:         0 0 10px 3px #000;
+
+}
+/*CSS hack to add triangular carret to context menu using partial border:before*/
+.og-contextmenu:before {
+    top: 0%;
+	left: auto;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+	border-right-color: #cccccc;
+	border-width: 8px;
+	margin: 2px 0 0 -24px;
+}
+.og-contextmenu li a{
+    padding: 2px 5px;
+}
+
+.og-active-thm {
+    border: 2px solid #29ff00 !important;
+    margin: -2px -2px -2px -2px;
+}
+
+.og-fullimg .annotation-point {
+    margin: 0px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+    margin-left: -7px;
+    margin-top: -7px;
+    font-size: 14px;
+    text-shadow: 0px 0px 5px #000,
+    /* Simulated effect for Firefox and Opera and nice enhancement for WebKit */
+    -1px -1px 1px #000, 1px -1px 1px #000, -1px 1px 1px #000, 1px 1px 1px #000;
+
+    /*Icon from Font Awesome*/
+
+}
+/*
+.annotation-point:hover {
+    margin-left: -12px;
+    margin-top: -12px;
+    font-size: 24px;
+}
+*/
+.apcol-default {
+    color: #FFF;
+}
+.apcol-scored {
+    color: #1b461b;
+}
+.apcol-selected {
+    color: #9a0200;
+    /*text-shadow: 0 0 10px #000000;*/
+}
+.popover {
+    color: #fff;
+}
+
+
+@keyframes blink {
+    0% { opacity: 1; }
+    35% {opacity: 0;}
+    65% {opacity: 0;}
+    100% { opacity: 1; }
+}
+@-webkit-keyframes blink {
+    0% { opacity: 1; }
+    35% {opacity: 0;}
+    65% {opacity: 0;}
+    100% { opacity: 1; }
+}
+@-moz-keyframes blink {
+    0% { opacity: 1; }
+    35% {opacity: 0;}
+    65% {opacity: 0;}
+    100% { opacity: 1; }
+}
+
+/*
+@-webkit-keyframes loader {
+	0% { background: #ddd; }
+	33% { background: #ccc; box-shadow: 0 0 1px #ccc, 15px 30px 1px #ccc, -15px 30px 1px #ddd; }
+	66% { background: #ccc; box-shadow: 0 0 1px #ccc, 15px 30px 1px #ddd, -15px 30px 1px #ccc; }
+}
+
+@-moz-keyframes loader {
+	0% { background: #ddd; }
+	33% { background: #ccc; box-shadow: 0 0 1px #ccc, 15px 30px 1px #ccc, -15px 30px 1px #ddd; }
+	66% { background: #ccc; box-shadow: 0 0 1px #ccc, 15px 30px 1px #ddd, -15px 30px 1px #ccc; }
+}
+
+@keyframes loader {
+	0% { background: #ddd; }
+	33% { background: #ccc; box-shadow: 0 0 1px #ccc, 15px 30px 1px #ccc, -15px 30px 1px #ddd; }
+	66% { background: #ccc; box-shadow: 0 0 1px #ccc, 15px 30px 1px #ddd, -15px 30px 1px #ccc; }
+}
+
+@media screen and (max-width: 830px) {
+
+	.og-expander h3 { font-size: 32px; }
+	.og-expander p { font-size: 13px; }
+	.og-expander a { font-size: 12px; }
+
+}
+
+@media screen and (max-width: 650px) {
+
+	.og-fullimg { display: none; }
+	.og-details { float: none; width: 100%; }
+	
+}
+*/

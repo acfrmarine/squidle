@@ -1,0 +1,62 @@
+{% extends "base-nosidebar.html" %}
+
+
+<!--
+{% block sidebar %}
+  <div id="sidebar-nav" class="span3" style="padding-left:10px;">
+
+    <h1>Deployment</h1>  
+    <div class="well well-small" style="align:center;">
+
+      <p class="lead">AUV List</p>
+      <p>options</p>
+    </div><!--/.well -->
+  </div>
+{% endblock %}
+-->
+
+{% block content_header %}
+  <ul class="breadcrumb">
+    <li class="active">AUV Deployment List</li>
+  </ul>
+{% endblock %}
+
+<!--{% block breadcrumbs %}
+  <li class="active">AUV Deployment List</li>
+{% endblock %}-->
+
+{% block content %}
+  {% if latest_auvdeployment_list %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>Min Depth</th>
+          <th>Max Depth</th>
+          <th>Mission Aim</th>
+          <th>Related Campaign</th>
+        </tr>
+      </thead>
+      <tbody>
+
+          {% for auvdeployment in latest_auvdeployment_list %}
+            <tr>
+              <td>{{auvdeployment.short_name}}</td>           
+              <td>{{auvdeployment.start_time_stamp}}</td>
+              <td>{{auvdeployment.end_time_stamp}}</td>
+              <td>{{auvdeployment.min_depth}}</td>
+              <td>{{auvdeployment.max_depth}}</td>
+              <td>{{auvdeployment.mission_aim}}</td>
+              <td><a href="/data/campaigns/{{auvdeployment.campaign.id}}" class="btn btn-large btn-primary">Campaign</a> <br><br>
+                  <a href="/data/auvdeployments/{{auvdeployment.id}}" class="btn btn-large btn-primary">Detail</a></td>
+            <tr>
+
+          {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+      <p>No auvdeployments are available.</p>
+  {% endif %}
+{% endblock %}

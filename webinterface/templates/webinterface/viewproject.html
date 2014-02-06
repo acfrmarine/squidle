@@ -1,0 +1,286 @@
+{% extends "base-blank.html" %}
+
+{% block tail_head %}
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}assets/thumbnail-expgrid/css/component.css" />
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}assets/catami-api/css/map.css" />
+	<!-- Add fancyBox main JS and CSS files -->
+    <script src="{{ STATIC_URL }}assets/thumbnail-expgrid/js/modernizr.custom.js"></script>
+
+{#    <link rel="stylesheet" type="text/css" href="http://jautochecklist.googlecode.com/svn/release/css/jAutochecklist.min.css?v=1.21"/>#}
+    <link rel="stylesheet" href="{{ STATIC_URL }}assets/bootstrap/css/bootstrap-multiselect.css" type="text/css">
+
+{% endblock %}
+
+{% block content %}
+<nav id="top-nav" class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <a id="nav-icon-link" class="navbar-brand" href="javascript:void(0)" title="Reset view"><i id="nav-icon"  class="icon-edit-sign"></i></a>
+    <ul class="nav navbar-nav">
+        <li class="divider-vertical"></li>
+        <!--<li><a title="View Map interface" href="javascript:void(0)" onclick="show_note('WIP','The map is still a WIP','success',true)"><i class="icon-globe"></i></a></li>-->
+        <li title="View Map" class="icon-text"><a id="map-nav" href="#map" data-toggle="tab" ><i class="icon-globe"></i>Map</a></li>
+        <li title="View Images for selected dataset" class="icon-text"><a id="image-nav" href="#thm" data-toggle="tab"><i class="icon-picture"></i>Images</a></li>
+        <!--<li title="Manage Datasets" class="icon-text"><a href="javascript:void(0)" onclick="$('#data-modal').modal('show')"><i class="icon-th-list"></i>Data</a></li>-->
+        <li title="Data tools for selected dataset" class="icon-text"><a id="data-nav" href="#datatab" data-toggle="tab"><i class="icon-th-list"></i>Data</a></li>
+        <li class="dropdown"><a id="datasel" href="#" class="dropdown-toggle" data-toggle="dropdown">No dataset selected <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li><a href="javascript:void(0)" onclick="$('#data-modal').modal('show')"><i class="icon-th-list"></i>
+                    Choose a dataset</a></li>
+                <li><a href="/"><i class="icon-plus"></i> Create new Project</a></li>
+            </ul>
+        </li>
+    </ul>
+
+    <ul id="sign-in-status"  class="nav navbar-nav navbar-right">
+
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+        <li title="Info/about"><a href="#info-modal" data-toggle="modal"><i class="icon-info-sign"></i></a></li>
+        <li title="Help/How to"><a href="#help-modal" data-toggle="modal" ><i class="icon-question-sign"></i></a></li>
+    </ul>
+</nav>
+
+
+<div class="container">
+    <div id="main-tabs"  class="tab-content">
+        <div class="tab-pane tab-main" id="map" data-isloaded="">
+        	<div id='deployment-map'></div>
+            <div id="map-panel-container">
+                <div id="map-panel">
+                    <div class="alert alert-danger"><b>UNDER CONSTRUCTION:</b> this website is currently under construction. Click <a href="#info-modal" data-toggle="modal">here</a> for more information.</div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane tab-main main" id="thm" data-isloaded="">
+            <ul id="og-grid-0" class="og-grid"></ul>
+        </div>
+        <div class="tab-pane tab-main main" id="datatab" data-isloaded="">
+            There is no dataset selected. Select or create a dataset by<br>
+            clicking the dropdown menu on the top navigation bar.
+        </div>
+    </div>
+</div>
+
+
+
+
+{% include "webinterface/subtemplates/data-modals.html" %}
+{% include "webinterface/subtemplates/help-modal.html" %}
+{% endblock %}
+
+
+
+{% block add_script %}
+<script type="text/javascript" src="{{ STATIC_URL }}assets/catami-api/js/images.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}assets/jquery/plugins/serialize-object.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}assets/catami-api/js/annotations.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}assets/catami-api/js/collections.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}assets/jquery/plugins/delayed-keyup.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}assets/fancybox/source/jquery.fancybox.js?v=2.1.5"></script>
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}assets/fancybox/source/jquery.fancybox.css?v=2.1.5" media="screen" />
+<script src="{{ STATIC_URL }}assets/thumbnail-expgrid/js/grid.js"></script>
+<script src="{{ STATIC_URL }}assets/js/default.js"></script>
+
+<script src="{{ STATIC_URL }}assets/image-manipulation/pixastic.custom.js"></script>
+{#<script src="http://jautochecklist.googlecode.com/svn/release/js/jAutochecklist.min.js?v=1.21"></script>#}
+<script type="text/javascript" src="{{ STATIC_URL }}assets/bootstrap/js/bootstrap-multiselect.js"></script>
+
+<script src="{{ STATIC_URL }}assets/openlayers/OpenLayers.js"></script>
+<script src="{{ STATIC_URL }}assets/OpenLayers/LoadingPanel.js"></script>
+<script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+{#<script src='{{ STATIC_URL }}assets/catami-api/js/Map.js'></script>#}
+<script src='{{ STATIC_URL }}assets/catami-api/js/map-ui.js'></script>
+
+<script type="text/javascript">
+
+    var curstate = {
+        clid: {{ clid }},
+        wsid: {{ wsid }},
+        asid: {{ asid }},
+        imid: {{ imid }},
+        imid_ui: function () {return (curstate.imid) ? '#img-'+curstate.imid : ''},
+        nimgs: Math.floor($( '#main-tabs' ).innerWidth()/110)*(Math.floor($(window).innerHeight()/86)+1),
+        isloggedin: ('{{ user.is_authenticated }}'=='True'),
+        userid: ('{{ user.id }}'=='None') ? 0 : {{ user.id }},
+        username: '{{ user.username }}',
+        loginfuncs: []   // functions to execute when a user is logged in
+    }
+
+    var filters = {
+        mapfilter : {},
+        imgfilter : ''
+    }
+
+    var thlist = new ImagesAPI({});
+    var clobj = new CollectionAPI({config: {format: '<b>{name}</b><br>Created by <b>{username}</b> on <b>{creation_date}</b>.<br>Contains <b>{image_count}</b> images.<br>{creation_info}.<br><em>{description}</em>'}});
+    var asobj = new AnnotationSetAPI({});
+    var thmgrid = new Grid('#og-grid-0',curstate);
+    var map = new BaseMap('{{ GEOSERVER_URL }}', '{% url "webinterface.views.get_multiple_deployment_extent" %}', '{% url "webinterface.views.get_collection_extent" %}', curstate);
+
+
+
+    // scrolling can generate a lot of events and cause a performance hit
+    // buffer to process one event per some interval of time.
+    var _scrollbuffer = null;
+    var scrollfuncs = [];
+    $(window).scroll(function (e) {
+        if ( !_scrollbuffer ) {
+            _scrollbuffer = setTimeout(function () {
+                _scrollbuffer = null;
+                for (var i= 0;i<scrollfuncs.length;i++)
+                    scrollfuncs[i]();
+            }, 500);
+        }
+    });
+
+
+    var resizefuncs = [];
+    $(window).resize(function () {
+        // do stuff on resize
+        for (var i= 0;i<resizefuncs.length;i++)
+            resizefuncs[i]();
+    });
+
+
+
+
+
+    $(document).ready(function () {
+        update_sign_in(curstate.userid,curstate.username); //initialise sign in variables
+        setupAjax(); // setup ajax auth
+        createDataModal(curstate); // setup modal windows for data
+
+        // Update current selection text
+        if (curstate.clid) {
+            $('#datasel').html(clobj.getCollectionInfo(curstate.clid).name);
+            if (curstate.wsid) $('#datasel').append(' <b style="color:red">|</b> ' + clobj.getCollectionInfo(curstate.wsid).name);
+            if (curstate.asid) $('#datasel').append(' <b style="color:red">|</b> ' + asobj.getAnnotationInfo(curstate.asid).name);
+            $('#datasel').append(' <b class="caret"></b>');
+        }
+
+        // Do stuff on showing of map
+        $('#map-nav').on('shown.bs.tab', function (e) {
+            history.replaceState(null, '', e.target);
+            $('#nav-icon-link').unbind('click').bind('click',function() {map.updateMapBounds("collection_id="+curstate.clid, map.collectionExtentUrl)});
+            if ($('#map').data('isloaded')==''){
+                //map = new BaseMap("{{ GEOSERVER_URL }}", '#deployment-map', '{% url "webinterface.views.get_multiple_deployment_extent" %}', '{% url "webinterface.views.get_collection_extent" %}', curstate);
+                map.addInfoPane($('#map'), 'mapinfo');
+                map.init($('#deployment-map'),$('#map-panel'));
+                $('#map').data('isloaded', true);
+                //map.setFullHeight($('#deployment-map'));
+                if (curstate.clid) { // Info mode
+                    map.updateMapForCollection(curstate.clid, 'Project', {markercol: "0000FF", markersize: 2, isclickable: false});
+                    var $clinfo = map.addPanel($('#map-panel'), {id: 'map-clinfo', icon: 'icon-info', title: 'Project info', closeable: false});
+                    clobj.getCollectionInfo(curstate.clid, $clinfo);
+                    if (curstate.wsid) {
+                        map.updateMapForCollection(curstate.wsid, 'Subset', {markercol:"FF0000", markersize:9, isclickable:true});
+                        map.updateMapBounds("collection_id=" + curstate.wsid, map.collectionExtentUrl);
+                        var $wsinfo = map.addPanel($('#map-panel'), {id: 'map-wsinfo', icon: 'icon-info', title: 'Subset info', closeable: false});
+                        clobj.getCollectionInfo(curstate.wsid, $wsinfo);
+                    }
+                    else {
+                        map.updateMapBounds("collection_id=" + curstate.clid, map.collectionExtentUrl);
+                    }
+                }
+                else { // Explore mode
+                    map.showDeployments();
+                    map.showImages();
+
+                    // Add selection tools
+                    var $selpanel = map.addPanel($('#map-panel'), {id: 'mapsel', icon: 'icon-plus-sign-alt', title: 'Selection tools', closeable: false});
+                    $selpanel.append('<br>');
+                    map.addDeploymentSelect($selpanel, 'Images');
+
+                    // Add filters
+                    var $filterpanel = map.addPanel($('#map-panel'), {id: 'mapfilters', icon: 'icon-filter', title: 'Filters', closeable: false});
+                    map.addRangeFilter($filterpanel, 'slider', 'Images', 'depth', {step: 1, range: [0, 2000], unit: 'm'});
+                    map.addRangeFilter($filterpanel, 'slider', 'Images', 'altitude', {step: 0.1, range: [0, 10], unit: 'm'});
+                    map.addRangeFilter($filterpanel, 'date', 'Images', 'date_time', {from: '2005-01-01', to: new Date()});
+                    map.addBBoxSelect($filterpanel, 'Images');
+
+                    // add current selection info
+                    // create selected panel with creation of selection layer
+                    var $curselpanel = map.addPanel($('#map-panel'), {id: 'mapselected', icon: 'icon-stackexchange', title: 'Current selection', closeable: false});
+                    map.updateSelectionInfo($curselpanel);
+                    curstate.loginfuncs.push(map.updateSelectionInfo);
+
+                }
+
+                // Add resize function to ensure map resizes on window resize
+                resizefuncs.push(function() {
+                    // size map
+                    map.setFullHeight();
+                });
+            }
+            if (curstate.imid) map.updateMapForSelectedImage(curstate.imid);
+        });
+
+        // Do stuff on showing of thumbnails
+        $('#image-nav').on('shown.bs.tab', function (e) {
+            history.replaceState(null, '', e.target);
+            $('#nav-icon-link').unbind('click').bind('click',function() {thmgrid.scrollToCurrentPreview()});
+            if ($('#thm').data('isloaded')==''){
+                var clid_thm = (curstate.wsid) ? curstate.wsid : curstate.clid;
+                var imgfilter = 'order_by=id&collection=' + clid_thm +'&limit=' + curstate.nimgs;
+                if (curstate.asid) imgfilter += '&annotation_label_ne=1&annotation_set='+curstate.asid;
+
+                thlist.setFormat('<li class="thm"><a id="img-{id}" class="thm-link" href="?clid='+curstate.clid+'&wsid='+curstate.wsid+'&asid='+curstate.asid+'&imid={id}#thm" data-largesrc="{web_location}" data-id="{id}" data-description="annotation tools and image information" data-annotation_labelled_count="{annotation_labelled_count}" data-annotation_count="{annotation_count}"><img src="{thumbnail_location}" alt="{id}"/></a></li>');
+
+                thmgrid.init(); // initialise thumbnail grid
+                thmgrid.addItems( $(thlist.getThumnailList(imgfilter, true)), $( '#og-grid-0' ));
+                //while (nimgloads++ < maximgloads && !$(imid_open).length) {
+                //    thmgrid.addItems( $(thlist.getThumnailList(thlist.meta.next, false)), $( '#og-grid-0' ));
+                //}
+
+                // add scroll function to scrollfuncs array to enable infinite scrolling
+                scrollfuncs.push(function(){
+                    // Infinite scrolling for automatic thumbnail loading
+                    // TODO: fix performance issues with lots of images
+                    if (isInView(thmgrid.$loaderdiv) && thlist.meta.next!= null) {
+                        thmgrid.addItems( $(thlist.getThumnailList(thlist.meta.next, false)), $( '#og-grid-0' ));
+                    }
+                });
+
+                $('#thm').data('isloaded',true);
+            }
+            else {
+                if ('#'+$('.og-expanded > a').attr('id') != curstate.imid_ui())
+                    $(curstate.imid_ui()).trigger('click');
+                else
+                    thmgrid.scrollToCurrentPreview();
+            }
+        });
+
+
+        $('#data-nav').on('shown.bs.tab', function (e) {
+            history.replaceState(null, '', e.target);
+            if (curstate.clid)
+                $('#datatab').load("/static/html/data-view-example.html");
+        });
+
+        // Activate tabs from anchor in url links
+        if (window.location.hash.length > 0) {
+            if ($(window.location.hash).hasClass('tab-pane')) $('li > a[href="' + window.location.hash + '"]').tab('show');
+            //else if ($(window.location.hash).hasClass('modal')) $(window.location.hash).modal('show');
+        } else {
+            $('#map-nav').tab('show'); // default to map tab
+        }
+
+
+
+    });
+
+
+
+
+    function showLoader() {
+        $('#nav-icon').removeClass('icon-edit-sign').addClass('icon-spin icon-spinner');
+        thmgrid.$loaderdiv.html('Loading images...');
+
+    }
+    function hideLoader() {
+        $('#nav-icon').removeClass('icon-spin icon-spinner').addClass('icon-edit-sign');
+        thmgrid.$loaderdiv.html('');
+    }
+
+</script>
+{% endblock %}

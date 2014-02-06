@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block sidebar %}
+    <div id="sidebar-nav" class="span3" style="padding-left:10px;">
+
+        <h1>Data Search</h1>
+
+        <div class="well well-small" style="align:center;">
+
+            <p class="lead">Find things</p>
+
+            <p>options</p>
+        </div>
+        <!--/.well -->
+
+    </div>
+{% endblock %}
+
+{% block content %}
+
+    <form action="" method="get">
+        <table>
+            {{ form.as_table }}
+        </table>
+        <input type="submit" value="Search"/>
+        <br><br>
+        {% if query %}
+
+
+            <div class="span8">
+                <p>You searched for <strong>{{ query }}</strong>,
+                    we found {{ page.object_list|length }} Objects</p>
+
+                <div id='map_container2'></div>
+                <table class="table">
+                    {% for result in page.object_list %}
+                        <tr>
+                            {% if result.model_name == 'campaign' %}
+                                {% include 'search/_result_object_campaign.html' %}
+                            {% elif result.model_name == 'auvdeployment' %}
+                                {% include 'search/_result_object_auvdeployment.html' %}
+                            {% elif result.model_name == 'bruvdeployment' %}
+                                {% include 'search/_result_object_bruvdeployment.html' %}
+                            {% elif result.model_name == 'deployment' %}
+                                {% include 'search/_result_object_deployment.html' %}
+                            {% else %}
+                                <div class="alert alert-error"><p>If you're seeing this, then there is a bug. Please let
+                                    someone at Catami know. Returned model type is >{{ result.model_name }}<</p></div>
+                            {% endif %}
+
+                            {% empty %}
+                            <div class="alert alert-info alert-block"><h4>No results found for
+                                <strong>{{ query }}</strong>. Oh snap!</h4>Perhaps try a different search? If you think
+                            this is a bug, get in touch.
+                            </div>
+                        </tr>
+                    {% endfor %}
+                </table>
+
+            </div>
+
+            {% if page.has_previous or page.has_next %}
+                <div>{% if page.has_previous %}<a href="?q={{ query }}&page={{ page.previous_page_number }}">{% endif %}
+                « Previous{% if page.has_previous %}</a>{% endif %}
+                    |
+                    {% if page.has_next %}<a href="?q={{ query }}&page={{ page.next_page_number }}">{% endif %}Next »
+                    {% if page.has_next %}</a>{% endif %}</div>
+            {% endif %}</div>
+
+        {% else %}
+
+        {% endif %}
+    </form>
+{% endblock %}
+
+{% block add_script %}
+    <script src='{{ STATIC_URL }}assets/openlayers/OpenLayers.js'></script>
+    <script src='{{ STATIC_URL }}assets/esriOceanBasemap/map.js'></script>
+
+    <script type="text/javascript">
+        var lon = 138;
+        var lat = -35;
+        var zoom = 4;
+        var map, layer;
+
+
+        function init() {
+            var bounds;
+
+            map = new OpenLayers.Map('map_container2');
+            layer = new OpenLayers.Layer.WMS("OpenLayers WMS",
+                    "http://vmap0.tiles.osgeo.org/wms/vmap0",
+                    {layers: 'basic'});
+
+            map.addLayer(layer);
+            map.setCenter(new OpenLayers.LonLat(lon, lat), zoom);
+            var geojson_data = '{ "type": "FeatureCollection", "features": [ {"geometry": { "type": "GeometryCollection", "geometries": [\
+{% for result in page.object_list %}{% if not forloop.last %}{{ result.object.start_position.geojson|safe }},{% else %}{{ result.object.start_position.geojson|safe }}{% endif %}{% endfor %}] }, "type": "Feature", "properties": {  } } ] }';
+
+            var geojson_format = new OpenLayers.Format.GeoJSON();
+            var feature_collection = geojson_format.read(geojson_data);
+
+            var vector_layer = new OpenLayers.Layer.Vector();
+            map.addLayer(vector_layer);
+            vector_layer.addFeatures(geojson_format.read(geojson_data));
+
+            if (feature_collection) {
+                for (var i = 0; i < feature_collection.length; ++i) {
+                    if (!bounds) {
+                        bounds = feature_collection[i].geometry.getBounds();
+                    } else {
+                        bounds.extend(feature_collection[i].geometry.getBounds());
+                    }
+
+                    //map.fitBounds(feature_collection.features.geometry.getBounds());
+                }
+                map.zoomToExtent(bounds);
+
+            }
+        }
+    </script>
+
+
+{% endblock %}   

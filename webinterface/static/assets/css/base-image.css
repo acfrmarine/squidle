@@ -1,0 +1,234 @@
+body html {
+    height: 100%;
+    width: 100%;
+    background-color: #3a3a3a;
+}
+#main-container {
+    background-color: #3a3a3a;
+    display: block;
+}
+#leftpane {
+    height: 100%;
+    width: 45px;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    background-color: #CCC;
+    border-right: 1px #000 solid;
+    margin: 0;
+    padding: 10px 5px 5px 5px;
+    text-align: center;
+}
+#imageview {
+    height: 600px;
+    width: 80%;
+    position: absolute;
+    top: 0;
+    left: 56px;
+
+    margin: 0;
+    background-color: #3a3a3a;
+}
+#imageview img {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+}
+#footpane {
+    height: 50px;
+    width: 80%;
+    position: absolute;
+    bottom: 0;
+    left: 56px;
+
+    background-color: #CCC;
+    border-top: 1px #000 solid;
+    margin: 0;
+    padding: 5px;
+}
+#rightpane{
+    height: 100%;
+    width: 270px;
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    background-color: #CCC;
+    border-left: 1px #000 solid;
+    margin: 0;
+    padding: 5px;
+}
+#thumbnailpane{
+    position: absolute;
+    bottom: 55px;
+    left: 50%;
+    width: 80%;
+    margin-left: -40%;
+    text-align: center;
+    background-color: #878787;
+    display: none;
+    overflow: hidden;
+    padding: 0;
+    border: 1px solid #ddd;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.055);
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.055);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.055);
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+
+#thumbnailpane i {
+    font-size: 30px;
+    line-height: 69px;
+    width: 4%;
+    text-align: center;
+    display: block;
+    float: left;
+    margin: 0;
+    padding: 0;
+}
+#thumbnailpane i.icon-angle-right {
+    float: right;
+}
+#thumbnailpane i:hover {
+    color: #FFF;
+}
+#thumbnailpane #thumbnaillist {
+    width: 90%;
+    display: block;
+    float: left;
+    margin: 1px 0px 1px 0px;
+    padding: 0;
+    overflow: hidden;
+}
+#thumbnailpane #thumbnaillist img {
+    width: 9.5%;
+    border: 1px solid transparent;
+    float: left;
+}
+
+#thumbnailpane #thumbnaillist img#active {
+    border-color: red;
+}
+
+#infotabs {
+    margin-bottom: 0;
+    border-bottom: 1px #3a3a3a solid;
+}
+#infotabs li a {
+    border: #3a3a3a solid 1px;
+    color: #000;
+    background-color: #CCCCCC;
+    /*margin-bottom: -1px;*/
+}
+#infotabs li.active a {
+    border-bottom-color: #FFF;
+    color: #000;
+    background-color: #FFF;
+}
+#infotabs-content > .active {
+    background-color: #FFF;
+    padding: 5px;
+    border: #3a3a3a solid 1px;
+    border-top: none;
+}
+
+#footpane #zoomctrl {
+    width: 33%;
+    float: left;
+    text-align: left;
+    display: inline-block;
+}
+#footpane #thumbnailctrl {
+    width: 33%;
+    float: left;
+    text-align: center;
+    display: inline-block;
+}
+#footpane #imgnavctrl {
+    width: 33%;
+    float: right;
+    text-align: right;
+    display: inline-block;
+}
+#label-list td {
+    padding: 2px;
+}
+
+#rightpane #nav-right {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 50px;
+    padding: 5px;
+    text-align: center;
+}
+#rightpane #nav-right li a {
+    width: 60px;
+    margin: 0;
+    color: #333333;
+    background-color: #f5f5f5;
+    margin-left: 5px;
+    line-height: 20px;
+    padding: 4px 12px;
+}
+#rightpane #nav-right li.active a {
+    color: #ffffff;
+    background-color: #363636;
+}
+.infopane {
+    background-color: #d9d9d9;
+    margin: 5px;
+    padding: 5px;
+}
+
+.divfixedh200 {
+    height: 200px;
+    overflow: auto;
+    border: 1px solid #e0e0e0;
+}
+
+.divfixedh400 {
+    height: 400px;
+    overflow: auto;
+    border: 1px solid #e0e0e0;
+}
+.divfixedh300 {
+    height: 200px;
+    overflow: auto;
+    border: 1px solid #e0e0e0;
+}
+
+.divfixedh70 {
+    height: 70px;
+    overflow: auto;
+    border: 1px solid #e0e0e0;
+}
+
+.infopane h1 {
+    font-size: 18px;
+    /*text-transform: uppercase;*/
+    margin: 0 0 5px 0;
+    padding: 0;
+    line-height: normal;
+}
+
+.infopane h2 {
+    font-size: 15px;
+    margin: 0;
+    padding: 0 0 5px 0;
+    line-height: normal;
+    border-bottom: solid 1px #FFF;
+}
+
+.infopane h1 a, .infopane h2 a {
+    color: #000;
+    text-decoration: none;
+}

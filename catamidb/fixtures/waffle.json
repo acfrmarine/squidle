@@ -1,0 +1,24 @@
+[
+    {
+        "pk":1,
+        "model":"waffle.switch",
+        "fields":{
+            "active":true,
+            "note":"Features under Collections. ",
+            "name":"Collections",
+            "modified":"2013-02-12T04:09:15.435Z",
+            "created":"2013-02-12T04:08:37Z"
+        }
+    },
+    {
+        "pk":2,
+        "model":"waffle.switch",
+        "fields":{
+            "active":true,
+            "note":"Things that are being played with, but not currently well thought out. ",
+            "name":"Experimental",
+            "modified":"2013-02-12T04:10:19.784Z",
+            "created":"2013-02-12T04:09:45Z"
+        }
+    }
+]

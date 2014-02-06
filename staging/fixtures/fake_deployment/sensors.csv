@@ -1,0 +1,3 @@
+sensortype,filename,columnname,camera
+cadence,cadence.csv,cadence,None
+index,images.csv,index,Front

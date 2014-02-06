@@ -1,0 +1,75 @@
+[
+    {
+        "pk":1,
+        "model":"catamidb.scientificmeasurementtype",
+        "fields":{
+            "display_name":"Temperature",
+            "description":"The water temperature at the location (and time) of the image.",
+            "max_value":40.0,
+            "min_value":-2.5,
+            "units":"cel",
+            "normalised_name":"temperature"
+        }
+    },
+    {
+        "pk":2,
+        "model":"catamidb.scientificmeasurementtype",
+        "fields":{
+            "display_name":"Salinity",
+            "description":"Water salinity at the measurement point.",
+            "max_value":41.0,
+            "min_value":2.0,
+            "units":"psu",
+            "normalised_name":"salinity"
+        }
+    },
+    {
+        "pk":3,
+        "model":"catamidb.scientificmeasurementtype",
+        "fields":{
+            "display_name":"Pitch",
+            "description":"Pitch of camera at time of image.",
+            "max_value":1.58,
+            "min_value":-1.58,
+            "units":"rad",
+            "normalised_name":"pitch"
+        }
+    },
+    {
+        "pk":4,
+        "model":"catamidb.scientificmeasurementtype",
+        "fields":{
+            "display_name":"Roll",
+            "description":"Roll of camera at time of image.",
+            "max_value":3.15,
+            "min_value":-3.15,
+            "units":"rad",
+            "normalised_name":"roll"
+        }
+    },
+    {
+        "pk":5,
+        "model":"catamidb.scientificmeasurementtype",
+        "fields":{
+            "display_name":"Yaw",
+            "description":"Yaw of camera at time of image.",
+            "max_value":3.15,
+            "min_value":-3.15,
+            "units":"rad",
+            "normalised_name":"yaw"
+        }
+    },
+    {
+        "pk":6,
+        "model":"catamidb.scientificmeasurementtype",
+        "fields":{
+            "display_name":"Altitude",
+            "description":"Altitude of camera at time of image.",
+            "max_value":12000.0,
+            "min_value":0.0,
+            "units":"m",
+            "normalised_name":"altitude"
+        }
+    }
+
+]

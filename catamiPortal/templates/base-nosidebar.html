@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Catami</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link rel="stylesheet" href="{{ STATIC_URL }}assets/css/jquery-ui-1.8.23.custom.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}assets/css/bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}assets/css/bootstrap-responsive.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}assets/css/fullscreenMap.css" type="text/css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}assets/css/overlay-basic.css" type="text/css">
+    {% block add_styles %}{% endblock %}
+
+    <style>
+        body {
+            padding-top: 40px; /* 60px to make the container go all the way to the bottom of the topbar */
+        }
+
+        #map_container2 {
+            height: 600px;
+            width: 100%;
+            border: 2px;
+        }
+
+        #leaflet_container {
+            height: 100%;
+            width: 100%;
+            border: 2px;
+        }
+
+        img.olTileImage {
+            max-width: 256px !important;
+        }
+
+        div.contentWrap {
+            height: 800px;
+            overflow-y: auto;
+        }
+
+        .sidebar-nav {
+            padding: 9px 0;
+        }
+
+        a.toggles {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            display: block;
+            background-color: black;
+            color: white;
+            padding: 10px 20px;
+        }
+
+        .no-sidebar {
+            margin-left: 0 !important;
+        }
+
+        .navbar .brand {
+            max-height: 40px;
+            overflow: visible;
+            padding-top: 0px;
+            padding-bottom: 0px
+        }
+
+        {% block insert_style %}{% endblock %}
+    </style>
+
+    <link href="{{ STATIC_URL }}assets/css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="{{ STATIC_URL }}assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144"
+          href="{{ STATIC_URL }}assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114"
+          href="{{ STATIC_URL }}assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72"
+          href="{{ STATIC_URL }}assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="{{ STATIC_URL }}assets/ico/apple-touch-icon-57-precomposed.png">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="/"><img src="{{ STATIC_URL }}assets/img/catamiheader-blue-small.png"
+                                           alt="catami_icon_small" width="140"/></a>
+
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    <li class=""><a href="/"><i class="icon-home icon-white"></i> Home </a></li>
+                    <li><a href="/data"><i class="icon-list-alt"></i> Explore </a></li>
+
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url "staging.views.index" %}"><i class="icon-upload"></i> Import </a></li>
+                    {% endif %}
+                    <!--
+                        <li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								<b class="caret"></b>
+								Interfaces
+							</a>
+							<ul class="dropdown-menu">
+							    <li><a  href="{% url "staging.views.index" %}"><i class="icon-upload"></i> Import Data</a></li>
+							    <li><a  href="/data"><i class="icon-list-alt"></i> View Data</a></li>
+							    <li><a  href="/search"><i class="icon-search"></i> Search Data</a></li>
+							
+							</ul>
+						</li>
+-->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <b class="caret"></b>
+                            Help
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/faq"><i class="icon-question-sign"></i> FAQ</a></li>
+                            <li><a href="/contact"><i class="icon-envelope"></i> Contact us</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#" rel="popover"
+                           title="Collaborative and Annotation Tools for Analysis of Marine Imagery and Video"
+                           data-placement="bottom"
+                           data-content=" This project includes development funded by the Australian National Data Service (ANDS, http://ands.org.au) and the National eResearch Collaboration Tools and Resources (NeCTAR, http://nectar.org.au). ANDS is supported by the Australian Government through the National Collaborative Research Infrastructure Strategy Program and the Education Investment Fund (EIF) Super Science Initiative. NeCTAR is an Australian Government project conducted as part of the Super Science initiative and financed by the Education Investment Fund. The University of Melbourne has been appointed the lead agent by the Commonwealth of Australia, Department of Industry, Innovation, Science, Research and Tertiary Education.">About</a>
+                    <li class="divider-vertical"></li>
+                    </li>
+                </ul>
+
+                {% if user.is_authenticated %}
+                    <a href="/logout/" class="btn btn-small pull-right"> Logout</a>
+                    <p class="navbar-text pull-right"><i class="icon-user icon-white"></i> Logged in as <a
+                            href="#"> {{ user.username }} </a>&nbsp;</p>
+                {% else %}
+                    <a href="/accounts/signin/" role="button" class="btn btn-small pull-right"
+                       data-toggle="modal">Login</a>
+                    <p class="navbar-text pull-right"><i class="icon-user icon-white"></i> Welcome visitor! <a
+                            href="#"> {{ user.username }} </a>&nbsp;</p>
+                {% endif %}
+
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+        <!-- container-fluid -->
+    </div>
+    <!-- navbar-inner -->
+</div>
+<!-- navbar navbar-inverse navbar-fixed-top -->
+
+<div class="container-fluid">
+    {% block content_header %}{% endblock %}
+    {% block content %}{% endblock %}
+</div>
+
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="{{ STATIC_URL }}assets/js/jquery-1.8.0.min.js"></script>
+<script src="{{ STATIC_URL }}assets/js/bootstrap.js"></script>
+<script src="{{ STATIC_URL }}assets/js/jquery.tools.min.js"></script>
+<script src="{{ STATIC_URL }}assets/js/jquery-ui-1.8.23.custom.min.js"></script>
+
+<!-- popover js -->
+<script type="text/javascript">
+    (function () {
+        $("[rel=popover]").popover();
+    })();
+</script>
+
+{% block add_script %}{% endblock %}
+
+</body>
+</html>

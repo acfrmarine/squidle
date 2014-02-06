@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+
+{% block sidebar %}
+  <div id="sidebar-nav" class="span3" style="padding-left:10px;">
+
+    <h1>Campaign</h1>  
+    <div class="well well-small" style="align:center;">
+
+      <p class="lead">List</p>
+      <p>options</p>
+    </div><!--/.well -->
+  </div>
+{% endblock %}
+
+{% block content_header %}
+  <ul class="breadcrumb">
+    <li><a href="/data">Data</a>  
+    <li class="active"><span class="divider">></span> Campaign List</li>
+  </ul>
+{% endblock %}
+	
+{% block content %}
+
+  <div id='map_container2'></div>
+
+  {% if latest_campaign_list %}
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Deployments</th>
+          <th>Researchers</th>
+          <th>Publications</th>
+          <th>Grant</th>
+          <th>Description</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+
+          {% for campaign in latest_campaign_list %}
+            <tr>
+             <td colspan=8><p class="lead">{{campaign.short_name}}<p></td>
+            </tr>
+
+            <tr>
+              <td>{{campaign.date_start}}</td>
+              <td>{{campaign.date_end}}</td>
+              <td>0</td>
+              <td>{{campaign.associated_researchers}}</td>
+              <td>{{campaign.associated_publications}}</td>
+              <td>{{campaign.associated_research_grant}}</td>
+              <td>{{campaign.description}}</td>
+              <td><a href="{{campaign.id}}" class="btn btn-large btn-primary">Detail</a></td>
+            <tr>
+
+          {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+      <p>No campaigns are available.</p>
+  {% endif %}
+{% endblock %}
+
+
+{% block add_script %}
+    <script src='{{ STATIC_URL }}assets/openlayers/OpenLayers.js'> </script>
+    <script src='{{ STATIC_URL }}assets/esriOceanBasemap/map.js'></script>
+    
+    <script type="text/javascript">
+    var lon = 138;
+    var lat = -35;
+    var zoom = 4;
+    var map, layer;
+    var bounds;
+
+ var style ={
+   strokeColor: "#00FF00",
+   strokeOpacity: 1,
+   strokeWidth: 3,
+   fillColor: "#00FF00",
+   fillOpacity: 0.8 };
+       
+	 function init(){
+
+var geojson_payload = '{ "type": "FeatureCollection", "features": [ {"geometry": { "type": "GeometryCollection", "geometries": [\
+{% for campaign_rect in campaign_rects %}{% if not forloop.last %}{{campaign_rect|safe}},{% else %}{{campaign_rect|safe}}{% endif %}{% endfor %}] }, "type": "Feature", "properties": {}} ] }';
+
+           var geojson_format = new OpenLayers.Format.GeoJSON();
+           var feature_collection = geojson_format.read(geojson_payload);
+           
+            map = new OpenLayers.Map('map_container2');
+            layer = new OpenLayers.Layer.WMS( "OpenLayers WMS", 
+                    "http://vmap0.tiles.osgeo.org/wms/vmap0",
+                    {layers: 'basic'} );
+            
+            map.addLayer(layer);
+            
+            var vector_layer = new OpenLayers.Layer.Vector(); 
+            map.addLayer(vector_layer);
+	        vector_layer.addFeatures(geojson_format.read(geojson_payload));
+	           
+            map.setCenter(new OpenLayers.LonLat(lon, lat), zoom);
+            
+		}
+    </script>
+{% endblock %}

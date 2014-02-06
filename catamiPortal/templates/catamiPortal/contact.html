@@ -1,0 +1,55 @@
+{% extends "base-nosidebar.html" %}
+
+{% block content %}
+    <br>
+    <div class="row-fluid well">
+        <p class="lead"><strong>Blogger</strong><a href="http://catami-australia.blogspot.com.au"> The Catami Blog</a>
+        </p>
+
+        <p>Catami has a blog! At the Catami blog you can read articles on project specifics and keep up to date with
+            important milestones</p>
+    </div>
+
+    <div class="row-fluid well">
+        <p class="lead"><strong>Google+</strong><a href="http://plus.google.com/104765819602128308640"> Catami on
+            plus.google.com</a></p>
+
+        <p> Catami is on Google+. We're using Google+ for day to day team communications and short notes on interesting
+            topics.</p>
+
+        <div class="g-plus" data-href="https://plus.google.com/104765819602128308640" rel="author"></div>
+    </div>
+
+    <div class="row-fluid well">
+        <p class="lead"><strong>Jira</strong><a href="http://catami.atlassian.net"> https://catami.atlassian.net</a></p>
+
+        <p>We're using Jira for our project management. You can see our current task set here, and track progress as we
+            work</p>
+    </div>
+
+    <div class="row-fluid well">
+        <p class="lead"><strong>Github</strong> <a href="http://catami.github.com"> https://catami.github.com</a></p>
+
+        <p>Catami is open source! All Catami source code and the Catami Wiki can be found here</p>
+        <iframe src="http://ghbtns.com/github-btn.html?user=catami&type=follow&size=large" allowtransparency="true"
+                frameborder="0" scrolling="0" width="165px" height="30px"></iframe>
+    </div>
+
+    <div class="row-fluid well">
+        <p class="lead"><strong>Email</strong> <a href="mailto:catami@ivec.org">catami@ivec.org</a></p>
+
+        <p>emails to catami@ivec.org get sent to the entire development team.</p>
+    </div>
+
+    <script type="text/javascript">
+        (function () {
+            var po = document.createElement('script');
+            po.type = 'text/javascript';
+            po.async = true;
+            po.src = 'https://apis.google.com/js/plusone.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(po, s);
+        })();
+    </script>
+{% endblock %}
+

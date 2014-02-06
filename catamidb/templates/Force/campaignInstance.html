@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block sidebar %}
+  <div id="sidebar-nav" class="span3" style="padding-left:10px;">
+
+    <h1>Campaign</h1>  
+    <div class="well well-small" style="align:center;">
+
+      <p class="lead">{{campaign_object.short_name}}</p>
+      <p>options</p>
+    </div><!--/.well -->
+
+  </div>
+{% endblock %}
+     
+{% block content_header %}
+  <ul class="breadcrumb">
+  <li><a href="/data">Data</a>  
+  <li><span class="divider">></span><a href="/data/campaigns/"> Campaign List</a></li>
+  <li class="active"><span class="divider">></span> {{campaign_object.short_name}}</li>
+  </ul>
+{% endblock %}
+
+
+
+{% block content %}
+  {% if campaign_object %}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Researchers</th>
+        <th>Publications</th>
+        <th>Grant</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+          <tr>
+            <td>{{campaign_object.date_start}}</td>
+            <td>{{campaign_object.date_end}}</td>
+            <td>{{campaign_object.associated_researchers}}</td>
+            <td>{{campaign_object.associated_publications}}</td>
+            <td>{{campaign_object.associated_research_grant}}</td>
+            <td>{{campaign_object.description}}</td>
+          <tr>
+    </tbody>
+  </table>
+  {% else %}
+      <p>This campaign seems to be broken or missing...</p>
+  {% endif %}
+
+  <h3>Campaign Map</h3>
+
+  <div id='map_container2'></div>
+
+
+  <h3>Campaign Deployments</h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>Depth Range</th>
+        <th>Mission Aim</th>
+        <th>Geolocation</th>
+      </tr>
+    </thead>
+    <tbody>
+
+        {% for auv_deployment in auv_deployment_list %}
+          <tr>
+          	<td>AUV</td>
+          	<td>{{auv_deployment.short_name}}</td>
+            <td>{{auv_deployment.start_time_stamp}}</td>
+            <td>{{auv_deployment.end_time_stamp}}</td>
+            <td>{{auv_deployment.min_depth}}m-{{auv_deployment.max_depth}}m</td>
+            <td>{{auv_deployment.mission_aim}}</td>
+            <td>{{auv_deployment.start_position}}</td>
+            <td><a href="/data/auvdeployments/{{auv_deployment.id}}" class="btn btn-large btn-primary">Detail</a> 
+          <tr>
+        {% endfor %}
+        {% for bruv_deployment in bruv_deployment_list %}
+          <tr>
+          	<td>BRUV</td>
+          	<td>{{bruv_deployment.short_name}}</td>
+            <td>{{bruv_deployment.start_time_stamp}}</td>
+            <td>{{bruv_deployment.end_time_stamp}}</td>
+            <td>{{bruv_deployment.min_depth}}m-{{bruv_deployment.max_depth}}m</td>
+            <td>{{bruv_deployment.mission_aim}}</td>
+            <td>{{bruv_deployment.start_position}}</td>
+            <td><a href="/data/bruvdeployments/{{bruv_deployment.id}}" class="btn btn-large btn-primary">Detail</a> 
+          <tr>
+        {% endfor %}
+        {% for dov_deployment in dov_deployment_list %}
+          <tr>
+          	<td>DOV</td>
+          	<td>{{dov_deployment.short_name}}</td>
+            <td>{{dov_deployment.start_time_stamp}}</td>
+            <td>{{dov_deployment.end_time_stamp}}</td>
+            <td>{{dov_deployment.min_depth}}m-{{dov_deployment.max_depth}}m</td>
+            <td>{{dov_deployment.mission_aim}}</td>
+            <td>{{dov_deployment.start_position}}</td>
+            <td><a href="/data/dovdeployments/{{dov_deployment.id}}" class="btn btn-large btn-primary">Detail</a> 
+          <tr>
+        {% endfor %}
+    </tbody>
+  </table>
+  
+{% endblock %}
+
+{% block add_script %}
+    <script src='{{ STATIC_URL }}assets/openlayers/OpenLayers.js'> </script>
+    <script src='{{ STATIC_URL }}assets/esriOceanBasemap/map.js'></script>
+    
+    <script type="text/javascript">
+    var lon = 138;
+    var lat = -35;
+    var zoom = 4;
+    var map, layer;
+    var bounds;
+
+ var style ={
+   strokeColor: "#00FF00",
+   strokeOpacity: 1,
+   strokeWidth: 3,
+   fillColor: "#00FF00",
+   fillOpacity: 0.8 };
+       
+	 function init(){
+	
+            map = new OpenLayers.Map('map_container2');
+            layer = new OpenLayers.Layer.WMS( "OpenLayers WMS", 
+                    "http://vmap0.tiles.osgeo.org/wms/vmap0",
+                    {layers: 'basic'} );
+            
+            map.addLayer(layer);
+            map.setCenter(new OpenLayers.LonLat(lon, lat), zoom);
+            
+            //This make a GeoJSON containing all the geojson points from the d
+var geojson_data = '{ "type": "FeatureCollection", "features": [ {"geometry": { "type": "GeometryCollection", "geometries": [\
+{% for deployment in auv_deployment_list %}{% if not forloop.last %}{{deployment.start_position.geojson|safe}},{% else %}{{deployment.start_position.geojson|safe}}{% endif %}{% endfor %}{% for deployment in bruv_deployment_list %}{% if not forloop.last %}{{deployment.start_position.geojson|safe}},{% else %}{{deployment.start_position.geojson|safe}}{% endif %}{% endfor %}{% for deployment in dov_deployment %}{% if not forloop.last %}{{deployment.start_position.geojson|safe}},{% else %}{{deployment.start_position.geojson|safe}}{% endif %}{% endfor %}] }, "type": "Feature", "properties": {}} ] }';
+
+var campaign_geojson = '{ "type": "FeatureCollection", "features": [ {"geometry": { "type": "GeometryCollection", "geometries": [\
+{{ campaign_as_geojson|safe }}] }, "type": "Feature", "properties": {}} ] }';
+
+	           
+           var geojson_format = new OpenLayers.Format.GeoJSON();
+           var featurecollection = geojson_format.read(geojson_data);
+           
+           var vector_layer = new OpenLayers.Layer.Vector(); 
+           map.addLayer(vector_layer);
+           vector_layer.addFeatures(geojson_format.read(geojson_data));
+           for(var i = 0; i < featurecollection.length; ++i) {
+                if (!bounds) {
+                    bounds = featurecollection[i].geometry.getBounds();
+                } else {
+                    bounds.extend(featurecollection[i].geometry.getBounds());
+                }
+
+            }
+            
+            var campaign_layer = new OpenLayers.Layer.Vector(); 
+            map.addLayer(campaign_layer);
+            campaign_layer.addFeatures(geojson_format.read(campaign_geojson));
+            
+			map.zoomToExtent(bounds);
+			
+			var pf = new OpenLayers.Feature.Vector(bounds, null, style);
+			
+			vector.addFeatures([pf]);
+		}
+    </script>
+{% endblock %}

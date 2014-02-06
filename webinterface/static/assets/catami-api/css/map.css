@@ -1,0 +1,143 @@
+#deployment-map {
+	width: 80%;
+    float: left;
+}
+
+#map-panel {
+    width: 100%;
+    font-size: 12px;
+    color: #fff;
+    text-align: left;
+    vertical-align: top;
+    padding: 10px;
+}
+
+#map-panel-container {
+    width: 20%;
+    overflow: hidden;
+    float: right;
+    background-color: #333333;
+    padding: 0px;
+}
+/*
+.mapinfo {
+    background-repeat:no-repeat;
+    width: 100%;
+    overflow: hidden;
+    font-size: 12px;
+    color: #fff;
+    text-shadow: 0 0 5px #000000;
+    text-align: left;
+    position: relative;
+}
+.mapthumb {
+    background-repeat:no-repeat;
+    width: 100%;
+    overflow: hidden;
+    font-size: 12px;
+    color: #fff;
+    text-shadow: 0 0 5px #000000;
+    text-align: left;
+    position: relative;
+}
+.mapselect {
+    background-repeat:no-repeat;
+    width: 100%;
+    overflow: hidden;
+    font-size: 12px;
+    color: #fff;
+    text-shadow: 0 0 5px #000000;
+    text-align: left;
+    position: relative;
+}
+*/
+
+#mapinfo {
+    display: none;
+    /*z-index: -1;*/
+}
+
+#map-panel .og-sidepane {
+    display: block;
+}
+
+#map-panel .og-sidepane .navbar {
+    z-index: inherit;
+}
+
+#deployment-map {
+    background-color: #c9dbf1;
+    text-align: center;
+}
+
+.layersDiv, .olControlLayerSwitcher, .olControlOverviewMapElement {
+    background-color: #333333 !important;
+}
+
+#maptools .nav > li > a {
+    padding: 3px 5px;
+    border-radius: 8px;
+}
+#mapinfo .popover {
+    position: fixed;
+}
+
+.map-pane-draggable {
+    display: block;
+    position: absolute;
+    top: 15px;
+    left: 70px;
+    width: auto;
+    height: auto;
+}
+
+.map-pane-draggable .map-panel-content {
+    max-width: 306px;
+}
+
+.map-panel {
+    margin-bottom: 25px;
+}
+
+.map-panel .navbar {
+    z-index: inherit;
+}
+.map-panel .map-panel-content {
+    min-height: 50px;
+    max-height: 250px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.map-panel button.active {
+    background-image: linear-gradient(#670000, #910000 40%, #b60000);
+}
+
+#img-info-content img {
+    border: 1px solid transparent;
+}
+
+#img-info-content .tooltip-inner {
+    max-width: 450px;
+    width: auto;
+    text-align: left;
+}
+
+#img-info-content img:hover {
+    border-color: #ffffff;
+}
+
+#mapsel-content {
+    overflow: visible;
+}
+
+#map-panel-container {
+    overflow: visible;
+}
+
+.map-panel .multiselect-container {
+    font-size: 10px;
+    zoom: 1;
+    filter: alpha(opacity=80);
+    opacity: 0.8;
+}

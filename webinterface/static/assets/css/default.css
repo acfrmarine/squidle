@@ -1,0 +1,372 @@
+@import url(http://fonts.googleapis.com/css?family=Lato:300,400,700);
+
+html { height: 100%; }
+
+*,
+*:after,
+*:before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+/* Clearfix hack by Nicolas Gallagher: http://nicolasgallagher.com/micro-clearfix-hack/ */
+.clearfix:before,
+.clearfix:after {
+    content: " ";
+    display: table;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+.clearfix {
+    *zoom: 1;
+}
+
+body {
+    background: #a3a3a3;
+    color: #333;
+    overflow: scroll;
+    overflow-x: hidden;
+    padding: 0;
+}
+body.modal-open {
+    overflow: hidden;
+}
+
+.container {
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    margin-top:50px;
+}
+
+
+.navbar {
+    min-height: 24px;
+    margin-bottom: 10px;
+}
+.navbar-default .navbar-nav > .active > a {
+    background-color: #282828;
+}
+#top-nav .navbar-brand {
+    font-size: 40px;
+    padding: 5px 10px 5px 5px;
+}
+
+.stop-scrolling {
+    height: 100%;
+    overflow: hidden;
+}
+
+#top-nav > .navbar-nav > li > a {
+    font-size: 9px;
+    text-transform: uppercase;
+    text-align: center;
+}
+#top-nav > .navbar-nav > li > a > i {
+    font-size: 20px;
+    display: block;
+}
+#top-nav > .navbar-nav > li.icon-text {
+    margin: 0;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+#top-nav > .navbar-nav > li.icon-text > a {
+    margin: 0;
+    padding: 10px 3px 5px 3px;
+    line-height: 10px;
+    min-width: 60px;
+    height: 50px;
+}
+/*#top-nav > .navbar-nav > li.divider {*/
+    /*margin-left: 20px;*/
+    /*margin-right: 20px;*/
+/*}*/
+
+#data-modal .modal-panel {
+    background-color: #abb7c3;
+    border: 1px solid #0c0d0e;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    float: left;
+    margin: 5px;
+    padding: 5px;
+    width:100%;
+}
+#data-modal .modal-panel .panel-list {
+    height: 200px;
+    max-height: 500px;
+    overflow: auto;
+}
+#data-modal .modal-panel-container {
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+    white-space: nowrap;
+    margin: 0;
+    padding: 0;
+    display: block;
+}
+
+#data-modal .modal-dialog {
+    width: 80%;
+    min-width: 500px;
+    max-width: 1000px;
+
+}
+#data-modal .modal-body {
+    max-height: 800px;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+#data-modal .modal-header {
+    color: #ccc;
+}
+#data-modal .modal-panel .panel-item .badge {
+    background-color: transparent;
+    color: #5d5d5d;
+}
+#data-modal .modal-panel .panel-item .badge:hover {
+    background-color: #5d5d5d;
+    color: #cccccc;
+}
+#data-modal .modal-panel .panel-item {
+    /*border-top: 1px #becbd7 solid;*/
+}
+#data-modal .modal-panel .panel-item .active {
+    background-color: #8a8a8a;
+    color: #ffffff;
+}
+#data-modal .modal-panel h3 {
+    padding: 0;
+    margin: 0 0 5px 0;
+    font-size: 14px;
+    font-weight: bold;
+    color: #5d5d5d;
+    width: 100%;
+}
+#data-modal .modal-panel .panel-desc {
+    color: #323232;
+    font-size: 10px;
+    font-style: italic;
+    border-bottom: 1px solid #777777;
+}
+
+#data-modal #data-modal-cursel {
+    margin: 0;
+}
+
+#info-modal div.modal-body, #help-modal div.modal-body {
+    max-height: 450px;
+    overflow: auto;
+}
+#info-modal div.modal-body li,#help-modal div.modal-body li {
+    margin-left: 15px;
+}
+
+input.error, select.error{
+    border:1px solid red !important;
+    background-color:#fdd !important;
+}
+input.error:after, select.error:after{
+    content: " &#33;";
+    font-weight: bold;
+    color: #ff0000;
+}
+
+.form-horizontal {
+    width: 100%;
+}
+.form-horizontal .control-label {
+    width:135px;
+}
+.form-horizontal .controls {
+    margin-left: 140px;
+}
+
+.form-horizontal-old p.control label {
+    float: left;
+    width: 135px;
+    text-align: right;
+}
+.form-horizontal-old p.control input {
+    margin-left: 5px;
+}
+.form-horizontal-old p.form-btn {
+    margin-left: 140px;
+}
+.form-horizontal .help-inline {
+    font-size: 10px;
+    color: #6f6f6f;
+}
+
+
+
+.alert {
+    margin-bottom: 10px;
+    display: block;
+    border-color: #252525;
+}
+.alert-error {
+    background-color: #ffe1e1;
+    color: #b60000;
+}
+.alert-error ul li{
+    margin-left: 15px;
+}
+.modal .modal-body {
+    max-height: 95%;
+}
+.modal-content {
+    color: #ccc;
+}
+
+.ajax-empty {
+    color: #535353;
+    padding: 20px;
+}
+
+
+#nav-loader {
+    color: #FFF;
+    float: left;
+    padding: 5px 10px 0 30px;
+    font-size: 18px;
+    line-height: 20px;
+    font-size: 40px;
+}
+
+.popover-content {
+    overflow-x: hidden;
+}
+
+.navbar-nav .divider-vertical {
+
+}
+
+#datatab {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#banner-carousel {
+    overflow: hidden;
+    background-color: #000;
+    min-height: 200px;
+}
+#banner-carousel img {
+    position: relative;
+    width: 100%;
+}
+
+.carousel-fade .item {
+    -webkit-transition: opacity 3s;
+    -moz-transition: opacity 3s;
+    -ms-transition: opacity 3s;
+    -o-transition: opacity 3s;
+    transition: opacity 3s;
+}
+
+.carousel-fade .active.left {
+    left: 0;
+    opacity: 0;
+    z-index: 2;
+}
+
+.carousel-fade .next {
+    left: 0;
+    opacity: 1;
+    z-index: 1;
+}
+
+#sitetitle {
+    font-family: "Lato", Arial, Helvetica, sans-serif;
+    position: absolute;
+    bottom: 20px;
+    right: 50px;
+    text-shadow: 0px 0px 5px #000, -1px -1px 1px #000, 1px -1px 1px #000, -1px 1px 1px #000, 1px 1px 1px #000;
+    color: #ffffff;
+    z-index: 1000;
+    text-align: right;
+}
+
+#sitetitle h1 {
+    font-size: 85px;
+    text-shadow: 0px 0px 5px #000, -1px -1px 1px #000, 1px -1px 1px #000, -1px 1px 1px #000, 1px 1px 1px #000;
+}
+
+#sitetitle h1 i {
+    font-size: 60px;
+}
+
+#sitetitle p {
+    font-size: 19px;
+    font-weight: bold;
+}
+
+#content .section {
+    width: 25%;
+    padding: 20px;
+    float: left;
+    color: #FFF;
+    display: block;
+}
+
+#content .section i.section-head {
+    margin: 0;
+    padding: 0;
+    margin-bottom: 20px;
+    font-size: 30px;
+    width: 100%;
+    display: block;
+}
+
+#content .section a.well:hover {
+    text-decoration: none;
+    background-color: #424242;
+}
+#content .section .well {
+    min-height: 280px;
+    display: block;
+    position: relative;
+    padding-bottom: 40px;
+}
+
+#content .section .section-moreinfo {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin-bottom: 20px;
+    margin-right: 20px;
+}
+
+#info-modal .modal-title,
+#info-modal .modal-close {
+    font-size: 30px;
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+}
+#info-modal .modal-close:hover {
+    text-decoration: none;
+}
+
+#info-modal .modal-body .img {
+    max-width: 800px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#info-modal {
+    opacity: 0.95;
+}

@@ -1,0 +1,259 @@
+/**********************************************************************************************************************
+ * Style cl-inline-full-bootstrap
+ **********************************************************************************************************************/
+.cl-inline-full-bootstrap {
+}
+
+.cl-inline-full-bootstrap .claction {
+    margin: 0 0 0 5px;
+    padding: 0;
+}
+
+.cl-inline-full-bootstrap .clactionitem {
+}
+
+.cl-inline-full-bootstrap .clinfo {
+    margin: 0 0 0 5px;
+    padding: 0;
+}
+
+.cl-inline-full-bootstrap .clinfoitem {
+}
+
+.cl-inline-full-bootstrap .clcreation {
+    margin-left: 10px;
+    font-size: 10px;
+    font-style: italic;
+    color: #6b6b6b;
+}
+
+.cl-inline-full-bootstrap .cldescription {
+    font-style: italic;
+    display: block;
+    color: #747474;
+    font-size: 12px;
+}
+
+.cl-inline-full-bootstrap .clname {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.cl-inline-full-bootstrap .clselect {
+    margin-right: 5px;
+}
+
+.cl-inline-full-bootstrap .clcheckbox {
+}
+
+.cl-inline-full-bootstrap .clinfoitem.Private {
+    background-color: #438543;
+    color: #FFFFFF;
+}
+
+.cl-inline-full-bootstrap .clinfoitem.Public {
+    background-color: #9c4d47;
+    color: #FFFFFF;
+}
+
+.cl-inline-full-bootstrap .clinfoitem.Collection {
+    background-color: #c8cfe8;
+    color: #000000;
+}
+
+.cl-inline-full-bootstrap .clinfoitem.Workset {
+    background-color: #e3c4db;
+    color: #000000;
+}
+
+/*
+ For nested list
+*/
+.cl-inline-full-bootstrap ul.list-main {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.cl-inline-full-bootstrap ul.list-main .list-toggle {
+    cursor: pointer;
+}
+
+.cl-inline-full-bootstrap ul.list-main > li {
+    margin-top: 10px;
+}
+
+.cl-inline-full-bootstrap ul.list-sub > li {
+    margin-top: 5px;
+}
+
+.cl-inline-full-bootstrap ul.list-main li.parent {
+}
+
+.cl-inline-full-bootstrap ul.list-main li .cllistctrl {
+    background-image: url('http://code.stephenmorley.org/javascript/collapsible-lists/button.png');
+    background-position: 5px 13px;
+    background-repeat: no-repeat;
+    width: 20px;
+    height: 20px;
+    padding: 10px 20px 10px 10px;
+}
+
+.cl-inline-full-bootstrap ul.list-main > li.parent > .cllistctrl {
+    background-image: url('http://code.stephenmorley.org/javascript/collapsible-lists/button-closed.png');
+}
+
+.cl-inline-full-bootstrap ul.list-main > li.parent > .cllistctrl.clopen {
+    background-image: url('http://code.stephenmorley.org/javascript/collapsible-lists/button-open.png');
+}
+
+.cl-inline-full-bootstrap ul.list-main .clactions ul.dropdown-menu {
+    /* Make DataTasks menu align to the right*/
+    left: auto;
+    right: 0;
+    text-align: left;
+}
+
+.cl-inline-full-bootstrap ul.list-sub {
+    list-style: none;
+    margin: 5px 0 15px 0;
+    padding: 10px;
+}
+
+.cl-inline-full-bootstrap ul.list-sub .clname {
+    font-size: 14px;
+}
+
+.cl-inline-full-bootstrap a {
+    color: #000000;
+}
+
+/**********************************************************************************************************************
+ * Style cl-sidebar
+ **********************************************************************************************************************/
+.cl-sidebar ul.list-main {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.cl-sidebar .claction {
+    margin: 0 0 0 5px;
+    padding: 0;
+}
+
+.cl-sidebar .clactionitem {
+}
+
+.cl-sidebar .clinfo {
+    margin: 0 0 0 5px;
+    padding: 0;
+}
+
+.cl-sidebar .clinfoitem {
+}
+
+.cl-sidebar .clcreation {
+    font-size: 10px;
+    font-weight: bold;
+    font-style: italic;
+    color: #6b6b6b;
+    display: block;
+}
+
+.cl-sidebar .cldescription {
+    font-size: 10px;
+    font-style: italic;
+    display: block;
+    color: #747474;
+}
+
+.cl-sidebar .clname {
+    font-weight: bold;
+}
+
+.cl-sidebar .clselect {
+    margin-right: 5px;
+}
+
+.cl-sidebar .clcheckbox {
+}
+
+.cl-sidebar .clradio {
+}
+
+.cl-sidebar ul.list-main > li {
+    padding: 3px;
+    margin-bottom: 5px;
+}
+
+/**********************************************************************************************************************
+ * Style cl-sidebar-name
+ **********************************************************************************************************************/
+.cl-sidebar-name ul.list-main {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.cl-sidebar-name .claction {
+    margin: 0 0 0 5px;
+    padding: 0;
+}
+
+.cl-sidebar-name .clactionitem {
+}
+
+.cl-sidebar-name .clinfo {
+    margin: 0 0 0 5px;
+    padding: 0;
+}
+
+.cl-sidebar-name .clinfoitem {
+}
+
+.cl-sidebar-name .clcreation {
+    font-size: 10px;
+    font-weight: bold;
+    font-style: italic;
+    color: #6b6b6b;
+    display: block;
+}
+
+.cl-sidebar-name .cldescription {
+    font-size: 10px;
+    font-style: italic;
+    display: block;
+    color: #747474;
+}
+
+.cl-sidebar-name .clname {
+    font-weight: bold;
+}
+
+.cl-sidebar-name .clselect {
+    margin-right: 5px;
+}
+
+.cl-sidebar-name .clcheckbox {
+}
+
+.cl-sidebar-name .clradio {
+}
+
+.cl-sidebar-name ul.list-main > li {
+    padding: 3px;
+    margin-bottom: 5px;
+}
+
+/**********************************************************************************************************************
+ * Style cl-nested-list
+ **********************************************************************************************************************/
+
+/**********************************************************************************************************************
+ * Other
+ **********************************************************************************************************************/
+a {
+    cursor: pointer;
+}
+

@@ -1,0 +1,40 @@
+/*#thmcontainer {
+    width: 950px;
+}*/
+
+#thmlist img {
+    width: 150px;
+}
+
+.th-fancybox img {
+    border: 1px solid white;
+}
+
+.th-annotate img {
+    border: 1px solid red;
+}
+
+#thmlist .thmct {
+    width: 150px;
+    /*position: relative;*/
+}
+
+.thmct img.thmimg {
+    width: 150px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    background-color: #CCC;
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    /*display: block;*/
+}
+
+.thmct i.thmicon {
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    color: #fff500;
+}
