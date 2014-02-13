@@ -19,8 +19,16 @@ service tomcat7 stop
 
 #put geoserver into tomcat
 unzip -o geoserver-2.2.4-war.zip 
-unzip -o geoserver.war -d geoserver 
-sudo cp -r geoserver /var/lib/tomcat7/webapps/
+#unzip -o geoserver.war -d geoserver 
+#sudo cp -r geoserver /var/lib/tomcat7/webapps/
+sudo cp -r geoserver.war /var/lib/tomcat7/webapps/
+
+# Restart tomcat to get it to start installing geoserver
+echo 'Restarting tomcat'
+sudo service tomcat7 restart
+
+# Wait for tomcat to sort itself out
+sleep 5
 
 # sed replace the username and password in datastore-config.xml
 sed -i "s@the_username@$U_NAME@g" scripts/geoserver-config/squidle/catamidb/datastore.xml
@@ -31,12 +39,12 @@ sed -i "s@the_host@$SERVER@g" scripts/geoserver-config/squidle/catamidb/datastor
 
 #copy the config over to geoserver, and make tomcat the owner
 sudo cp -r scripts/geoserver-config/squidle /var/lib/tomcat7/webapps/geoserver/data/workspaces/
-chown -R tomcat7 /var/lib/tomcat7/webapps
-chgrp -R tomcat7 /var/lib/tomcat7/webapps
+#chown -R tomcat7 /var/lib/tomcat7/webapps
+#chgrp -R tomcat7 /var/lib/tomcat7/webapps
 
 #change username and password for admin
 # look in /var/lib/tomcat7/webapps/geoserver/data/security
-sed -i "s@admin=geoserver@$U_NAME=$PASSWORD@g" /var/lib/tomcat7/webapps/geoserver/data/security/users.properties
+#sed -i "s@admin=geoserver@$U_NAME=$PASSWORD@g" /var/lib/tomcat7/webapps/geoserver/data/security/users.properties
 
 echo 'Restarting tomcat'
 sudo service tomcat7 restart
