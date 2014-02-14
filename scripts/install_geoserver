@@ -6,19 +6,19 @@
 echo 'Setting up geoserver'
 
 #Check if geoserver is already on here, if not then download it
-if [ -a "geoserver-2.2.4-war.zip" ]
+if [ -a "geoserver-2.4.4-war.zip" ]
 then
-    echo 'geoserver-2.2.4.zip found, skipping download'
+    echo 'geoserver-2.4.4.zip found, skipping download'
 else
     echo 'Downloading geoserver'
-    wget http://downloads.sourceforge.net/project/geoserver/GeoServer/2.2.4/geoserver-2.2.4-war.zip
+    wget http://downloads.sourceforge.net/project/geoserver/GeoServer/2.4.4/geoserver-2.4.4-war.zip
 fi
 
 #stop tomcat, so we can make some adjustments
 service tomcat7 stop
 
 #put geoserver into tomcat
-unzip -o geoserver-2.2.4-war.zip 
+unzip -o geoserver-2.4.4-war.zip 
 #unzip -o geoserver.war -d geoserver 
 #sudo cp -r geoserver /var/lib/tomcat7/webapps/
 sudo cp -r geoserver.war /var/lib/tomcat7/webapps/
@@ -29,6 +29,9 @@ sudo service tomcat7 restart
 
 # Wait for tomcat to sort itself out
 sleep 5
+
+#stop tomcat, so we can make some adjustments
+service tomcat7 stop
 
 # sed replace the username and password in datastore-config.xml
 sed -i "s@the_username@$U_NAME@g" scripts/geoserver-config/squidle/catamidb/datastore.xml
