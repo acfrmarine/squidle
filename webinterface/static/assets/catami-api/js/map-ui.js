@@ -24,7 +24,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	this.collectionExtentUrl = collectionExtentUrl;
 	this.hostname = location.hostname;
 
-	this.browseEnabled = true;
+//	this.browseEnabled = true;
 	this.isInitialised = false;
 
 	/* Setting up the projection details here, so that 4326 projected data can be displayed on top of
@@ -64,11 +64,12 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			//displayProjection: geographic,
 			units : "m",
 			//maxExtent: world_extent,
-			maxResolution : 156543.0399,
+            maxResolution : 156543.0399,
 			numZoomLevels : 25,
-			controls : [new OpenLayers.Control.Navigation(),
+            center : [14431310.938232, -3013453.4026953],
+            controls : [new OpenLayers.Control.Navigation(),
                 new OpenLayers.Control.PanZoomBar(),
-                new OpenLayers.Control.LayerSwitcher({'ascending' : false}),
+                new OpenLayers.Control.LayerSwitcher({'ascending' : true}),
                 //new OpenLayers.Control.Permalink(),
                 new OpenLayers.Control.ScaleLine(),
                 //new OpenLayers.Control.Permalink('permalink'),
@@ -87,6 +88,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 //			numZoomLevels : 25,
 //			sphericalMercator : true
 //		}));
+
+
         this.mapInstance.addLayer(new OpenLayers.Layer.Google("Google Map", {
             numZoomLevels: 20
         }, {minScale: 150000}));
@@ -94,6 +97,24 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             type: google.maps.MapTypeId.SATELLITE,
             numZoomLevels: 20
         }, {maxScale: 150000}));
+        this.mapInstance.addLayer(new OpenLayers.Layer.XYZ("ESRI Ocean Basemap",
+            "http://services.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/${z}/${y}/${x}",
+            {
+                sphericalMercator: true,
+                isBaseLayer: true,
+                numZoomLevels: 20,
+                wrapDateLine: true
+            }
+        ));
+//        this.mapInstance.addLayer(new OpenLayers.Layer.WMS(
+//            "baselayer",
+//            "http://tilecache.emii.org.au/cgi-bin/tilecache.cgi/1.0.0/",
+//            {
+//                layers: 'HiRes_aus-group' ,
+//                wrapDateLine: true,
+//            }
+//        ));
+
 		this.isInitialised = true;
 	}
 
@@ -109,7 +130,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
      * @param filterArray
      */
     this.updateMapUsingFilter = function (filterArray, layerName) {
-        console.log("Applying map filter");
+
+        console.log("Applying map filter to "+ layerName);
 
         var filter_1_1 = new OpenLayers.Format.Filter({
             version: "1.1.0"
@@ -176,7 +198,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 		this.updateMapUsingFilter(filter_array, layername);
 
-		this.browseEnabled = false;
+//		this.browseEnabled = false;
 
 		if (settings.isclickable) {
 			// select individual poses by clicking the map
@@ -261,56 +283,59 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		layername = (( typeof layername !== 'undefined') ? layername : "Deployments");
 		var mapInstance = this.mapInstance;
 		if (mapInstance.getLayersByName(layername).length == 0) {
-			mapInstance.addLayer(new OpenLayers.Layer.Vector(layername, {
-				strategies : [new OpenLayers.Strategy.Fixed(), new OpenLayers.Strategy.Cluster()],
-				protocol : new OpenLayers.Protocol.WFS({
-					url : this.wfsUrl,
-					featureType : "catamidb_deployment",
-					featureNS : "http://catami"
-				}),
-				styleMap : new OpenLayers.StyleMap({
-					"default" : new OpenLayers.Style({
-						pointRadius : "${radius}",
-						fillColor : "#ffcc66",
-						fillOpacity : 0.8,
-						strokeColor : "#cc6633",
-						strokeWidth : "${width}",
-						strokeOpacity : 0.8
-					}, {
-						context : {
-							width : function(feature) {
-								return (feature.cluster) ? 2 : 1;
-							},
-							radius : function(feature) {
-								var pix = 2;
-								if (feature.cluster) {
-									pix = Math.min(feature.attributes.count, 7) + 2;
-								}
-								return pix;
-							}
-						}
-					}),
-					"select" : {
-						fillColor : "#8aeeef",
-						strokeColor : "#32a8a9"
+
+            function style(fill,stroke,size, op){
+
+                return new OpenLayers.Style({
+                    pointRadius: "${radius}",
+                    fillColor: fill,//"#ffcc66",
+                    fillOpacity: op,
+                    strokeColor: stroke,
+                    //strokeWidth : "${width}",
+                    strokeOpacity: 0.8
+                }, {
+                    context: {
+//                        width : function(feature) {
+//                        	return (feature.cluster) ? 2 : 1;
+//                        },
+                        radius: function (feature) {
+                            return Math.round(5 * Math.log(feature.attributes.count + 1) + size);
+                        }
                     }
-				}),
-				projection : baseMap.projection.geographic
-			}, {
-				maxScale : 150000
-			}));
-			var thislayer = mapInstance.getLayersByName(layername)[0];
-			thislayer.events.register('loadend', this, function(evt) {
-				if (this.browseEnabled == true) {
+                });
+
+            }
+
+            var deploymentlayer = new OpenLayers.Layer.Vector(layername, {
+                strategies: [
+                    new OpenLayers.Strategy.Fixed(),
+                    new OpenLayers.Strategy.Cluster()
+                ],
+                protocol: new OpenLayers.Protocol.WFS({
+                    url: this.wfsUrl,
+                    featureType: "catamidb_deployment"
+                    //featureNS : "http://catami"
+                }),
+                styleMap: new OpenLayers.StyleMap({
+                    "default": style("#000000", "#ffffff", 4, 0.5),
+                    "select": style("#cccccc", "#ffffff", 4, 0.5),
+                    "highlight": style("#FF0000", "#ffffff", 8, 0.8)
+                }),
+                projection: baseMap.projection.geographic
+            });
+
+            mapInstance.addLayer(deploymentlayer);
+            deploymentlayer.events.register('loadend', this, function(evt) {
+				//if (this.browseEnabled == true) {
 					mapInstance.zoomToExtent(evt.object.getDataExtent());
-				}
+				//}
 			});
-			var highlightCtrl = new OpenLayers.Control.SelectFeature(thislayer, {
+			var highlightCtrl = new OpenLayers.Control.SelectFeature(deploymentlayer, {
 				hover : true,
 				highlightOnly : true,
-				renderIntent : "temporary",
+				renderIntent : "highlight",
 				handlerOptions : {
-					'delay' : 5000
+					//'delay' : 5000
 				},
 				/*
 				 * could update some information about the highlighted deployments
@@ -318,16 +343,15 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				eventListeners : {
 					//beforefeaturehighlighted: report,
 					featurehighlighted : showDeploymentInfo
-					//                    featureselected: zoomToDeployments
 				}
 			});
 			this.mapInstance.addControl(highlightCtrl);
 			highlightCtrl.activate();
 
-			var select = new OpenLayers.Control.SelectFeature(thislayer);
+			var select = new OpenLayers.Control.SelectFeature(deploymentlayer);
 			mapInstance.addControl(select);
 			select.activate();
-			thislayer.events.on({
+            deploymentlayer.events.on({
 				"featureselected" : zoomToDeployments
 			});
 		}
@@ -345,6 +369,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 selecteddpls = '',
                 otherdpls = '';
 
+            console.log(event);
+
 
             baseMap.$dplinfo.html('');
 
@@ -357,9 +383,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
             // add other unselected deployments
             for (var i = 0, len = event.feature.cluster.length; i < len; i++) {
+                depid = event.feature.cluster[i].fid.split('.')[1];
                 if ($.inArray(depid, filtdepids) < 0) {
                     //$depinfo = $('<a href="javascript:void(0)">' + event.feature.cluster[i].data.short_name + '</a>');
-                    depid = event.feature.cluster[i].fid.split('.')[1];
                     $depinfo = getDeploymentCheckbox(depid, event.feature.cluster[i].data.short_name, '');
                     baseMap.$dplinfo.append($depinfo);
                 }
@@ -425,50 +451,24 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 			var showFeatureInfo = new OpenLayers.Control.WMSGetFeatureInfo({
 				url : this.wmsUrl,
-				title : 'Identify features by hovering',
+				title : 'Identify features by clicking',
 				//layers : [this.layers['AUVworkset']],
 				layers : baseMap.mapInstance.getLayersByName(layername),
 				queryVisible : true,
-				hover : true,
+				hover : false,
 				output : "object",
 				infoFormat : "application/vnd.ogc.gml",
 				maxFeatures : 6,
 				eventListeners : {
 					getfeatureinfo : function(event) {
 
-//						console.log('hover getFeatureInfo')
-//						console.log(event);
-
                         if (event.features.length > 0) {
                             baseMap.$imginfo.html('');
-
+                            var fid, $thumb;
                             for (var i=0 ; i < event.features.length ; i++ ) {
-                                //console.log(el);
-                                var fid = event.features[i].attributes.img_id;
-                                var imginfo = thlist.getImageInfo(fid);
-                                //console.log(imginfo);
-
-                                var position = imginfo.position.replace(/.*\(|\)/gi, '').split(' ');
-                                var parseWebLocation = imginfo.images[0].web_location.split('/');
-                                var imgName = parseWebLocation[parseWebLocation.length - 1];
-
-                                var infotxt = '<b>Name:</b> ' + imgName;
-                                infotxt += '<br><b>ID:</b> ' + imginfo.id;
-                                infotxt += '<br><b>Depth:</b> ' + Math.round(imginfo.depth * 100) / 100 + ' m';
-                                infotxt += '<br><b>LAT:</b> ' + Math.round(position[1] * 1000000) / 1000000;
-                                infotxt += '<br><b>LON:</b> ' + Math.round(position[0] * 1000000) / 1000000;
-                                infotxt += '<br><b>TS:</b> ' + imginfo.date_time.split('.')[0];
-
-                                var $thumb = $('<a href="' + imginfo.images[0].web_location + '" title="' + infotxt + '" ><img src="' + imginfo.images[0].thumbnail_location + '"/></a> ');
-                                $thumb.tooltip({trigger:"hover", html:true, placement: 'right'});
-                                $thumb.fancybox();
+                                fid = event.features[i].attributes.img_id;
+                                $thumb = getImageInfo(fid);
                                 baseMap.$imginfo.append($thumb);
-                                // display other sensor measurements
-//                                if (imginfo.measurements.length > 0) {
-//                                    for (var i = 0; i < imginfo.measurements.length; i++) {
-//                                        $(infoid).append('<br><b>' + imginfo.measurements[i].name + ': </b>' + imginfo.measurements[i].value + ' ' + imginfo.measurements[i].units);
-//                                    }
-//                                }
                             }
                             //baseMap.$imginfo.append("<br><br>");
                             baseMap.$imginfo.parent().show();
@@ -482,43 +482,113 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		}
 	};
 
+
+    function getImageInfo (id) {
+        var imginfo = thlist.getImageInfo(id);
+        //console.log(imginfo);
+
+        var position = imginfo.position.replace(/.*\(|\)/gi, '').split(' ');
+        var parseWebLocation = imginfo.images[0].web_location.split('/');
+        var imgName = parseWebLocation[parseWebLocation.length - 1];
+
+        var infotxt = '<b>Name:</b> ' + imgName;
+        infotxt += '<br><b>ID:</b> ' + imginfo.id;
+        infotxt += '<br><b>Depth:</b> ' + Math.round(imginfo.depth * 100) / 100 + ' m';
+        infotxt += '<br><b>LAT:</b> ' + Math.round(position[1] * 1000000) / 1000000;
+        infotxt += '<br><b>LON:</b> ' + Math.round(position[0] * 1000000) / 1000000;
+        infotxt += '<br><b>TS:</b> ' + imginfo.date_time.split('.')[0];
+        // display other sensor measurements
+//                                if (imginfo.measurements.length > 0) {
+//                                    for (var i = 0; i < imginfo.measurements.length; i++) {
+//                                        $(infoid).append('<br><b>' + imginfo.measurements[i].name + ': </b>' + imginfo.measurements[i].value + ' ' + imginfo.measurements[i].units);
+//                                    }
+//                                }
+
+        var $thumb = $('<a href="' + imginfo.images[0].web_location + '" title="' + infotxt + '" ><img src="' + imginfo.images[0].thumbnail_location + '"/></a> ');
+        $thumb.tooltip({trigger: "hover", html: true, placement: 'right'});
+        $thumb.fancybox();
+        return $thumb;
+    }
+
 	/**
 	 *
 	 * Will take a Bounding Box filter and update the image selection layer
 	 *
 	 * @param BBOXfilter
 	 */
-	this.updateMapForSelection = function(baselayername, nocreate) {
+	this.showSelectedImages = function(selectlayername, nocreate) {
         nocreate = (( typeof nocreate !== 'undefined') ? nocreate : false);
-		var selectlayername = baselayername + ' (selected)',
+		var //selectlayername = baselayername + ' (selected)',
             selectedpanelid = 'mapselected',
             $selectedpanel;
 
 		// check if there is a selection
 		if (this.getSelectFilters() == null) {
 			// if there is no selection, remove selection layer if it exists
-			if (this.mapInstance.getLayersByName(selectlayername).length != 0) {
-				this.mapInstance.getLayersByName(selectlayername)[0].destroy();
-			}
+//			if (this.mapInstance.getLayersByName(selectlayername).length != 0) {
+//                //this.mapInstance.getLayersByName(selectlayername)[0].hide();
+//				this.mapInstance.getLayersByName(selectlayername)[0].destroy();
+//                this.mapInstance.removeControl(this.mapInstance.getControlsBy('title','ClickImg')[0]);
+//			}
 	        //$('#' + selectedpanelid).hide();
 		} else  if (this.mapInstance.getLayersByName(selectlayername).length == 0 && !nocreate) {
 			// add the selection layer if required
-			this.mapInstance.addLayer(new OpenLayers.Layer.WMS(selectlayername, this.wmsUrl, {
-				layers : 'catami:catamidb_images',
-				format : 'image/gif',
-				transparent : 'TRUE',
-				sld : "http://" + baseMap.hostname + "/geoserverSimplestyle?name=catami:catamidb_images&colour=00FF00&size=5"
-			}, {//tileOptions: {maxGetUrlLength: 2048},
-				transitionEffect: 'resize'//, minScale: 150000}), // selection layer should always be visible
-			}));
+			var imglayer = new OpenLayers.Layer.WMS(selectlayername, this.wmsUrl, {
+                layers: 'catami:catamidb_images',
+                format: 'image/gif',
+                transparent: 'TRUE',
+                sld: "http://" + baseMap.hostname + "/geoserverstyle?prop=depth&min=35.0&max=50.0"
+                //sld : "http://" + baseMap.hostname + "/geoserverSimplestyle?name=catami:catamidb_images&colour=00FF00&size=5"
+            }, {//tileOptions: {maxGetUrlLength: 2048},
+                transitionEffect: 'resize'//, minScale: 150000}), // selection layer should always be visible
+            });
+            this.mapInstance.addLayer(imglayer);
 
+//            var highlightLayer = new OpenLayers.Control.GetFeature({
+//                protocol: OpenLayers.Protocol.WFS.fromWMSLayer(imglayer),
+//                box: true,
+//                hover: true,
+//                multipleKey: "shiftKey",
+//                toggleKey: "ctrlKey"
+//            });
+//            this.mapInstance.addControl(highlightLayer);
+//            highlightLayer.activate();
 
+            var showFeatureInfo = new OpenLayers.Control.WMSGetFeatureInfo({
+                url: this.wmsUrl,
+                title: 'ClickImg',
+                layers: baseMap.mapInstance.getLayersByName(selectlayername),
+                queryVisible: true,
+                hover: false,
+                output: "object",
+                infoFormat: "application/vnd.ogc.gml",
+                maxFeatures: 9,
+                eventListeners: {
+                    getfeatureinfo: function (event) {
+                        if (event.features.length > 0) {
+                            baseMap.$imginfo.html('');
+                            var fid, $thumb;
+                            for (var i = 0; i < event.features.length; i++) {
+                                fid = event.features[i].attributes.img_id;
+                                $thumb = getImageInfo(fid);
+                                baseMap.$imginfo.append($thumb);
+                            }
+                            baseMap.$imginfo.parent().show();
+                            baseMap.$infopane.show(200);
+                        }
+                    }
+                }
+            });
+
+            this.mapInstance.addControl(showFeatureInfo);
+            showFeatureInfo.activate();
 		}
 
 
 
 
         if (this.mapInstance.getLayersByName(selectlayername).length > 0) {
+
             var filterCombined = this.getFilters();
             this.updateMapUsingFilter(filterCombined, selectlayername);
         }
@@ -573,11 +643,19 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
         // Get deployment filters
         console.log(this.filters.deployments);
-        for (var i=0 ; i < this.filters.deployments.length; i++) {
+        if (this.filters.deployments.length > 0) {
+            for (var i=0 ; i < this.filters.deployments.length; i++) {
+                selectfilters.push(new OpenLayers.Filter.Comparison({
+                    type: OpenLayers.Filter.Comparison.EQUAL_TO,
+                    property: "deployment_id",
+                    value: parseInt(this.filters.deployments[i].id)
+                }));
+            }
+        } else { // dirty hack - if no deployments selected, then make an invalid filter
             selectfilters.push(new OpenLayers.Filter.Comparison({
                 type: OpenLayers.Filter.Comparison.EQUAL_TO,
                 property: "deployment_id",
-                value: parseInt(this.filters.deployments[i].id)
+                value: -1
             }));
         }
 
@@ -668,7 +746,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                         var filterBounds = event.feature.geometry.getBounds().clone();
                         filterBounds.transform(baseMap.projection.mercator, baseMap.projection.geographic);
                         baseMap.filters.BBoxes.push(filterBounds);
-                        baseMap.updateMapForSelection(layername);
+                        baseMap.showSelectedImages(layername);
                         toggleBBoxSelect(bbctrl, $bboxbtn,true);
                     }
                 }
@@ -741,7 +819,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 //                        else baseMap.$dplinfo.prepend(getDeploymentCheckbox(id,name,'checked'));
                     }
                 }
-                baseMap.updateMapForSelection(layername);
+                baseMap.showSelectedImages(layername);
             }
         });
 
@@ -760,7 +838,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 //        $dplselect.change(function() {
 //            baseMap.filters.deployments = $dplselect.val();
-//            baseMap.updateMapForSelection(layername);
+//            baseMap.showSelectedImages(layername);
 //            baseMap.updateMapBounds("deployment_ids=" + $dplselect.val(), baseMap.deploymentExtentUrl);
 //        });
 
@@ -874,7 +952,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                     //
                     baseMap.filters.featranges[feature] = $slider.slider("values");
                     baseMap.updateMapUsingFilter(baseMap.getRangeFilters(), layername); // update main layer
-                    baseMap.updateMapForSelection(layername, true); // update selection layer (if it exists)
+                    baseMap.showSelectedImages(layername, true); // update selection layer (if it exists)
                     //updateMapFilters();
                 }
             });
@@ -899,7 +977,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                     // update map filter - this could probably be streamlined
                     baseMap.filters.featranges[feature] = [$fromdate.val() , $todate.val()];
                     baseMap.updateMapUsingFilter(baseMap.getRangeFilters(), layername); // update main layer
-                    baseMap.updateMapForSelection(layername, true); // update selection layer (if it exists)
+                    baseMap.showSelectedImages(layername, true); // update selection layer (if it exists)
                     //updateMapFilters();
                 }
             });
@@ -914,7 +992,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                     $fromdate.datepicker("option", "maxDate", selectedDate);
                     baseMap.filters.featranges[feature] = [$fromdate.val() , $todate.val()];
                     baseMap.updateMapUsingFilter(baseMap.getRangeFilters(), layername); // update main layer
-                    baseMap.updateMapForSelection(layername, true); // update selection layer (if it exists)
+                    baseMap.showSelectedImages(layername, true); // update selection layer (if it exists)
                     //updateMapFilters();
                 }
             });
