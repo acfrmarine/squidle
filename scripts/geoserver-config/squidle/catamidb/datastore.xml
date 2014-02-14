@@ -1,0 +1,32 @@
+<dataStore>
+  <id>DataStoreInfoImpl--476b19ba:13f885da7ca:-7fea</id>
+  <name>catamidb</name>
+  <description>catamidb</description>
+  <type>PostGIS</type>
+  <enabled>true</enabled>
+  <workspace>
+    <id>WorkspaceInfoImpl--476b19ba:13f885da7ca:-7fec</id>
+  </workspace>
+  <connectionParameters>
+    <entry key="Connection timeout">20</entry>
+    <entry key="port">5432</entry>
+    <entry key="passwd">euro!trip</entry>
+    <entry key="dbtype">postgis</entry>
+    <entry key="host">localhost</entry>
+    <entry key="validate connections">true</entry>
+    <entry key="encode functions">false</entry>
+    <entry key="max connections">10</entry>
+    <entry key="database">catamidb</entry>
+    <entry key="namespace">http://catami</entry>
+    <entry key="schema">public</entry>
+    <entry key="Loose bbox">true</entry>
+    <entry key="Expose primary keys">false</entry>
+    <entry key="fetch size">1000</entry>
+    <entry key="Max open prepared statements">50</entry>
+    <entry key="preparedStatements">false</entry>
+    <entry key="Estimated extends">true</entry>
+    <entry key="user">auv</entry>
+    <entry key="min connections">1</entry>
+  </connectionParameters>
+  <__default>false</__default>
+</dataStore>

@@ -1,0 +1,53 @@
+#!/bin/bash -x
+#==================================================#
+# SETUP GEOSERVER
+#==================================================#
+
+echo 'Setting up geoserver'
+
+#Check if geoserver is already on here, if not then download it
+if [ -a "geoserver-2.2.4-war.zip" ]
+then
+    echo 'geoserver-2.2.4.zip found, skipping download'
+else
+    echo 'Downloading geoserver'
+    wget http://downloads.sourceforge.net/project/geoserver/GeoServer/2.2.4/geoserver-2.2.4-war.zip
+fi
+
+#stop tomcat, so we can make some adjustments
+service tomcat7 stop
+
+#put geoserver into tomcat
+unzip -o geoserver-2.2.4-war.zip 
+#unzip -o geoserver.war -d geoserver 
+#sudo cp -r geoserver /var/lib/tomcat7/webapps/
+sudo cp -r geoserver.war /var/lib/tomcat7/webapps/
+
+# Restart tomcat to get it to start installing geoserver
+echo 'Restarting tomcat'
+sudo service tomcat7 restart
+
+# Wait for tomcat to sort itself out
+sleep 5
+
+# sed replace the username and password in datastore-config.xml
+sed -i "s@the_username@$U_NAME@g" scripts/geoserver-config/squidle/catamidb/datastore.xml
+sed -i "s@the_password@$PASSWORD@g" scripts/geoserver-config/squidle/catamidb/datastore.xml
+
+# relace the host with given host
+sed -i "s@the_host@$SERVER@g" scripts/geoserver-config/squidle/catamidb/datastore.xml
+
+#copy the config over to geoserver, and make tomcat the owner
+sudo cp -r scripts/geoserver-config/squidle /var/lib/tomcat7/webapps/geoserver/data/workspaces/
+#chown -R tomcat7 /var/lib/tomcat7/webapps
+#chgrp -R tomcat7 /var/lib/tomcat7/webapps
+
+#change username and password for admin
+# look in /var/lib/tomcat7/webapps/geoserver/data/security
+#sed -i "s@admin=geoserver@$U_NAME=$PASSWORD@g" /var/lib/tomcat7/webapps/geoserver/data/security/users.properties
+
+echo 'Restarting tomcat'
+sudo service tomcat7 restart
+
+echo 'Restarting apache'
+sudo service apache2 restart

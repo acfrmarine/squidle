@@ -1,0 +1,99 @@
+#!/bin/bash -x
+#==================================================#
+# BUILDS THE SQUIDLEE SERVER FROM A FRESH 
+# INSTALL OF UBUNTU
+# -------------------------------------------------#
+# USE
+#
+# sudo ./destroy  # kills any old dbases
+# opt 1)
+# sudo ./install -u <username> -p <password> -b <git-branch-name> -h <hostname>
+# opt 2)
+# sudo ./install -f <credential file>
+# opt 3)
+# sudo ./install # defaults to looking in ~/.squidle.cred
+#
+# CREDENTIAL FILE
+# LINE 1 #Comment
+# LINE 2 <username>
+# LINE 3 <password>
+#
+#==================================================#
+
+#revision argument
+
+set -eux
+
+SERVER="http://squidle.acfr.usyd.edu.au"
+CREDFILE="~/.squidle.cred"
+BRANCH=""
+CURRENT_DIR=$(pwd)
+INSTALL_PATH="/var/www"
+
+#==================================================#
+# GRAB THE U_NAME AND PASSWORD
+#==================================================#
+OPTFIND=1
+U_NAME=""
+PASSWORD=""
+
+while getopts "u:p:f:b:h:" opt; do
+    case "$opt" in
+    u)
+        U_NAME=$OPTARG
+        ;;
+    p)
+        PASSWORD=$OPTARG
+        ;;
+    f)
+        CREDFILE=$OPTARG
+        ;;
+    b)
+        BRANCH=$OPTARG
+        ;;
+    h)  
+    	SERVER=$OPTARG
+        ;;      
+    esac
+done
+
+shift $((OPTFIND-1))
+
+if [ -z ${U_NAME} ] # if no user variable must be passed credfile
+then
+
+    USER_HOME=$(eval echo ~${SUDO_USER})
+    echo "expecting credential file in :: "${USER_HOME}
+    i=0
+    while read line; do
+        param[$i]=$line
+        i=`expr $i + 1` 
+    done < $CREDFILE
+
+    U_NAME=${param[1]}
+    PASSWORD=${param[2]} 
+fi
+
+echo "user=$U_NAME, password=$PASSWORD, branch=$BRANCH"
+
+#install dependencies and then the application
+. scripts/install_dependencies
+. scripts/install_squidle
+
+# go back to the install scripts dir
+#cd $CURRENT_DIR
+
+#install geoserver now
+. scripts/install_geoserver
+
+cd $CURRENT_DIR
+
+#==================================================#
+# ADD CRON JOB TO DO A HOURLY BACKUP.
+#==================================================#
+#echo "Creating cron job for backup"
+#cp catami-postgres-backup-cron.sh /etc/cron.hourly/
+#BAKSCRIPT=/etc/cron.hourly/catami-postgres-backup-cron.sh
+#chmod +x $BAKSCRIPT
+
+service apache2 restart

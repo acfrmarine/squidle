@@ -1,0 +1,8 @@
+#!/bin/bash -x
+#==================================================#
+# These should be just the server requirements only 
+# !! Exception being scipy for now. pip install not 
+# working
+#==================================================#
+#juju-log "Installing Apache2, Django1.4, postgres, postgis via apt-get"
+apt-get install -y curl python postgresql-9.1 apache2 python-setuptools postgresql-server-dev-9.1 postgresql-9.1-postgis postgis python-scipy binutils libproj-dev gdal-bin git unzip tomcat7 tomcat7-common libtomcat7-java python-opencv libapache2-mod-wsgi
