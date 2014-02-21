@@ -4697,3 +4697,7 @@ IndexError: index 10064 is out of bounds for axis 0 with size 10064
 2014-02-17 11:27:31,870 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
 2014-02-17 12:48:16,761 - catamidb.authorization - DEBUG - Created initial Public group.
 2014-02-17 12:48:16,764 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-21 14:52:17,830 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-21 14:52:17,840 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-21 15:15:40,529 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-21 15:15:40,538 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.

@@ -569,11 +569,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 maxFeatures: 9,
                 eventListeners: {
                     getfeatureinfo: function (event) {
+                        console.log('get features!');
                         if (event.features.length > 0) {
                             baseMap.$imginfo.html('');
                             var fid, $thumb;
                             for (var i = 0; i < event.features.length; i++) {
                                 fid = event.features[i].attributes.img_id;
+                                console.log(fid);
                                 $thumb = getImageInfo(fid);
                                 baseMap.$imginfo.append($thumb);
                             }

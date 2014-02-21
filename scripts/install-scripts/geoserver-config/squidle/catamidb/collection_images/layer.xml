@@ -1,0 +1,16 @@
+<layer>
+  <name>collection_images</name>
+  <id>LayerInfoImpl-53c0e9bc:1417cbf52ed:3f5d</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--570ae188:124761b8d78:-7fdf</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-53c0e9bc:1417cbf52ed:3f5c</id>
+  </resource>
+  <enabled>true</enabled>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>
