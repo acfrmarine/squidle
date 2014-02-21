@@ -289,15 +289,19 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 return new OpenLayers.Style({
                     pointRadius: "${radius}",
                     fillColor: fill,//"#ffcc66",
-                    fillOpacity: op,
+                    //fillOpacity: op,
                     strokeColor: stroke,
-                    //strokeWidth : "${width}",
-                    strokeOpacity: 0.8
+                    strokeOpacity: 1,
+                    strokeWidth : "${stroke}",
+                    fillOpacity: (typeof op !== 'undefined') ? op : "${opacity}"
                 }, {
                     context: {
-//                        width : function(feature) {
-//                        	return (feature.cluster) ? 2 : 1;
-//                        },
+                        stroke : function(feature) {
+                        	return (feature.attributes.count > 1) ? 3 : 1.5;
+                        },
+                        opacity: function(feature) {
+                            return (feature.attributes.count > 1) ? 0.6 : 0.4;
+                        },
                         radius: function (feature) {
                             return Math.round(5 * Math.log(feature.attributes.count + 1) + size);
                         }
@@ -317,9 +321,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                     //featureNS : "http://catami"
                 }),
                 styleMap: new OpenLayers.StyleMap({
-                    "default": style("#000000", "#ffffff", 4, 0.5),
-                    "select": style("#cccccc", "#ffffff", 4, 0.5),
-                    "highlight": style("#FF0000", "#ffffff", 8, 0.8)
+                    "default": style("#000000", "#000000", 4),
+                    "select": style("#cccccc", "#000000", 4),
+                    "highlight": style("#000000", "#ffffff", 8, 1)
                 }),
                 projection: baseMap.projection.geographic
             });

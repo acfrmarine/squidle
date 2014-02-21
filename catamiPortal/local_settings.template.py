@@ -1,21 +1,17 @@
 DEBUG=True
 TEMPLATE_DEBUG = True
 STATIC_ROOT = '/home/auv/Code/catami_static/'
-ADMINS = (
-	('Ariell Friedman', 'a.friedman@acfr.usyd.edu.au'),
-)
 
-MANAGERS = ADMINS
+
 
 DATABASES = {
 	'default': {
 		'ENGINE': 'django.contrib.gis.db.backends.postgis',
 		'NAME': 'catamidb',
-		'USER': 'catami',
-		'PASSWORD': 'euro!trip',
+		'USER': '$USERNAME$',
+        'PASSWORD': '$PASSWORD$'
 	}
 }
-TIME_ZONE = 'Australia/Perth'
 # this hopefully will direct it all to the localhost
 # and not require the full http://
 GEOSERVER_URL = "/geoserver" # standard config for local host

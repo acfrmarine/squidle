@@ -4467,3 +4467,233 @@ IndexError: index 10064 is out of bounds for axis 0 with size 10064
 2014-02-06 13:50:57,652 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
 2014-02-06 13:52:29,086 - catamidb.authorization - DEBUG - Created initial Public group.
 2014-02-06 13:52:29,089 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-11 13:06:02,533 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-11 13:06:02,536 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-11 13:08:18,511 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-11 13:08:18,514 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-11 13:10:33,290 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-11 13:10:33,293 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-12 11:34:16,356 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-12 11:34:16,359 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-12 11:36:12,181 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-12 11:36:12,185 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-12 11:49:52,703 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-12 11:49:52,707 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-12 12:04:04,402 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-12 12:04:04,405 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-12 12:08:49,483 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-12 12:08:49,486 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-12 12:20:46,127 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-12 12:20:46,130 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-12 12:24:54,370 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-12 12:24:54,373 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-12 12:27:02,661 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-12 12:27:02,664 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-12 13:05:34,510 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-12 13:05:34,513 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-12 13:06:14,741 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-12 13:06:14,744 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-12 13:08:02,889 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-12 13:08:02,892 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-12 13:12:30,283 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-12 13:12:30,286 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-12 13:13:05,206 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-12 13:13:05,209 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-12 13:13:57,439 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-12 13:13:57,442 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-12 13:14:54,165 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-12 13:14:54,167 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-12 13:32:03,661 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-12 13:32:03,664 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-12 13:36:30,586 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-12 13:36:30,589 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-12 13:37:59,651 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-12 13:37:59,654 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-12 13:58:22,809 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-12 13:58:22,812 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-12 14:02:43,736 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-12 14:02:43,739 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-12 14:03:23,360 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-12 14:03:23,363 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-12 14:04:07,054 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-12 14:04:07,057 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-12 14:08:04,461 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-12 14:08:04,464 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-12 14:08:35,986 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-12 14:08:35,988 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-12 14:29:19,031 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-12 14:29:19,034 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-12 14:30:01,935 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-12 14:30:01,938 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-12 14:33:31,389 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-12 14:33:31,392 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-12 14:34:10,819 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-12 14:34:10,823 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 09:29:10,955 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 09:29:10,958 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 09:29:40,449 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 09:29:40,452 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 09:31:19,522 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 09:31:19,525 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 10:30:13,336 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 10:30:13,338 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 10:30:57,275 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 10:30:57,278 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 10:31:53,048 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 10:31:53,051 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 10:35:24,620 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 10:35:24,623 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 10:36:06,572 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 10:36:06,575 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 10:36:20,987 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 10:36:20,990 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 10:36:37,843 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 10:36:37,846 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 10:36:41,216 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 10:36:41,219 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 10:37:50,061 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 10:37:50,065 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 10:38:53,864 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 10:38:53,867 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 10:39:53,625 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 10:39:53,628 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 10:40:17,638 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 10:40:17,641 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 10:41:06,561 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 10:41:06,564 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 10:43:58,677 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 10:43:58,680 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 10:44:55,196 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 10:44:55,199 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 10:46:01,927 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 10:46:01,930 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 10:46:43,616 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 10:46:43,619 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 11:01:56,491 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 11:01:56,494 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 11:05:10,712 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 11:05:10,715 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 11:06:36,667 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 11:06:36,670 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 11:08:49,760 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 11:08:49,763 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 11:09:31,617 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 11:09:31,619 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 11:13:57,273 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 11:13:57,276 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 11:21:23,984 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 11:21:23,987 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 11:21:53,155 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 11:21:53,158 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 11:22:33,873 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 11:22:33,876 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 11:30:41,218 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 11:30:41,220 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 11:32:24,874 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 11:32:24,877 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 11:39:33,597 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 11:39:33,600 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 11:44:41,793 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 11:44:41,796 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 12:32:59,635 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 12:32:59,638 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 12:40:32,362 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 12:40:32,365 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 12:42:57,672 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 12:42:57,675 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 12:44:53,879 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 12:44:53,882 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 12:47:22,772 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 12:47:22,776 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 13:13:52,212 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 13:13:52,216 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 13:14:24,346 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 13:14:24,348 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 13:15:05,049 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 13:15:05,052 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 13:27:40,210 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 13:27:40,213 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 13:29:49,663 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 13:29:49,666 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 13:31:03,096 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 13:31:03,098 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 13:47:29,242 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 13:47:29,245 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 13:49:16,388 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 13:49:16,391 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 13:51:07,653 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 13:51:07,656 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 13:51:43,738 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 13:51:43,741 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 13:52:52,365 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 13:52:52,368 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 13:54:09,477 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 13:54:09,480 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 13:54:44,085 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 13:54:44,087 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 14:01:36,299 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 14:01:36,302 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 14:06:45,606 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 14:06:45,609 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 14:13:30,570 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 14:13:30,573 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 14:14:22,558 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 14:14:22,561 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 14:21:05,529 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 14:21:05,532 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 14:23:21,921 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 14:23:21,924 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 14:24:01,055 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 14:24:01,058 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 14:25:59,985 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 14:25:59,989 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 14:26:48,981 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 14:26:48,984 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 14:29:39,203 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 14:29:39,205 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 14:30:31,436 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 14:30:31,439 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 14:30:57,767 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 14:30:57,770 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 14:35:02,265 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 14:35:02,268 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 14:37:23,376 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 14:37:23,378 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 14:38:49,160 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 14:38:49,163 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 14:39:17,183 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 14:39:17,185 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 14:44:56,457 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 14:44:56,460 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 15:00:05,169 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 15:00:05,172 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 15:01:56,565 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 15:01:56,567 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 15:06:35,530 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 15:06:35,533 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-14 15:07:13,418 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-14 15:07:13,420 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-17 07:23:43,680 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-17 07:23:43,683 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-17 07:24:44,697 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-17 07:24:44,700 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-17 07:25:26,005 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-17 07:25:26,008 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-17 07:26:54,239 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-17 07:26:54,242 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-17 07:28:04,786 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-17 07:28:04,789 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-17 07:28:53,687 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-17 07:28:53,690 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-17 07:30:55,283 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-17 07:30:55,285 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-17 07:31:40,755 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-17 07:31:40,757 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-17 07:53:22,990 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-17 07:53:22,993 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-17 07:54:26,275 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-17 07:54:26,278 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-17 11:27:31,867 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-17 11:27:31,870 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
+2014-02-17 12:48:16,761 - catamidb.authorization - DEBUG - Created initial Public group.
+2014-02-17 12:48:16,764 - catamidb.authorization - DEBUG - Assigned AnonymousUser to the Public group.
