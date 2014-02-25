@@ -443,8 +443,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	this.showImages = function(layername) {
 		layername = (( typeof layername !== 'undefined') ? layername : "Images");
 		if (this.mapInstance.getLayersByName(layername).length == 0) {
-			this.mapInstance.addLayer(new OpenLayers.Layer.WMS(layername, this.wmsUrl, {
-				layers : 'catami:catamidb_images',
+			var ImagesLayer = this.mapInstance.addLayer(new OpenLayers.Layer.WMS(layername, this.wmsUrl, {
+				//layers : 'catami:catamidb_images',
+				layers : 'catamidb_images',
 				format : 'image/gif',
 				transparent : 'TRUE',
 				sld : "http://" + baseMap.hostname + "/geoserverstyle?prop=depth&min=35.0&max=50.0"
@@ -465,6 +466,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				maxFeatures : 6,
 				eventListeners : {
 					getfeatureinfo : function(event) {
+					console.log("showImages:");
+					console.log(event);
 
                         if (event.features.length > 0) {
                             baseMap.$imginfo.html('');
@@ -544,7 +547,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 sld: "http://" + baseMap.hostname + "/geoserverstyle?prop=depth&min=35.0&max=50.0"
                 //sld : "http://" + baseMap.hostname + "/geoserverSimplestyle?name=catami:catamidb_images&colour=00FF00&size=5"
             }, {//tileOptions: {maxGetUrlLength: 2048},
-                transitionEffect: 'resize'//, minScale: 150000}), // selection layer should always be visible
+                transitionEffect: 'resize',//, minScale: 150000}), // selection layer should always be visible
+				tileOptions: {maxGetUrlLength: 2048}, 
+				isBaseLayer : false
             });
             this.mapInstance.addLayer(imglayer);
 
@@ -559,7 +564,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 //            highlightLayer.activate();
 
             var showFeatureInfo = new OpenLayers.Control.WMSGetFeatureInfo({
-                url: this.wmsUrl,
+                url: baseMap.wmsUrl,
                 title: 'ClickImg',
                 layers: baseMap.mapInstance.getLayersByName(selectlayername),
                 queryVisible: true,
@@ -568,8 +573,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 infoFormat: "application/vnd.ogc.gml",
                 maxFeatures: 9,
                 eventListeners: {
+		    nogetfeatureinfo : function(event) {
+			console.log('No queryable layers found');
+		    },
                     getfeatureinfo: function (event) {
-                        console.log('get features!');
+                        console.log('get features got ' + event.features.length + ' features');
+			console.log(event);
+                        console.log(baseMap.mapInstance.getLayersByName(selectlayername));
                         if (event.features.length > 0) {
                             baseMap.$imginfo.html('');
                             var fid, $thumb;
@@ -586,7 +596,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 }
             });
 
-            this.mapInstance.addControl(showFeatureInfo);
+            baseMap.mapInstance.addControl(showFeatureInfo);
             showFeatureInfo.activate();
 		}
 
