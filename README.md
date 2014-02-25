@@ -8,4 +8,17 @@ Squidle is a web-based framework that aims to facilitate the exploration, manage
 Installation
 ============
 
+In order to install squidle, follow these instructions.  This should download the archive from github, install required depencies and setup the postgres database and geoserver.
+
+> git clone https://github.com/acfrmarine/squidle.git
+> cd squidle
+> ./scripts/install-scripts/install
+
+This setup has been tested on Ubuntu 12.04.
+
+For those wishing to use the squidle interface, we maintain a server that includes the IMOS AUV Imagery here:
+
+http://squidle.acfr.usyd.edu.au
+
+
 
