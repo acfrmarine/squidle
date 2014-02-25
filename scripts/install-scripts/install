@@ -77,14 +77,14 @@ fi
 echo "user=$U_NAME, password=$PASSWORD, branch=$BRANCH"
 
 #install dependencies and then the application
-. scripts/install_dependencies
-. scripts/install_squidle
+. scripts/install-scripts/install_dependencies
+. scripts/install-scripts/install_squidle
 
 # go back to the install scripts dir
 #cd $CURRENT_DIR
 
 #install geoserver now
-. scripts/install_geoserver
+. scripts/install-scripts/install_geoserver
 
 cd $CURRENT_DIR
 

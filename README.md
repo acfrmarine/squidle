@@ -5,4 +5,7 @@ In recent years, ecologists and biologists have increasingly relied on digital v
 
 Squidle is a web-based framework that aims to facilitate the exploration, management and annotation of marine imagery. We are working closely with members of the marine science community to create a streamlined, user-friendly interface that integrates sophisticated map-based data management tools with an advanced annotation system. Users are able to quickly select data using advanced queries (eg: depth, altitude, date, deployment or bounding box), which they can then subsample and annotate using a selection of standardised, agreed upon methods. The interface will be extended to incorporate machine learning tools for automated clustering and supervised classification, which will serve to streamline and enhance data exploration, subsetting and annotation. Data import & export tools will make it easier to import existing labels from commonly used annotation programs (eg CPCe), and also provide reporting tools for summaries and statistics. The project aims to deliver a reliable, advanced and easy-to-use web-based framework that facilitates direct access to survey data in an effort to reduce the latency between collecting and interpreting marine imagery.
 
-Documentation and installation instructions, still to come...
+Installation
+============
+
+
