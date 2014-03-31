@@ -1,5 +1,36 @@
 
 <div class="well" style="width: 50%; text-align: left; margin-left: auto; margin-right: auto; color: #ccc">
+
+<p>Export annotation, subset and project data:</p>
+
+	<ul id="download-info" style="margin-left: 20px">
+	</ul>
+
+<p>Download the Squidle Image Downloader from here:</p>
+	<div style='padding-top: 1px' id='jw_onlyRecommededDiv' class='jw_cleanFont'>
+                        <div id='jw_topLevelMainDiv' class='jw_cleanFont jw_mainDiv'>
+				<script type="text/javascript" src="/static/files/image_downloader/SquidleDownloaderEmbed.js"></script>
+                                <script id="jwEmbed" type="text/javascript">
+
+                                        var updateURL = "/static/files/image_downloader/"
+					var onlineURL = updateURL+jwGetDetectedFilename(true,null);
+                                        var offlineURL = updateURL+jwGetDetectedFilename(false,null);
+
+                                        $("#jw_topLevelMainDiv").html("<ul style='margin-left: 20px'></ul>");
+					$("#jw_topLevelMainDiv ul").html("<li><a href='" + onlineURL + "'>Download image sync tool.</a></li>");
+
+                                        
+                                        // TODO: create a div that is hidden. When "All version" is clicked it shows all the available versions
+					//el.innerHTML += "<li><a href='" + offlineURL + "'>Stand-alone version.</a></li>";
+					//$("#jw_topLevelMainDiv ul").appned("");
+                                        
+                                </script>
+                        </div>
+                </div>
+</div>
+
+
+<div class="well" style="width: 50%; text-align: left; margin-left: auto; margin-right: auto; color: #ccc">
 <p>This will contain information about the selected datataset. It will provide:</p>
     <ul style="margin-left: 20px">
         <li>Links and tools to export projects, worksets and annotations.</li>
@@ -7,7 +38,6 @@
         <li>Access to results from machine learning tools. <b></b><a href="#myModal" data-toggle="modal"> Click here for a brief overview of our superpixel classification framework</a></b>.</li>
     </ul>
 </div>
-
 
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
