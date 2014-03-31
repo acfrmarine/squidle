@@ -28,3 +28,5 @@ nose-exclude
 django-dajaxice
 django-dajax
 django-bootstrap-toolkit
+django-queryset-csv
+gspread

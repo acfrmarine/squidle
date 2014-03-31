@@ -24,9 +24,12 @@ import simplejson
 from django.conf import settings
 from collection.api import CollectionResource
 from collection.models import Collection, CollectionManager
+from annotations.models import PointAnnotation, PointAnnotationSet
 
 from webinterface.forms import CreateCollectionForm, CreateWorksetForm, CreateWorksetAndAnnotation, CreateCollectionExploreForm, CreatePointAnnotationSet, CreateWorksetFromImagelist
 from userena.forms import AuthenticationForm, SignupForm
+
+from django.db.models import Max
 
 import HTMLParser
 
@@ -291,29 +294,147 @@ def project(request):
          "GEOSERVER_URL": settings.GEOSERVER_URL},
         RequestContext(request))
 
-#####################################################################
-# NEW MAPS ##########################################################
-def map(request):
+######################################################################
+## NEW MAPS ##########################################################
+#def map(request):
+#
+#    # check for optional get parameters
+#    # This avoids needing to specify a new url and view for each optional parameter
+#    clid = request.GET.get("clid", "0") if request.GET.get("clid", "") else 0
+#    wsid = request.GET.get("wsid", "0") if request.GET.get("wsid", "") else 0
+#    asid = request.GET.get("asid", "0") if request.GET.get("asid", "") else 0
+#    imid = request.GET.get("imid", "0") if request.GET.get("imid", "") else 0
+#
+#    return render_to_response('webinterface/viewmap.html',
+#        {'clid': clid,
+#         'wsid': wsid,
+#         "asid": asid,
+#         "imid": imid,
+#         'WMS_URL': settings.WMS_URL,
+#         'WMS_layer_name': settings.WMS_LAYER_NAME},
+#        RequestContext(request))
 
-    # check for optional get parameters
-    # This avoids needing to specify a new url and view for each optional parameter
+#####################################################################
+
+
+def download_csv(request):
+    from djqscsv import render_to_csv_response
+
     clid = request.GET.get("clid", "0") if request.GET.get("clid", "") else 0
-    wsid = request.GET.get("wsid", "0") if request.GET.get("wsid", "") else 0
     asid = request.GET.get("asid", "0") if request.GET.get("asid", "") else 0
-    imid = request.GET.get("imid", "0") if request.GET.get("imid", "") else 0
 
-    return render_to_response('webinterface/viewmap.html',
-        {'clid': clid,
-         'wsid': wsid,
-         "asid": asid,
-         "imid": imid,
-         'WMS_URL': settings.WMS_URL,
-         'WMS_layer_name': settings.WMS_LAYER_NAME},
-        RequestContext(request))
+    if asid :
+        annotation = PointAnnotationSet.objects.get(pk=asid)
+        point_annotations = PointAnnotation.objects.filter(annotation_set = annotation).values('image_id', 'image__web_location', 'x', 'y',
+                                                                                               'label_id','label__caab_code','label__code_name','label__cpc_code')
+        return render_to_csv_response(point_annotations, append_datestamp=True)
+    elif clid:
+        collection = Collection.objects.get(pk=clid)
+        #images = collection.images.filter(
+        #    pose__scientificposemeasurement__measurement_type__normalised_name='altitude').values('id', 'web_location',
+        #                                                                                          'pose__date_time',
+        #                                                                                          'pose__depth',
+        #                                                                                          'pose__position',
+        #                                                                                          'pose__scientificposemeasurement__value')
+        #images = collection.images.annotate(altitude=Max(
+        #    'pose__scientificposemeasurement__value',
+        #    pose__scientificposemeasurement__measurement_type__normalised_name='altitude')).values('id', 'web_location',
+        #                                  'pose__date_time',
+        #                                  'pose__depth',
+        #                                  'pose__position',
+        #                                  'altitude')
+        images = collection.images.values('id', 'web_location',
+                                       'pose__date_time',
+                                       'pose__depth',
+                                       'pose__position')
 
-#####################################################################
+        return render_to_csv_response(images, append_datestamp=True)
 
 
+# This view imports classes from a google spreadsheet
+# TODO: robustify and make better!!!
+def update_classes_gspread (request) :
+    import gspread
+    from annotations.models import AnnotationCode
+
+    guser = request.GET.get('guser')
+    gpass = request.GET.get('gpass')
+    action = request.GET.get('action')
+    field = request.GET.get('field')
+
+    gc = gspread.login(guser, gpass) # Login with your Google account
+    ss = gc.open("squidle classes") # Open a worksheet from spreadsheet with one shot
+
+    response = HttpResponse()
+    if action == "import" :
+        # Import new classes from spreadsheet
+        # TODO: use headers to determine column numbers
+        # 0: CAAB code
+        # 1: Class Name
+        # 2: CPC/orig code (for reference)
+        # 3: Short name
+        # 4: Colour
+        # 5: Parent CAAB
+        wks = ss.worksheet("To add to squidle")
+        list_of_lists = wks.get_all_values()
+        headers = list_of_lists[0]
+        response.write("<b>{}</b><br>".format(headers))
+
+        for annotation_list in list_of_lists[1:]:
+            try:
+                response.write("Adding: {}...".format(annotation_list[1]))
+                parentclass = AnnotationCode.objects.filter(caab_code = annotation_list[5])[0]
+                newclass = AnnotationCode(caab_code = annotation_list[0],cpc_code = annotation_list[3],
+                                          point_colour = annotation_list[4],code_name = annotation_list[1],
+                                          description = "No description.",parent = parentclass)
+                newclass.save()
+                response.write("...DONE!<br>")
+
+            except Exception as e:
+                response.write("...ERROR!!!!!! {}<br>".format(e.message))
+
+    elif action == "update" :
+        wks = ss.worksheet("Already on squidle")
+        # 0:ID
+        # 1:CAAB code
+        # 2:Class Name
+        # 3:Description
+        # 4:Short name
+        # 5:Colour
+        # 6:Parent ID
+        # 7:Parent CAAB
+        list_of_lists = wks.get_all_values()
+        for annotation_list in list_of_lists[1:]:
+            try:
+                response.write("Updating: {}...".format(annotation_list[2]))
+                thisclass = AnnotationCode.objects.filter(caab_code=annotation_list[1])[0]
+                thisclass.point_colour = annotation_list[5]
+                #print thisclass
+                thisclass.save()
+                response.write("...DONE!<br>")
+            except Exception as e:
+                response.write("...ERROR!!!!!! {}<br>".format(e.message))
+
+    elif action == "export":
+        print "export"
+
+    return response
+
+
+    #return render_to_response('webinterface/viewproject.html',
+    #      #    return render_to_response('webinterface/viewcollectionalternative.html',
+    #      {'clid': clid,
+    #       'wsid': wsid,
+    #       "asid": asid,
+    #       "imid": imid,
+    #       "clform": clform,
+    #       "wsform": wsform,
+    #       "ulwsform": ulwsform,
+    #       "asform": asform,
+    #       "aform": aform,
+    #       "suform": suform,
+    #       "GEOSERVER_URL": settings.GEOSERVER_URL},
+    #      RequestContext(request))
 
 
 #@waffle_switch('Collections')

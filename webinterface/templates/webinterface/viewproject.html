@@ -20,12 +20,14 @@
         <li title="View Map" class="icon-text"><a id="map-nav" href="#map" data-toggle="tab" ><i class="icon-globe"></i>Map</a></li>
         <li title="View Images for selected dataset" class="icon-text"><a id="image-nav" href="#thm" data-toggle="tab"><i class="icon-picture"></i>Images</a></li>
         <!--<li title="Manage Datasets" class="icon-text"><a href="javascript:void(0)" onclick="$('#data-modal').modal('show')"><i class="icon-th-list"></i>Data</a></li>-->
-        <li title="Data tools for selected dataset" class="icon-text"><a id="data-nav" href="#datatab" data-toggle="tab"><i class="icon-th-list"></i>Data</a></li>
+        <li title="Data tools for selected dataset" class="icon-text"><a id="data-nav" href="#datatab" data-toggle="tab"><i class="icon-th-list"></i>Download</a></li>
         <li class="dropdown"><a id="datasel" href="#" class="dropdown-toggle" data-toggle="dropdown">No dataset selected <b class="caret"></b></a>
             <ul class="dropdown-menu">
                 <li><a href="javascript:void(0)" onclick="$('#data-modal').modal('show')"><i class="icon-th-list"></i>
                     Choose a dataset</a></li>
-                <li><a href="/"><i class="icon-plus"></i> Create new Project</a></li>
+{#                <li><a href="javascript:void(0)" onclick="$('#dataset-modal').modal('show')"><i class="icon-th-list"></i>#}
+{#                    Temporary test</a></li>#}
+                <li><a href="javascript:void(0)" onclick="window.location.assign('/viewproject')"><i class="icon-plus"></i> Create new Project</a></li>
             </ul>
         </li>
     </ul>
@@ -63,8 +65,9 @@
 
 
 
-{% include "webinterface/subtemplates/data-modals.html" %}
-{% include "webinterface/subtemplates/help-modal.html" %}
+    {% include "webinterface/subtemplates/data-modals.html" %}
+    {% include "webinterface/subtemplates/dataset-modal.html" %}
+    {% include "webinterface/subtemplates/help-modal.html" %}
 {% endblock %}
 
 
@@ -111,8 +114,8 @@
     }
 
     var thlist = new ImagesAPI({});
-    var clobj = new CollectionAPI({config: {format: '<b>{name}</b><br>Created by <b>{username}</b> on <b>{creation_date}</b>.<br>Contains <b>{image_count}</b> images.<br>{creation_info}.<br><em>{description}</em>'}});
-    var asobj = new AnnotationSetAPI({});
+    var clobj = new CollectionAPI({config: {format: '<b>{name}</b><br>Created by <b>{username}</b> on <b>{creation_date}</b>.<br>{creation_info}<br><em>{description}</em>'}});
+    var asobj = new AnnotationSetAPI({config:{format: '<b>{name}</b><br>Created by <b>{owner}</b><br>Count: {count}<br>Method: {methodology}'}});
     var thmgrid = new Grid('#og-grid-0',curstate);
     var map = new BaseMap('{{ GEOSERVER_URL }}', '{% url "webinterface.views.get_multiple_deployment_extent" %}', '{% url "webinterface.views.get_collection_extent" %}', curstate);
 
@@ -148,6 +151,7 @@
         update_sign_in(curstate.userid,curstate.username); //initialise sign in variables
         setupAjax(); // setup ajax auth
         createDataModal(curstate); // setup modal windows for data
+        refresh_dataset_modal();
 
         // Update current selection text
         if (curstate.clid) {
@@ -176,26 +180,32 @@
                         map.updateMapBounds("collection_id=" + curstate.wsid, map.collectionExtentUrl);
                         var $wsinfo = map.addPanel($('#map-panel'), {id: 'map-wsinfo', icon: 'icon-info', title: 'Subset info', closeable: false});
                         clobj.getCollectionInfo(curstate.wsid, $wsinfo);
+                        if (curstate.asid) {
+                            var $asinfo = map.addPanel($('#map-panel'), {id: 'map-asinfo', icon: 'icon-info', title: 'Annotation info', closeable: false});
+                            asobj.getAnnotationInfo(curstate.asid, $asinfo);
+                        }
                     }
                     else {
                         map.updateMapBounds("collection_id=" + curstate.clid, map.collectionExtentUrl);
                     }
                 }
                 else { // Explore mode
+                    var imagelayer = "Images",
+                        imagelayer_filt = imagelayer ;//+ " (filtered)";
                     map.showDeployments();
-                    //map.showImages("Images");
+                    //map.showImages(imagelayer);
 
                     // Add selection tools
                     var $selpanel = map.addPanel($('#map-panel'), {id: 'mapsel', icon: 'icon-plus-sign-alt', title: 'Selection tools', closeable: false});
                     $selpanel.append('<br>');
-                    map.addDeploymentSelect($selpanel, 'Images');
+                    map.addDeploymentSelect($selpanel, imagelayer);
 
                     // Add filters
                     var $filterpanel = map.addPanel($('#map-panel'), {id: 'mapfilters', icon: 'icon-filter', title: 'Filters', closeable: false});
-                    map.addRangeFilter($filterpanel, 'slider', 'Images', 'depth', {step: 1, range: [0, 2000], unit: 'm'});
-                    map.addRangeFilter($filterpanel, 'slider', 'Images', 'altitude', {step: 0.1, range: [0, 10], unit: 'm'});
-                    map.addRangeFilter($filterpanel, 'date', 'Images', 'date_time', {from: '2005-01-01', to: new Date()});
-                    map.addBBoxSelect($filterpanel, 'Images');
+                    map.addRangeFilter($filterpanel, 'slider', imagelayer_filt, 'depth', {step: 1, range: [0, 2000], unit: 'm'});
+                    map.addRangeFilter($filterpanel, 'slider', imagelayer_filt, 'altitude', {step: 0.1, range: [0, 10], unit: 'm'});
+                    map.addRangeFilter($filterpanel, 'date',  imagelayer_filt, 'date_time', {from: '2005-01-01', to: new Date()});
+                    map.addBBoxSelect($filterpanel, imagelayer_filt);
 
                     // add current selection info
                     // create selected panel with creation of selection layer
@@ -253,8 +263,13 @@
 
         $('#data-nav').on('shown.bs.tab', function (e) {
             history.replaceState(null, '', e.target);
-            if (curstate.clid)
-                $('#datatab').load("/static/html/data-view-example.html");
+            if (curstate.clid) {
+                $('#datatab').load("/static/html/data-view-example.html", function () {
+                    $('#download-info').html('<li><a href="download_csv?asid='+ curstate.asid+'">Click here to download the ANNOTATION point data</a></li>'+
+                            '<li><a href = "download_csv?clid=' + curstate.wsid + '" > Click here to download the SUBSET image data </a></li >'+
+                            '<li><a href = "download_csv?clid=' + curstate.clid + '" > Click here to download the PROJECT image data </a></li >');
+                });
+            }
         });
 
         // Activate tabs from anchor in url links

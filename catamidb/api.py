@@ -59,6 +59,7 @@ class CampaignResource(ModelResource):
         authentication = MultiAuthentication(AnonymousGetAuthentication(),
                                              ApiKeyAuthentication())
         allowed_methods = ['get']
+        ordering = ['short_name']
 
 class DeploymentResource(ModelResource):
     campaign = fields.ForeignKey(CampaignResource, 'campaign')

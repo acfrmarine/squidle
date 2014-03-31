@@ -63,7 +63,10 @@ urlpatterns = patterns(
 
     # NEW VIEWS #########################################################
     url(r'^viewproject$', 'project'),
-    url(r'^viewmap$', 'map'),
+    #url(r'^viewmap$', 'map'),
+    url(r'^download_csv$','download_csv'),
+
+    url(r'^update_classes$','update_classes_gspread'),
 
     #####################################################################
 

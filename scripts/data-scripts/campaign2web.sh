@@ -6,9 +6,9 @@
 
 RENAVLIST=$1
 BASEDIR="/media/data/CATAMI_SITE/media/"
-SCRIPTDIR="$(readlink -f "$0")" # location of this script
-#RENAV2WEB=$SCRIPTDIR"/renav2web.py"
-RENAV2WEB="/home/auv/Code/catami/scripts/renav2web.py"
+SCRIPTDIR=`dirname "$(readlink -f "$0")"` # location of this script
+RENAV2WEB=$SCRIPTDIR"/renav2web.py"
+#RENAV2WEB="/home/auv/Code/catami/scripts/renav2web.py"
 
 ####################################################
 # Read list of dives and link/prepare for web
@@ -16,7 +16,8 @@ RENAV2WEB="/home/auv/Code/catami/scripts/renav2web.py"
 while read renav; do
   divedir=`dirname $renav`
   dive=`basename $divedir`
-  imgs=`ls -d $divedir/i*_gw`
+  imgs=`ls -d $divedir/i*_cv`
+  #imgs=`ls -d $divedir/i*_gw`
 
   # make directory, import data
   echo "    Preparing $dive..."
@@ -27,3 +28,4 @@ while read renav; do
 done < $RENAVLIST
 
 echo "Done!"
+

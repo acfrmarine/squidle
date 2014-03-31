@@ -708,7 +708,7 @@ function AnnotationSetAPI (usrsettings) {
         });
         if (outputelement) {
             if (!$(outputelement).hasClass(config.theme)) $(outputelement).addClass(config.theme);
-            $(outputelement).html(formatObj(config.format, clobj));
+            $(outputelement).html(formatObj(config.format, asobj));
         }
         return asobj;
     }

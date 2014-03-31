@@ -51,8 +51,18 @@ class CollectionAuthorization(Authorization):
     def delete_detail(self, object_list, bundle):
         """Currently do not permit deletion of any collections.
         """
-        raise Unauthorized(
-            "You do not have permission to delete this collection.")
+        original = object_list.get(id=bundle.obj.id)
+        user = get_real_user_object(bundle.request.user)
+        if user.has_perm('collection.delete_collection', original):
+            # the user has permission to edit - but not all edits are permitted
+            # it is a fairly complex setup - locked prevents certain things,
+            # but not others etc. this isn't so much an authorisation issue but
+            # a model issue however
+            return True
+        else:
+            raise Unauthorized(
+                "This collection is locked and cannot be unlocked or modified."
+            )
 
     def update_detail(self, object_list, bundle):
         """Restrict access to updating a collection.
@@ -86,7 +96,7 @@ class CollectionResource(ModelResource):
                                              ApiKeyAuthentication(),
                                              Authentication())
         authorization = CollectionAuthorization()
-        detail_allowed_methods = ['get', 'put']
+        detail_allowed_methods = ['get', 'put', 'delete']
         list_allowed_methods = ['get']
         filtering = {
             'is_public': 'exact',
@@ -98,8 +108,7 @@ class CollectionResource(ModelResource):
 
     def dehydrate(self, bundle):
         """Add an image_count field to CollectionResource."""
-        bundle.data['image_count'] = Collection.objects.get(pk=bundle.data[
-            'id']).images.count()
+        #bundle.data['image_count'] = Collection.objects.get(pk=bundle.data['id']).images.count()
         if bundle.obj.parent:
             bundle.data['parent_id'] = bundle.obj.parent.pk
         else:

@@ -3,7 +3,7 @@ from dateutil.tz import tzutc
 from django.contrib.gis.db import models
 
 from django.contrib.auth.models import User
-from catamidb.models import Image, Deployment, ScientificMeasurementType
+from catamidb.models import Pose, Image, Deployment, ScientificMeasurementType
 from random import sample
 import logging
 from collection import authorization
@@ -11,11 +11,15 @@ from django.db.utils import IntegrityError
 from django.db.models import Count
 #from django.contrib.gis.geos import Polygon
 from django.contrib.gis.geos import *
+from math import pi
 
 import os
+import sys
 
 logger = logging.getLogger(__name__)
 
+sys.path.insert(0, '/home/auv/git/squidle/scripts/grts_sampler/python/')
+import GRTSSampler
 
 class CollectionManager(models.Manager):
     """Manager for collection objects.
@@ -150,48 +154,42 @@ class CollectionManager(models.Manager):
             altitude = measurement_types.get(normalised_name="altitude")
 
             # now add all the images
-            dplinfo = ""
-            depinfo = ""
-            altinfo = ""
-            datinfo = ""
+            filters = ""
             if deployment_list is not None:
-                dplinfo = "{} deployments".format(len(deployment_list))
+                #dplinfo = "{} deployments".format(len(deployment_list))
                 for dplid in deployment_list:
                     value = int(dplid)
                     deployment = Deployment.objects.get(id=value)
                     images = Image.objects.filter(pose__deployment=deployment)
 
                     #dplinfo += deployment.short_name+" "
-                    print dplinfo
+                    #print dplinfo
                     #filter depth
                     if depth_range is not None:
-                        print "depth filter", depth_range
                         images = images.filter(pose__depth__range=depth_range)
-                        depinfo = " [depth:{} to {}m]".format(*depth_range)
+                        filters += " | depth: {} to {}m".format(*depth_range)
                     #filter altitude
                     if altitude_range is not None:
-                        print "altitude filter", altitude_range
                         images = images.filter(pose__scientificposemeasurement__measurement_type=altitude, pose__scientificposemeasurement__value__range=altitude_range)
                         #altinfo = "[altitude:" + altitude_range[0] + "-" + altitude_range[1] + "]"
-                        altinfo = " [altitude:{} to {}m]".format(*altitude_range)
+                        filters += " | altitude: {} to {}m".format(*altitude_range)
                     # filter dates
                     if date_time_range is not None:
-                        print "depth filter", depth_range
                         images = images.filter(pose__date_time__range=date_time_range)
-                        print "depth filter info"
-                        datinfo = " [dates:{} to {}]".format(*date_time_range)
+                        filters += " | date: {} to {}".format(*date_time_range)
                     # Bounding boxes
                     if bounding_boxes is not None:
-                        print "Bounding boxes ",bounding_boxes
                         for bbox in bounding_boxes:
                             bbox_tpl = tuple([float(x) for x in bbox.split(',')])
-                            print bbox_tpl
                             bboximages = images.filter(pose__position__contained=Polygon.from_bbox(bbox_tpl))
                             collection.images.add(*bboximages)
+                        filters += " | {} bounding box(es)".format(len(bounding_boxes))
                     else :
                         collection.images.add(*images)
 
-                collection.creation_info = dplinfo+depinfo+altinfo+datinfo
+                if filters != "" :
+                    filters = "Filters {}.".format(filters)
+                collection.creation_info = "{} images from {} deployment(s). {}".format(collection.images.count(), len(deployment_list) , filters)
 
 
             collection.save()
@@ -282,6 +280,20 @@ class CollectionManager(models.Manager):
                 if len(wsimglist) <= 0:
                     raise CollectionError("No images could be found matching your list")
                 workset.creation_info = "Uploaded list containing {0} pre-selected images".format(len(wsimglist))
+
+            elif method == "grts" :
+                collection_images = collection.images.all()
+                collection_poses = collection_images.values_list("pose__position")
+                #collection_latlons = [i[0].coords for i in collection_poses]
+                d2r = pi / 180
+                lat = [i[0].y * d2r  for i in collection_poses]
+                lon = [i[0].x * d2r for i in collection_poses]
+                inds = list(GRTSSampler.create_grts_sample(lat,lon,n,0.0))
+                print inds
+
+                wsimglist = [collection_images[i] for i in inds]
+                workset.creation_info = "{} images selected from {} images using GRTS".format(len(wsimglist), collection_images.count())
+
 
             else:
                 raise CollectionError("Unrecognised method argument for Workset creation")

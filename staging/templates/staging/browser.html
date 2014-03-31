@@ -40,7 +40,7 @@
     function getCampaignFolderContents(folder_id) {
     	// for now extend the list of returned campaigns with the 'limit' argument to avoid having
     	// to paginate the returned list
-        var apiurl = '/api/dev/stagingfiles/?folder=' + folder_id + '&limit=10000';
+        var apiurl = '/api/dev/stagingfiles/?folder=' + folder_id + '&limit=0';
         $("#filecontainerbody").html('');
         //location.hash = folder_id;
         appendCampaignFolderContents(apiurl);
@@ -74,7 +74,7 @@
         })
     }
     function getCampaignList() {
-        var apiurl = "/api/dev/campaign/?format=json";
+        var apiurl = "/api/dev/campaign/?limit=0&format=json";
         $.getJSON(apiurl, function (campaigns) {
             var options = '<option value="">--ALL--</option>';
             for (var i = 0; i < campaigns.objects.length; i++) {
@@ -85,7 +85,7 @@
         })
     }
     function showCampaignDives( campaignFolderObject ) {
-        var apiurl = '/api/dev/stagingfiles/?folder=' + campaignFolderObject;
+        var apiurl = '/api/dev/stagingfiles/?limit=0&folder=' + campaignFolderObject;
         $("#campaignDiveList").html('');
         $.getJSON(apiurl, function (files) {
             var dive_list = '';

@@ -247,11 +247,10 @@ Tag-example browser modal
 var modalstate = {};
 
 
-
 function updateCollections() {
     var cllist = new CollectionAPI({
         config: {
-            format: '<div id="cl-{id}" class="panel-item"><a href="javascript:void(0)" class="dm-popover badge" onclick="selectCollection({id})" data-content="<small>Created by <b>{username}</b> on <b>{creation_date}</b>.<br>Contains <b>{image_count}</b> images.<br>{creation_info}.<br><em>{description}</em></small>" data-original-title="{type} information">{name}</a></div>'
+            format: '<div id="cl-{id}" class="panel-item"><a href="javascript:void(0)" class="dm-popover badge" onclick="selectCollection({id})" data-content="<small>ID: {id}<br>Created by <b>{username}</b> on <b>{creation_date}</b>.<br>{creation_info}<br><em>{description}</em></small>" data-original-title="{type} information">{name}</a></div>'
         }
     });
     $('#dm-ws').remove();
@@ -264,7 +263,7 @@ function updateCollections() {
 function selectCollection(clid) {
     var wslist = new CollectionAPI({
         config: {
-            format: '<div id="ws-{id}" class="panel-item"><a href="javascript:void(0)" class="dm-popover badge" onclick="selectWorkset({id})" data-content="<small>Created by <b>{username}</b> on <b>{creation_date}</b>.<br>Contains <b>{image_count}</b> images.<br>{creation_info}.<br><em>{description}</em></small>" data-original-title="{type} information">{name}</a></div>'
+            format: '<div id="ws-{id}" class="panel-item"><a href="javascript:void(0)" class="dm-popover badge" onclick="selectWorkset({id})" data-content="<small>ID: {id}<br>Created by <b>{username}</b> on <b>{creation_date}</b>.<br>{creation_info}<br><em>{description}</em></small>" data-original-title="{type} information">{name}</a></div>'
         }
     });
     $('#dm-as').remove();
@@ -402,6 +401,7 @@ function openNewWorksetModalWindow() {
 function send_workset_form(form_id){
     curstate.clid = modalstate.clid;
     curstate.asid = 0;
+    show_busy("Busy creating your Subset...");
     Dajaxice.webinterface.send_workset_form(Dajax.process, {'form':$(form_id).serialize(true),'form_id':form_id});
 }
 
@@ -418,7 +418,7 @@ function openNewCollectionModalWindow() {
     //$('#data-modal').modal('hide');
     //$('#new-collection-modal').modal('show');
     if (confirm('This will redirect you to the Project creation tab. Would you like to continue?')) {
-        window.location.replace('/');
+        window.location.assign('/viewproject');
     }
 }
 function send_collection_form(form_id){
