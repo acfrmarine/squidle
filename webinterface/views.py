@@ -357,8 +357,8 @@ def update_classes_gspread (request) :
     import gspread
     from annotations.models import AnnotationCode
 
-    guser = request.GET.get('guser')
-    gpass = request.GET.get('gpass')
+    guser = request.POST.get('guser')
+    gpass = request.POST.get('gpass')
     action = request.GET.get('action')
     field = request.GET.get('field')
 
@@ -375,7 +375,7 @@ def update_classes_gspread (request) :
         # 3: Short name
         # 4: Colour
         # 5: Parent CAAB
-        wks = ss.worksheet("To add to squidle")
+        wks = ss.worksheet("Valid new classes (read-only)")
         list_of_lists = wks.get_all_values()
         headers = list_of_lists[0]
         response.write("<b>{}</b><br>".format(headers))
@@ -393,8 +393,9 @@ def update_classes_gspread (request) :
             except Exception as e:
                 response.write("...ERROR!!!!!! {}<br>".format(e.message))
 
+    # TODO: update other fields too (currently only updates colour
     elif action == "update" :
-        wks = ss.worksheet("Already on squidle")
+        wks = ss.worksheet("Existing classes (read-only)")
         # 0:ID
         # 1:CAAB code
         # 2:Class Name
@@ -408,15 +409,29 @@ def update_classes_gspread (request) :
             try:
                 response.write("Updating: {}...".format(annotation_list[2]))
                 thisclass = AnnotationCode.objects.filter(caab_code=annotation_list[1])[0]
-                thisclass.point_colour = annotation_list[5]
-                #print thisclass
-                thisclass.save()
+                if thisclass.point_colour != annotation_list[8]:
+                    response.write("CHANGING FROM: {} to {}".format(thisclass.point_colour, annotation_list[8]))
+                    thisclass.point_colour = annotation_list[8]
+                    thisclass.save()
+
                 response.write("...DONE!<br>")
             except Exception as e:
                 response.write("...ERROR!!!!!! {}<br>".format(e.message))
 
     elif action == "export":
-        print "export"
+        wks = ss.worksheet("Existing classes (read-only)")
+        allclasses = AnnotationCode.objects.all().order_by('code_name').values_list('id','caab_code', 'code_name', 'description','cpc_code',
+                                                                                    'point_colour','parent_id','parent__caab_code')
+        # Select a cell range
+        cell_list = wks.range('A{}:H{}'.format(2, len(allclasses) + 1))
+        flat_list = [val for subl in allclasses for val in subl] # flatten class list to enable batch updating
+
+        for i in range(0,len(flat_list),1):
+            cell_list[i].value = flat_list[i]
+
+        # Send update in batch mode
+        wks.update_cells(cell_list)
+        response.write("Done updating spreadsheet with ALL existing classes<br>")
 
     return response
 
