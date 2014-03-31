@@ -47,7 +47,7 @@ class CreateWorksetFromImagelist (forms.Form) :
 class CreateWorksetForm(forms.Form):
     name = forms.CharField(label=u'Name', widget=forms.TextInput(attrs={'placeholder': 'Enter a descriptive name'}))
     #ispublic = forms.BooleanField(label=u'Make public?', required=False)
-    method = forms.ChoiceField(label=u'Sub-sample', choices=(('random', 'N random images'),('stratified','Every Nth image')), initial='random', help_text=u'Currently only two options. More to come including: spatial strat and GRTS, etc...')
+    method = forms.ChoiceField(label=u'Sub-sample', choices=(('random', 'N random images'),('stratified','Every Nth image'),('grts','N images sampled using GRTS')), initial='random', help_text=u'The method used to subsample the images...')
     n = forms.IntegerField(label=u'N', min_value=1, help_text=u'Number of images or spacing between images (depends on sub-sample method)')
     #start_ind = forms.IntegerField(label=u'Start Index', min_value=0)
     #stop_ind = forms.IntegerField(label=u'Stop Index', min_value=0)
@@ -62,6 +62,14 @@ class CreatePointAnnotationSet (forms.Form):
     name = forms.CharField(label=u'Name', widget=forms.TextInput(attrs={'placeholder': 'Enter a descriptive name'}))
     methodology = forms.ChoiceField(label=u'Methodology', choices=POINT_METHODOLOGIES, initial=0, help_text=u'The method for positioning the points')
     count = forms.IntegerField(label=u'N', min_value=1, help_text=u'Number of points')
+
+    # Attach javascript onchange event to select
+    #methodology.widget.attrs["onchange"] = "if ($(this).val() == 3) $(this.form.id_count).val(9)[0].disabled=true;"\
+    #"else if ($(this).val() == 1 || $(this).val() == 2) $(this.form.id_count).val(10)[0].disabled=false;"\
+    #"else  $(this.form.id_count).val(50)[0].disabled=false;"
+    methodology.widget.attrs["onchange"] = "if ($(this).val() == 3) $(this.form.id_count).val(9);" \
+                                           "else if ($(this).val() == 1 || $(this).val() == 2) $(this.form.id_count).val(10);" \
+                                           "else  $(this.form.id_count).val(50);"
 
 
 class CreateWorksetAndAnnotation(forms.Form):

@@ -10,8 +10,8 @@ class AnnotationCode(models.Model):
     This stores all the levels of the classifaction tree
     with parent filled in as appropriate.
     """
-    caab_code = models.CharField(max_length=8, blank=True, null=True) # 8 numbers
-    cpc_code = models.CharField(max_length=5, unique=True) # CPC Code file code
+    caab_code = models.CharField(max_length=8, blank=True, null=True, unique=True) # 8 numbers
+    cpc_code = models.CharField(max_length=6, unique=True) # CPC Code file code
     point_colour = models.CharField(max_length=6) # hex RGB colour
     code_name = models.CharField(max_length=100)
     description = models.CharField(max_length=200)
@@ -70,6 +70,7 @@ POINT_METHODOLOGIES = (
     (0, 'N random points'),
     (1, 'Regular grid (N points across)'),
     (2, 'Regular grid (N points down)'),
+    (3, 'Spectrometer FOV patch (9 points)'),
 )
 
 
@@ -145,9 +146,17 @@ class PointAnnotationManager(models.Manager):
                     add_point(annotation_set, image, labeller, x, y)
 
 
-        else:
-            # don't know what to do... invalid choice etc.
-            pass
+        elif annotation_set.methodology == 3:
+            add_point(annotation_set, image, labeller, 0.51252,0.54757)
+            add_point(annotation_set, image, labeller, 0.55997,0.54757)
+            add_point(annotation_set, image, labeller, 0.46506,0.54757)
+            add_point(annotation_set, image, labeller, 0.51252,0.6106)
+            add_point(annotation_set, image, labeller, 0.51252,0.48455)
+            add_point(annotation_set, image, labeller, 0.54607,0.59214)
+            add_point(annotation_set, image, labeller, 0.54607,0.50301)
+            add_point(annotation_set, image, labeller, 0.47896,0.59214)
+            add_point(annotation_set, image, labeller, 0.47896,0.50301)
+
 
 
 class PointAnnotationSet(AnnotationSet):
