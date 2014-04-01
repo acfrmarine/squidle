@@ -280,7 +280,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * Update the map for a set of deployments
 	 **/
 	this.showDeployments = function(layername) {
-		layername = (( typeof layername !== 'undefined') ? layername : "Deployments");
+		layername = (( typeof layername !== 'undefined') ? layername : "Deployment origins");
 		var mapInstance = this.mapInstance;
 		if (mapInstance.getLayersByName(layername).length == 0) {
 
@@ -748,30 +748,34 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     this.addBBoxSelect = function ($container, layername) {
         var $bboxbtn = $('<button type="button" class="btn btn-default pull-right btn-sm" title="Draw a bounding box around the images you would like to add to your selection."><i class="icon-crop"></i> BOX</button>');
 
-        var layernameBoundingBoxes = layername + ' (bounding boxes)';
-        if (this.mapInstance.getLayersByName(layernameBoundingBoxes).length == 0) {
-            this.mapInstance.addLayer(new OpenLayers.Layer.Vector(layernameBoundingBoxes, null))
-        }
-
-        var bbctrl =  new OpenLayers.Control.DrawFeature(baseMap.mapInstance.getLayersByName(layernameBoundingBoxes)[0], OpenLayers.Handler.RegularPolygon, {
-                handlerOptions: {
-                    irregular: true
-                },
-                eventListeners: {
-                    "featureadded": function (event) {
-                        var filterBounds = event.feature.geometry.getBounds().clone();
-                        filterBounds.transform(baseMap.projection.mercator, baseMap.projection.geographic);
-                        baseMap.filters.BBoxes.push(filterBounds);
-                        baseMap.showSelectedImages(layername);
-                        toggleBBoxSelect(bbctrl, $bboxbtn,true);
-                    }
-                }
-            });
-        this.mapInstance.addControl(bbctrl);
-
-
+               
 
         $bboxbtn.click(function (){
+             var layernameBoundingBoxes = 'Bounding boxes';
+        
+            if (baseMap.mapInstance.getLayersByName(layernameBoundingBoxes).length == 0) {
+            baseMap.mapInstance.addLayer(new OpenLayers.Layer.Vector(layernameBoundingBoxes, null))
+	    var bbctrl =  new OpenLayers.Control.DrawFeature(baseMap.mapInstance.getLayersByName(layernameBoundingBoxes)[0], OpenLayers.Handler.RegularPolygon, {
+		handlerOptions: {
+		    irregular: true
+		},
+		eventListeners: {
+		    "featureadded": function (event) {
+			var filterBounds = event.feature.geometry.getBounds().clone();
+			filterBounds.transform(baseMap.projection.mercator, baseMap.projection.geographic);
+			baseMap.filters.BBoxes.push(filterBounds);
+			baseMap.showSelectedImages(layername);
+			toggleBBoxSelect(bbctrl, $bboxbtn,true);
+		    }
+		}
+	    });
+	    baseMap.mapInstance.addControl(bbctrl);
+
+
+            }
+
+           
+
             toggleBBoxSelect(bbctrl, $bboxbtn);
         });
         $bboxbtn.tooltip({trigger:'hover'});
@@ -798,8 +802,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         var $dplselect = $('<select multiple id="deploymentSelect" name="deploymentSelect"> </select>');
 
 
-
-        addDeploymentsToSelect($dplselect);
+        addCampaignsToSelect($dplselect);
+//        addDeploymentsToSelect($dplselect);
 
 
         $container.append($dplselect);
@@ -808,6 +812,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         $dplselect.multiselect({
             maxHeight: 400,
             buttonWidth: $container.innerWidth(),
+            enableCaseInsensitiveFiltering: true,
             buttonText: function (options, select) {
                 if (options.length == 0) return '<i class="icon-th-list"></i> Select deployment(s)';
                 else if (options.length == 1) return '<i class="icon-th-list"></i> '+ options.length+' deployment selected';
@@ -835,7 +840,10 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 //                        else baseMap.$dplinfo.prepend(getDeploymentCheckbox(id,name,'checked'));
                     }
                 }
-                baseMap.showSelectedImages(layername);
+                console.log("dep select");
+                //baseMap.showSelectedImages(layername, baseMap.getSelectFilters());
+                //baseMap.showSelectedImages(layername, baseMap.getFilters());
+                baseMap.showSelectedImages(layername,false);
             }
         });
 
@@ -848,7 +856,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         $popout.css({position:'absolute',
             top: Math.max(-$popout.outerHeight()/2 , baseMap.$mapobj.offset().top - $popout.parent().offset().top),
             left: -$popout.outerWidth(),
-            'z-index': 9999
+            'z-index': 9999,
+            width: $popout.outerWidth()
         });
 
 
@@ -862,8 +871,28 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
     }
 
+    function addCampaignsToSelect($dplselect) {
+        $.ajax({
+            dataType: "json",
+            async: false,
+            url: '/api/dev/campaign/?limit=0&order_by=short_name',
+            success: function (cmp) {
+                var $cmpgrp, dplcount;
+                if (cmp.objects.length > 0) {
+                    for (var i = 0; i < cmp.objects.length; i++) {
+                        $cmpgrp = $('<optgroup></optgroup>');
+                        dplcount = addDeploymentsToSelect($cmpgrp, cmp.objects[i].id);
+                        $cmpgrp.attr('label',cmp.objects[i].short_name + ' ('+ dplcount+')');
+                        $dplselect.append($cmpgrp);
+                    }
+                }
+            }
+        });
+    }
+
     function addDeploymentsToSelect ($dplselect, cmpid) {
         var cmpstr = ( typeof cmpid !== 'undefined') ? '&campaign=' + cmpid : '';
+        var dplcount = 0;
         $.ajax({
             dataType: "json",
             async: false,
@@ -872,14 +901,18 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 if (dpl.objects.length > 0) {
                     for (var i = 0; i < dpl.objects.length; i++) {
                         $dplselect.append('<OPTION VALUE="' + dpl.objects[i].id + '">' + dpl.objects[i].short_name + '</option>');
+                        dplcount ++;
                     }
                 }
                 else {
-                    $dplselect.append('<OPTION VALUE="">No dpeloyments found</option>');
+                    $dplselect.append('<OPTION VALUE="" disabled="true">No dpeloyments found</option>');
                 }
             }
         });
+        return dplcount;
     }
+
+
 
     /**
      *
