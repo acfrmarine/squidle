@@ -817,7 +817,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 								var filterBounds = event.feature.geometry.getBounds().clone();
 								filterBounds.transform(baseMap.projection.mercator, baseMap.projection.geographic);
 								baseMap.filters.BBoxes.push(filterBounds);
-								baseMap.showSelectedImages(layername);
+								// baseMap.showSelectedImages(layername);
+								baseMap.showSelectedImages(layername, false, this.filtLayerColor);
 								toggleBBoxSelect(bbctrl, $bboxbtn,true);
 						    }
 						}
@@ -1066,6 +1067,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 change: function (event, ui) {
 					console.log("\tEvent slider");
                     baseMap.filters.featranges[feature] = $slider.slider("values");
+					console.log("\t\tColor="+this.filtLayerColor);
                     baseMap.showSelectedImages(layername, false, this.filtLayerColor);
 					// baseMap.updateMapUsingFilter(baseMap.getRangeFilters(), layername);
                     
@@ -1092,8 +1094,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                     $todate.datepicker("option", "minDate", selectedDate);
                     // update map filter - this could probably be streamlined
                     baseMap.filters.featranges[feature] = [$fromdate.val() , $todate.val()];
-                    baseMap.updateMapUsingFilter(baseMap.getRangeFilters(), layername); // update main layer
-                    baseMap.showSelectedImages(layername, true); // update selection layer (if it exists)
+					baseMap.showSelectedImages(layername, false, this.filtLayerColor);
+                    // baseMap.updateMapUsingFilter(baseMap.getRangeFilters(), layername); // update main layer
+                    // baseMap.showSelectedImages(layername, true); // update selection layer (if it exists)
                     //updateMapFilters();
                 }
             });
@@ -1107,8 +1110,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                     // restrict the start date
                     $fromdate.datepicker("option", "maxDate", selectedDate);
                     baseMap.filters.featranges[feature] = [$fromdate.val() , $todate.val()];
-                    baseMap.updateMapUsingFilter(baseMap.getRangeFilters(), layername); // update main layer
-                    baseMap.showSelectedImages(layername, true); // update selection layer (if it exists)
+					baseMap.showSelectedImages(layername, false, this.filtLayerColor);
+                    // baseMap.updateMapUsingFilter(baseMap.getRangeFilters(), layername); // update main layer
+//                     baseMap.showSelectedImages(layername, true); // update selection layer (if it exists)
                     //updateMapFilters();
                 }
             });
