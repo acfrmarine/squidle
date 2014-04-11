@@ -564,7 +564,10 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 //                this.mapInstance.removeControl(this.mapInstance.getControlsBy('title','ClickImg')[0]);
 //			}
 	        //$('#' + selectedpanelid).hide();
-		} else  if (this.mapInstance.getLayersByName(selectlayername).length == 0 && !nocreate) {
+			console.log("No filters selected");
+		} 
+		
+		if (this.mapInstance.getLayersByName(selectlayername).length == 0 && !nocreate) {
 			// add the selection layer if required
 			var imglayer = new OpenLayers.Layer.WMS(selectlayername, this.wmsUrl, {
                 layers: 'catami:catamidb_images',
