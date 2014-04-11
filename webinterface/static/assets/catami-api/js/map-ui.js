@@ -52,7 +52,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * @param $mapobj
 	 */
 	this.init = function($mapobj, $mappanel) {
-			console.log("Function this.init");
+			console.log("Function init");
 		// set map object
 		this.$mapobj = $mapobj;
         this.$mappanel = $mappanel;
@@ -121,7 +121,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	}
 
 	this.setFullHeight = function() {
-			console.log("Function this.setFullHeight");
+			console.log("Function setFullHeight");
         this.$mapobj.height($(window).height() - this.$mapobj.offset().top);
         this.$mappanel.parent().height($(window).height() - this.$mappanel.parent().offset().top);
         //this.$mapobj.width($(window).width()- this.$mappanel.parent().width());
@@ -285,8 +285,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * Update the map for a set of deployments
 	 **/
 	this.showDeployments = function(layername) {
-			console.log("Function showDeployments");
-		
+		console.log("Function showDeployments");
+		console.log("layername=" +layername)
 		layername = (( typeof layername !== 'undefined') ? layername : "Deployment origins");
 		var mapInstance = this.mapInstance;
 		if (mapInstance.getLayersByName(layername).length == 0) {
