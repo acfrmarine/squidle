@@ -1038,6 +1038,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
     this.addRangeFilter = function ($container,type,layername,feature,params) {
 		console.log("Function addRangeFilter");
+		layername = layername + "(filt)";
+		
         if (type=='slider') {
             var $slider = $('<div id="'+ feature+'-slider" style="margin-left:10px; margin-right:10px;"></div>'),
                 infoid = feature + '-range',
@@ -1055,7 +1057,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                     $($slider.data('infoid')).html(ui.values[ 0 ] +' - '+ ui.values[ 1 ]);
                 },
                 change: function (event, ui) {
-                    //
                     baseMap.filters.featranges[feature] = $slider.slider("values");
                     baseMap.updateMapUsingFilter(baseMap.getRangeFilters(), layername); // update main layer
                     baseMap.showSelectedImages(layername, true); // update selection layer (if it exists)
