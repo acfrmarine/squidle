@@ -371,7 +371,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				"featureselected" : zoomToDeployments
 			});
 		}
-
+		console.log("END showDeployments");
 		//this.updateMapBounds("deployment_ids="+deploymentIds, this.deploymentExtentUrl)
 	};
 	/**
@@ -1038,7 +1038,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
     this.addRangeFilter = function ($container,type,layername,feature,params) {
 		console.log("Function addRangeFilter");
-		layername = layername + "(filt)";
+		layername = layername + " (filt)";
 		
         if (type=='slider') {
             var $slider = $('<div id="'+ feature+'-slider" style="margin-left:10px; margin-right:10px;"></div>'),
@@ -1058,8 +1058,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 },
                 change: function (event, ui) {
                     baseMap.filters.featranges[feature] = $slider.slider("values");
-                    baseMap.updateMapUsingFilter(baseMap.getRangeFilters(), layername); // update main layer
                     baseMap.showSelectedImages(layername, true); // update selection layer (if it exists)
+					baseMap.updateMapUsingFilter(baseMap.getRangeFilters(), layername); // update main layer
+                    
                     //updateMapFilters();
                 }
             });
