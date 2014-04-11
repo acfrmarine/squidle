@@ -564,7 +564,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 //                this.mapInstance.removeControl(this.mapInstance.getControlsBy('title','ClickImg')[0]);
 //			}
 	        //$('#' + selectedpanelid).hide();
-			console.log("No filters selected");
+			console.log("\tNo filters selected");
 		} 
 		
 		if (this.mapInstance.getLayersByName(selectlayername).length == 0 && !nocreate) {
@@ -581,7 +581,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				isBaseLayer : false
             });
             this.mapInstance.addLayer(imglayer);
-
+			console.log("\tCreated new layer: " + selectlayername);
 //            var highlightLayer = new OpenLayers.Control.GetFeature({
 //                protocol: OpenLayers.Protocol.WFS.fromWMSLayer(imglayer),
 //                box: true,
