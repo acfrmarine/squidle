@@ -26,6 +26,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	this.hostname = location.hostname;
 
 	this.filtLayername = "filter layer";
+	this.filtLayerColor = "00FF00";
 
 //	this.browseEnabled = true;
 	this.isInitialised = false;
@@ -547,10 +548,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 *
 	 * 
 	 */
-	this.showSelectedImages = function(selectlayername, nocreate) {
+	this.showSelectedImages = function(selectlayername, nocreate, color) {
 		console.log("Function showSelectedImages: " + selectlayername);
 		
         nocreate = (( typeof nocreate !== 'undefined') ? nocreate : false);
+		color = (( typeof color !== 'undefined') ? color : "0000FF");
 		var //selectlayername = baselayername + ' (selected)',
             selectedpanelid = 'mapselected',
             $selectedpanel;
@@ -574,7 +576,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 format: 'image/gif',
                 transparent: 'TRUE',
                 // sld: "http://" + baseMap.hostname + "/geoserverstyle?prop=depth&min=35.0&max=50.0"
-                sld : "http://" + baseMap.hostname + "/geoserverSimplestyle?name=catami:catamidb_images&colour=00FF00&size=5"
+                sld : "http://" + baseMap.hostname + "/geoserverSimplestyle?name=catami:catamidb_images&colour="+color+"&size=5"
             }, {//tileOptions: {maxGetUrlLength: 2048},
                 transitionEffect: 'resize',//, minScale: 150000}), // selection layer should always be visible
 				tileOptions: {maxGetUrlLength: 2048}, 
@@ -796,7 +798,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		console.log("Function addBBoxSelect");
         var $bboxbtn = $('<button type="button" class="btn btn-default pull-right btn-sm" title="Draw a bounding box around the images you would like to add to your selection."><i class="icon-crop"></i> BOX</button>');
 
-               
+        layername = this.filtLayername;
 
         $bboxbtn.click(function (){
              var layernameBoundingBoxes = 'Bounding boxes';
@@ -810,11 +812,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 						},
 						eventListeners: {
 						    "featureadded": function (event) {
-							var filterBounds = event.feature.geometry.getBounds().clone();
-							filterBounds.transform(baseMap.projection.mercator, baseMap.projection.geographic);
-							baseMap.filters.BBoxes.push(filterBounds);
-							baseMap.showSelectedImages(filtLayername);
-							toggleBBoxSelect(bbctrl, $bboxbtn,true);
+								var filterBounds = event.feature.geometry.getBounds().clone();
+								filterBounds.transform(baseMap.projection.mercator, baseMap.projection.geographic);
+								baseMap.filters.BBoxes.push(filterBounds);
+								baseMap.showSelectedImages(layername);
+								toggleBBoxSelect(bbctrl, $bboxbtn,true);
 						    }
 						}
 				    }
@@ -1041,7 +1043,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
     this.addRangeFilter = function ($container,type,layername,feature,params) {
 		console.log("Function addRangeFilter");
-		layername = filtLayername;
+		layername = this.filtLayername;
 		
         if (type=='slider') {
             var $slider = $('<div id="'+ feature+'-slider" style="margin-left:10px; margin-right:10px;"></div>'),
@@ -1062,8 +1064,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 change: function (event, ui) {
 					console.log("\tEvent slider");
                     baseMap.filters.featranges[feature] = $slider.slider("values");
-                    baseMap.showSelectedImages(layername, false); // update selection layer (if it exists)
-					baseMap.updateMapUsingFilter(baseMap.getRangeFilters(), layername); // update main layer
+                    baseMap.showSelectedImages(layername, false, this.filtLayerColor);
+					// baseMap.updateMapUsingFilter(baseMap.getRangeFilters(), layername);
                     
                     //updateMapFilters();
                 }
