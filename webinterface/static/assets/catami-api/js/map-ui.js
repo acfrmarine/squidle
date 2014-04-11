@@ -573,8 +573,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 layers: 'catami:catamidb_images',
                 format: 'image/gif',
                 transparent: 'TRUE',
-                sld: "http://" + baseMap.hostname + "/geoserverstyle?prop=depth&min=35.0&max=50.0"
-                //sld : "http://" + baseMap.hostname + "/geoserverSimplestyle?name=catami:catamidb_images&colour=00FF00&size=5"
+                // sld: "http://" + baseMap.hostname + "/geoserverstyle?prop=depth&min=35.0&max=50.0"
+                sld : "http://" + baseMap.hostname + "/geoserverSimplestyle?name=catami:catamidb_images&colour=00FF00&size=5"
             }, {//tileOptions: {maxGetUrlLength: 2048},
                 transitionEffect: 'resize',//, minScale: 150000}), // selection layer should always be visible
 				tileOptions: {maxGetUrlLength: 2048}, 
@@ -813,7 +813,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 							var filterBounds = event.feature.geometry.getBounds().clone();
 							filterBounds.transform(baseMap.projection.mercator, baseMap.projection.geographic);
 							baseMap.filters.BBoxes.push(filterBounds);
-							baseMap.showSelectedImages(layername);
+							baseMap.showSelectedImages(filtLayername);
 							toggleBBoxSelect(bbctrl, $bboxbtn,true);
 						    }
 						}
@@ -1041,7 +1041,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
     this.addRangeFilter = function ($container,type,layername,feature,params) {
 		console.log("Function addRangeFilter");
-		layername = layername + " (filt)";
+		layername = filtLayername;
 		
         if (type=='slider') {
             var $slider = $('<div id="'+ feature+'-slider" style="margin-left:10px; margin-right:10px;"></div>'),
