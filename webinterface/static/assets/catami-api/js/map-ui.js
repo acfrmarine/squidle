@@ -553,6 +553,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		
         nocreate = (( typeof nocreate !== 'undefined') ? nocreate : false);
 		color = (( typeof color !== 'undefined') ? color : "0000FF");
+		console.log("\tColor="+color);
 		var //selectlayername = baselayername + ' (selected)',
             selectedpanelid = 'mapselected',
             $selectedpanel;
