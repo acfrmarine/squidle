@@ -1148,6 +1148,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
         baseMap.$selectedpanel.html('');
 
+		// Show number of deployments and their info
         if (baseMap.filters.deployments != null) {
             for (var i = 0; i < baseMap.filters.deployments.length; i++) {
                 dplinfo += baseMap.filters.deployments[i].name + '<br>';
@@ -1155,19 +1156,24 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 showcreatbtn = true;
             }
             if (dplinfo != '') {
+				// TODO: Why <a>??
                 baseMap.$selectedpanel.append($('<a href="#_" class="btn btn-xs" title="' + dplinfo + '">Deployments <span class="badge">' + i + '</span></a> ').popover({html: true, placement: 'topRight', trigger: 'hover'}));
                 $newclform.find('#id_deployment_ids').val(dplids.join(','));
             }
         }
-
+		
+		// Show the range filters
         var i = 0;
         for (var key in baseMap.filters.featranges) {
-            rangeinfo += key + ': ' + baseMap.filters.featranges[key][0] + ' to ' + baseMap.filters.featranges[key][1] + '<br>';
+            rangeinfo = key + ': ' + baseMap.filters.featranges[key][0] + ' to ' + baseMap.filters.featranges[key][1] + '<br>';
             $newclform.find('#id_'+key).val(baseMap.filters.featranges[key][0] + ',' + baseMap.filters.featranges[key][1])
+	        if (rangeinfo != '')  {
+				baseMap.$selectedpanel.append($('<a href="#_" class="btn btn-xs" title="' + rangeinfo + '">Filter <span class="badge">' + i + '</span></a> ').popover({html: true, placement: 'topRight', trigger:'hover'}));
+			}
             i++;
         }
-        if (rangeinfo != '') baseMap.$selectedpanel.append($('<a href="#_" class="btn btn-xs" title="' + rangeinfo + '">Filters <span class="badge">' + i + '</span></a> ').popover({html: true, placement: 'topRight', trigger:'hover'}));
-
+		
+		// Show bounding boxes
         var bboxarr = [];
         var bbox = [];
         for (var i = 0; i < baseMap.filters.BBoxes.length; i++) {
