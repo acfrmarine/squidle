@@ -15,6 +15,7 @@ OpenLayers.ProxyHost = "/proxy/?url=";
  */
 
 function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globalstate) {
+	console.log("Function BaseMap");
 	//Map view code to get moved out later.
 	//prep some data we need to use to display the points
 	this.wmsUrl = geoserverUrl + '/wms';
@@ -51,6 +52,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * @param $mapobj
 	 */
 	this.init = function($mapobj, $mappanel) {
+			console.log("Function this.init");
 		// set map object
 		this.$mapobj = $mapobj;
         this.$mappanel = $mappanel;
@@ -119,6 +121,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	}
 
 	this.setFullHeight = function() {
+			console.log("Function this.setFullHeight");
         this.$mapobj.height($(window).height() - this.$mapobj.offset().top);
         this.$mappanel.parent().height($(window).height() - this.$mappanel.parent().offset().top);
         //this.$mapobj.width($(window).width()- this.$mappanel.parent().width());
@@ -130,8 +133,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
      * @param filterArray
      */
     this.updateMapUsingFilter = function (filterArray, layerName) {
-
-        console.log("Applying map filter to "+ layerName);
+			console.log("Function updateMapUsingFilter");
+        console.log("Applying map filter to '"+ layerName + "'");
 
         var filter_1_1 = new OpenLayers.Format.Filter({
             version: "1.1.0"
@@ -163,6 +166,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * @param layersettings {markersize,markercol,isclickable}
 	 */
 	this.updateMapForCollection = function(clid, layername, layersettings) {
+			console.log("Function updateMapForCollection");
 		// overide default settings with layersettings
 		var settings = {
 			markersize : 5,
@@ -254,6 +258,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * @param imageId
 	 */
 	this.updateMapForSelectedImage = function(imageId, layername) {
+			console.log("Function updateMapForSelectedImage");
 		layername = (( typeof layername !== 'undefined') ? layername : "Current Image");
 		if (this.mapInstance.getLayersByName(layername).length == 0) {
 			//this.layers[layername] = new OpenLayers.Layer.Markers(layername);
@@ -280,6 +285,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * Update the map for a set of deployments
 	 **/
 	this.showDeployments = function(layername) {
+			console.log("Function showDeployments");
+		
 		layername = (( typeof layername !== 'undefined') ? layername : "Deployment origins");
 		var mapInstance = this.mapInstance;
 		if (mapInstance.getLayersByName(layername).length == 0) {
@@ -363,7 +370,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		//this.updateMapBounds("deployment_ids="+deploymentIds, this.deploymentExtentUrl)
 	};
 	function showDeploymentInfo(event) {
-		//console.log(event);
+			console.log("Function showDeploymentInfo");
 
 		if (event.feature.cluster.length > 0) {
 			var $depinfo,
@@ -404,6 +411,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	}
 
     function getDeploymentCheckbox (id,name,checked) {
+			console.log("Function getDeploymentCheckbox");
         var $depinfo = $('<label class="checkbox"><input type="checkbox" value="' + id + '" '+checked+' > ' + name + '</label>');
         $depinfo.data('depid', id);
         $depinfo.click(function () {
@@ -418,6 +426,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * Zoom to a deployment
 	 **/
 	function zoomToDeployments(event) {
+			console.log("Function zoomToDeployments");
 		// parse the deployment ids
 		//baseMap.test = event;
 		var deploymentIds = [];
@@ -441,6 +450,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 
 	this.showImages = function(layername) {
+			console.log("Function showImages");
 		layername = (( typeof layername !== 'undefined') ? layername : "Images");
 		if (this.mapInstance.getLayersByName(layername).length == 0) {
 			var ImagesLayer = this.mapInstance.addLayer(new OpenLayers.Layer.WMS(layername, this.wmsUrl, {
@@ -491,6 +501,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 
     function getImageInfo (id) {
+			console.log("Function getImageInfo");
         var imginfo = thlist.getImageInfo(id);
         //console.log(imginfo);
 
@@ -524,6 +535,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * @param BBOXfilter
 	 */
 	this.showSelectedImages = function(selectlayername, nocreate) {
+			console.log("Function showSelectedImages");
         nocreate = (( typeof nocreate !== 'undefined') ? nocreate : false);
 		var //selectlayername = baselayername + ' (selected)',
             selectedpanelid = 'mapselected',
@@ -636,6 +648,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 *  'collection_id=[]'
 	 */
 	this.updateMapBounds = function(boundsCriteria, extentUrl) {
+			console.log("Function updateMapBounds");
 		var mapInstance = this.mapInstance;
 		//var geographic = baseMap.projection.geographic;
 		//var mercator = baseMap.projection.mercator;
@@ -655,6 +668,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 
     this.getSelectFilters = function () {
+			console.log("Function getSelectedFilters");
         var selectfilters = [];
 
         // Get deployment filters
@@ -685,6 +699,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     }
 
     this.getRangeFilters = function () {
+			console.log("Function getRangeFilters");
         var filters = [],
             bboxfilters = [];
 
@@ -722,6 +737,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 
     this.getFilters = function () {
+			console.log("Function getFilters");
         var filters = [],
             rangefilters = this.getRangeFilters(),
             selectfilters = this.getSelectFilters();
@@ -746,6 +762,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 
     this.addBBoxSelect = function ($container, layername) {
+			console.log("Function addBBoxSelect");
         var $bboxbtn = $('<button type="button" class="btn btn-default pull-right btn-sm" title="Draw a bounding box around the images you would like to add to your selection."><i class="icon-crop"></i> BOX</button>');
 
                
@@ -785,6 +802,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     }
 
     function toggleBBoxSelect (bbctrl, $bboxbtn, forcedeselect) {
+			console.log("Function toggleBBoxSelect");
         forcedeselect = (( typeof forcedeselect !== 'undefined') ? forcedeselect : false);
         if ($bboxbtn.hasClass('active') || forcedeselect) {
             bbctrl.deactivate();
@@ -799,6 +817,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     }
 
     this.addDeploymentSelect = function ($container, layername) {
+			console.log("Function addDeploymentSelect");
         var $dplselect = $('<select multiple id="deploymentSelect" name="deploymentSelect"> </select>');
 
 
@@ -872,6 +891,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     }
 
     function addCampaignsToSelect($dplselect) {
+			console.log("Function addCampainsToSelect");
         $.ajax({
             dataType: "json",
             async: false,
@@ -891,6 +911,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     }
 
     function addDeploymentsToSelect ($dplselect, cmpid) {
+			console.log("Function addDeploymentsToSelect");
         var cmpstr = ( typeof cmpid !== 'undefined') ? '&campaign=' + cmpid : '';
         var dplcount = 0;
         $.ajax({
@@ -921,7 +942,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
      * @returns {*|jQuery|HTMLElement} panel content element
      */
     this.addPanel = function ($container, panelinfo) {
-
+			console.log("Function addPanel");
         // check if panel exists, otherwise create it
         if ($container.find('#'+ panelinfo.id).length <= 0) {
             var $panel = $('<div id="' + panelinfo.id + '" class="map-panel og-panel"></div>');
@@ -958,6 +979,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 
     this.addInfoPane = function ($container, panelid) {
+			console.log("Function addInfoPane");
         var $infopane = $('<div id="'+ panelid+'" class="og-dragpane map-pane-draggable"></div>');
 
         this.$imginfo = this.addPanel($infopane, {id:'img-info',icon:'icon-picture',title:'Nearby images', closeable:true});
@@ -981,6 +1003,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 
     this.addRangeFilter = function ($container,type,layername,feature,params) {
+			console.log("Function addRangeFilter");
         if (type=='slider') {
             var $slider = $('<div id="'+ feature+'-slider" style="margin-left:10px; margin-right:10px;"></div>'),
                 infoid = feature + '-range',
@@ -1062,6 +1085,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
      * @param $container (optional - needs to be set on first call)
      */
     this.updateSelectionInfo = function ($container) {
+			console.log("Function updateSelectionInfo");
 
         if ( typeof $container !== 'undefined') baseMap.$selectedpanel = $container;
 
@@ -1130,7 +1154,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     }
 
     this.openNewCollectionModal = function () {
-
+			console.log("Function openNewCollectonModal");
 
         $('#new-collection-modal').modal('show');
     }
