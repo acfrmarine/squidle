@@ -801,7 +801,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         var $bboxbtn = $('<button type="button" class="btn btn-default pull-right btn-sm" title="Draw a bounding box around the images you would like to add to your selection."><i class="icon-crop"></i> BOX</button>');
 
         layername = this.filtLayername;
-
+		layercolor = this.filtLayerColor;
+		
         $bboxbtn.click(function (){
              var layernameBoundingBoxes = 'Bounding boxes';
         
@@ -818,7 +819,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 								filterBounds.transform(baseMap.projection.mercator, baseMap.projection.geographic);
 								baseMap.filters.BBoxes.push(filterBounds);
 								// baseMap.showSelectedImages(layername);
-								baseMap.showSelectedImages(layername, false, this.filtLayerColor);
+								baseMap.showSelectedImages(layername, false, layercolor);
 								toggleBBoxSelect(bbctrl, $bboxbtn,true);
 						    }
 						}
@@ -1047,6 +1048,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     this.addRangeFilter = function ($container,type,layername,feature,params) {
 		console.log("Function addRangeFilter");
 		layername = this.filtLayername;
+		layercolor = this.filtLayerColor;
 		
         if (type=='slider') {
             var $slider = $('<div id="'+ feature+'-slider" style="margin-left:10px; margin-right:10px;"></div>'),
@@ -1068,7 +1070,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					console.log("\tEvent slider");
                     baseMap.filters.featranges[feature] = $slider.slider("values");
 					console.log("\t\tColor="+this.filtLayerColor);
-                    baseMap.showSelectedImages(layername, false, this.filtLayerColor);
+                    baseMap.showSelectedImages(layername, false, layercolor);
 					// baseMap.updateMapUsingFilter(baseMap.getRangeFilters(), layername);
                     
                     //updateMapFilters();
@@ -1094,7 +1096,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                     $todate.datepicker("option", "minDate", selectedDate);
                     // update map filter - this could probably be streamlined
                     baseMap.filters.featranges[feature] = [$fromdate.val() , $todate.val()];
-					baseMap.showSelectedImages(layername, false, this.filtLayerColor);
+					baseMap.showSelectedImages(layername, false, layercolor);
                     // baseMap.updateMapUsingFilter(baseMap.getRangeFilters(), layername); // update main layer
                     // baseMap.showSelectedImages(layername, true); // update selection layer (if it exists)
                     //updateMapFilters();
@@ -1110,7 +1112,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                     // restrict the start date
                     $fromdate.datepicker("option", "maxDate", selectedDate);
                     baseMap.filters.featranges[feature] = [$fromdate.val() , $todate.val()];
-					baseMap.showSelectedImages(layername, false, this.filtLayerColor);
+					baseMap.showSelectedImages(layername, false, layercolor);
                     // baseMap.updateMapUsingFilter(baseMap.getRangeFilters(), layername); // update main layer
 //                     baseMap.showSelectedImages(layername, true); // update selection layer (if it exists)
                     //updateMapFilters();
