@@ -25,6 +25,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	this.collectionExtentUrl = collectionExtentUrl;
 	this.hostname = location.hostname;
 
+	this.filtLayername = "filter layer";
+
 //	this.browseEnabled = true;
 	this.isInitialised = false;
 
@@ -52,7 +54,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * @param $mapobj
 	 */
 	this.init = function($mapobj, $mappanel) {
-			console.log("Function init");
+		console.log("Function init");
 		// set map object
 		this.$mapobj = $mapobj;
         this.$mappanel = $mappanel;
@@ -121,7 +123,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	}
 
 	this.setFullHeight = function() {
-			console.log("Function setFullHeight");
+		// console.log("Function setFullHeight");
         this.$mapobj.height($(window).height() - this.$mapobj.offset().top);
         this.$mappanel.parent().height($(window).height() - this.$mappanel.parent().offset().top);
         //this.$mapobj.width($(window).width()- this.$mappanel.parent().width());
@@ -133,8 +135,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
      * @param filterArray
      */
     this.updateMapUsingFilter = function (filterArray, layerName) {
-			console.log("Function updateMapUsingFilter");
-        console.log("Applying map filter to '"+ layerName + "'");
+		console.log("Function updateMapUsingFilter");
+        console.log("\tApplying map filter to layer: '"+ layerName + "'");
 
         var filter_1_1 = new OpenLayers.Format.Filter({
             version: "1.1.0"
@@ -152,7 +154,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         layer.params['FILTER'] = new_filter;
 
         layer.redraw();
-
+		console.log("END updateMapUsingFilter");
     };
 
 
@@ -510,7 +512,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 
     function getImageInfo (id) {
-			console.log("Function getImageInfo");
+		// console.log("Function getImageInfo");
         var imginfo = thlist.getImageInfo(id);
         //console.log(imginfo);
 
@@ -534,6 +536,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         var $thumb = $('<a href="' + imginfo.images[0].web_location + '" title="' + infotxt + '" ><img src="' + imginfo.images[0].thumbnail_location + '"/></a> ');
         $thumb.tooltip({trigger: "hover", html: true, placement: 'right'});
         $thumb.fancybox();
+		
+		// console.log("END getImageInfo");
         return $thumb;
     }
 
@@ -644,10 +648,10 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		 layer.params['FILTER'] = new_filter;
 		 layer.redraw();*/
 		console.log("END showSelectedImages");
+		console.log("");
+		console.log("");
 	};
-	/**
-	 * Zoom to encompass all deployments
-	 */
+
 
 
 
@@ -658,7 +662,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 *  'collection_id=[]'
 	 */
 	this.updateMapBounds = function(boundsCriteria, extentUrl) {
-		console.log("Function updateMapBounds");
+		// console.log("Function updateMapBounds");
 		
 		var mapInstance = this.mapInstance;
 		//var geographic = baseMap.projection.geographic;
@@ -715,7 +719,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
           	return null;
     }
 	/**
-	 *
+	 * Creates a filter based on the ranges set and bounding boxes drawn
 	 */
     this.getRangeFilters = function () {
 		console.log("Function getRangeFilters");
@@ -745,11 +749,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             //console.log(bboxes);
         }
 
-        if (bboxfilters.length > 0) filters.push(new OpenLayers.Filter.Logical({
-            type: OpenLayers.Filter.Logical.OR,
-            filters: bboxfilters
-        }));
+        if (bboxfilters.length > 0) 
+			filters.push(new OpenLayers.Filter.Logical({
+            	type: OpenLayers.Filter.Logical.OR,
+            	filters: bboxfilters
+        	}));
 
+		console.log("END getRangeFilters");
         if (filters.length > 0) return filters;
         else return null;
     }
@@ -1178,15 +1184,16 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         }
 
         baseMap.$selectedpanel.append($createbtn);
-
+		// console.log("END updateSelectionInfo");
     }
 
     this.openNewCollectionModal = function () {
-		console.log("Function openNewCollectonModal");
+		// console.log("Function openNewCollectonModal");
 
         $('#new-collection-modal').modal('show');
     }
 
+	console.log("END BaseMap");
 }
 
 /*select = new OpenLayers.Layer.Vector("Selection", {styleMap:
