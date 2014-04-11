@@ -552,8 +552,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		console.log("Function showSelectedImages: " + selectlayername);
 		
         nocreate = (( typeof nocreate !== 'undefined') ? nocreate : false);
-		color = (( typeof color !== 'undefined') ? color : "0000FF");
 		console.log("\tColor="+color);
+		color = (( typeof color !== 'undefined') ? color : "0000FF");
+		
 		var //selectlayername = baselayername + ' (selected)',
             selectedpanelid = 'mapselected',
             $selectedpanel;
