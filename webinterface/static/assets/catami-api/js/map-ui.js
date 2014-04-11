@@ -556,7 +556,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             $selectedpanel;
 
 		// check if there is a selection
-		if (this.getSelectFilters() == null) {
+		// if (this.getSelectFilters() == null) {
 			// if there is no selection, remove selection layer if it exists
 //			if (this.mapInstance.getLayersByName(selectlayername).length != 0) {
 //                //this.mapInstance.getLayersByName(selectlayername)[0].hide();
@@ -564,8 +564,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 //                this.mapInstance.removeControl(this.mapInstance.getControlsBy('title','ClickImg')[0]);
 //			}
 	        //$('#' + selectedpanelid).hide();
-			console.log("\tNo filters selected");
-		} 
+			// console.log("\tNo filters selected");
+	// 	} 
 		
 		if (this.mapInstance.getLayersByName(selectlayername).length == 0 && !nocreate) {
 			// add the selection layer if required
@@ -1060,8 +1060,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                     $($slider.data('infoid')).html(ui.values[ 0 ] +' - '+ ui.values[ 1 ]);
                 },
                 change: function (event, ui) {
+					console.log("\tEvent slider");
                     baseMap.filters.featranges[feature] = $slider.slider("values");
-                    baseMap.showSelectedImages(layername, true); // update selection layer (if it exists)
+                    baseMap.showSelectedImages(layername, false); // update selection layer (if it exists)
 					baseMap.updateMapUsingFilter(baseMap.getRangeFilters(), layername); // update main layer
                     
                     //updateMapFilters();
