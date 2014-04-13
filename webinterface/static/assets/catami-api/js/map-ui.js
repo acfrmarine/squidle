@@ -1168,7 +1168,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             rangeinfo = key + ': ' + baseMap.filters.featranges[key][0] + ' to ' + baseMap.filters.featranges[key][1] + '<br>';
             $newclform.find('#id_'+key).val(baseMap.filters.featranges[key][0] + ',' + baseMap.filters.featranges[key][1])
 	        if (rangeinfo != '')  {
-				baseMap.$selectedpanel.append($('<a href="#_" class="btn btn-xs" title="' + rangeinfo + '" onclick="alert(\"here\";)" >' + key + ' filter &nbsp;<span class="badge">X</span></a> ').popover({html: true, placement: 'topRight', trigger:'hover'}));
+				baseMap.$selectedpanel.append($('<a href="#_" class="btn btn-xs" title="' + rangeinfo + '" onclick="alert(\"here\");" >' + key + ' filter &nbsp;<span class="badge">X</span></a> ').popover({html: true, placement: 'topRight', trigger:'hover'}));
 			}
             i++;
         }
