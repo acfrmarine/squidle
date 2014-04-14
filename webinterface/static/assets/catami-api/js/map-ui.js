@@ -1081,16 +1081,20 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					var e = document.getElementById(buttonid);
 					console.log(e);			            
 					
-			        // // delete button
-			        if (currMinVal == minVal && currMaxVal == maxVal && e != null && e.id == buttonid) {
-			            console.log("\tdelete "+buttonid);
-		                e.outerHTML = "";
+			        // 
+			        if (currMinVal == minVal && currMaxVal == maxVal) {
+						// delete button	
+						if( e != null && e.id == buttonid ) {
+							console.log("\tdelete "+buttonid);
+							e.outerHTML = "";
 						
-						delete baseMap.filters.featranges[feature];
+							// and delete from the featranges
+							delete baseMap.filters.featranges[feature];
+						}
 			        }
-			        // create button (if not already exists)
-			        else if ( currMinVal != minVal || currMaxVal != maxVal)) {
-						var rangeinfo = feature + ": " + currMinVal + "-" + currMaxVal;
+			        // create button
+			        else {
+						var rangeinfo = feature + ": " + currMinVal + "-" + currMaxVald
 		                var $btn = $('<span id="'+buttonid+'" class="btn btn-xs" title="' + rangeinfo + '">' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span>');
 		                $btn.find("a").click(function () {
 							console.log("\n\nclick!");
