@@ -1071,6 +1071,35 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 change: function (event, ui) {
                     baseMap.filters.featranges[feature] = $slider.slider("values");
                     baseMap.showSelectedImages(layername, false, layercolor);
+					
+					
+					currMinVal = ui.values[0];
+			        currMaxVal = ui.values[1];
+			        minVal = $slider.slider("option", "min");
+			        maxVal = $slider.slider("option", "max");
+
+			        // delete button
+			        if (currMinVal == minVal && currMaxVal == maxVal) {
+			            alert("delete");
+			            var e = GetElementInsideContainer("buttons", "range");
+			            if (e.id == 'range') {
+			                e.parentElement.removeChild(e);
+			            }
+			        }
+			        // create button
+			        else {
+
+			            var e = GetElementInsideContainer("buttons", "range");
+			            alert("create : " + currMinVal);
+			            if (e.id != "range") {
+			                var $btn = $('<span id="range">Button <a href="">X</a></span>');
+			                $btn.find("a").click(function () {
+			                    $('#slider').slider("option", "min", minVal);
+			                    $('#slider').slider("option", "max", maxVal);
+			                });
+			                $('mapselected-content').append($btn);
+			            }
+			        }
                 }
             });
 			this.filterElements.push($slider);
@@ -1080,8 +1109,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         }
 
         else if (type=='date') {
-            var $fromdate = $('<input type = "text" name = "fromdate" placeholder = "From date" id = "fromdate" size="8">'),
-                $todate = $('<input type = "text" name = "todate" placeholder = "To date" id = "todate" size="8">'),
+            var $fromdate = $('<input type="text" name="fromdate" placeholder="From date" id="fromdate" size="8">'),
+                $todate   = $('<input type="text" name="todate"   placeholder="To date"   id="todate"   size="8">'),
                 filtertitle = "Date range:";
 
             $fromdate.datepicker({
@@ -1236,6 +1265,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         $('#new-collection-modal').modal('show');
     }
 
+
+	this.GetElementInsideContainer = function(containerID, childID) {
+	    var elm = document.getElementById(childID);
+	    var parent = elm ? elm.parentNode : {};
+	    return (parent.id && parent.id === containerID) ? elm : {};
+	}
+	
 	console.log("END BaseMap");
 }
 
