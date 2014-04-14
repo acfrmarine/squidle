@@ -1089,7 +1089,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 						delete baseMap.filters.featranges[feature];
 			        }
 			        // create button (if not already exists)
-			        else if (e == null || e.id != buttonid || (e.id == buttonid && currMinVal != minVal && currMaxVal != maxVal)) {
+			        else if ( currMinVal != minVal || currMaxVal != maxVal)) {
 						var rangeinfo = feature + ": " + currMinVal + "-" + currMaxVal;
 		                var $btn = $('<span id="'+buttonid+'" class="btn btn-xs" title="' + rangeinfo + '">' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span>');
 		                $btn.find("a").click(function () {
