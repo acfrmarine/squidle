@@ -1090,18 +1090,17 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 // 			        }
 // 			        // create button
 // 			        else {
-						console.log("infoid="+infoid);
 			            var e = document.getElementById(infoid);
-			            
-			            // if (e.id != "infoid") {
-// 			                var $btn = $('<span id="range">Button <a href="">X</a></span>');
-// 			                $btn.find("a").click(function () {
-// 			                    $('#slider').slider("option", "min", minVal);
-// 			                    $('#slider').slider("option", "max", maxVal);
-// 			                });
-// 			                $('mapselected-content').append($btn);
-// 			            }
-// 			        }
+						console.log(e.id);			            
+			            if (e.id != "infoid") {
+			                var $btn = $('<span id="'+infoid+'">Button <a href="">X</a></span>');
+			                $btn.find("a").click(function () {
+			                    $('#slider').slider("option", "min", minVal);
+			                    $('#slider').slider("option", "max", maxVal);
+			                });
+			                $('mapselected-content').append($btn);
+			            }
+			        }
                 }
             });
 			this.filterElements.push($slider);
