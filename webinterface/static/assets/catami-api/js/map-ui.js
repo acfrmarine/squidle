@@ -1105,7 +1105,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 						baseMap.filters.featranges[feature] = $slider.slider("values");
 			        }
 					
-                    
+					// Update slider text
+                    $($slider.data('infoid')).html(ui.values[ 0 ] +' - '+ ui.values[ 1 ]);
+					// Update map
                     baseMap.showSelectedImages(layername, false, layercolor);
 					return;
                 }
