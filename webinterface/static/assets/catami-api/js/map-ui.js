@@ -1168,8 +1168,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             rangeinfo = key + ': ' + baseMap.filters.featranges[key][0] + ' to ' + baseMap.filters.featranges[key][1] + '<br>';
             $newclform.find('#id_'+key).val(baseMap.filters.featranges[key][0] + ',' + baseMap.filters.featranges[key][1])
 	        if (rangeinfo != '')  {
-				baseMap.$selectedpanel.append($('<a href="#_" class="btn btn-xs" title="' + rangeinfo + '" id="" onclick="" >' + key + ' filter &nbsp;<span class="badge">X</span></a> ').popover({html: true, placement: 'topRight', trigger:'hover'}));
-				console.log( baseMap.$selectedpanel.length );
+				baseMap.$selectedpanel.append($('<a href="#_" class="btn btn-xs" title="' + rangeinfo + '" id="" onclick="baseMap.filters.featranges.splice(i,1);" >' + key + ' filter &nbsp;<span class="badge">X</span></a> ').popover({html: true, placement: 'topRight', trigger:'hover'}));
 			}
             i++;
         }
@@ -1187,8 +1186,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             baseMap.$selectedpanel.append($('<a href="#_" class="btn btn-xs" title="' + bboxinfo + '">Bounding boxes <span class="badge">' + i + '</span></a> ').popover({html: true, placement: 'topRight', trigger: 'hover'}));
             $newclform.find('#id_bboxes').val(bboxarr.join(':'));
         }
-
-
 
         var $createbtn = $('<button class="btn btn-info disabled" style="width:100%; margin-top:10px;"><i class="icon-plus"></i> New Project with selection</button>');
 
