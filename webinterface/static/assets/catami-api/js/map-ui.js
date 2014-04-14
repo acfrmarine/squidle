@@ -1077,7 +1077,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			        currMaxVal = ui.values[1];
 			        minVal = $slider.slider("option", "min");
 			        maxVal = $slider.slider("option", "max");
-					alert(minVal + "/" + maxVal);
+					console.log("min/max="+minVal + "/"+ maxVal);
+					console.log("current="+currMinVal + "/"+currMaxVal);
+					
 			        // // delete button
 // 			        if (currMinVal == minVal && currMaxVal == maxVal) {
 // 			            alert("delete");
@@ -1088,17 +1090,17 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 // 			        }
 // 			        // create button
 // 			        else {
-// 
+	console.log("infoid="+infoid);
 			            var e = this.GetElementInsideContainer("mapselected-content", infoid);
-			            alert(e.id);
-			            if (e.id != "infoid") {
-			                var $btn = $('<span id="range">Button <a href="">X</a></span>');
-			                $btn.find("a").click(function () {
-			                    $('#slider').slider("option", "min", minVal);
-			                    $('#slider').slider("option", "max", maxVal);
-			                });
-			                $('mapselected-content').append($btn);
-			            }
+			            
+			            // if (e.id != "infoid") {
+// 			                var $btn = $('<span id="range">Button <a href="">X</a></span>');
+// 			                $btn.find("a").click(function () {
+// 			                    $('#slider').slider("option", "min", minVal);
+// 			                    $('#slider').slider("option", "max", maxVal);
+// 			                });
+// 			                $('mapselected-content').append($btn);
+// 			            }
 // 			        }
                 }
             });
