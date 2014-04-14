@@ -1082,7 +1082,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					
 					// Get ID of button (if it exists)
 					var buttonid = infoid+'-button';
-					var e = baseMap.$selectedpanel.getElementById(buttonid);
+					var e = document.getElementById(buttonid);
 					console.log(e);			            
 					
 			        // // delete button
@@ -1098,7 +1098,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		                    $slider.slider("option", "min", minVal);
 		                    $slider.slider("option", "max", maxVal);
 		                });
-		                baseMap.$selectedpanel.append($btn);
+		                $container.append($btn);
 			        }
                 }
             });
