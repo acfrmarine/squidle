@@ -1081,7 +1081,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			        // delete button
 			        if (currMinVal == minVal && currMaxVal == maxVal) {
 			            alert("delete");
-			            var e = GetElementInsideContainer("buttons", "range");
+			            var e = this.GetElementInsideContainer("buttons", "range");
 			            if (e.id == 'range') {
 			                e.parentElement.removeChild(e);
 			            }
@@ -1089,7 +1089,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			        // create button
 			        else {
 
-			            var e = GetElementInsideContainer("buttons", "range");
+			            var e = this.GetElementInsideContainer("buttons", "range");
 			            alert("create : " + currMinVal);
 			            if (e.id != "range") {
 			                var $btn = $('<span id="range">Button <a href="">X</a></span>');
