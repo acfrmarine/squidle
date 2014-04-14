@@ -1092,7 +1092,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			        // }
 			        // // create button (if not already exists)
 			        // else 
-					if (e.id != buttonid) {
+					if (e == null || e.id != buttonid) {
 		                var $btn = $('<span id="'+buttonid+'" class="btn btn-xs" title="' + rangeinfo + '">' + key + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span>');
 		                $btn.find("a").click(function () {
 		                    $('#slider').slider("option", "min", minVal);
