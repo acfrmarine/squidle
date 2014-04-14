@@ -1095,9 +1095,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 						var rangeinfo = feature + ": " + currMinVal + "-" + currMaxVal;
 		                var $btn = $('<span id="'+buttonid+'" class="btn btn-xs" title="' + rangeinfo + '">' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span>');
 		                $btn.find("a").click(function () {
-							console.log("click!")
-		                    $slider.slider("option", "min", minVal);
-		                    $slider.slider("option", "max", maxVal);
+							console.log("click!");
+		                    $slider.slider("option", "values", [minVal, maxVal]);
 		                });
 		                $container.append($btn);
 			        }
