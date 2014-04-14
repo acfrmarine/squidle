@@ -1092,8 +1092,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 							delete baseMap.filters.featranges[feature];
 						}
 			        }
-			        // create button
-			        else {
+			        // create button in side panel
+			        else if( e.id != buttonid) {
 						var rangeinfo = feature + ": " + currMinVal + "-" + currMaxVal;
 		                var $btn = $('<span id="'+buttonid+'" class="btn btn-xs" title="' + rangeinfo + '">' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span>');
 		                $btn.find("a").click(function () {
@@ -1102,6 +1102,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		                });
 		                $container.append($btn);
 						
+						// Add to featranges
 						baseMap.filters.featranges[feature] = $slider.slider("values");
 			        }
 					
