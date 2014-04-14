@@ -1178,7 +1178,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					console.log("filter after : " + baseMap.filters.featranges);
 					baseMap.updateSelectionInfo();
 				});
-		        $rangebtn.popover({html: true, placement: 'topRight', trigger:'hover'});
+		        $rangebtn.tooltip({html: true, placement: 'topRight', trigger:'hover'});
 
 		        baseMap.$selectedpanel.append($rangebtn);
 				//baseMap.$selectedpanel.append($('<a class="btn btn-xs" title="' + rangeinfo + '" id="range_'+i+'" onclick="this.removeRangeFilter('+i+');" >' + key + ' filter &nbsp;<span class="badge">X</span></a> ').popover({html: true, placement: 'topRight', trigger:'hover'}));
