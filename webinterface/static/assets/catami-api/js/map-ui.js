@@ -1089,16 +1089,16 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 // 			        // create button
 // 			        else {
 // 
-// 			            var e = this.GetElementInsideContainer("mapselected-content", infoid);
-// 			            alert("create : " + currMinVal);
-// 			            if (e.id != "range") {
-// 			                var $btn = $('<span id="range">Button <a href="">X</a></span>');
-// 			                $btn.find("a").click(function () {
-// 			                    $('#slider').slider("option", "min", minVal);
-// 			                    $('#slider').slider("option", "max", maxVal);
-// 			                });
-// 			                $('mapselected-content').append($btn);
-// 			            }
+			            var e = this.GetElementInsideContainer("mapselected-content", infoid);
+			            alert(e.id);
+			            if (e.id != "infoid") {
+			                var $btn = $('<span id="range">Button <a href="">X</a></span>');
+			                $btn.find("a").click(function () {
+			                    $('#slider').slider("option", "min", minVal);
+			                    $('#slider').slider("option", "max", maxVal);
+			                });
+			                $('mapselected-content').append($btn);
+			            }
 // 			        }
                 }
             });
