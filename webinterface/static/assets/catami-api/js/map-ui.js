@@ -1100,7 +1100,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			                });
 			                $('mapselected-content').append($btn);
 			            }
-			        }
+			        // }
                 }
             });
 			this.filterElements.push($slider);
