@@ -1117,7 +1117,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 }
             });
             $todate.datepicker('setDate', params.to);
-			this.filterElements.push($toDate);
+			this.filterElements.push($todate);
 
             //baseMap.filters.featranges[feature] = function() {return [$fromdate.val() , $todate.val()]};
 
