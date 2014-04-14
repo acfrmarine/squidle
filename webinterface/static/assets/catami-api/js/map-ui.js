@@ -1164,11 +1164,12 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		
 		// Show the range filters
         var i = 0;
+		console.log("filter before: " + baseMap.filters.length);
         for (var key in baseMap.filters.featranges) {
             rangeinfo = key + ': ' + baseMap.filters.featranges[key][0] + ' to ' + baseMap.filters.featranges[key][1] + '<br>';
             $newclform.find('#id_'+key).val(baseMap.filters.featranges[key][0] + ',' + baseMap.filters.featranges[key][1])
 	        if (rangeinfo != '')  {
-				baseMap.$selectedpanel.append($('<a href="#_" class="btn btn-xs" title="' + rangeinfo + '" id="" onclick="baseMap.filters.featranges.splice(i,1);" >' + key + ' filter &nbsp;<span class="badge">X</span></a> ').popover({html: true, placement: 'topRight', trigger:'hover'}));
+				baseMap.$selectedpanel.append($('<a class="btn btn-xs" title="' + rangeinfo + '" id="" onclick="baseMap.filters.featranges.splice(i,1);console.log("filter after: " + baseMap.filters.length);" >' + key + ' filter &nbsp;<span class="badge">X</span></a> ').popover({html: true, placement: 'topRight', trigger:'hover'}));
 			}
             i++;
         }
@@ -1183,7 +1184,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             showcreatbtn = true;
         }
         if (bboxinfo != '') {
-            baseMap.$selectedpanel.append($('<a href="#_" class="btn btn-xs" title="' + bboxinfo + '">Bounding boxes <span class="badge">' + i + '</span></a> ').popover({html: true, placement: 'topRight', trigger: 'hover'}));
+            baseMap.$selectedpanel.append($('<a class="btn btn-xs" title="' + bboxinfo + '">Bounding boxes <span class="badge">' + i + '</span></a> ').popover({html: true, placement: 'topRight', trigger: 'hover'}));
             $newclform.find('#id_bboxes').val(bboxarr.join(':'));
         }
 
