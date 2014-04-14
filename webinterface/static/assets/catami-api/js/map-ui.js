@@ -1169,9 +1169,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             // $newclform.find('#id_'+key).val(baseMap.filters.featranges[key][0] + ',' + baseMap.filters.featranges[key][1])
 	        if (rangeinfo != '')  {
 				
-		        var $rangebtn = $('<span class="btn btn-xs" title="' + rangeinfo + '">' + key + ' filter<i class="icon-remove-sign"></i></span>');
+		        var $rangebtn = $('<span class="btn btn-xs" title="' + rangeinfo + '">' + key + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span>');
 		
-		        $rangebtn.click(function (){
+		        $rangebtn.find("a").click(function (){
 					console.log("filter before: " + baseMap.filters.featranges);
 					console.log("removing: " + key);
 					delete baseMap.filters.featranges[key];
