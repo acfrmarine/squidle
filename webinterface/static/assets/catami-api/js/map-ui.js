@@ -1086,21 +1086,19 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					console.log(e);			            
 					
 			        // // delete button
-			        // if (currMinVal == minVal && currMaxVal == maxVal && e.id == buttonid) {
-			        //     console.log("\tdelete "+buttonid);
-			        // 		                e.parentElement.removeChild(e);
-			        // }
-			        // // create button (if not already exists)
-			        // else 
-					if (e == null || e.id != buttonid) {
+			        if (currMinVal == minVal && currMaxVal == maxVal && e != null && e.id == buttonid) {
+			            console.log("\tdelete "+buttonid);
+		                e.parentElement.removeChild(e);
+			        }
+			        // create button (if not already exists)
+			        else if (e == null || e.id != buttonid) {
 						var rangeinfo = feature + ": " + currMinVal + "-" + currMaxVal;
 		                var $btn = $('<span id="'+buttonid+'" class="btn btn-xs" title="' + rangeinfo + '">' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span>');
 		                $btn.find("a").click(function () {
-		                    $('#slider').slider("option", "min", minVal);
-		                    $('#slider').slider("option", "max", maxVal);
+		                    $slider.slider("option", "min", minVal);
+		                    $slider.slider("option", "max", maxVal);
 		                });
 		                baseMap.$selectedpanel.append($btn);
-	            
 			        }
                 }
             });
