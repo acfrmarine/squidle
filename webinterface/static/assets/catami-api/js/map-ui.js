@@ -43,6 +43,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		BBoxes : [],
         deployments : []
 	}
+	
+	this.filterElements = []
 
 
 	//this.AUVimageSelectionFilter = [];
@@ -1069,11 +1071,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 change: function (event, ui) {
                     baseMap.filters.featranges[feature] = $slider.slider("values");
                     baseMap.showSelectedImages(layername, false, layercolor);
-					// baseMap.updateMapUsingFilter(baseMap.getRangeFilters(), layername);
-                    //updateMapFilters();
                 }
             });
-            //baseMap.filters.featranges[feature] = function() {return $slider.slider("values")};
+			this.filterElements.push($slider);
 
             $container.append(filtertitle, $info, params.unit, $slider,'<br>');
             $($slider.data('infoid')).html($slider.slider("values", 0) +' - '+  $slider.slider("values", 1));
@@ -1100,7 +1100,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 }
             });
             $fromdate.datepicker('setDate', params.from);
-
+			this.filterElements.push($fromdate);
+			
             $todate.datepicker({
                 changeMonth: true,
                 changeYear: true,
@@ -1116,7 +1117,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 }
             });
             $todate.datepicker('setDate', params.to);
-
+			this.filterElements.push($toDate);
 
             //baseMap.filters.featranges[feature] = function() {return [$fromdate.val() , $todate.val()]};
 
@@ -1147,6 +1148,12 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		filters = this.getFilters();
 		console.log(filters.length+ " filters");
 		console.log(filters);
+		
+		
+		console.log("Filter els: " + baseMap.filterElements.length);
+		for(var i = 0; i < baseMap.filterElements.length; i++) {
+			console.log(i + ": " + baseMap.filterElements[i]);
+		}
 
 		// Show number of deployments and their info
         if (baseMap.filters.deployments != null) {
@@ -1175,8 +1182,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					console.log("filter before: " + baseMap.filters.featranges);
 					console.log("removing: " + key);
 					delete baseMap.filters.featranges[key];
+					
+					baseMap.
+					
 					console.log("filter after : " + baseMap.filters.featranges);
-					baseMap.updateSelectionInfo();
+					baseMap.showSelectedImages();
 				});
 		        $rangebtn.tooltip({html: true, placement: 'topRight', trigger:'hover'});
 
