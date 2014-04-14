@@ -1081,17 +1081,19 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					console.log("current="+currMinVal + "/"+currMaxVal);
 					
 					// Get ID of button (if it exists)
-					var e = document.getElementById(infoid);
+					var buttonid = infoid+'-button';
+					var e = document.getElementById(buttonid);
 					console.log(e);			            
 					
-			        // delete button
-			        if (currMinVal == minVal && currMaxVal == maxVal && e.id == infoid) {
-			            console.log("\tdelete "+infoid);
-		                e.parentElement.removeChild(e);
-			        }
-			        // create button (if not already exists)
-			        else if (e.id != infoid) {
-		                var $btn = $('<span class="btn btn-xs" title="' + rangeinfo + '">' + key + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span>');
+			        // // delete button
+			        // if (currMinVal == minVal && currMaxVal == maxVal && e.id == buttonid) {
+			        //     console.log("\tdelete "+buttonid);
+			        // 		                e.parentElement.removeChild(e);
+			        // }
+			        // // create button (if not already exists)
+			        // else 
+					if (e.id != buttonid) {
+		                var $btn = $('<span id="'+buttonid+'" class="btn btn-xs" title="' + rangeinfo + '">' + key + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span>');
 		                $btn.find("a").click(function () {
 		                    $('#slider').slider("option", "min", minVal);
 		                    $('#slider').slider("option", "max", maxVal);
