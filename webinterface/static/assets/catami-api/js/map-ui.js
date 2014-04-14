@@ -1147,6 +1147,10 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
         baseMap.$selectedpanel.html('');
 
+		filters = getFilters();
+		console.log(filters.length+ " filters");
+		console.log(filters);
+
 		// Show number of deployments and their info
         if (baseMap.filters.deployments != null) {
             for (var i = 0; i < baseMap.filters.deployments.length; i++) {
@@ -1175,9 +1179,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					console.log("removing: " + i);
 					baseMap.filters.featranges.splice(i,1);
 					console.log("filter after : " + baseMap.filters.featranges.length);
-					this.updateSelectionInfo();
+					baseMap.updateSelectionInfo();
 				});
-		        $rangebtn.tooltip({html: true, placement: 'topRight', trigger:'hover'});
+		        $rangebtn.popover({html: true, placement: 'topRight', trigger:'hover'});
 
 		        baseMap.$selectedpanel.append($rangebtn);
 				//baseMap.$selectedpanel.append($('<a class="btn btn-xs" title="' + rangeinfo + '" id="range_'+i+'" onclick="this.removeRangeFilter('+i+');" >' + key + ' filter &nbsp;<span class="badge">X</span></a> ').popover({html: true, placement: 'topRight', trigger:'hover'}));
