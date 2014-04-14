@@ -1082,7 +1082,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					
 					// Get ID of button (if it exists)
 					var buttonid = infoid+'-button';
-					var e = document.getElementById(buttonid);
+					var e = baseMap.$selectedpanel.getElementById(buttonid);
 					console.log(e);			            
 					
 			        // // delete button
