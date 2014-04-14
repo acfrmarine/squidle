@@ -1098,7 +1098,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			                    $('#slider').slider("option", "min", minVal);
 			                    $('#slider').slider("option", "max", maxVal);
 			                });
-			                $('mapselected-content').append($btn);
+			                baseMap.$selectedpanel.append($btn);
 			            }
 			        // }
                 }
