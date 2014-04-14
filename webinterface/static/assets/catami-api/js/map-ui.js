@@ -1080,26 +1080,24 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					console.log("min/max="+minVal + "/"+ maxVal);
 					console.log("current="+currMinVal + "/"+currMaxVal);
 					
+					// Get ID of button (if it exists)
+					var e = document.getElementById(infoid);
+					console.log(e);			            
+					
 			        // delete button
-			        if (currMinVal == minVal && currMaxVal == maxVal) {
-			            alert("delete");
-			            var e = document.getElementById(infoid);
-			            if (e.id == infoid) {
-			                e.parentElement.removeChild(e);
-			            }
+			        if (currMinVal == minVal && currMaxVal == maxVal && e.id == infoid) {
+			            console.log("\tdelete "+infoid);
+		                e.parentElement.removeChild(e);
 			        }
-			        // create button
-			        else {
-			            var e = document.getElementById(infoid);
-						console.log(e.id);			            
-			            if (e.id != infoid) {
-			                var $btn = $('<span class="btn btn-xs" title="' + rangeinfo + '">' + key + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span>');
-			                $btn.find("a").click(function () {
-			                    $('#slider').slider("option", "min", minVal);
-			                    $('#slider').slider("option", "max", maxVal);
-			                });
-			                baseMap.$selectedpanel.append($btn);
-			            }
+			        // create button (if not already exists)
+			        else if (e.id != infoid) {
+		                var $btn = $('<span class="btn btn-xs" title="' + rangeinfo + '">' + key + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span>');
+		                $btn.find("a").click(function () {
+		                    $('#slider').slider("option", "min", minVal);
+		                    $('#slider').slider("option", "max", maxVal);
+		                });
+		                baseMap.$selectedpanel.append($btn);
+	            
 			        }
                 }
             });
