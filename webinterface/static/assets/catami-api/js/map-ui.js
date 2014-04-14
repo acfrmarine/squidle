@@ -1090,8 +1090,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 // 			        }
 // 			        // create button
 // 			        else {
-	console.log("infoid="+infoid);
-			            var e = this.GetElementInsideContainer("mapselected-content", infoid);
+						console.log("infoid="+infoid);
+			            var e = document.getElementById(infoid);
 			            
 			            // if (e.id != "infoid") {
 // 			                var $btn = $('<span id="range">Button <a href="">X</a></span>');
