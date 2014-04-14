@@ -1147,7 +1147,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
         baseMap.$selectedpanel.html('');
 
-		filters = getFilters();
+		filters = this.getFilters();
 		console.log(filters.length+ " filters");
 		console.log(filters);
 
