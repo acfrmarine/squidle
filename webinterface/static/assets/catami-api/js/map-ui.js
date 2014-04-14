@@ -1093,7 +1093,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 						}
 			        }
 			        // create button in side panel
-			        else if( e.id != buttonid) {
+			        else if( e == null || e.id != buttonid) {
 						var rangeinfo = feature + ": " + currMinVal + "-" + currMaxVal;
 		                var $btn = $('<span id="'+buttonid+'" class="btn btn-xs" title="' + rangeinfo + '">' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span>');
 		                $btn.find("a").click(function () {
