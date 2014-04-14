@@ -1128,16 +1128,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         }
     }
 
-
-	this.removeRangeFilter = function(ind) {
-		console.log("removeRangeFilter: "+ind);
-		
-		console.log("filter before: " + baseMap.filters.featranges.length);
-		baseMap.filters.featranges.splice(ind,1);
-		console.log("filter after : " + baseMap.filters.featranges.length);
-		this.updateSelectionInfo();
-	}
-
     // TODO: this is a bit ugly - remove code duplication
     /**
      *
@@ -1173,12 +1163,24 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		
 		// Show the range filters
         var i = 0;
-		
         for (var key in baseMap.filters.featranges) {
             rangeinfo = key + ': ' + baseMap.filters.featranges[key][0] + ' to ' + baseMap.filters.featranges[key][1] + '<br>';
             $newclform.find('#id_'+key).val(baseMap.filters.featranges[key][0] + ',' + baseMap.filters.featranges[key][1])
 	        if (rangeinfo != '')  {
-				baseMap.$selectedpanel.append($('<a class="btn btn-xs" title="' + rangeinfo + '" id="range_'+i+'" onclick="this.removeRangeFilter('+i+');" >' + key + ' filter &nbsp;<span class="badge">X</span></a> ').popover({html: true, placement: 'topRight', trigger:'hover'}));
+				
+		        var $rangebtn = $('<button type="button" class="btn btn-xs" title="' + rangeinfo + '">' + key + ' filter &nbsp;<span class="badge">X</span></button>');
+		
+		        $rangebtn.click(function (){
+					console.log("filter before: " + baseMap.filters.featranges.length);
+					console.log("removing: " + i);
+					baseMap.filters.featranges.splice(i,1);
+					console.log("filter after : " + baseMap.filters.featranges.length);
+					this.updateSelectionInfo();
+				}
+		        $rangebtn.tooltip({html: true, placement: 'topRight', trigger:'hover'});
+
+		        baseMap.$selectedpanel.append($rangebtn);
+				//baseMap.$selectedpanel.append($('<a class="btn btn-xs" title="' + rangeinfo + '" id="range_'+i+'" onclick="this.removeRangeFilter('+i+');" >' + key + ' filter &nbsp;<span class="badge">X</span></a> ').popover({html: true, placement: 'topRight', trigger:'hover'}));
 			}
             i++;
         }
