@@ -1069,11 +1069,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                     $($slider.data('infoid')).html(ui.values[ 0 ] +' - '+ ui.values[ 1 ]);
                 },
                 change: function (event, ui) {
-                    baseMap.filters.featranges[feature] = $slider.slider("values");
-                    baseMap.showSelectedImages(layername, false, layercolor);
-					
-					
-					currMinVal = ui.values[0];
+                    currMinVal = ui.values[0];
 			        currMaxVal = ui.values[1];
 			        minVal = $slider.slider("option", "min");
 			        maxVal = $slider.slider("option", "max");
@@ -1088,18 +1084,26 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			        // // delete button
 			        if (currMinVal == minVal && currMaxVal == maxVal && e != null && e.id == buttonid) {
 			            console.log("\tdelete "+buttonid);
-		                delete e;
+		                e.outerHTML = "";
+						
+						delete baseMap.filters.featranges[feature];
 			        }
 			        // create button (if not already exists)
 			        else if (e == null || e.id != buttonid) {
 						var rangeinfo = feature + ": " + currMinVal + "-" + currMaxVal;
 		                var $btn = $('<span id="'+buttonid+'" class="btn btn-xs" title="' + rangeinfo + '">' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span>');
 		                $btn.find("a").click(function () {
-							console.log("click!");
+							console.log("\n\nclick!");
 		                    $slider.slider("option", "values", [minVal, maxVal]);
 		                });
 		                $container.append($btn);
+						
+						baseMap.filters.featranges[feature] = $slider.slider("values");
 			        }
+					
+                    
+                    baseMap.showSelectedImages(layername, false, layercolor);
+					return;
                 }
             });
 			this.filterElements.push($slider);
