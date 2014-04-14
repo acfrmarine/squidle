@@ -1176,7 +1176,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					baseMap.filters.featranges.splice(i,1);
 					console.log("filter after : " + baseMap.filters.featranges.length);
 					this.updateSelectionInfo();
-				}
+				});
 		        $rangebtn.tooltip({html: true, placement: 'topRight', trigger:'hover'});
 
 		        baseMap.$selectedpanel.append($rangebtn);
