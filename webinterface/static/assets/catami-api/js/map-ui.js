@@ -1152,7 +1152,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		
 		console.log("Filter els: " + baseMap.filterElements.length);
 		for(var i = 0; i < baseMap.filterElements.length; i++) {
-			console.log(i + ": " + baseMap.filterElements[i]);
+			console.log(i + ": " + baseMap.filterElements[i].data);
 		}
 
 		// Show number of deployments and their info
