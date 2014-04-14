@@ -1077,29 +1077,29 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			        currMaxVal = ui.values[1];
 			        minVal = $slider.slider("option", "min");
 			        maxVal = $slider.slider("option", "max");
-
-			        // delete button
-			        if (currMinVal == minVal && currMaxVal == maxVal) {
-			            alert("delete");
-			            var e = this.GetElementInsideContainer("buttons", "range");
-			            if (e.id == 'range') {
-			                e.parentElement.removeChild(e);
-			            }
-			        }
-			        // create button
-			        else {
-
-			            var e = this.GetElementInsideContainer("buttons", "range");
-			            alert("create : " + currMinVal);
-			            if (e.id != "range") {
-			                var $btn = $('<span id="range">Button <a href="">X</a></span>');
-			                $btn.find("a").click(function () {
-			                    $('#slider').slider("option", "min", minVal);
-			                    $('#slider').slider("option", "max", maxVal);
-			                });
-			                $('mapselected-content').append($btn);
-			            }
-			        }
+					alert(minVal + "/" + maxVal);
+			        // // delete button
+// 			        if (currMinVal == minVal && currMaxVal == maxVal) {
+// 			            alert("delete");
+// 			            var e = this.GetElementInsideContainer("buttons", "range");
+// 			            if (e.id == 'range') {
+// 			                e.parentElement.removeChild(e);
+// 			            }
+// 			        }
+// 			        // create button
+// 			        else {
+// 
+// 			            var e = this.GetElementInsideContainer("mapselected-content", infoid);
+// 			            alert("create : " + currMinVal);
+// 			            if (e.id != "range") {
+// 			                var $btn = $('<span id="range">Button <a href="">X</a></span>');
+// 			                $btn.find("a").click(function () {
+// 			                    $('#slider').slider("option", "min", minVal);
+// 			                    $('#slider').slider("option", "max", maxVal);
+// 			                });
+// 			                $('mapselected-content').append($btn);
+// 			            }
+// 			        }
                 }
             });
 			this.filterElements.push($slider);
@@ -1180,9 +1180,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		
 		
 		console.log("Filter els: " + baseMap.filterElements.length);
-		for(var i = 0; i < baseMap.filterElements.length; i++) {
-			console.log(i + ": " + baseMap.filterElements[i].data);
-		}
+
 
 		// Show number of deployments and their info
         if (baseMap.filters.deployments != null) {
@@ -1219,7 +1217,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				});
 		        $rangebtn.tooltip({html: true, placement: 'topRight', trigger:'hover'});
 
-		        baseMap.$selectedpanel.append($rangebtn);
+		        //baseMap.$selectedpanel.append($rangebtn);
 				//baseMap.$selectedpanel.append($('<a class="btn btn-xs" title="' + rangeinfo + '" id="range_'+i+'" onclick="this.removeRangeFilter('+i+');" >' + key + ' filter &nbsp;<span class="badge">X</span></a> ').popover({html: true, placement: 'topRight', trigger:'hover'}));
 			}
             i++;
