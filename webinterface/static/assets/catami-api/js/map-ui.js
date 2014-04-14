@@ -1135,7 +1135,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		console.log("filter before: " + baseMap.filters.featranges.length);
 		baseMap.filters.featranges.splice(ind,1);
 		console.log("filter after : " + baseMap.filters.featranges.length);
-		updateSelectionInfo();
+		this.updateSelectionInfo();
 	}
 
     // TODO: this is a bit ugly - remove code duplication
@@ -1178,7 +1178,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             rangeinfo = key + ': ' + baseMap.filters.featranges[key][0] + ' to ' + baseMap.filters.featranges[key][1] + '<br>';
             $newclform.find('#id_'+key).val(baseMap.filters.featranges[key][0] + ',' + baseMap.filters.featranges[key][1])
 	        if (rangeinfo != '')  {
-				baseMap.$selectedpanel.append($('<a class="btn btn-xs" title="' + rangeinfo + '" id="range_'+i+'" onclick="removeRangeFilter('+i+');" >' + key + ' filter &nbsp;<span class="badge">X</span></a> ').popover({html: true, placement: 'topRight', trigger:'hover'}));
+				baseMap.$selectedpanel.append($('<a class="btn btn-xs" title="' + rangeinfo + '" id="range_'+i+'" onclick="this.removeRangeFilter('+i+');" >' + key + ' filter &nbsp;<span class="badge">X</span></a> ').popover({html: true, placement: 'topRight', trigger:'hover'}));
 			}
             i++;
         }
