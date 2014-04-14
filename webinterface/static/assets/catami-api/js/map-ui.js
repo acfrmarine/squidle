@@ -1088,6 +1088,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			        // // delete button
 			        if (currMinVal == minVal && currMaxVal == maxVal && e != null && e.id == buttonid) {
 			            console.log("\tdelete "+buttonid);
+						console.log(e.parentElement);
 		                e.parentElement.removeChild(e);
 			        }
 			        // create button (if not already exists)
