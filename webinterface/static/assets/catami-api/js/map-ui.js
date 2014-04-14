@@ -1129,7 +1129,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     }
 
 
-	this.removeRangeFilter(ind) {
+	this.removeRangeFilter = function(ind) {
 		console.log("removeRangeFilter: "+ind);
 		
 		console.log("filter before: " + baseMap.filters.featranges.length);
