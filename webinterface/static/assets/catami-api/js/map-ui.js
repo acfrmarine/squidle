@@ -1067,12 +1067,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                     $($slider.data('infoid')).html(ui.values[ 0 ] +' - '+ ui.values[ 1 ]);
                 },
                 change: function (event, ui) {
-					console.log("\tEvent slider");
                     baseMap.filters.featranges[feature] = $slider.slider("values");
-					console.log("\t\tColor="+this.filtLayerColor);
                     baseMap.showSelectedImages(layername, false, layercolor);
 					// baseMap.updateMapUsingFilter(baseMap.getRangeFilters(), layername);
-                    
                     //updateMapFilters();
                 }
             });
@@ -1169,16 +1166,16 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         var i = 0;
         for (var key in baseMap.filters.featranges) {
             rangeinfo = key + ': ' + baseMap.filters.featranges[key][0] + ' to ' + baseMap.filters.featranges[key][1] + '<br>';
-            $newclform.find('#id_'+key).val(baseMap.filters.featranges[key][0] + ',' + baseMap.filters.featranges[key][1])
+            // $newclform.find('#id_'+key).val(baseMap.filters.featranges[key][0] + ',' + baseMap.filters.featranges[key][1])
 	        if (rangeinfo != '')  {
 				
 		        var $rangebtn = $('<button type="button" class="btn btn-xs" title="' + rangeinfo + '">' + key + ' filter &nbsp;<span class="badge">X</span></button>');
 		
 		        $rangebtn.click(function (){
-					console.log("filter before: " + baseMap.filters.featranges.length);
-					console.log("removing: " + i);
-					baseMap.filters.featranges.splice(i,1);
-					console.log("filter after : " + baseMap.filters.featranges.length);
+					console.log("filter before: " + baseMap.filters.featranges);
+					console.log("removing: " + key);
+					delete baseMap.filters.featranges[key];
+					console.log("filter after : " + baseMap.filters.featranges);
 					baseMap.updateSelectionInfo();
 				});
 		        $rangebtn.popover({html: true, placement: 'topRight', trigger:'hover'});
