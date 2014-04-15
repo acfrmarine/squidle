@@ -1201,8 +1201,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     this.addBBoxSelect = function ($container, $infocontainer,layername) {
 		console.log("Function addBBoxSelect");
         var $bboxbtn = $('<button type="button" class="btn btn-default pull-right btn-sm" title="Draw a bounding box around the images you would like to add to your selection."><i class="icon-crop"></i> BOX</button>'),
-			infoid = 'bbox',
-			$btn = $('<span id="'+infoid+'-button" class="btn btn-xs" >' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span><br>');
+			$btn = $('<span id="bbox-button" class="btn btn-xs" >BBox filters &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span><br>');
 			
 		layercolor = this.filtLayerColor;
 		
