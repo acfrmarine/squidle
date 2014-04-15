@@ -1100,7 +1100,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 							console.log("\n\nclick!");
 		                    $slider.slider("option", "values", [minVal, maxVal]);
 		                });
-		                $container.append($btn);
+		                //$container.append($btn);
+						baseMap.$selectedpanel.append($btn);
 						
 						// Add to featranges
 						baseMap.filters.featranges[feature] = $slider.slider("values");
