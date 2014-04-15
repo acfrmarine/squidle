@@ -1139,20 +1139,42 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 filtertitle = "Date range:",
 				infoid = feature,
 				$btn = $('<span id="'+infoid+'-button" class="btn btn-xs" >' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span><br>');
-
+			
             $fromdate.datepicker({
                 changeMonth: true,
                 changeYear: true,
                 dateFormat: 'yy-mm-dd',
-                onClose: function (selectedDate) {
-                    // restrict the end date
-                    $todate.datepicker("option", "minDate", selectedDate);
-                    // update map filter - this could probably be streamlined
-                    baseMap.filters.featranges[feature] = [$fromdate.val() , $todate.val()];
-					baseMap.showSelectedImages(layername, false, layercolor);
-                    // baseMap.updateMapUsingFilter(baseMap.getRangeFilters(), layername); // update main layer
-                    // baseMap.showSelectedImages(layername, true); // update selection layer (if it exists)
-                    //updateMapFilters();
+				minDate: params.from,
+				maxDate: params.to,
+                onClose: function (dateText, inst) {
+					if( dateText != "" )
+	                    // restrict the end date
+	                    $todate.datepicker("option", "minDate", dateText);
+						// Get min/max and current selected
+						var to = new Date(params.to);
+						var from = new Date(params.from);
+						var selTo = $todate.datepicker("getDate");
+						var selFrom = $fromdate.datepicker("getDate");
+						// If at the ends remove filter
+						if (from.getDate()==selFrom.getDate() && 
+							from.getMonth()==selFrom.getMonth() && 
+							from.getYear() == selFrom.getYear() && 
+							to.getDate()==selTo.getDate() && 
+							to.getMonth()==selTo.getMonth() && 
+							to.getYear() == selTo.getYear()
+						) {
+							delete baseMap.filters.featranges[feature];
+							$btn.hide();
+						}
+						else {
+							baseMap.filters.featranges[feature] = [$fromdate.val() , $todate.val()];
+							$btn.show();
+						
+						}
+						
+						// Update map
+						baseMap.showSelectedImages(layername, false, layercolor);
+					}
                 }
             });
             $fromdate.datepicker('setDate', params.from);
@@ -1161,14 +1183,38 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 changeMonth: true,
                 changeYear: true,
                 dateFormat: 'yy-mm-dd',
-                onClose: function (selectedDate) {
-                    // restrict the start date
-                    $fromdate.datepicker("option", "maxDate", selectedDate);
-                    baseMap.filters.featranges[feature] = [$fromdate.val() , $todate.val()];
-					baseMap.showSelectedImages(layername, false, layercolor);
-                    // baseMap.updateMapUsingFilter(baseMap.getRangeFilters(), layername); // update main layer
-//                     baseMap.showSelectedImages(layername, true); // update selection layer (if it exists)
-                    //updateMapFilters();
+				minDate: params.from,
+				maxDate: params.to,
+                onClose: function (dateText, inst) {
+					if( dateText != "") {
+	                    // restrict the start date
+	                    $fromdate.datepicker("option", "maxDate", selectedDate);
+	                    
+						// Get min/max and current selected
+						var to = new Date(params.to);
+						var from = new Date(params.from);
+						var selTo = $todate.datepicker("getDate");
+						var selFrom = $fromdate.datepicker("getDate");
+						// If at the ends remove filter
+						if (from.getDate()==selFrom.getDate() && 
+							from.getMonth()==selFrom.getMonth() && 
+							from.getYear() == selFrom.getYear() && 
+							to.getDate()==selTo.getDate() && 
+							to.getMonth()==selTo.getMonth() && 
+							to.getYear() == selTo.getYear()
+						) {
+							delete baseMap.filters.featranges[feature];
+							$btn.hide();
+						}
+						else {
+							baseMap.filters.featranges[feature] = [$fromdate.val() , $todate.val()];
+							$btn.show();
+						
+						}
+						
+						// Update map
+						baseMap.showSelectedImages(layername, false, layercolor);
+					}
                 }
             });
             $todate.datepicker('setDate', params.to);
@@ -1177,10 +1223,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			// Create button
 			$btn.hide();
 			$btn.find("a").click(function () {
-				// TODO: reset the dates
-		        // minVal = $slider.slider("option", "min");
-// 		        maxVal = $slider.slider("option", "max");
-// 	            $slider.slider("option", "values", [minVal, maxVal]);
+				$fromdate.datepicker("option", "minDate", minDate);
+				$todate.datepicker("option", "maxDate", maxDate);
 	        });
 			$btn.tooltip({
 				html: true, 
