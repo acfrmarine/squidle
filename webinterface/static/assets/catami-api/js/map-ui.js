@@ -1209,7 +1209,19 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             var layernameBoundingBoxes = 'Bounding boxes';
         	
             if (baseMap.mapInstance.getLayersByName(layernameBoundingBoxes).length == 0) {
-            	baseMap.mapInstance.addLayer(new OpenLayers.Layer.Vector(layernameBoundingBoxes, null))
+				var bbLayer = new OpenLayers.Layer.Vector(layernameBoundingBoxes, null);
+				bbLayer.event.on({
+					'beforefeaturemodified': function(evt) {
+						console.log("Selected " + evt.feature.id + " for modification");
+					},
+					'afterfeaturemodified': function(evt) {
+						console.log("Finished with " + evt.feature.id);
+					}
+				});
+				var modifyFeature = new OpenLayers.Control.ModifyFeature(layer, {
+				  mode: OpenLayers.Control.ModifyFeature.RESIZE | OpenLayers.Control.ModifyFeature.DRAG
+				});
+            	baseMap.mapInstance.addLayer(bbLayer)
 	    		var bbctrl =  new OpenLayers.Control.DrawFeature( 
 					baseMap.mapInstance.getLayersByName(layernameBoundingBoxes)[0], OpenLayers.Handler.RegularPolygon, {
 						handlerOptions: {
