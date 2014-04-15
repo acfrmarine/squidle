@@ -1241,12 +1241,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				    }
 				);
 	    		
-				bbctrl.tooltip({
-					html: true,
-					placement: 'left',
-					trigger: 'hover',
-					title: 'this is bounding box'
-				});
 				baseMap.mapInstance.addControl(bbctrl);
             }
 
