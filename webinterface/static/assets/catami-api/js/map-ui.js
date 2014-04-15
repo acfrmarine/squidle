@@ -1127,6 +1127,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	}
 	/**
 	 * Creates a date filter and adds it to the given container
+	 * TODO: I can't find a onChange event for the datepicker. This results in showing/hiding the filter button as well 
+	 * 		as the filter variable in different places. Can we find a nicer event management?
 	 */
 	this.addDateFilter = function ($container,$infocontainer,layername,feature,params) {
 			console.log("Function addDateFilter");
