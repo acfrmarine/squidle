@@ -1,0 +1,112 @@
+<div class="modal fade" id="dataset-modal" tabindex="-1" role="dialog" aria-labelledby="dataset-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                <h4><i class="icon-th-list"></i> Manage datasets</h4>
+                <ul class="breadcrumb" id="dataset-modal-cursel">
+                    <li>Select a dataset below:</li>
+                </ul>
+            </div>
+            <div class="modal-body">
+                <div class="dataset-modal-container">
+                    <div class="btn-group-vertical">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default">Default sfsdf sdfs dfs dfsdf sdf sdf</button>
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                            </ul>
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default">Default sdfsdf sdf sd</button>
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                            </ul>
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default">Default</button>
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"></span></button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <div id="project-panel" class="dataset-panel"></div>
+{#                    <div id="workset-panel" class="dataset-panel">workset</div>#}
+{#                    <div id="annotat-panel" class="dataset-panel">annotation</div>#}
+                </div>
+            </div>
+            <div class="modal-footer" style="text-align: left">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button id="data-modal-btn" type="submit" class="btn btn-primary pull-right disabled"
+                        onclick="updateDatasets()">Select dataset
+                </button>
+                <span id="data-modal-msg" class="alert alert-danger pull-right" style="padding: 8px"><b>Warning:</b> no Project selected...</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    //$(document).ready(function () {
+        //$('#project-pane').show();
+        //$('#workset-pane').show();
+        //$('#annotat-pane').show();
+    //});
+    function refresh_dataset_modal() {
+        refresh_collections();
+    }
+
+    function refresh_collections() {
+        var cllist = new CollectionAPI({
+            config: {
+                format: '<div id="cl-{id}" class="panel-item"><a href="javascript:void(0)" class="dm-popover badge" onclick="selectCollection({id})" data-content="<small>Created by <b>{username}</b> on <b>{creation_date}</b>.<br>Contains <b>{image_count}</b> images.<br>{creation_info}.<br><em>{description}</em></small>" data-original-title="{type} information">{name}</a></div>'
+            }
+        });
+        cllist.getCollectionItems('limit=0&parent__isnull=True&order_by=name', '#project-panel');
+    }
+
+
+    function delete_collection(id){
+        $.ajax({
+            url: '/api/dev/collection/'+id+'/?format=json',
+            //dataType: "json",
+            type: 'DELETE',
+            //data: {"id": id},
+            success: function() {
+                show_note('SUCCESS','deleted: '+id);
+            },
+            error: function () {
+                show_note('ERROR', 'error: ' + id);
+            }
+        });
+    }
+
+
+    function create_dataset_modal() {
+        $('#dataset-modal').on('hidden.bs.modal', function () {
+
+        });
+        $('#dataset-modal').on('shown.bs.modal', function () {
+
+        });
+    }
+</script>
