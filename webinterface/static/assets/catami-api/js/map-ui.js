@@ -572,17 +572,22 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		
 		if (this.mapInstance.getLayersByName(selectlayername).length == 0 && !nocreate) {
 			// add the selection layer if required
-			var imglayer = new OpenLayers.Layer.WMS(selectlayername, this.wmsUrl, {
-                layers: 'catami:catamidb_images',
-                format: 'image/gif',
-                transparent: 'TRUE',
-                // sld: "http://" + baseMap.hostname + "/geoserverstyle?prop=depth&min=35.0&max=50.0"
-                sld : "http://" + baseMap.hostname + "/geoserverSimplestyle?name=catami:catamidb_images&colour="+color+"&size=5"
-            }, {//tileOptions: {maxGetUrlLength: 2048},
-                transitionEffect: 'resize',//, minScale: 150000}), // selection layer should always be visible
-				tileOptions: {maxGetUrlLength: 2048}, 
-				isBaseLayer : false
-            });
+			var imglayer = new OpenLayers.Layer.WMS(
+				selectlayername, 
+				this.wmsUrl, 
+				{
+	                layers: 'catami:catamidb_images',
+	                format: 'image/gif',
+	                transparent: 'TRUE',
+	                // sld: "http://" + baseMap.hostname + "/geoserverstyle?prop=depth&min=35.0&max=50.0"
+	                sld : "http://" + baseMap.hostname + "/geoserverSimplestyle?name=catami:catamidb_images&colour="+color+"&size=5"
+            	}, 
+				{
+	                transitionEffect: 'resize',
+					tileOptions: {maxGetUrlLength: 2048}, 
+					isBaseLayer : false
+	            }
+			);
             this.mapInstance.addLayer(imglayer);
 			console.log("\tCreated new layer: " + selectlayername);
 //            var highlightLayer = new OpenLayers.Control.GetFeature({
@@ -609,15 +614,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 						console.log('No queryable layers found');
 			    	},
 					getfeatureinfo: function (event) {
-						console.log('getfeatureinfo got ' + event.features.length + ' features');
-						console.log(event);
-						console.log(baseMap.mapInstance.getLayersByName(selectlayername));
 	                    if (event.features.length > 0) {
 	                        baseMap.$imginfo.html('');
 	                        var fid, $thumb;
 	                        for (var i = 0; i < event.features.length; i++) {
 	                            fid = event.features[i].attributes.img_id;
-	                            console.log(fid);
 	                            $thumb = getImageInfo(fid);
 	                            baseMap.$imginfo.append($thumb);
 	                        }
