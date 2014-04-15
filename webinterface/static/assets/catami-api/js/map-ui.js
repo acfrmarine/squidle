@@ -1056,7 +1056,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             $info = $('<span id="' + infoid + '"></span>'),
             filtertitle = feature[0].toUpperCase() + feature.substring(1) + ' range: ', // capitalise first letter
 			buttonid = infoid+'-button',
-            $btn = $('<span id="'+buttonid+'" class="btn btn-xs" title="...">' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span>');
+            $btn = $('<span id="'+buttonid+'" class="btn btn-xs" >' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span>');
         
 			
 		// create slider
@@ -1119,6 +1119,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				return rangeinfo;
 			}
 		});
+		$btn.tooltip("show");
 		
 		// Add to containers
         $container.append(filtertitle, $info, params.unit, $slider,'<br>');
