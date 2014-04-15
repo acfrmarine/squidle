@@ -1058,6 +1058,18 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 $info = $('<span id="' + infoid + '"></span>'),
                 filtertitle = feature[0].toUpperCase() + feature.substring(1) + ' range: '; // capitalise first letter
 
+			var buttonid = infoid+'-button';
+            var $btn = $('<span id="'+buttonid+'" class="btn btn-xs" title="...">' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span>');
+            $btn.hide();
+			$btn.find("a").click(function () {
+                $slider.slider("option", "values", [minVal, maxVal]);
+            });
+			$btn.tooltip({html: true, placement: 'left', trigger:'hover'});
+			//$container.append($btn);
+			baseMap.$selectedpanel.append($btn);
+			
+			
+			
             $slider.data('infoid', '#'+infoid);
             $slider.slider({
                 range: true,
@@ -1076,39 +1088,25 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					console.log("min/max="+minVal + "/"+ maxVal);
 					console.log("current="+currMinVal + "/"+currMaxVal);
 					
-					// Get ID of button (if it exists)
-					var buttonid = infoid+'-button';
-					var e = document.getElementById(buttonid);
-					console.log(e);			            
+					// Update slider text
+                    $($slider.data('infoid')).html(ui.values[ 0 ] +' - '+ ui.values[ 1 ]);
 					
-			        // 
-			        if (currMinVal == minVal && currMaxVal == maxVal) {
-						// delete button	
-						if( e != null && e.id == buttonid ) {
-							console.log("\tdelete "+buttonid);
-							e.outerHTML = "";
-						
-							// and delete from the featranges
-							delete baseMap.filters.featranges[feature];
-						}
-			        }
+					if (currMinVal == minVal && currMaxVal == maxVal) {
+						$btn.hide();
+						// and delete from the featranges
+						delete baseMap.filters.featranges[feature];
+					}
 			        // create button in side panel
-			        else if( e == null || e.id != buttonid) {
+			        else {
+						// 
 						var rangeinfo = feature + ": " + currMinVal + "-" + currMaxVal;
-		                var $btn = $('<span id="'+buttonid+'" class="btn btn-xs" title="' + rangeinfo + '">' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span>');
-		                $btn.find("a").click(function () {
-							console.log("\n\nclick!");
-		                    $slider.slider("option", "values", [minVal, maxVal]);
-		                });
-		                //$container.append($btn);
-						baseMap.$selectedpanel.append($btn);
-						
+						$btn.attr( "title", rangeinfo );
+						$btn.show();
 						// Add to featranges
 						baseMap.filters.featranges[feature] = $slider.slider("values");
 			        }
 					
-					// Update slider text
-                    $($slider.data('infoid')).html(ui.values[ 0 ] +' - '+ ui.values[ 1 ]);
+					
 					// Update map
                     baseMap.showSelectedImages(layername, false, layercolor);
 					return;
@@ -1253,7 +1251,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 
         if (showcreatbtn && !globalstate.isloggedin) {
-            baseMap.$selectedpanel.append('<div class="alert alert-danger" style="margin-top:10px"><b>NOTE:</b> you need to be logged in to create a Project</div>');
+            baseMap.$selectedpanel.append('<div class="alert" style="margin-top:10px"><b>NOTE:</b> you need to be logged in to create a Project</div>');
         }
         else if (showcreatbtn && globalstate.isloggedin) {
             $createbtn.removeClass('disabled');
