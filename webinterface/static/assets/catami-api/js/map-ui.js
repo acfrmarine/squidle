@@ -1244,8 +1244,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				baseMap.mapInstance.addControl(bbctrl);
             }
 
-			bbctrl.
-            //toggleBBoxSelect(bbctrl, $bboxbtn);
+
+            toggleBBoxSelect(bbctrl, $bboxbtn);
         });
         $bboxbtn.tooltip({
 				html: true, 
