@@ -1220,8 +1220,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			// Create button
 			$btn.hide();
 			$btn.find("a").click(function () {
-				$fromdate.datepicker("option", "minDate", params.from);
-				$todate.datepicker("option", "maxDate", params.to);
+				$fromdate.datepicker('setDate', params.from);
+				$todate.datepicker('setDate', params.to);
 	        });
 			$btn.tooltip({
 				html: true, 
@@ -1229,7 +1229,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				trigger:'hover',
 				title: function() {
 			        var values = [$fromdate.val() , $todate.val()];
-					var rangeinfo = feature + ": " + values[0] + "-" + values[1];
+					var rangeinfo = feature + ": " + values[0] + " to " + values[1];
 					return rangeinfo;
 				}
 			});
