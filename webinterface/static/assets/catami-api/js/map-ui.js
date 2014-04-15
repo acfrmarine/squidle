@@ -1047,16 +1047,15 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * Creates a range filter and adds it to the given container
 	 */
     this.addRangeFilter = function ($container,$infocontainer,layername,feature,params) {
-		console.log("Function addRangeFilter");
-		layername = this.filtLayername;
+		console.log("Function addRangeFilter: "+feature);
+
 		layercolor = this.filtLayerColor;		
 		
         var $slider = $('<div id="'+ feature+'-slider" style="margin-left:10px; margin-right:10px;"></div>'),
             infoid = feature + '-range',
             $info = $('<span id="' + infoid + '"></span>'),
             filtertitle = feature[0].toUpperCase() + feature.substring(1) + ' range: ', // capitalise first letter
-			buttonid = infoid+'-button',
-            $btn = $('<span id="'+buttonid+'" class="btn btn-xs" >' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span>');
+            $btn = $('<span id="'+infoid+'-button" class="btn btn-xs" >' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span><br>');
         
 			
 		// create slider
@@ -1131,13 +1130,14 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 */
 	this.addDateFilter = function ($container,$infocontainer,layername,feature,params) {
 			console.log("Function addDateFilter");
-			layername = this.filtLayername;
+
 			layercolor = this.filtLayerColor;		
 
 
             var $fromdate = $('<input type="text" name="fromdate" placeholder="From date" id="fromdate" size="8">'),
                 $todate   = $('<input type="text" name="todate"   placeholder="To date"   id="todate"   size="8">'),
-                filtertitle = "Date range:";
+                filtertitle = "Date range:",
+				$btn = $('<span id="'+infoid+'-button" class="btn btn-xs" >' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span><br>');
 
             $fromdate.datepicker({
                 changeMonth: true,
@@ -1172,11 +1172,31 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             });
             $todate.datepicker('setDate', params.to);
 
-            //baseMap.filters.featranges[feature] = function() {return [$fromdate.val() , $todate.val()]};
 
+			// Create button
+			$btn.hide();
+			$btn.find("a").click(function () {
+				// TODO: reset the dates
+		        // minVal = $slider.slider("option", "min");
+// 		        maxVal = $slider.slider("option", "max");
+// 	            $slider.slider("option", "values", [minVal, maxVal]);
+	        });
+			$btn.tooltip({
+				html: true, 
+				placement: 'left', 
+				trigger:'hover',
+				title: function() {
+			        var values = [$fromdate.val() , $todate.val()];
+					var rangeinfo = feature + ": " + values[0] + "-" + values[1];
+					return rangeinfo;
+				}
+			});
+			$btn.tooltip("show");
+			
+			// Add to containers
             var $filtcont = $('<span class="pull-right"></span>').append($fromdate, ' to ', $todate);
             $container.append(filtertitle, $filtcont,'<br>');
-
+			$infocontainer.append($btn);
     }
 
     // TODO: this is a bit ugly - remove code duplication
