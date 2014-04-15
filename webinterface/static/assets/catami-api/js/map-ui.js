@@ -1218,10 +1218,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 						console.log("Finished with " + evt.feature.id);
 					}
 				});
-				var modifyFeature = new OpenLayers.Control.ModifyFeature(layer, {
+				var modifyFeature = new OpenLayers.Control.ModifyFeature(bbLayer, {
 				  mode: OpenLayers.Control.ModifyFeature.RESIZE | OpenLayers.Control.ModifyFeature.DRAG
 				});
-            	baseMap.mapInstance.addLayer(bbLayer)
+            	baseMap.mapInstance.addLayer(bbLayer);
+				
 	    		var bbctrl =  new OpenLayers.Control.DrawFeature( 
 					baseMap.mapInstance.getLayersByName(layernameBoundingBoxes)[0], OpenLayers.Handler.RegularPolygon, {
 						handlerOptions: {
