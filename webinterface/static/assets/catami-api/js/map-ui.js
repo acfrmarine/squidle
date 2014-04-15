@@ -1234,11 +1234,12 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
             toggleBBoxSelect(bbctrl, $bboxbtn);
         });
-        $bboxbtn.tooltip({html: true, 
+        $bboxbtn.tooltip({
+				html: true, 
 				placement: 'left', 
-				trigger:'hover'},
+				trigger:'hover',
 				title: "bla bla"
-			);
+			});
 
 
 		// Create button
