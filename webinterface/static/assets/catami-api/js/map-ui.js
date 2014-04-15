@@ -1234,7 +1234,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 								baseMap.filters.BBoxes.push(filterBounds);
 								// baseMap.showSelectedImages(layername);
 								baseMap.showSelectedImages(layername, false, layercolor);
-								toggleBBoxSelect(bbctrl, $bboxbtn,true);
+								// toggleBBoxSelect(bbctrl, $bboxbtn,true);
 						    }
 						}
 				    }
