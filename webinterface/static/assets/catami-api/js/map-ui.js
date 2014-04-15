@@ -645,6 +645,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         //this.updateSelectionInfo(baseMap.$selectedpanel);
         //$('#' + selectedpanelid).show();
 
+		console.log(baseMap.mapInstance.getControl('bbmod'));
 
 		//this.updateMapUsingFilter(this.AUVimageSelectionFilter, layername)
 		/*var xml = new OpenLayers.Format.XML();
@@ -1250,9 +1251,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 								baseMap.filters.BBoxes.push(filterBounds);
 								
 								
-								baseMap.showSelectedImages(layername, false, layercolor);
+								
 								baseMap.mapInstance.getControl('bbctrl').deactivate();
 								baseMap.mapInstance.getControl('bbmod').activate();
+								
+								baseMap.showSelectedImages(layername, false, layercolor);
 						    }
 						}
 				    }
@@ -1302,6 +1305,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     }
 
     function toggleBBoxSelect (bbctrl, $bboxbtn, forcedeselect) {
+		return;
+		
 		console.log("Function toggleBBoxSelect");
         forcedeselect = (( typeof forcedeselect !== 'undefined') ? forcedeselect : false);
         if ($bboxbtn.hasClass('active') || forcedeselect) {
