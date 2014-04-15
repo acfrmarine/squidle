@@ -1060,8 +1060,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             var $slider = $('<div id="'+ feature+'-slider" style="margin-left:10px; margin-right:10px;"></div>'),
                 infoid = feature + '-range',
                 $info = $('<span id="' + infoid + '"></span>'),
-                filtertitle = feature[0].toUpperCase() + feature.substring(1) + ' range: '; // capitalise first letter
-			
+                filtertitle = feature[0].toUpperCase() + feature.substring(1) + ' range: ', // capitalise first letter
+				buttonid = infoid+'-button',
+	            $btn = $('<span id="'+buttonid+'" class="btn btn-xs" title="...">' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span>');
+            
+				
 			// create slider
             $slider.data('infoid', '#'+infoid);
             $slider.slider({
@@ -1091,9 +1094,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					}
 			        // create button in side panel
 			        else {
-						// 
+						// TODO: is not updating correctly
 						var rangeinfo = feature + ": " + currMinVal + "-" + currMaxVal;
-						$btn.attr( "title", rangeinfo );
+						$btn.data( "title", rangeinfo );
+						
+						
 						$btn.show();
 						// Add to featranges
 						baseMap.filters.featranges[feature] = $slider.slider("values");
@@ -1108,9 +1113,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			console.log("slider created");
 			
 			// Create button
-			var buttonid = infoid+'-button';
-            var $btn = $('<span id="'+buttonid+'" class="btn btn-xs" title="...">' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span>');
-            $btn.hide();
+			$btn.hide();
 			$btn.find("a").click(function () {
 		        minVal = $slider.slider("option", "min");
 		        maxVal = $slider.slider("option", "max");
