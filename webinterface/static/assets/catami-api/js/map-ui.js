@@ -1176,7 +1176,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		//console.log("Function updateSelectionInfo");
 
         if ( typeof $container !== 'undefined') baseMap.$selectedpanel = $container;
-
+		return;
         var rangeinfo = '',
             bboxinfo = '',
             dplinfo = '',
