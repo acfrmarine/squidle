@@ -1147,9 +1147,10 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				minDate: params.from,
 				maxDate: params.to,
                 onClose: function (dateText, inst) {
-					if( dateText != "" )
+					if( dateText != "" ) {
 	                    // restrict the end date
 	                    $todate.datepicker("option", "minDate", dateText);
+						
 						// Get min/max and current selected
 						var to = new Date(params.to);
 						var from = new Date(params.from);
@@ -1161,15 +1162,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 							from.getYear() == selFrom.getYear() && 
 							to.getDate()==selTo.getDate() && 
 							to.getMonth()==selTo.getMonth() && 
-							to.getYear() == selTo.getYear()
-						) {
+							to.getYear() == selTo.getYear() ) {
 							delete baseMap.filters.featranges[feature];
 							$btn.hide();
 						}
 						else {
 							baseMap.filters.featranges[feature] = [$fromdate.val() , $todate.val()];
 							$btn.show();
-						
 						}
 						
 						// Update map
@@ -1201,15 +1200,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 							from.getYear() == selFrom.getYear() && 
 							to.getDate()==selTo.getDate() && 
 							to.getMonth()==selTo.getMonth() && 
-							to.getYear() == selTo.getYear()
-						) {
+							to.getYear() == selTo.getYear()) {
 							delete baseMap.filters.featranges[feature];
 							$btn.hide();
 						}
 						else {
 							baseMap.filters.featranges[feature] = [$fromdate.val() , $todate.val()];
 							$btn.show();
-						
 						}
 						
 						// Update map
