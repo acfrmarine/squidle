@@ -1047,7 +1047,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 
 
-    this.addRangeFilter = function ($container,type,layername,feature,params) {
+    this.addRangeFilter = function ($container,$infocontainer, type,layername,feature,params) {
 		console.log("Function addRangeFilter");
 		layername = this.filtLayername;
 		layercolor = this.filtLayerColor;
@@ -1065,8 +1065,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 $slider.slider("option", "values", [minVal, maxVal]);
             });
 			$btn.tooltip({html: true, placement: 'left', trigger:'hover'});
-			//$container.append($btn);
-			baseMap.$selectedpanel.append($btn);
+			$infocontainer.append($btn);
 			
 			
 			
