@@ -1225,8 +1225,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			$btn.find("a").click(function () {
 				$fromdate.datepicker('setDate', params.from);
 				$todate.datepicker('setDate', params.to);
-				console.log(this);
-				this.hide();
+				$btn.hide();
 	        });
 			$btn.tooltip({
 				html: true, 
