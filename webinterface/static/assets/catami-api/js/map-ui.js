@@ -1209,7 +1209,19 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             var layernameBoundingBoxes = 'Bounding boxes';
         	
             if (baseMap.mapInstance.getLayersByName(layernameBoundingBoxes).length == 0) {
-				var bbLayer = new OpenLayers.Layer.Vector(layernameBoundingBoxes);
+				styleMap = new OpenLayers.StyleMap({
+				        strokeColor: '#ff0000'
+				        , strokeWidth: 3
+				        // Comment next line out, and handlers will not appear
+				        // to selected feature
+				        , pointRadius: 6
+				    });
+					
+				var bbLayer = new OpenLayers.Layer.Vector(layernameBoundingBoxes, 
+					{
+						styleMap: styleMap
+					}
+				);
 				bbLayer.events.register({
 					'beforefeaturemodified': function(evt) {
 						console.log("Selected " + evt.feature.id + " for modification");
