@@ -1223,7 +1223,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 						styleMap: styleMap
 					}
 				);
-				bbLayer.events.register({
+				bbLayer.events.on({
 					'beforefeaturemodified': function(evt) {
 						console.log("Selected " + evt.feature.id + " for modification");
 					},
