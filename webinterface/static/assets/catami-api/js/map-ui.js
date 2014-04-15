@@ -1225,7 +1225,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				);
 				bbLayer.events.on({
 					'beforefeaturemodified': function(evt) {
-						console.log("Selected " + evt.feature.id + " for modification");
+						console.log("\n\nSelected " + evt.feature.id + " for modification\n\n");
 					},
 					'afterfeaturemodified': function(evt) {
 						console.log("Finished with " + evt.feature.id);
