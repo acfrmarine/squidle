@@ -1052,23 +1052,17 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		layername = this.filtLayername;
 		layercolor = this.filtLayerColor;
 		
+		console.log($container);
+		console.log($infocontainer);
+		
+		
         if (type=='slider') {
             var $slider = $('<div id="'+ feature+'-slider" style="margin-left:10px; margin-right:10px;"></div>'),
                 infoid = feature + '-range',
                 $info = $('<span id="' + infoid + '"></span>'),
                 filtertitle = feature[0].toUpperCase() + feature.substring(1) + ' range: '; // capitalise first letter
-
-			var buttonid = infoid+'-button';
-            var $btn = $('<span id="'+buttonid+'" class="btn btn-xs" title="...">' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span>');
-            $btn.hide();
-			$btn.find("a").click(function () {
-                $slider.slider("option", "values", [minVal, maxVal]);
-            });
-			$btn.tooltip({html: true, placement: 'left', trigger:'hover'});
-			$infocontainer.append($btn);
-			console.log($container);
-			console.log($infocontainer);			
 			
+			// create slider
             $slider.data('infoid', '#'+infoid);
             $slider.slider({
                 range: true,
@@ -1108,13 +1102,27 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					
 					// Update map
                     baseMap.showSelectedImages(layername, false, layercolor);
-					return;
                 }
             });
 			this.filterElements.push($slider);
-
+			console.log("slider created");
+			
+			// Create button
+			var buttonid = infoid+'-button';
+            var $btn = $('<span id="'+buttonid+'" class="btn btn-xs" title="...">' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span>');
+            $btn.hide();
+			$btn.find("a").click(function () {
+		        minVal = $slider.slider("option", "min");
+		        maxVal = $slider.slider("option", "max");
+                $slider.slider("option", "values", [minVal, maxVal]);
+            });
+			$btn.tooltip({html: true, placement: 'left', trigger:'hover'});
+			console.log("button created");
+			
+			// Add to containers
             $container.append(filtertitle, $info, params.unit, $slider,'<br>');
             $($slider.data('infoid')).html($slider.slider("values", 0) +' - '+  $slider.slider("values", 1));
+			$infocontainer.append($btn);
         }
 
         else if (type=='date') {
