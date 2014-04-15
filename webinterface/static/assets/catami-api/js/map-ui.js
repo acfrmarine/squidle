@@ -1264,6 +1264,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				
 				baseMap.mapInstance.addLayer(bbLayer);
 				baseMap.mapInstance.addControls([bbctrl, bbmod]);
+				
+				bbctrl.activate();
             }
 
 
