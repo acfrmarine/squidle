@@ -200,21 +200,19 @@
                     $selpanel.append('<br>');
                     map.addDeploymentSelect($selpanel, imagelayer);
 
-                    // Add filters
+                    // Create panels
                     var $filterpanel = map.addPanel($('#map-panel'), {id: 'mapfilters', icon: 'icon-filter', title: 'Filters', closeable: false});
                     // create selected panel with creation of selection layer
                     var $curselpanel = map.addPanel($('#map-panel'), {id: 'mapselected', icon: 'icon-stackexchange', title: 'Current selection', closeable: false});
 					
 					
+					// Add filters
                     map.addRangeFilter($filterpanel, $curselpanel, 'slider', imagelayer_filt, 'depth', {step: 1, range: [0, 2000], unit: 'm'});
                     map.addRangeFilter($filterpanel, $curselpanel, 'slider', imagelayer_filt, 'altitude', {step: 0.1, range: [0, 10], unit: 'm'});
                     map.addRangeFilter($filterpanel, $curselpanel, 'date',  imagelayer_filt, 'date_time', {from: '2005-01-01', to: new Date()});
                     map.addBBoxSelect($filterpanel, $curselpanel, imagelayer_filt);
 
                     // add current selection info
-                    
-					
-					
                     map.updateSelectionInfo($curselpanel);
                     curstate.loginfuncs.push(map.updateSelectionInfo);
 

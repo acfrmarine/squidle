@@ -1066,8 +1066,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             });
 			$btn.tooltip({html: true, placement: 'left', trigger:'hover'});
 			$infocontainer.append($btn);
-			
-			
+			console.log($container);
+			console.log($infocontainer);			
 			
             $slider.data('infoid', '#'+infoid);
             $slider.slider({
