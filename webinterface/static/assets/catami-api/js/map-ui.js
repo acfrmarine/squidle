@@ -1239,6 +1239,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 								
 								
 								baseMap.showSelectedImages(layername, false, layercolor);
+								baseMap.mapInstance.getControl('bbctrl').deactivate();
 								baseMap.mapInstance.getControl('bbmod').activate();
 						    }
 						}
@@ -1292,12 +1293,12 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		console.log("Function toggleBBoxSelect");
         forcedeselect = (( typeof forcedeselect !== 'undefined') ? forcedeselect : false);
         if ($bboxbtn.hasClass('active') || forcedeselect) {
-            // bbctrl.deactivate();
-			baseMap.mapInstance.getControl('bbctrl').deactivate();
+
+			baseMap.mapInstance.getControl('bbmod').deactivate();
             $bboxbtn.removeClass('active');
         }
         else {
-            // bbctrl.activate();
+
 			baseMap.mapInstance.getControl('bbctrl').activate();
             $bboxbtn.addClass('active');
         }
