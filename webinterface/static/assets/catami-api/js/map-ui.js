@@ -43,9 +43,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		BBoxes : [],
         deployments : []
 	}
-	
-	this.filterElements = []
-
 
 	//this.AUVimageSelectionFilter = [];
 	//this.ExploreFilter = [];
@@ -1046,89 +1043,93 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     }
 
 
-
-    this.addRangeFilter = function ($container,$infocontainer, type,layername,feature,params) {
+	/**
+	 * Creates a range filter and adds it to the given container
+	 */
+    this.addRangeFilter = function ($container,$infocontainer,layername,feature,params) {
 		console.log("Function addRangeFilter");
 		layername = this.filtLayername;
-		layercolor = this.filtLayerColor;
+		layercolor = this.filtLayerColor;		
 		
-		console.log($container);
-		console.log($infocontainer);
-		
-		
-        if (type=='slider') {
-            var $slider = $('<div id="'+ feature+'-slider" style="margin-left:10px; margin-right:10px;"></div>'),
-                infoid = feature + '-range',
-                $info = $('<span id="' + infoid + '"></span>'),
-                filtertitle = feature[0].toUpperCase() + feature.substring(1) + ' range: ', // capitalise first letter
-				buttonid = infoid+'-button',
-	            $btn = $('<span id="'+buttonid+'" class="btn btn-xs" title="...">' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span>');
-            
-				
-			// create slider
-            $slider.data('infoid', '#'+infoid);
-            $slider.slider({
-                range: true,
-                min: params.range[0],
-                max: params.range[1],
-                step: params.step,
-                values: params.range,
-                slide: function (event, ui) {
-                    $($slider.data('infoid')).html(ui.values[ 0 ] +' - '+ ui.values[ 1 ]);
-                },
-                change: function (event, ui) {
-                    currMinVal = ui.values[0];
-			        currMaxVal = ui.values[1];
-			        minVal = $slider.slider("option", "min");
-			        maxVal = $slider.slider("option", "max");
-					console.log("min/max="+minVal + "/"+ maxVal);
-					console.log("current="+currMinVal + "/"+currMaxVal);
-					
-					// Update slider text
-                    $($slider.data('infoid')).html(ui.values[ 0 ] +' - '+ ui.values[ 1 ]);
-					
-					if (currMinVal == minVal && currMaxVal == maxVal) {
-						$btn.hide();
-						// and delete from the featranges
-						delete baseMap.filters.featranges[feature];
-					}
-			        // create button in side panel
-			        else {
-						// TODO: is not updating correctly
-						var rangeinfo = feature + ": " + currMinVal + "-" + currMaxVal;
-						$btn.data( "title", rangeinfo );
-						
-						
-						$btn.show();
-						// Add to featranges
-						baseMap.filters.featranges[feature] = $slider.slider("values");
-			        }
-					
-					
-					// Update map
-                    baseMap.showSelectedImages(layername, false, layercolor);
-                }
-            });
-			this.filterElements.push($slider);
-			console.log("slider created");
+        var $slider = $('<div id="'+ feature+'-slider" style="margin-left:10px; margin-right:10px;"></div>'),
+            infoid = feature + '-range',
+            $info = $('<span id="' + infoid + '"></span>'),
+            filtertitle = feature[0].toUpperCase() + feature.substring(1) + ' range: ', // capitalise first letter
+			buttonid = infoid+'-button',
+            $btn = $('<span id="'+buttonid+'" class="btn btn-xs" title="...">' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span>');
+        
 			
-			// Create button
-			$btn.hide();
-			$btn.find("a").click(function () {
+		// create slider
+        $slider.data('infoid', '#'+infoid);
+        $slider.slider({
+            range: true,
+            min: params.range[0],
+            max: params.range[1],
+            step: params.step,
+            values: params.range,
+            slide: function (event, ui) {
+                $($slider.data('infoid')).html(ui.values[ 0 ] +' - '+ ui.values[ 1 ]);
+            },
+            change: function (event, ui) {
+                currMinVal = ui.values[0];
+		        currMaxVal = ui.values[1];
 		        minVal = $slider.slider("option", "min");
 		        maxVal = $slider.slider("option", "max");
-                $slider.slider("option", "values", [minVal, maxVal]);
-            });
-			$btn.tooltip({html: true, placement: 'left', trigger:'hover'});
-			console.log("button created");
-			
-			// Add to containers
-            $container.append(filtertitle, $info, params.unit, $slider,'<br>');
-            $($slider.data('infoid')).html($slider.slider("values", 0) +' - '+  $slider.slider("values", 1));
-			$infocontainer.append($btn);
-        }
+				console.log("min/max="+minVal + "/"+ maxVal);
+				console.log("current="+currMinVal + "/"+currMaxVal);
+				
+				// Update slider text
+                $($slider.data('infoid')).html(ui.values[ 0 ] +' - '+ ui.values[ 1 ]);
+				
+				if (currMinVal == minVal && currMaxVal == maxVal) {
+					$btn.hide();
+					// and delete from the featranges
+					delete baseMap.filters.featranges[feature];
+				}
+		        // create button in side panel
+		        else {
+					// TODO: is not updating correctly
+					// should tooltip be destroyed and recreated? check out best way to update bootstrap tooltip title
+					var rangeinfo = feature + ": " + currMinVal + "-" + currMaxVal;
+					$btn.data( "original-title", rangeinfo );
+					
+					
+					$btn.show();
+					// Add to featranges
+					baseMap.filters.featranges[feature] = $slider.slider("values");
+		        }
+				
+				
+				// Update map
+                baseMap.showSelectedImages(layername, false, layercolor);
+            }
+        });
+		
+		// Create button
+		$btn.hide();
+		$btn.find("a").click(function () {
+	        minVal = $slider.slider("option", "min");
+	        maxVal = $slider.slider("option", "max");
+            $slider.slider("option", "values", [minVal, maxVal]);
+        });
+		$btn.tooltip({html: true, placement: 'left', trigger:'hover'});
+		console.log("button created");
+		
+		// Add to containers
+        $container.append(filtertitle, $info, params.unit, $slider,'<br>');
+        $($slider.data('infoid')).html($slider.slider("values", 0) +' - '+  $slider.slider("values", 1));
+		$infocontainer.append($btn);
 
-        else if (type=='date') {
+	}
+	/**
+	 * Creates a date filter and adds it to the given container
+	 */
+	this.addDateFilter = function ($container,$infocontainer,layername,feature,params) {
+			console.log("Function addDateFilter");
+			layername = this.filtLayername;
+			layercolor = this.filtLayerColor;		
+
+
             var $fromdate = $('<input type="text" name="fromdate" placeholder="From date" id="fromdate" size="8">'),
                 $todate   = $('<input type="text" name="todate"   placeholder="To date"   id="todate"   size="8">'),
                 filtertitle = "Date range:";
@@ -1149,7 +1150,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 }
             });
             $fromdate.datepicker('setDate', params.from);
-			this.filterElements.push($fromdate);
 			
             $todate.datepicker({
                 changeMonth: true,
@@ -1166,13 +1166,12 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 }
             });
             $todate.datepicker('setDate', params.to);
-			this.filterElements.push($todate);
 
             //baseMap.filters.featranges[feature] = function() {return [$fromdate.val() , $todate.val()]};
 
             var $filtcont = $('<span class="pull-right"></span>').append($fromdate, ' to ', $todate);
             $container.append(filtertitle, $filtcont,'<br>');
-        }
+
     }
 
     // TODO: this is a bit ugly - remove code duplication
@@ -1182,9 +1181,10 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
      */
     this.updateSelectionInfo = function ($container) {
 		//console.log("Function updateSelectionInfo");
-
-        if ( typeof $container !== 'undefined') baseMap.$selectedpanel = $container;
 		return;
+		
+    if ( typeof $container !== 'undefined') baseMap.$selectedpanel = $container;
+
         var rangeinfo = '',
             bboxinfo = '',
             dplinfo = '',
@@ -1192,15 +1192,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             showcreatbtn = false,
             $newclform = $('#clform');
 
-        baseMap.$selectedpanel.html('');
-
-		filters = this.getFilters();
-		console.log(filters.length+ " filters");
-		console.log(filters);
+        // baseMap.$selectedpanel.html('');		
 		
-		
-		console.log("Filter els: " + baseMap.filterElements.length);
-
 
 		// Show number of deployments and their info
         if (baseMap.filters.deployments != null) {
@@ -1216,46 +1209,46 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             }
         }
 		
-		// Show the range filters
-        var i = 0;
-        for (var key in baseMap.filters.featranges) {
-            rangeinfo = key + ': ' + baseMap.filters.featranges[key][0] + ' to ' + baseMap.filters.featranges[key][1] + '<br>';
-            // $newclform.find('#id_'+key).val(baseMap.filters.featranges[key][0] + ',' + baseMap.filters.featranges[key][1])
-	        if (rangeinfo != '')  {
-				
-		        var $rangebtn = $('<span class="btn btn-xs" title="' + rangeinfo + '">' + key + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span>');
-		
-		        $rangebtn.find("a").click(function (){
-					console.log("filter before: " + baseMap.filters.featranges);
-					console.log("removing: " + key);
-					delete baseMap.filters.featranges[key];
-					
-					baseMap.
-					
-					console.log("filter after : " + baseMap.filters.featranges);
-					baseMap.showSelectedImages();
-				});
-		        $rangebtn.tooltip({html: true, placement: 'topRight', trigger:'hover'});
-
-		        //baseMap.$selectedpanel.append($rangebtn);
-				//baseMap.$selectedpanel.append($('<a class="btn btn-xs" title="' + rangeinfo + '" id="range_'+i+'" onclick="this.removeRangeFilter('+i+');" >' + key + ' filter &nbsp;<span class="badge">X</span></a> ').popover({html: true, placement: 'topRight', trigger:'hover'}));
-			}
-            i++;
-        }
-		
-		// Show bounding boxes
-        var bboxarr = [];
-        var bbox = [];
-        for (var i = 0; i < baseMap.filters.BBoxes.length; i++) {
-            bbox = [baseMap.filters.BBoxes[i].left , baseMap.filters.BBoxes[i].bottom , baseMap.filters.BBoxes[i].right , baseMap.filters.BBoxes[i].top];
-            bboxinfo += 'Box 1: ' + bbox.join(',') + '<br>';
-            bboxarr.push(bbox.join(','));
-            showcreatbtn = true;
-        }
-        if (bboxinfo != '') {
-            baseMap.$selectedpanel.append($('<a class="btn btn-xs" title="' + bboxinfo + '">Bounding boxes <span class="badge">' + i + '</span></a> ').popover({html: true, placement: 'topRight', trigger: 'hover'}));
-            $newclform.find('#id_bboxes').val(bboxarr.join(':'));
-        }
+		// Show the range filters		// 
+		//         var i = 0;
+		//         for (var key in baseMap.filters.featranges) {
+		//             rangeinfo = key + ': ' + baseMap.filters.featranges[key][0] + ' to ' + baseMap.filters.featranges[key][1] + '<br>';
+		//             // $newclform.find('#id_'+key).val(baseMap.filters.featranges[key][0] + ',' + baseMap.filters.featranges[key][1])
+		// 	        if (rangeinfo != '')  {
+		// 		
+		//         var $rangebtn = $('<span class="btn btn-xs" title="' + rangeinfo + '">' + key + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span>');
+		// 
+		//         $rangebtn.find("a").click(function (){
+		// 			console.log("filter before: " + baseMap.filters.featranges);
+		// 			console.log("removing: " + key);
+		// 			delete baseMap.filters.featranges[key];
+		// 			
+		// 			baseMap.
+		// 			
+		// 			console.log("filter after : " + baseMap.filters.featranges);
+		// 			baseMap.showSelectedImages();
+		// 		});
+		//         $rangebtn.tooltip({html: true, placement: 'topRight', trigger:'hover'});
+		// 
+		//         //baseMap.$selectedpanel.append($rangebtn);
+		// 		//baseMap.$selectedpanel.append($('<a class="btn btn-xs" title="' + rangeinfo + '" id="range_'+i+'" onclick="this.removeRangeFilter('+i+');" >' + key + ' filter &nbsp;<span class="badge">X</span></a> ').popover({html: true, placement: 'topRight', trigger:'hover'}));
+		// 	}
+		//             i++;
+		//         }
+		// 
+		// // Show bounding boxes
+		//         var bboxarr = [];
+		//         var bbox = [];
+		//         for (var i = 0; i < baseMap.filters.BBoxes.length; i++) {
+		//             bbox = [baseMap.filters.BBoxes[i].left , baseMap.filters.BBoxes[i].bottom , baseMap.filters.BBoxes[i].right , baseMap.filters.BBoxes[i].top];
+		//             bboxinfo += 'Box 1: ' + bbox.join(',') + '<br>';
+		//             bboxarr.push(bbox.join(','));
+		//             showcreatbtn = true;
+		//         }
+		//         if (bboxinfo != '') {
+		//             baseMap.$selectedpanel.append($('<a class="btn btn-xs" title="' + bboxinfo + '">Bounding boxes <span class="badge">' + i + '</span></a> ').popover({html: true, placement: 'topRight', trigger: 'hover'}));
+		//             $newclform.find('#id_bboxes').val(bboxarr.join(':'));
+		//         }
 
         var $createbtn = $('<button class="btn btn-info disabled" style="width:100%; margin-top:10px;"><i class="icon-plus"></i> New Project with selection</button>');
 

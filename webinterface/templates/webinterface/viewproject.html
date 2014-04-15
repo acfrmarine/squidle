@@ -191,9 +191,10 @@
                 }
                 else { // Explore mode
                     var imagelayer = "Deployment images",
-                        imagelayer_filt = imagelayer + " (filtered)";
+                        imagelayer_filt = "Selected images";
                     map.showDeployments();
-                    //map.showImages(imagelayer);
+                    map.showSelectedImages(imagelayer);
+                    map.showSelectedImages(imagelayer_filt);
 
                     // Add selection tools
                     var $selpanel = map.addPanel($('#map-panel'), {id: 'mapsel', icon: 'icon-plus-sign-alt', title: 'Selection tools', closeable: false});
@@ -207,9 +208,9 @@
 					
 					
 					// Add filters
-                    map.addRangeFilter($filterpanel, $curselpanel, 'slider', imagelayer_filt, 'depth', {step: 1, range: [0, 2000], unit: 'm'});
-                    map.addRangeFilter($filterpanel, $curselpanel, 'slider', imagelayer_filt, 'altitude', {step: 0.1, range: [0, 10], unit: 'm'});
-                    map.addRangeFilter($filterpanel, $curselpanel, 'date',  imagelayer_filt, 'date_time', {from: '2005-01-01', to: new Date()});
+                    map.addRangeFilter($filterpanel, $curselpanel, imagelayer_filt, 'depth', {step: 1, range: [0, 2000], unit: 'm'});
+                    map.addRangeFilter($filterpanel, $curselpanel, imagelayer_filt, 'altitude', {step: 0.1, range: [0, 10], unit: 'm'});
+                    map.addDateFilter($filterpanel, $curselpanel, imagelayer_filt, 'date_time', {from: '2005-01-01', to: new Date()});
                     map.addBBoxSelect($filterpanel, $curselpanel, imagelayer_filt);
 
                     // add current selection info
