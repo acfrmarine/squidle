@@ -1209,8 +1209,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             var layernameBoundingBoxes = 'Bounding boxes';
         	
             if (baseMap.mapInstance.getLayersByName(layernameBoundingBoxes).length == 0) {
-				var bbLayer = new OpenLayers.Layer.Vector(layernameBoundingBoxes, null);
-				bbLayer.events.on({
+				var bbLayer = new OpenLayers.Layer.Vector(layernameBoundingBoxes);
+				bbLayer.events.register({
 					'beforefeaturemodified': function(evt) {
 						console.log("Selected " + evt.feature.id + " for modification");
 					},
@@ -1218,10 +1218,14 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 						console.log("Finished with " + evt.feature.id);
 					}
 				});
-				var modifyFeature = new OpenLayers.Control.ModifyFeature(bbLayer, {
-				  mode: OpenLayers.Control.ModifyFeature.RESIZE | OpenLayers.Control.ModifyFeature.DRAG
-				});
-            	baseMap.mapInstance.addLayer(bbLayer);
+				var bbmod = new OpenLayers.Control.ModifyFeature(
+					bbLayer, 
+					{
+						mode: OpenLayers.Control.ModifyFeature.RESIZE | OpenLayers.Control.ModifyFeature.DRAG
+					}
+				);
+				bbmod.id = 'bbmod';
+            	
 				
 	    		var bbctrl =  new OpenLayers.Control.DrawFeature(bbLayer, OpenLayers.Handler.RegularPolygon, {
 						handlerOptions: {
@@ -1232,16 +1236,18 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 								var filterBounds = event.feature.geometry.getBounds().clone();
 								filterBounds.transform(baseMap.projection.mercator, baseMap.projection.geographic);
 								baseMap.filters.BBoxes.push(filterBounds);
-								// baseMap.showSelectedImages(layername);
+								
+								
 								baseMap.showSelectedImages(layername, false, layercolor);
-								// toggleBBoxSelect(bbctrl, $bboxbtn,true);
+								baseMap.mapInstance.getControl('bbmod').activate();
 						    }
 						}
 				    }
 				);
 	    		bbctrl.id = "bbctrl";
 				
-				baseMap.mapInstance.addControl(bbctrl);
+				baseMap.mapInstance.addLayer(bbLayer);
+				baseMap.mapInstance.addControls([bbctrl, bbmod]);
             }
 
 
