@@ -1220,8 +1220,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			// Create button
 			$btn.hide();
 			$btn.find("a").click(function () {
-				$fromdate.datepicker("option", "minDate", minDate);
-				$todate.datepicker("option", "maxDate", maxDate);
+				$fromdate.datepicker("option", "minDate", params.from);
+				$todate.datepicker("option", "maxDate", params.to);
 	        });
 			$btn.tooltip({
 				html: true, 
