@@ -1210,7 +1210,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         	
             if (baseMap.mapInstance.getLayersByName(layernameBoundingBoxes).length == 0) {
 				var bbLayer = new OpenLayers.Layer.Vector(layernameBoundingBoxes, null);
-				bbLayer.event.on({
+				bbLayer.events.on({
 					'beforefeaturemodified': function(evt) {
 						console.log("Selected " + evt.feature.id + " for modification");
 					},
