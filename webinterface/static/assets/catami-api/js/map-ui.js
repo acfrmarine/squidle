@@ -1213,7 +1213,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 						baseMap.showSelectedImages(layername, false, layercolor);
 					}
                 },
-				onChangeMonthYear(year, month, inst) {
+				onChangeMonthYear: function(year, month, inst) {
 					console.log("here");
 				}
             });
