@@ -1187,7 +1187,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 onClose: function (dateText, inst) {
 					if( dateText != "") {
 	                    // restrict the start date
-	                    $fromdate.datepicker("option", "maxDate", selectedDate);
+	                    $fromdate.datepicker("option", "maxDate", dateText);
 	                    
 						// Get min/max and current selected
 						var to = new Date(params.to);
@@ -1212,10 +1212,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 						// Update map
 						baseMap.showSelectedImages(layername, false, layercolor);
 					}
-                },
-				onChangeMonthYear: function(year, month, inst) {
-					console.log("here");
-				}
+                }
             });
             $todate.datepicker('setDate', params.to);
 
@@ -1225,7 +1222,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			$btn.find("a").click(function () {
 				$fromdate.datepicker('setDate', params.from);
 				$todate.datepicker('setDate', params.to);
+				// There is no way to trigger a onChange on the date picker. As such I have to do this both places.
+				// TODO: Can we figure a way to trigger onChange?
+				// The following three lines should ideally not be here
 				$btn.hide();
+				delete baseMap.filters.featranges[feature];
+				// Update map
+				baseMap.showSelectedImages(layername, false, layercolor);
 	        });
 			$btn.tooltip({
 				html: true, 
