@@ -1090,10 +1090,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		        else {
 					// TODO: is not updating correctly
 					// should tooltip be destroyed and recreated? check out best way to update bootstrap tooltip title
-					var rangeinfo = feature + ": " + currMinVal + "-" + currMaxVal;
-					$btn.data( "original-title", rangeinfo );
-					
-					
 					$btn.show();
 					// Add to featranges
 					baseMap.filters.featranges[feature] = $slider.slider("values");
@@ -1112,8 +1108,17 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	        maxVal = $slider.slider("option", "max");
             $slider.slider("option", "values", [minVal, maxVal]);
         });
-		$btn.tooltip({html: true, placement: 'left', trigger:'hover'});
-		console.log("button created");
+		$btn.tooltip({
+			html: true, 
+			placement: 'left', 
+			trigger:'hover',
+			title: function() {
+		        minVal = $slider.slider("option", "min");
+		        maxVal = $slider.slider("option", "max");
+				var rangeinfo = feature + ": " + currMinVal + "-" + currMaxVal;
+				return rangeinfo;
+			}
+		});
 		
 		// Add to containers
         $container.append(filtertitle, $info, params.unit, $slider,'<br>');
