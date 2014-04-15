@@ -1113,9 +1113,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			placement: 'left', 
 			trigger:'hover',
 			title: function() {
-		        minVal = $slider.slider("option", "min");
-		        maxVal = $slider.slider("option", "max");
-				var rangeinfo = feature + ": " + currMinVal + "-" + currMaxVal;
+		        var values = $slider.slider("values");
+				var rangeinfo = feature + ": " + values[0] + "-" + values[1];
 				return rangeinfo;
 			}
 		});
