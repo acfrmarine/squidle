@@ -1223,8 +1223,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				});
             	baseMap.mapInstance.addLayer(bbLayer);
 				
-	    		var bbctrl =  new OpenLayers.Control.DrawFeature( 
-					baseMap.mapInstance.getLayersByName(layernameBoundingBoxes)[0], OpenLayers.Handler.RegularPolygon, {
+	    		var bbctrl =  new OpenLayers.Control.DrawFeature(bbLayer, OpenLayers.Handler.RegularPolygon, {
 						handlerOptions: {
 						    irregular: true
 						},
@@ -1240,11 +1239,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 						}
 				    }
 				);
-	    		
+	    		bbctrl.id = "bbctrl";
+				
 				baseMap.mapInstance.addControl(bbctrl);
             }
 
-            toggleBBoxSelect(bbctrl, $bboxbtn);
+			bbctrl.
+            //toggleBBoxSelect(bbctrl, $bboxbtn);
         });
         $bboxbtn.tooltip({
 				html: true, 
@@ -1275,19 +1276,23 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		
         $container.append("<br>Crop selected deployments:",$bboxbtn);
 		$infocontainer.append($btn);
+		
+		console.log("END addBBoxSelect");
+		console.log("");
+		console.log("");
     }
 
     function toggleBBoxSelect (bbctrl, $bboxbtn, forcedeselect) {
 		console.log("Function toggleBBoxSelect");
         forcedeselect = (( typeof forcedeselect !== 'undefined') ? forcedeselect : false);
         if ($bboxbtn.hasClass('active') || forcedeselect) {
-            bbctrl.deactivate();
-            //baseMap.mapcontrols.nav.activate();
+            // bbctrl.deactivate();
+			baseMap.mapInstance.getControl('bbctrl').deactivate();
             $bboxbtn.removeClass('active');
         }
         else {
-            bbctrl.activate();
-            //baseMap.mapcontrols.nav.deactivate();
+            // bbctrl.activate();
+			baseMap.mapInstance.getControl('bbctrl').activate();
             $bboxbtn.addClass('active');
         }
     }
