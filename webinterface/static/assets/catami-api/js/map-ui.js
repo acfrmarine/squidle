@@ -1137,6 +1137,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             var $fromdate = $('<input type="text" name="fromdate" placeholder="From date" id="fromdate" size="8">'),
                 $todate   = $('<input type="text" name="todate"   placeholder="To date"   id="todate"   size="8">'),
                 filtertitle = "Date range:",
+				infoid = feature,
 				$btn = $('<span id="'+infoid+'-button" class="btn btn-xs" >' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span><br>');
 
             $fromdate.datepicker({
