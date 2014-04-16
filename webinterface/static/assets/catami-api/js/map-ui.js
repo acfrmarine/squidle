@@ -1235,7 +1235,12 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			baseMap.mapInstance.addLayer(bbLayer);
 			
 			// A modifier to edit the bounding boxes
-			var bbmod = new OpenLayers.Control.ModifyFeature(bbLayer);
+			var bbmod = new OpenLayers.Control.ModifyFeature(bbLayer, 
+				{
+					mode: OpenLayers.Control.ModifyFeature.RESIZE | 
+						  OpenLayers.Control.ModifyFeature.ROTATE;
+				}
+			);
 			bbmod.id = 'bbmod';
         	
 			// A controller to draw bounding boxes
@@ -1266,7 +1271,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         }
 
 		
-        $container.append("<br>Crop selected deployments:<br>",$bboxdraw, $bboxedit);
+        $container.append("<br>Crop selected deployments:<br>", $bboxedit, "&nbsp;", $bboxdraw);
 		
 		console.log("END addBBoxSelect");
 		console.log("");
@@ -1295,12 +1300,12 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         if ($bbxedit.hasClass('active')) {
 			console.log("diactivated");
 			baseMap.mapInstance.getControl('bbmod').deactivate();
-			baseMap.mapInstance.getControl('showFeatureInfo').activate();
+			baseMap.mapInstance.getLayersByName('Deployment origins').setVisibility(true);
             $bbxedit.removeClass('active');
         }
         else {
 			console.log("activated");
-			baseMap.mapInstance.getControl('showFeatureInfo').deactivate();
+			baseMap.mapInstance.getLayersByName('Deployment origins').setVisibility(false);
 			baseMap.mapInstance.getControl('bbmod').activate();
             $bbxedit.addClass('active');
         }
