@@ -642,22 +642,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         if (this.mapInstance.getLayersByName(selectlayername).length > 0) {
 
             var filterCombined = this.getFilters();
+			console.log(filterCombined);
             this.updateMapUsingFilter(filterCombined, selectlayername);
         }
         this.updateSelectionInfo();
-        //$selectedpanel = $('#' + selectedpanelid + '-content');
-        //this.updateSelectionInfo(baseMap.$selectedpanel);
-        //$('#' + selectedpanelid).show();
 
-		console.log(baseMap.mapInstance.getControl('bbmod'));
-
-		//this.updateMapUsingFilter(this.AUVimageSelectionFilter, layername)
-		/*var xml = new OpenLayers.Format.XML();
-		 var new_filter = xml.write(this.filter_1_1.write(filter_logic));
-
-		 var layer = this.layers[layername];
-		 layer.params['FILTER'] = new_filter;
-		 layer.redraw();*/
 		console.log("END showSelectedImages");
 		console.log("");
 		console.log("");
@@ -1209,7 +1198,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		console.log("Function addBBoxSelect");
         var $bboxdraw = $('<button type="button" class="btn btn-default pull-right btn-sm" title="Draw a bounding box around the images you would like to add to your selection."><i class="icon-crop"></i> BOX</button>'),
 			$bboxedit = $('<button type="button" class="btn btn-default pull-right btn-sm" title="Edit a bounding box by selecting it."><i class="icon-edit"></i> BOX</button>'),
-			$bboxdel = $('<button type="button" class="btn btn-default pull-right btn-sm" title="Delete a bounding box by selecting it."><i class="icon-remove"></i> BOX</button>');
+			$bboxdel = $('<button type="button" class="btn btn-default pull-right btn-sm" title="Delete a bounding box by selecting it."><i class="icon-remove-sign"></i> BOX</button>');
 		// Setup button action callbacks
         $bboxdraw.click(function (){
             toggleBBoxDraw($bboxdraw);
@@ -1244,19 +1233,23 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			bbLayer.events.on({
 				'beforefeaturemodified': function(evt) {
 					// Unused
-					//var bounds = evt.feature.geometry.getBounds().clone();
-					//console.log("\n\nSelected " + evt.feature.id + " for modification:");
-					//console.log("\tbounds: "+bounds+"\n");
 				},
 				'afterfeaturemodified': function(evt) {
 					console.log("Finished with " + evt.feature.id);
+					// Get new bounds and update filter array
+					var filterBounds = event.feature.geometry.getBounds().clone();
+					filterBounds.transform(baseMap.projection.mercator, baseMap.projection.geographic);
+					baseMap.filters.BBoxes[id] = filterBounds;
+					// Update view
+					baseMap.showSelectedImages(layername, false, layercolor);
 				},
 				'featureselected': function(evt) {
 					console.log("Feature: "+evt.feature.id+"selected");
-					console.log(evt);
-					console.log(evt.object);
-					console.log(evt.feature);
+					// Delete from layer
 					evt.object.removeFeatures( evt.object.getFeatureById(evt.feature.id) );
+					// Delete from filter list
+					delete baseMap.filters.BBoxes[id];
+					baseMap.showSelectedImages(layername, false, layercolor);
 				}
 			});
 			baseMap.mapInstance.addLayer(bbLayer);
@@ -1287,9 +1280,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 							var filterBounds = event.feature.geometry.getBounds().clone();
 							filterBounds.transform(baseMap.projection.mercator, baseMap.projection.geographic);
 							console.log( 'id: '+event.feature.id+', bounds: '+filterBounds);
-							// baseMap.filters.BBoxes[id] = filterBounds;
-// 														
-// 							baseMap.showSelectedImages(layername, false, layercolor);
+							baseMap.filters.BBoxes[id] = filterBounds;
+														
+							baseMap.showSelectedImages(layername, false, layercolor);
 							toggleBBoxDraw($bboxdraw);
 					    }
 					}
