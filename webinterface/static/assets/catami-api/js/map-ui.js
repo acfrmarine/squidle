@@ -1235,12 +1235,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			baseMap.mapInstance.addLayer(bbLayer);
 			
 			// A modifier to edit the bounding boxes
-			var bbmod = new OpenLayers.Control.ModifyFeature(bbLayer, 
-				{
-					mode: OpenLayers.Control.ModifyFeature.RESIZE | 
+			var bbmod = new OpenLayers.Control.ModifyFeature(bbLayer);
+			bbmod.mode = OpenLayers.Control.ModifyFeature.RESIZE | 
 						  OpenLayers.Control.ModifyFeature.ROTATE;
-				}
-			);
 			bbmod.id = 'bbmod';
         	
 			// A controller to draw bounding boxes
