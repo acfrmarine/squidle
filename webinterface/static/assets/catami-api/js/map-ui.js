@@ -505,6 +505,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                     }
 				}
 			});
+			showFeatureInfo.id = "showFeautreInfo";
 			this.mapInstance.addControl(showFeatureInfo);
 			showFeatureInfo.activate();
 		}
@@ -628,7 +629,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					}
                 }
             });
-
+			showFeatureInfo.id = "showFeatureInfo";
             baseMap.mapInstance.addControl(showFeatureInfo);
             showFeatureInfo.activate();
 		}
@@ -1203,7 +1204,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     this.addBBoxSelect = function ($container, $infocontainer,layername) {
 		console.log("Function addBBoxSelect");
         var $bboxdraw = $('<button type="button" class="btn btn-default pull-right btn-sm" title="Draw a bounding box around the images you would like to add to your selection."><i class="icon-crop"></i> BOX</button>'),
-			$bboxedit = $('<button type="button" class="btn btn-default pull-right btn-sm" >Edit BOX</button>');
+			$bboxedit = $('<button type="button" class="btn btn-default pull-right btn-sm" title="Edit a bounding box by selecting it."><i class="icon-edit"></i> BOX</button>');
 		// Setup button action callbacks
         $bboxdraw.click(function (){
             toggleBBoxDraw($bboxdraw);
@@ -1265,7 +1266,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         }
 
 		
-        $container.append("<br>Crop selected deployments:",$bboxdraw, $bboxedit);
+        $container.append("<br>Crop selected deployments:<br>",$bboxdraw, $bboxedit);
 		
 		console.log("END addBBoxSelect");
 		console.log("");
@@ -1294,10 +1295,12 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         if ($bbxedit.hasClass('active')) {
 			console.log("diactivated");
 			baseMap.mapInstance.getControl('bbmod').deactivate();
+			baseMap.mapInstance.getControl('showFeatureInfo').activate();
             $bbxedit.removeClass('active');
         }
         else {
 			console.log("activated");
+			baseMap.mapInstance.getControl('showFeatureInfo').deactivate();
 			baseMap.mapInstance.getControl('bbmod').activate();
             $bbxedit.addClass('active');
         }
