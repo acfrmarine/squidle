@@ -1238,20 +1238,16 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				},
 				'afterfeaturemodified': function(evt) {
 					console.log("Finished modifying " + evt.feature.id);
-
-					// TODO: toggle button!!!
-					
-					// Get new bounds and update filter array
 					var filterBounds = evt.feature.geometry.getBounds().clone();
 					filterBounds.transform(baseMap.projection.mercator, baseMap.projection.geographic);
 					baseMap.filters.BBoxes[evt.feature.id] = filterBounds;
 					// Update view
 					baseMap.showSelectedImages(layername, false, layercolor);
+					
+					toggleBBoxEdit();
 				},
 				'featureselected': function(evt) {
 					console.log("Feature: "+evt.feature.id+" selected");
-					// TODO: toggle button!!!
-					
 					// Perform this only when the bbdelete button is selected
 					if( baseMap.mapInstance.getControl('bbselect').active ) {
 						// Delete from filter list
@@ -1260,6 +1256,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 						evt.object.removeFeatures( evt.object.getFeatureById(evt.feature.id) );
 						// Update view
 						baseMap.showSelectedImages(layername, false, layercolor);
+						
+						toggleBBoxDel();
 					}
 				}
 			});
@@ -1294,7 +1292,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 							baseMap.filters.BBoxes[evt.feature.id] = filterBounds;
 														
 							baseMap.showSelectedImages(layername, false, layercolor);
-							toggleBBoxDraw($bboxdraw);
+							toggleBBoxDraw();
 					    }
 					}
 			    }
@@ -1316,58 +1314,50 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	/**
 	 * Toggles the bounding box draw button and deals with the controllers
 	 */
-    function toggleBBoxDraw ($bboxdraw, forcedeselect) {
-		console.log("Function toggleBBoxDraw");
+    function toggleBBoxDraw (forcedeselect) {
         forcedeselect = (( typeof forcedeselect !== 'undefined') ? forcedeselect : false);
         if ($('#bboxdraw').hasClass('active') || forcedeselect) {
-
 			baseMap.mapInstance.getControl('bbctrl').deactivate();
-            $bboxdraw.removeClass('active');
+            $('#bboxdraw').removeClass('active');
         }
         else {
-
 			baseMap.mapInstance.getControl('bbctrl').activate();
-            $bboxdraw.addClass('active');
+            $('#bboxdraw').addClass('active');
         }
-		console.log("END toggleBBoxDraw");
     }
 	/**
 	 * Toggles the bounding box edit button and deals with the controllers
 	 */
-	function toggleBBoxEdit($bbxedit) {
-		console.log("Function toggleBBoxEdit");
-        if ($bbxedit.hasClass('active')) {
+	function toggleBBoxEdit() {
+        if ($('#bbxedit').hasClass('active') ) {
 			baseMap.mapInstance.getControl('bbmod').deactivate();
 			baseMap.mapInstance.getControl('highlightCtrl').activate();
-            $bbxedit.removeClass('active');
+            $('#bbxedit').removeClass('active');
         }
         else {
 			// We need to deactivate the highlightCtrl before the bbmod control actually 
 			// 	gets activated. This is probably because it is also a vector layer!?
 			baseMap.mapInstance.getControl('highlightCtrl').deactivate();
 			baseMap.mapInstance.getControl('bbmod').activate();
-            $bbxedit.addClass('active');
+            $('#bbxedit').addClass('active');
         }
-		console.log("END toggleBBoxEdit");
 	}
 	/**
 	 * Toggles the bounding box delete button and deals with the controllers
 	 */
-	function toggleBBoxDel($bbxdel) {
-		console.log("Function toggleBBoxDel");
-        if ($bbxdel.hasClass('active')) {
+	function toggleBBoxDel() {
+        if ($('bbxdel').hasClass('active')) {
 			baseMap.mapInstance.getControl('bbselect').deactivate();
 			baseMap.mapInstance.getControl('highlightCtrl').activate();
-            $bbxdel.removeClass('active');
+            $('bbxdel').removeClass('active');
         }
         else {
 			// We need to deactivate the highlightCtrl before the bbmod control actually 
 			// 	gets activated. This is probably because it is also a vector layer!?
 			baseMap.mapInstance.getControl('highlightCtrl').deactivate();
 			baseMap.mapInstance.getControl('bbselect').activate();
-            $bbxdel.addClass('active');
+            $('bbxdel').addClass('active');
         }
-		console.log("END toggleBBoxDel");
 	}	
     // TODO: this is a bit ugly - remove code duplication
     /**
