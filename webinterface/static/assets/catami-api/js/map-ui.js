@@ -1206,7 +1206,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			$bboxedit = $('<button type="button" class="btn btn-default pull-right btn-sm" >Edit BOX</button>');
 		// Setup button action callbacks
         $bboxdraw.click(function (){
-            toggleBBoxSelect($bboxdraw);
+            toggleBBoxDraw($bboxdraw);
         });
         $bboxdraw.tooltip({
 				html: true, 
@@ -1272,7 +1272,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		console.log("");
     }
 
-    function toggleBBoxSelect ($bboxdraw, forcedeselect) {
+    function toggleBBoxDraw ($bboxdraw, forcedeselect) {
 		
 		console.log("Function toggleBBoxSelect");
         forcedeselect = (( typeof forcedeselect !== 'undefined') ? forcedeselect : false);
