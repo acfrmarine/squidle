@@ -361,11 +361,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					featurehighlighted : showDeploymentInfo
 				}
 			});
+			highlightCtrl.id = "highlightCtrl";
 			this.mapInstance.addControl(highlightCtrl);
 			highlightCtrl.activate();
 
-			var select = new OpenLayers.Control.SelectFeature(deploymentlayer);
-			mapInstance.addControl(select);
+			var selectCtrl = new OpenLayers.Control.SelectFeature(deploymentlayer);
+			selectCtrl.id = "selectCtrl";
+			mapInstance.addControl(selectCtrl);
 			select.activate();
             deploymentlayer.events.on({
 				"featureselected" : zoomToDeployments
@@ -601,7 +603,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 //            this.mapInstance.addControl(highlightLayer);
 //            highlightLayer.activate();
 
-            var showFeatureInfo = new OpenLayers.Control.WMSGetFeatureInfo({
+            var showFeatureInfoCtrl = new OpenLayers.Control.WMSGetFeatureInfo({
                 url: baseMap.wmsUrl,
                 title: 'ClickImg',
                 layers: baseMap.mapInstance.getLayersByName(selectlayername),
@@ -629,8 +631,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					}
                 }
             });
-			showFeatureInfo.id = "showFeatureInfo";
-            baseMap.mapInstance.addControl(showFeatureInfo);
+			showFeatureInfoCtrl.id = "showFeatureInfoCtrl";
+            baseMap.mapInstance.addControl(showFeatureInfoCtrl);
             showFeatureInfo.activate();
 		}
 
@@ -1297,12 +1299,12 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         if ($bbxedit.hasClass('active')) {
 			console.log("diactivated");
 			baseMap.mapInstance.getControl('bbmod').deactivate();
-			baseMap.mapInstance.getLayersByName('Deployment origins').setVisibility(true);
+			// baseMap.mapInstance.getLayersByName('Deployment origins').setVisibility(true);
             $bbxedit.removeClass('active');
         }
         else {
 			console.log("activated");
-			baseMap.mapInstance.getLayersByName('Deployment origins').setVisibility(false);
+			// baseMap.mapInstance.getLayersByName('Deployment origins').setVisibility(false);
 			baseMap.mapInstance.getControl('bbmod').activate();
             $bbxedit.addClass('active');
         }
