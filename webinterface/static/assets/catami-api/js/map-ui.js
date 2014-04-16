@@ -1299,12 +1299,12 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         if ($bbxedit.hasClass('active')) {
 			console.log("diactivated");
 			baseMap.mapInstance.getControl('bbmod').deactivate();
-			// baseMap.mapInstance.getLayersByName('Deployment origins').setVisibility(true);
+			baseMap.mapInstance.getControl('highlighCtrl').activate();
             $bbxedit.removeClass('active');
         }
         else {
 			console.log("activated");
-			// baseMap.mapInstance.getLayersByName('Deployment origins').setVisibility(false);
+			baseMap.mapInstance.getControl('highlighCtrl').deactivate();
 			baseMap.mapInstance.getControl('bbmod').activate();
             $bbxedit.addClass('active');
         }
