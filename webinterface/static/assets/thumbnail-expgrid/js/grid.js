@@ -978,7 +978,7 @@ function Grid (grid, globalstate) {
 
     function showPointModifiers($point,$menu) {
         $menu.html('');
-        var $modifiers = $('<select multiple="multiple" id="id_deployment_ids" name="deployment_ids" size="3" style="width:150px"></select>');
+        var $modifiers = $('<select multiple="multiple" id="id_deployment_ids" name="deployment_ids" size="10" style="width:150px"></select>');
         var $submit = '';
         $.ajax({
             dataType: "json",
@@ -991,9 +991,22 @@ function Grid (grid, globalstate) {
                     }
                     $submit = $('<button style="width:150px">Update</button>');
                     $submit.click(function() {
-                        show_note('Not implemented yet','This feature has not been implemented yet. Please stand by.','error',true);
+                        var modifiers_arr = [], modifier_names = [];
+                        $modifiers.children("option").filter(":selected").each(function (i, o) {
+                            modifiers_arr.push($(o).val());
+                            modifier_names.push($(o).text());
+                            //modifiers_arr = $(this).val();
+                        });
+//                        console.log(modifiers_arr);
+//                        console.log(modifier_names);
+//                        console.log($point.data('resource_uri'));
+
+                        //console.log($point.data());
+                        //updateModifiers($point.data('resource_uri'), modifiers_arr);
+                        labelSelectedPoints(null, '', '', modifiers_arr, modifier_names);
                         $menu.remove();
                     });
+                    selectAnnotationPoint($point[0],true);
                 }
                 else {
                     $modifiers.append('<OPTION VALUE="">No modifiers found');
@@ -1002,8 +1015,6 @@ function Grid (grid, globalstate) {
         });
         $menu.append($modifiers,$('<br>'),$submit);
     }
-    // ?format=json
-
 
 
 

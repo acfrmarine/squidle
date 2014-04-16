@@ -169,7 +169,7 @@ function AnnotationAPI (usrsettings) {
             label_name: obj.label_name,
             label_colour:obj.label_colour,
             level: obj.level,
-            qualifiers: obj.qualifiers,
+            qualifiers: obj.qualifier_names,
             x: obj.x,
             y: obj.y,
             resource_uri: obj.resource_uri,
@@ -203,17 +203,18 @@ function selectAnnotationPoint(item, select) {
     var selectpoint = (typeof select !== 'undefined') ? select : ! $(item).hasClass('apcol-selected');
 
     if (selectpoint) {
-        $(item).removeClass (function (index, css) {
-            return (css.match (/\bapcol-\S+/g) || []).join(' ');
-        }).addClass('apcol-selected');
-        $(item).addClass('icon-bullseye');
+//        $(item).removeClass (function (index, css) {
+//            return (css.match (/\bapcol-\S+/g) || []).join(' ');
+//        }).addClass('apcol-selected');
+//        $(item).addClass('icon-bullseye');
+        $(item).addClass('icon-bullseye apcol-selected');
         $('#antag-search').focus();
         //$(item).css('color', '#FF0000');
         $(item).css({"font-size": "22px", "margin": "-11px"});
     } else { // deselect point
-        var apcol_class = ($(item).data().scored) ? 'apcol-scored' : 'apcol-default';
-        $(item).removeClass ('apcol-selected icon-bullseye').addClass(apcol_class);
-        //$(item).css('color', $(item).data().label_colour);
+//        var apcol_class = ($(item).data().scored) ? 'apcol-scored' : 'apcol-default';
+//        $(item).removeClass('apcol-selected icon-bullseye').addClass(apcol_class);
+        $(item).removeClass('apcol-selected icon-bullseye');
         $(item).animate({"font-size": "14px", "margin": "-7px"}, 300);
     }
     /*
@@ -275,26 +276,48 @@ function setAnnotationPoints() {
 
         //console.log('OFFSET: '+imgoffsettop+', '+imgoffsetleft);
         $.each(pointList, function(i,thispoint) {
-            var apcol_class =  (thispoint.scored) ? 'apcol-scored icon-circle' : 'apcol-default icon-circle-blank',
-                ap_title = thispoint.label_name,
-                top = Math.round(imgoffsettop+thispoint.y*imgheight),
+            //var apcol_class =  (thispoint.scored) ? 'apcol-scored icon-circle' : 'apcol-default icon-circle-blank';
+            var top = Math.round(imgoffsettop+thispoint.y*imgheight),
                 left = Math.round(imgoffsetleft+thispoint.x*imgwidth);
 
-            var $anpt = $('<i id="'+thispoint.cssid+'" class="annotation-point '+apcol_class+'" '+
-                'style="top:'+top+'px; left:'+left+'px; color:#'+thispoint.label_colour+';" '+
-                'data-title="'+ap_title+'"></i>');
-            $mainimg.after($anpt.fadeIn(1 + Math.floor(Math.random() * 1000)));
-            $anpt.mouseenter(function(){mouseoverAnPt(this);});
-            $anpt.mouseleave(function(){mouseoutAnPt(this);});
-            $anpt.click(function(){selectAnnotationPoint(this);})
-            $anpt.data({scored:thispoint.scored,
-                label:thispoint.label,
-                label_name:thispoint.label_name,
-                label_colour:'#'+thispoint.label_colour,
-                resource_uri:thispoint.resource_uri,
-                position:{x:thispoint.x , y:thispoint.y}});
+//            var $anpt = $('<i id="'+thispoint.cssid+'" class="annotation-point '+apcol_class+'" '+
+//                'style="top:'+top+'px; left:'+left+'px; color:#'+thispoint.label_colour+';"></i>');
+//            $anpt.mouseenter(function(){mouseoverAnPt(this);});
+//            $anpt.mouseleave(function(){mouseoutAnPt(this);});
+//            $anpt.click(function(){selectAnnotationPoint(this);})
+//            $anpt.data({scored:thispoint.scored,
+//                label:thispoint.label,
+//                label_name:thispoint.label_name,
+//                label_colour:'#'+thispoint.label_colour,
+//                resource_uri:thispoint.resource_uri,
+//                qualifiers : thispoint.qualifiers,
+//                position:{x:thispoint.x , y:thispoint.y},
+//                imgposition: {top:top, left:left}});
 
-            if (thispoint.scored) $anpt.tooltip({placement: 'right', container: 'body'});
+            var thispointdata = {scored: thispoint.scored,
+                label: thispoint.label,
+                label_name: thispoint.label_name,
+                label_colour: '#' + thispoint.label_colour,
+                resource_uri: thispoint.resource_uri,
+                qualifiers: thispoint.qualifiers,
+                position: {x: thispoint.x, y: thispoint.y},
+                imgposition: {top: top, left: left}};
+
+            var $anpt = updatePoint(thispointdata);
+
+            $mainimg.after($anpt.fadeIn(1 + Math.floor(Math.random() * 1000)));
+            // tooltip function (title and modifiers)
+//            $anpt.tooltip({placement: 'right',
+//                container: 'body',
+//                html: true,
+//                title: function() {
+//                    var title = $(this).data('label_name'); // add label name
+//                    $.each($(this).data('qualifiers'), function (i, l) { // add list of modifiers
+//                        title += "<br>-"+l;
+//                    });
+//                    return title;
+//                }
+//            });
 
         });
         showThmAnnotationData($activethm.parent('li.thm'), pointList.length);
@@ -304,6 +327,50 @@ function setAnnotationPoints() {
     //hideImgLoader();
 }
 
+/**
+ * Create or update point labels
+ *
+ * @param thispoint : either a dictionary object containing fields to create a new point, or an existing jquery object
+ * with all the data associated with the existing point.
+ * @returns {*|jQuery|HTMLElement}
+ */
+function updatePoint(thispoint) {
+
+    if (thispoint instanceof jQuery) { // if point is existing jqery object (already initialised point)
+        var $anpt = thispoint;
+        thispoint = $anpt.data();
+    }
+    else { // if initial dictionary, create annotation point
+        var $anpt = $('<i id="' + thispoint.cssid + '" style="top:' + thispoint.imgposition.top + 'px; left:' + thispoint.imgposition.left + 'px;"></i>');
+        $anpt.data(thispoint);
+        $anpt.addClass("annotation-point");
+        $anpt.mouseenter(function () {
+            mouseoverAnPt(this);
+        });
+        $anpt.mouseleave(function () {
+            mouseoutAnPt(this);
+        });
+        $anpt.click(function () {
+            selectAnnotationPoint(this);
+        });
+        $anpt.tooltip({placement: 'right',
+            container: $anpt,
+            html: true,
+            title: function () {
+                var title = $(this).data('label_name'); // add label name
+                $.each($(this).data('qualifiers'), function (i, l) { // add list of modifiers
+                    title += "<br>-" + l;
+                });
+                return title;
+            }
+        });
+    }
+    if (thispoint.scored) $anpt.removeClass('icon-circle-blank').addClass('icon-circle');
+    else $anpt.removeClass('icon-circle').addClass('icon-circle-blank');
+    $anpt.css('color', thispoint.label_colour);
+
+    return $anpt;
+}
 
 function showImgLoader() {
     //if (!$('.og-loading').data().hasOwnProperty('active')) $('.og-loading').data().active=0;
@@ -322,18 +389,27 @@ function hideImgLoader() {
  * @param label
  * @param value
  */
-function labelSelectedPoints(label, label_name, label_colour) {
+function labelSelectedPoints(label, label_name, label_colour, qualifiers, qualifier_names) {
     //'{ "objects": [{"resource_uri": "/api/dev/point_annotation/2/", "label": "/api/dev/annotation_code/273/"}]}'
+    qualifiers = (typeof qualifiers !== 'undefined') ? qualifiers : null;
+    qualifier_names = (typeof qualifier_names !== 'undefined') ? qualifier_names : [];
     var patchdata = {objects: []};
     //var selectedinds = [];
     var unlabeled = '/api/dev/annotation_code/1/';
     var labelclass = 'apcol-default';
     var $activethm = $('.og-active-thm');
     $('.apcol-selected').each(function () {
-        patchdata.objects.push({resource_uri: $(this).data().resource_uri, label: label});
+        if (label != null || qualifiers != null) {
+            var newpointlabel = {resource_uri: $(this).data().resource_uri};
+            if (label != null) newpointlabel.label = label;
+            if (qualifiers != null) newpointlabel.qualifiers = qualifiers;
+            patchdata.objects.push(newpointlabel);
+        }
     });
     if (patchdata.objects.length > 0) {
         showImgLoader();
+        console.log(patchdata);
+        console.log(JSON.stringify(patchdata));
         $.ajax({
             url: '/api/dev/point_annotation/',
             type: 'PATCH',
@@ -342,27 +418,31 @@ function labelSelectedPoints(label, label_name, label_colour) {
             data: JSON.stringify(patchdata),
             success: function(response, textStatus, jqXhr) {
                 $('.apcol-selected').each(function () {
-                    if (label != unlabeled && $(this).data().label == unlabeled) $activethm.data().annotation_labelled_count ++;
-                    else if (label == unlabeled && $(this).data().label != unlabeled ) $activethm.data().annotation_labelled_count --;
 
-                    $(this).data().scored = true;
-                    $(this).data().label = label;
-                    $(this).data().label_name = label_name;
-                    $(this).data().label_colour = label_colour;
 
-                    $(this).tooltip('destroy');
-                    $(this).animate({"font-size": "30px", "margin": "-15px"}, 100).animate({"font-size": "14px", "margin": "-7px"}, 400);
-                    $(this).attr({'data-title':label_name,title:label_name});
+                    if (label != null) {
+                        // Update label counts
+                        if (label != unlabeled && $(this).data().label == unlabeled) $activethm.data().annotation_labelled_count++;
+                        else if (label == unlabeled && $(this).data().label != unlabeled) $activethm.data().annotation_labelled_count--;
 
-                    if (label != unlabeled) {
-                        $(this).tooltip({placement: 'right', container:'body'});
-                        labelclass = 'apcol-scored';
-                        $(this).removeClass('icon-circle-blank').addClass('icon-circle');
-                    } else {
-                        $(this).removeClass('icon-circle').addClass('icon-circle-blank');
+                        // Update label meta data
+                        $(this).data().label = label;
+                        $(this).data().label_name = label_name;
+                        $(this).data().label_colour = label_colour;
+                        $(this).data().scored = ($(this).data().label != unlabeled);
                     }
-                    $(this).removeClass ('apcol-selected icon-bullseye').addClass(labelclass);
-                    $(this).css('color',label_colour)
+
+                    if (qualifiers != null) $(this).data().qualifiers = qualifier_names;
+
+                    // update point appearance
+                    updatePoint($(this));
+
+                    // unselect point
+                    selectAnnotationPoint(this, false);
+
+//                    $(this).animate({"font-size": "30px", "margin": "-15px"}, 100).animate({"font-size": "14px", "margin": "-7px"}, 400);
+//                    $(this).removeClass('apcol-selected icon-bullseye');
+
                 });
                 updateTagTally();
                 showThmAnnotationData($activethm.parent('li.thm'));
@@ -428,14 +508,28 @@ function labelSelectedPoints(label, label_name, label_colour) {
     */
 }
 
+
+// TODO: this is a useful jquery plugin for filtering on data value and should be moved somewhere else
+$.fn.filterData = function (key, value) {
+    return this.filter(function () {
+        return $(this).data(key) == value;
+    });
+};
+
 function mouseoverTagTally(title) {
     //$('[data-original-title="' + title + '"]').tooltip('show');
-    $('.annotation-point[data-title="' + title + '"]').css({"font-size" : "+=16px", "margin":"-=8px"});
+//    $('.annotation-point[data-label_name="' + title + '"]').css({"font-size" : "+=16px", "margin":"-=8px"});
+    $('.annotation-point').filterData('label_name',title).css({"font-size": "+=16px", "margin": "-=8px"});
 }
 function mouseoutTagTally(title) {
     //$('[data-original-title="' + title + '"]').tooltip('hide');
 //    $('.annotation-point[data-title="' + title + '"]').animate({"font-size": "-=10px", "margin": "+=5px"}, 400);
-    $('.annotation-point[data-title="' + title + '"]').css({"font-size": "-=16px", "margin": "+=8px"});
+    //$('.annotation-point[data-label_name="' + title + '"]').css({"font-size": "-=16px", "margin": "+=8px"});
+    //$('.annotation-point').filterData('label_name', title).css({"font-size": "-=16px", "margin": "+=8px"});
+    $('.annotation-point').filterData('label_name', title).each(
+        function(i,thispoint) {
+            mouseoutAnPt(thispoint)
+        });
 }
 
 function updateTagTally() {

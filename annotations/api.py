@@ -250,6 +250,9 @@ class PointAnnotationResource(ModelResource):
         authorization = PointAnnotationAuthorization()
         always_return_data = True
 
+
+
+
     def obj_get_list(self, bundle, **kwargs):
         """Overrides the given method from ModelResource.
 
@@ -441,4 +444,9 @@ class PointAnnotationResource(ModelResource):
         bundle.data['label_name'] = bundle.obj.label.code_name
         bundle.data['label_colour'] = bundle.obj.label.point_colour
         bundle.data['label_cpc_code'] = bundle.obj.label.cpc_code
+        outlist = []
+        for m in bundle.obj.qualifiers.all():
+            outlist.append(m.modifier_name)
+
+        bundle.data['qualifier_names'] = outlist
         return bundle
