@@ -1250,7 +1250,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					            new OpenLayers.Geometry.Point(bounds[0],bounds[1]), 
 					            {some:'data'},
 					            {externalGraphic: 'http://www.gatesms.eu/img/loga/java.png', graphicHeight: 30,graphicWidth: 30});
-								evt.object.addFeatures([feature]);
+					evt.object.addFeatures([feature]);
+					console.log('new feature: '+feature.geometry.getBounds());
 				},
 				'afterfeaturemodified': function(evt) {
 					console.log("Finished with " + evt.feature.id);
