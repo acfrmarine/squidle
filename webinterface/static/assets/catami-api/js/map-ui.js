@@ -1062,7 +1062,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		$btn.tooltip("show");
 		
 		// Add to containers
-        $container.append("<div></div><br>").append(filtertitle, "<br>", $info, params.unit, $slider);
+        $container.append($("<div></div>").append(filtertitle, "<br>", $info, params.unit, $slider));
         $($slider.data('infoid')).html($slider.slider("values", 0) +' - '+  $slider.slider("values", 1));
 		$infocontainer.append($btn);
 
@@ -1188,7 +1188,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			
 			// Add to containers
             var $filtcont = $('<span class="pull-right"></span>').append($fromdate, ' to ', $todate);
-            $container.append("<div></div><br>").append(filtertitle, "<br>", $filtcont);
+            $container.append($("<div></div>").append(filtertitle, "<br>", $filtcont));
 			$infocontainer.append($btn);
     }
 	/**
@@ -1304,7 +1304,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         }
 
 		
-        $container.append("<div></div><br>").append( "Crop box tools:<br>", $bboxdel, "&nbsp;", $bboxedit, "&nbsp;", $bboxdraw );
+        $container.append($("<div>Crop box tools:<br></div>").append( $bboxdel, $bboxedit, $bboxdraw ));
 		
 		console.log("END addBBoxSelect");
 		console.log("");
