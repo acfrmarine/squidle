@@ -1246,12 +1246,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					var bounds = evt.feature.geometry.getBounds().clone();
 					console.log("\n\nSelected " + evt.feature.id + " for modification:");
 					console.log("\tbounds: "+bounds+"\n");
-					var feature = new OpenLayers.Feature.Vector(
-					            new OpenLayers.Geometry.Point(bounds[0],bounds[1]), 
-					            {some:'data'},
-					            {externalGraphic: 'http://www.gatesms.eu/img/loga/java.png', graphicHeight: 30,graphicWidth: 30});
-					evt.object.addFeatures([feature]);
-					console.log('new feature: '+feature.geometry.getBounds());
+					if ($bbxdel.hasClass('active')) {
+						console.log('We should delete');
+					}
 				},
 				'afterfeaturemodified': function(evt) {
 					console.log("Finished with " + evt.feature.id);
@@ -1300,7 +1297,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         }
 
 		
-        $container.append("<br>Crop selected deployments:<br>", $bboxedit, "&nbsp;", $bboxdraw);
+        $container.append("<br>Crop selected deployments:<br>", $bboxdel, "&nbsp;", $bboxedit, "&nbsp;", $bboxdraw);
 		
 		console.log("END addBBoxSelect");
 		console.log("");
@@ -1350,7 +1347,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	function toggleBBoxDel($bbxdel) {
 		console.log("Function toggleBBoxDel");
         if ($bbxdel.hasClass('active')) {
-			baseMap.mapInstance.getControl('bbselect').deactivate();
+			baseMap.mapInstance.getControl('bbmod').deactivate();
 			baseMap.mapInstance.getControl('highlightCtrl').activate();
             $bbxdel.removeClass('active');
         }
@@ -1358,7 +1355,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			// We need to deactivate the highlightCtrl before the bbmod control actually 
 			// 	gets activated. This is probably because it is also a vector layer!?
 			baseMap.mapInstance.getControl('highlightCtrl').deactivate();
-			baseMap.mapInstance.getControl('bbselect').activate();
+			baseMap.mapInstance.getControl('bbmod').activate();
             $bbxdel.addClass('active');
         }
 		console.log("END toggleBBoxDel");
