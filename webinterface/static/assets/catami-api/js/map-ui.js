@@ -1187,7 +1187,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			$btn.tooltip("show");
 			
 			// Add to containers
-            var $filtcont = $('<span class="pull-right"></span>').append($fromdate, ' to ', $todate);
+            var $filtcont = $('<span></span>').append($fromdate, ' to ', $todate);
             $container.append($("<div></div>").append(filtertitle, "<br>", $filtcont));
 			$infocontainer.append($btn);
     }
@@ -1198,9 +1198,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 */
     this.addBBoxSelect = function ($container, $infocontainer,layername) {
 		console.log("Function addBBoxSelect");
-        var $bboxdraw = $('<button type="button" id="bboxdraw" class="btn btn-default pull-right btn-sm" title="Draw a bounding box around the images you would like to add to your selection."><i class="icon-crop"></i> Create</button>'),
-			$bboxedit = $('<button type="button" id="bboxedit" class="btn btn-default pull-right btn-sm" title="Edit a bounding box by selecting it."><i class="icon-edit"></i> Edit</button>'),
-			$bboxdel  = $('<button type="button" id="bboxdel"  class="btn btn-default pull-right btn-sm" title="Delete a bounding box by selecting it."><i class="icon-remove-sign"></i> Delete</button>');
+        var $bboxdraw = $('<button type="button" id="bboxdraw" class="btn btn-default btn-sm" title="Draw a bounding box around the images you would like to add to your selection."><i class="icon-crop"></i> Create</button>'),
+			$bboxedit = $('<button type="button" id="bboxedit" class="btn btn-default btn-sm" title="Edit a bounding box by selecting it."><i class="icon-edit"></i> Edit</button>'),
+			$bboxdel  = $('<button type="button" id="bboxdel"  class="btn btn-default btn-sm" title="Delete a bounding box by selecting it."><i class="icon-remove-sign"></i> Delete</button>');
 		// Setup button action callbacks
         $bboxdraw.click(function (){
             toggleBBoxDraw();
@@ -1304,7 +1304,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         }
 
 		
-        $container.append($("<div>Crop box tools:<br></div>").append( $bboxdel, $bboxedit, $bboxdraw ));
+        $container.append($("<div>Crop box tools:<br></div>").append( $bboxdraw, $bboxedit, $bboxdel ));
 		
 		console.log("END addBBoxSelect");
 		console.log("");
