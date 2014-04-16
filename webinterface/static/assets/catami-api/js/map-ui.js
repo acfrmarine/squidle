@@ -1239,9 +1239,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				'afterfeaturemodified': function(evt) {
 					console.log("Finished modifying " + evt.feature.id);
 					// Get new bounds and update filter array
-					var filterBounds = event.feature.geometry.getBounds().clone();
+					var filterBounds = evt.feature.geometry.getBounds().clone();
 					filterBounds.transform(baseMap.projection.mercator, baseMap.projection.geographic);
-					baseMap.filters.BBoxes[event.feature.id] = filterBounds;
+					baseMap.filters.BBoxes[evt.feature.id] = filterBounds;
 					// Update view
 					baseMap.showSelectedImages(layername, false, layercolor);
 				},
@@ -1250,7 +1250,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					// Perform this only when the bbdelete button is selected
 					if( baseMap.mapInstance.getControl('bbselect').active ) {
 						// Delete from filter list
-						delete baseMap.filters.BBoxes[event.feature.id];
+						delete baseMap.filters.BBoxes[evt.feature.id];
 						// Delete from layer
 						evt.object.removeFeatures( evt.object.getFeatureById(evt.feature.id) );
 						// Update view
@@ -1282,11 +1282,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					    irregular: true
 					},
 					eventListeners: {
-					    "featureadded": function (event) {
-							var filterBounds = event.feature.geometry.getBounds().clone();
+					    "featureadded": function (evt) {
+							var filterBounds = evt.feature.geometry.getBounds().clone();
 							filterBounds.transform(baseMap.projection.mercator, baseMap.projection.geographic);
-							console.log( 'id: '+event.feature.id+', bounds: '+filterBounds);
-							baseMap.filters.BBoxes[event.feature.id] = filterBounds;
+							console.log( 'id: '+evt.feature.id+', bounds: '+filterBounds);
+							baseMap.filters.BBoxes[evt.feature.id] = filterBounds;
 														
 							baseMap.showSelectedImages(layername, false, layercolor);
 							toggleBBoxDraw($bboxdraw);
