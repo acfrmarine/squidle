@@ -1249,7 +1249,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				'featureselected': function(evt) {
 					console.log("Feature: "+evt.feature.id+" selected");
 					// Perform this only when the bbdelete button is selected
-					if( baseMap.mapInstance.getControl('bbxdelCtrl').active ) {
+					if( baseMap.mapInstance.getControl('bboxdelCtrl').active ) {
 						// Delete from filter list
 						delete baseMap.filters.BBoxes[evt.feature.id];
 						// Delete from layer
@@ -1346,17 +1346,17 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * Toggles the bounding box delete button and deals with the controllers
 	 */
 	function toggleBBoxDel() {
-        if ($('bboxdel').hasClass('active')) {
+        if ($('#bboxdel').hasClass('active')) {
 			baseMap.mapInstance.getControl('bboxdelCtrl').deactivate();
 			baseMap.mapInstance.getControl('highlightCtrl').activate();
-            $('bboxdel').removeClass('active');
+            $('#bboxdel').removeClass('active');
         }
         else {
 			// We need to deactivate the highlightCtrl before the bbmod control actually 
 			// 	gets activated. This is probably because it is also a vector layer!?
 			baseMap.mapInstance.getControl('highlightCtrl').deactivate();
 			baseMap.mapInstance.getControl('bboxdelCtrl').activate();
-            $('bboxdel').addClass('active');
+            $('#bboxdel').addClass('active');
         }
 	}	
     // TODO: this is a bit ugly - remove code duplication
