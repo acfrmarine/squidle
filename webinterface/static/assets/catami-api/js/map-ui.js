@@ -1248,7 +1248,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					console.log("\tbounds: "+bounds+"\n");
 					var feature = new OpenLayers.Feature.Vector(
 					            new OpenLayers.Geometry.Point(0,0)
-					            .transform(projWGS84, map.getProjectionObject()), 
+					            .transform(baseMap.projection.mercator, baseMap.projection.geographic), 
 					            {some:'data'},
 					            {externalGraphic: 'http://www.gatesms.eu/img/loga/java.png', graphicHeight: 30,graphicWidth: 30});
 								evt.object.addFeatures([feature]);
