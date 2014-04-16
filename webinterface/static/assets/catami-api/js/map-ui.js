@@ -1198,9 +1198,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 */
     this.addBBoxSelect = function ($container, $infocontainer,layername) {
 		console.log("Function addBBoxSelect");
-        var $bboxdraw = $('<button type="button" class="btn btn-default pull-right btn-sm" title="Draw a bounding box around the images you would like to add to your selection."><i class="icon-crop"></i> BOX</button>'),
-			$bboxedit = $('<button type="button" class="btn btn-default pull-right btn-sm" title="Edit a bounding box by selecting it."><i class="icon-edit"></i> BOX</button>'),
-			$bboxdel = $('<button type="button" class="btn btn-default pull-right btn-sm" title="Delete a bounding box by selecting it."><i class="icon-remove-sign"></i> BOX</button>');
+        var $bboxdraw = $('<button type="button" id="bboxdraw" class="btn btn-default pull-right btn-sm" title="Draw a bounding box around the images you would like to add to your selection."><i class="icon-crop"></i> Create</button>'),
+			$bboxedit = $('<button type="button" id="bboxedit" class="btn btn-default pull-right btn-sm" title="Edit a bounding box by selecting it."><i class="icon-edit"></i> Edit</button>'),
+			$bboxdel = $('<button type="button" id="bboxdel" class="btn btn-default pull-right btn-sm" title="Delete a bounding box by selecting it."><i class="icon-remove-sign"></i> Delete</button>');
 		// Setup button action callbacks
         $bboxdraw.click(function (){
             toggleBBoxDraw($bboxdraw);
@@ -1238,6 +1238,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				},
 				'afterfeaturemodified': function(evt) {
 					console.log("Finished modifying " + evt.feature.id);
+
+					// TODO: toggle button!!!
+					
 					// Get new bounds and update filter array
 					var filterBounds = evt.feature.geometry.getBounds().clone();
 					filterBounds.transform(baseMap.projection.mercator, baseMap.projection.geographic);
@@ -1247,6 +1250,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				},
 				'featureselected': function(evt) {
 					console.log("Feature: "+evt.feature.id+" selected");
+					// TODO: toggle button!!!
+					
 					// Perform this only when the bbdelete button is selected
 					if( baseMap.mapInstance.getControl('bbselect').active ) {
 						// Delete from filter list
@@ -1301,7 +1306,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         }
 
 		
-        $container.append("<br>Crop selected deployments:<br>", $bboxdel, "&nbsp;", $bboxedit, "&nbsp;", $bboxdraw);
+        $container.append("<br>Crop tools:<br>", $bboxdel, "&nbsp;", $bboxedit, "&nbsp;", $bboxdraw);
 		
 		console.log("END addBBoxSelect");
 		console.log("");
@@ -1314,7 +1319,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     function toggleBBoxDraw ($bboxdraw, forcedeselect) {
 		console.log("Function toggleBBoxDraw");
         forcedeselect = (( typeof forcedeselect !== 'undefined') ? forcedeselect : false);
-        if ($bboxdraw.hasClass('active') || forcedeselect) {
+        if ($('#bboxdraw').hasClass('active') || forcedeselect) {
 
 			baseMap.mapInstance.getControl('bbctrl').deactivate();
             $bboxdraw.removeClass('active');
