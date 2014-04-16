@@ -1206,7 +1206,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			$bboxedit = $('<button type="button" class="btn btn-default pull-right btn-sm" >Edit BOX</button>');
 		// Setup button action callbacks
         $bboxdraw.click(function (){
-            toggleBBoxSelect(bbctrl, $bboxdraw);
+            toggleBBoxSelect($bboxdraw);
         });
         $bboxdraw.tooltip({
 				html: true, 
@@ -1249,14 +1249,10 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					    "featureadded": function (event) {
 							var filterBounds = event.feature.geometry.getBounds().clone();
 							filterBounds.transform(baseMap.projection.mercator, baseMap.projection.geographic);
-							baseMap.filters.BBoxes.push(filterBounds);
-							
-							
-							
-							baseMap.mapInstance.getControl('bbctrl').deactivate();
-							baseMap.mapInstance.getControl('bbmod').activate();
-							
-							baseMap.showSelectedImages(layername, false, layercolor);
+							// baseMap.filters.BBoxes.push(filterBounds);
+// 														
+// 							baseMap.showSelectedImages(layername, false, layercolor);
+							toggleBBoxDraw(null,$bboxdraw);
 					    }
 					}
 			    }
@@ -1276,7 +1272,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		console.log("");
     }
 
-    function toggleBBoxSelect (bbctrl, $bboxdraw, forcedeselect) {
+    function toggleBBoxSelect ($bboxdraw, forcedeselect) {
 		
 		console.log("Function toggleBBoxSelect");
         forcedeselect = (( typeof forcedeselect !== 'undefined') ? forcedeselect : false);
@@ -1290,19 +1286,22 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			baseMap.mapInstance.getControl('bbctrl').activate();
             $bboxdraw.addClass('active');
         }
+		console.log("END toggleBBoxSelect");
     }
 	
 	function toggleBBoxEdit($bbxedit) {
+		console.log("Function toggleBBoxEdit");
         if ($bbxedit.hasClass('active')) {
-
+			console.log("diactivated");
 			baseMap.mapInstance.getControl('bbmod').deactivate();
             $bbxedit.removeClass('active');
         }
         else {
-
+			console.log("activated");
 			baseMap.mapInstance.getControl('bbmod').activate();
             $bbxedit.addClass('active');
         }
+		console.log("END toggleBBoxEdit");
 	}
 	
     // TODO: this is a bit ugly - remove code duplication
