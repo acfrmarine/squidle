@@ -1299,7 +1299,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			);
     		bbdrawCtrl.id = "bbdrawCtrl";
 			
-			baseMap.mapInstance.addControls([bbdrawCtl, bbeditCtrl, bbdelCtrl]);
+			baseMap.mapInstance.addControls([bbdrawCtrl, bbeditCtrl, bbdelCtrl]);
 			
         }
 
