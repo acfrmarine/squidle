@@ -1246,12 +1246,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					var bounds = evt.feature.geometry.getBounds().clone();
 					console.log("\n\nSelected " + evt.feature.id + " for modification:");
 					console.log("\tbounds: "+bounds+"\n");
-					if ($bbxdel.hasClass('active')) {
-						console.log('We should delete');
-					}
+					
 				},
 				'afterfeaturemodified': function(evt) {
 					console.log("Finished with " + evt.feature.id);
+				},
+				'featureselected': function(evt) {
+					console.log("Feature: "+evt.feature.id+"selected");
 				}
 			});
 			baseMap.mapInstance.addLayer(bbLayer);
@@ -1462,12 +1463,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         $('#new-collection-modal').modal('show');
     }
 
-
-	this.GetElementInsideContainer = function(containerID, childID) {
-	    var elm = document.getElementById(childID);
-	    var parent = elm ? elm.parentNode : {};
-	    return (parent.id && parent.id === containerID) ? elm : {};
-	}
 	
 	console.log("END BaseMap");
 }
