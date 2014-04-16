@@ -368,7 +368,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			var selectCtrl = new OpenLayers.Control.SelectFeature(deploymentlayer);
 			selectCtrl.id = "selectCtrl";
 			mapInstance.addControl(selectCtrl);
-			select.activate();
+			selectCtrl.activate();
             deploymentlayer.events.on({
 				"featureselected" : zoomToDeployments
 			});
