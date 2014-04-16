@@ -1243,15 +1243,17 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			var bbLayer = new OpenLayers.Layer.Vector(layernameBoundingBoxes);
 			bbLayer.events.on({
 				'beforefeaturemodified': function(evt) {
-					var bounds = evt.feature.geometry.getBounds().clone();
-					console.log("\n\nSelected " + evt.feature.id + " for modification:");
-					console.log("\tbounds: "+bounds+"\n");
+					// Unused
+					//var bounds = evt.feature.geometry.getBounds().clone();
+					//console.log("\n\nSelected " + evt.feature.id + " for modification:");
+					//console.log("\tbounds: "+bounds+"\n");
 				},
 				'afterfeaturemodified': function(evt) {
 					console.log("Finished with " + evt.feature.id);
 				},
 				'featureselected': function(evt) {
 					console.log("Feature: "+evt.feature.id+"selected");
+					evt.object.removeFeature( evt.object.getFeatureById(evt.feature.id) );
 				}
 			});
 			baseMap.mapInstance.addLayer(bbLayer);
