@@ -1269,7 +1269,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         }
 
 		
-        $container.append("<br>Crop selected deployments:",$bboxbtn, $bboxedit);
+        $container.append("<br>Crop selected deployments:",$bboxdraw, $bboxedit);
 		
 		console.log("END addBBoxSelect");
 		console.log("");
