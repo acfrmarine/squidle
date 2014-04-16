@@ -1256,7 +1256,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					console.log(evt);
 					console.log(evt.object);
 					console.log(evt.feature);
-					// evt.object.removeFeature( evt.object.getFeatureById(evt.feature.id) );
+					evt.object.removeFeatures( evt.object.getFeatureById(evt.feature.id) );
 				}
 			});
 			baseMap.mapInstance.addLayer(bbLayer);
