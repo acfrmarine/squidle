@@ -1304,7 +1304,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         }
 
 		
-        $container.append("<div></div><br>").append( "Crop box tools:<br>", $bboxdel, "&nbsp;", $bboxedit, "&nbsp;", $bboxdraw, );
+        $container.append("<div></div><br>").append( "Crop box tools:<br>", $bboxdel, "&nbsp;", $bboxedit, "&nbsp;", $bboxdraw );
 		
 		console.log("END addBBoxSelect");
 		console.log("");
