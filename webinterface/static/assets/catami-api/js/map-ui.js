@@ -740,11 +740,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         }
 
         // get BBox filters
-        for (var i = 0; i < this.filters.BBoxes.length; i++) {
+        // for (var i = 0; i < this.filters.BBoxes.length; i++) {
+		for( var key in this.filters.BBoxes) {
+			
             bboxfilters.push(new OpenLayers.Filter.Spatial({
                 type: OpenLayers.Filter.Spatial.BBOX,
                 property: "position",
-                value: this.filters.BBoxes[i]
+                value: this.filters.BBoxes[key]
             }));
             //console.log(bboxes);
         }
