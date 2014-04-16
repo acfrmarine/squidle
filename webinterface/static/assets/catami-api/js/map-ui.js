@@ -1237,7 +1237,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					// Unused
 				},
 				'afterfeaturemodified': function(evt) {
-					console.log("Finished with " + evt.feature.id);
+					console.log("Finished modifying " + evt.feature.id);
 					// Get new bounds and update filter array
 					var filterBounds = event.feature.geometry.getBounds().clone();
 					filterBounds.transform(baseMap.projection.mercator, baseMap.projection.geographic);
@@ -1246,12 +1246,16 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					baseMap.showSelectedImages(layername, false, layercolor);
 				},
 				'featureselected': function(evt) {
-					console.log("Feature: "+evt.feature.id+"selected");
-					// Delete from layer
-					evt.object.removeFeatures( evt.object.getFeatureById(evt.feature.id) );
-					// Delete from filter list
-					delete baseMap.filters.BBoxes[event.feature.id];
-					baseMap.showSelectedImages(layername, false, layercolor);
+					console.log("Feature: "+evt.feature.id+" selected");
+					// Perform this only when the bbdelete button is selected
+					if( baseMap.mapInstance.getControl('bbselect').active() ) {
+						// Delete from filter list
+						delete baseMap.filters.BBoxes[event.feature.id];
+						// Delete from layer
+						evt.object.removeFeatures( evt.object.getFeatureById(evt.feature.id) );
+						// Update view
+						baseMap.showSelectedImages(layername, false, layercolor);
+					}
 				}
 			});
 			baseMap.mapInstance.addLayer(bbLayer);
