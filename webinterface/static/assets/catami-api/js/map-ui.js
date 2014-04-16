@@ -633,7 +633,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             });
 			showFeatureInfoCtrl.id = "showFeatureInfoCtrl";
             baseMap.mapInstance.addControl(showFeatureInfoCtrl);
-            showFeatureInfo.activate();
+            showFeatureInfoCtrl.activate();
 		}
 
 
