@@ -1248,7 +1248,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				'featureselected': function(evt) {
 					console.log("Feature: "+evt.feature.id+" selected");
 					// Perform this only when the bbdelete button is selected
-					if( baseMap.mapInstance.getControl('bbselect').active() ) {
+					if( baseMap.mapInstance.getControl('bbselect').active ) {
 						// Delete from filter list
 						delete baseMap.filters.BBoxes[event.feature.id];
 						// Delete from layer
