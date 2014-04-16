@@ -1202,127 +1202,108 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 */
     this.addBBoxSelect = function ($container, $infocontainer,layername) {
 		console.log("Function addBBoxSelect");
-        var $bboxbtn = $('<button type="button" class="btn btn-default pull-right btn-sm" title="Draw a bounding box around the images you would like to add to your selection."><i class="icon-crop"></i> BOX</button>'),
-			$btn = $('<span id="bbox-button" class="btn btn-xs" >BBox filters &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span><br>');
-			
-		layercolor = this.filtLayerColor;
-		
-        $bboxbtn.click(function (){
-            var layernameBoundingBoxes = 'Bounding boxes';
-        	
-            if (baseMap.mapInstance.getLayersByName(layernameBoundingBoxes).length == 0) {
-				styleMap = new OpenLayers.StyleMap({
-				        strokeColor: '#ff0000'
-				        , strokeWidth: 3
-				        // Comment next line out, and handlers will not appear
-				        // to selected feature
-				        , pointRadius: 6
-				    });
-					
-				var bbLayer = new OpenLayers.Layer.Vector(layernameBoundingBoxes, 
-					{
-						styleMap: styleMap
-					}
-				);
-				bbLayer.events.on({
-					'beforefeaturemodified': function(evt) {
-						console.log("\n\nSelected " + evt.feature.id + " for modification\n\n");
-					},
-					'afterfeaturemodified': function(evt) {
-						console.log("Finished with " + evt.feature.id);
-					}
-				});
-				var bbmod = new OpenLayers.Control.ModifyFeature(
-					bbLayer, 
-					{
-						mode: OpenLayers.Control.ModifyFeature.RESIZE | OpenLayers.Control.ModifyFeature.DRAG
-					}
-				);
-				bbmod.id = 'bbmod';
-            	
-				
-	    		var bbctrl =  new OpenLayers.Control.DrawFeature(bbLayer, OpenLayers.Handler.RegularPolygon, {
-						handlerOptions: {
-						    irregular: true
-						},
-						eventListeners: {
-						    "featureadded": function (event) {
-								var filterBounds = event.feature.geometry.getBounds().clone();
-								filterBounds.transform(baseMap.projection.mercator, baseMap.projection.geographic);
-								baseMap.filters.BBoxes.push(filterBounds);
-								
-								
-								
-								baseMap.mapInstance.getControl('bbctrl').deactivate();
-								baseMap.mapInstance.getControl('bbmod').activate();
-								
-								baseMap.showSelectedImages(layername, false, layercolor);
-						    }
-						}
-				    }
-				);
-	    		bbctrl.id = "bbctrl";
-				
-				baseMap.mapInstance.addLayer(bbLayer);
-				baseMap.mapInstance.addControls([bbctrl, bbmod]);
-				
-				bbctrl.activate();
-            }
-
-
-            toggleBBoxSelect(bbctrl, $bboxbtn);
+        var $bboxdraw = $('<button type="button" class="btn btn-default pull-right btn-sm" title="Draw a bounding box around the images you would like to add to your selection."><i class="icon-crop"></i> BOX</button>'),
+			$bboxedit = $('<button type="button" class="btn btn-default pull-right btn-sm" >Edit BOX</button>');
+		// Setup button action callbacks
+        $bboxdraw.click(function (){
+            toggleBBoxSelect(bbctrl, $bboxdraw);
         });
-        $bboxbtn.tooltip({
+        $bboxdraw.tooltip({
 				html: true, 
 				placement: 'left', 
 				trigger:'hover'
 			});
-
-
-		// Create button
-		$btn.hide();
-		$btn.find("a").click(function () {
-			
-			$btn.hide();
-			// delete baseMap.filters.featranges[feature];
-			// Update map
-			baseMap.showSelectedImages(layername, false, layercolor);
+        $bboxedit.click(function (){
+            toggleBBoxEdit($bboxedit);
         });
-		$btn.tooltip({
-			html: true, 
-			placement: 'left', 
-			trigger:'hover',
-			title: function() {
-		        var msg ="";
-				return msg;
-			}
-		});
-		$btn.tooltip("show");
 		
-        $container.append("<br>Crop selected deployments:",$bboxbtn);
-		$infocontainer.append($btn);
+		
+		// Create a separate layer to show the drawn bounding boxes
+		var layernameBoundingBoxes = 'Bounding boxes';
+        if (baseMap.mapInstance.getLayersByName(layernameBoundingBoxes).length == 0) {
+				
+			var bbLayer = new OpenLayers.Layer.Vector(layernameBoundingBoxes);
+			bbLayer.events.on({
+				'beforefeaturemodified': function(evt) {
+					console.log("\n\nSelected " + evt.feature.id + " for modification\n\n");
+				},
+				'afterfeaturemodified': function(evt) {
+					console.log("Finished with " + evt.feature.id);
+				}
+			});
+			baseMap.mapInstance.addLayer(bbLayer);
+			
+			// A modifier to edit the bounding boxes
+			var bbmod = new OpenLayers.Control.ModifyFeature(bbLayer);
+			bbmod.id = 'bbmod';
+        	
+			// A controller to draw bounding boxes
+    		var bbctrl =  new OpenLayers.Control.DrawFeature(
+				bbLayer, 
+				OpenLayers.Handler.RegularPolygon, 
+				{
+					handlerOptions: {
+					    irregular: true
+					},
+					eventListeners: {
+					    "featureadded": function (event) {
+							var filterBounds = event.feature.geometry.getBounds().clone();
+							filterBounds.transform(baseMap.projection.mercator, baseMap.projection.geographic);
+							baseMap.filters.BBoxes.push(filterBounds);
+							
+							
+							
+							baseMap.mapInstance.getControl('bbctrl').deactivate();
+							baseMap.mapInstance.getControl('bbmod').activate();
+							
+							baseMap.showSelectedImages(layername, false, layercolor);
+					    }
+					}
+			    }
+			);
+    		bbctrl.id = "bbctrl";
+			
+			
+			baseMap.mapInstance.addControls([bbctrl, bbmod]);
+			
+        }
+
+		
+        $container.append("<br>Crop selected deployments:",$bboxbtn, $bboxedit);
 		
 		console.log("END addBBoxSelect");
 		console.log("");
 		console.log("");
     }
 
-    function toggleBBoxSelect (bbctrl, $bboxbtn, forcedeselect) {
-		return;
+    function toggleBBoxSelect (bbctrl, $bboxdraw, forcedeselect) {
 		
 		console.log("Function toggleBBoxSelect");
         forcedeselect = (( typeof forcedeselect !== 'undefined') ? forcedeselect : false);
-        if ($bboxbtn.hasClass('active') || forcedeselect) {
+        if ($bboxdraw.hasClass('active') || forcedeselect) {
 
-			baseMap.mapInstance.getControl('bbmod').deactivate();
-            $bboxbtn.removeClass('active');
+			baseMap.mapInstance.getControl('bbctrl').deactivate();
+            $bboxdraw.removeClass('active');
         }
         else {
 
 			baseMap.mapInstance.getControl('bbctrl').activate();
-            $bboxbtn.addClass('active');
+            $bboxdraw.addClass('active');
         }
     }
+	
+	function toggleBBoxEdit($bbxedit) {
+        if ($bbxedit.hasClass('active')) {
+
+			baseMap.mapInstance.getControl('bbmod').deactivate();
+            $bbxedit.removeClass('active');
+        }
+        else {
+
+			baseMap.mapInstance.getControl('bbmod').activate();
+            $bbxedit.addClass('active');
+        }
+	}
 	
     // TODO: this is a bit ugly - remove code duplication
     /**
