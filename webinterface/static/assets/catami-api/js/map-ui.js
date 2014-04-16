@@ -1203,7 +1203,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			$bboxdel = $('<button type="button" id="bboxdel" class="btn btn-default pull-right btn-sm" title="Delete a bounding box by selecting it."><i class="icon-remove-sign"></i> Delete</button>');
 		// Setup button action callbacks
         $bboxdraw.click(function (){
-            toggleBBoxDraw($bboxdraw);
+            toggleBBoxDraw();
         });
         $bboxdraw.tooltip({
 			html: true, 
@@ -1211,7 +1211,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			trigger:'hover'
 		});
         $bboxedit.click(function (){
-            toggleBBoxEdit($bboxedit);
+            toggleBBoxEdit();
         });
         $bboxedit.tooltip({
 			html: true, 
@@ -1219,7 +1219,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			trigger:'hover'
 		});
         $bboxdel.click(function (){
-            toggleBBoxDel($bboxdel);
+            toggleBBoxDel();
         });
         $bboxdel.tooltip({
 			html: true, 
