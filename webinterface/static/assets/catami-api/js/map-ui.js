@@ -1246,7 +1246,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					var bounds = evt.feature.geometry.getBounds().clone();
 					console.log("\n\nSelected " + evt.feature.id + " for modification:");
 					console.log("\tbounds: "+bounds+"\n");
-					
 				},
 				'afterfeaturemodified': function(evt) {
 					console.log("Finished with " + evt.feature.id);
@@ -1348,7 +1347,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	function toggleBBoxDel($bbxdel) {
 		console.log("Function toggleBBoxDel");
         if ($bbxdel.hasClass('active')) {
-			baseMap.mapInstance.getControl('bbmod').deactivate();
+			baseMap.mapInstance.getControl('bbselect').deactivate();
 			baseMap.mapInstance.getControl('highlightCtrl').activate();
             $bbxdel.removeClass('active');
         }
@@ -1356,7 +1355,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			// We need to deactivate the highlightCtrl before the bbmod control actually 
 			// 	gets activated. This is probably because it is also a vector layer!?
 			baseMap.mapInstance.getControl('highlightCtrl').deactivate();
-			baseMap.mapInstance.getControl('bbmod').activate();
+			baseMap.mapInstance.getControl('bbselect').activate();
             $bbxdel.addClass('active');
         }
 		console.log("END toggleBBoxDel");
