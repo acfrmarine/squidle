@@ -1239,7 +1239,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					// Get new bounds and update filter array
 					var filterBounds = event.feature.geometry.getBounds().clone();
 					filterBounds.transform(baseMap.projection.mercator, baseMap.projection.geographic);
-					baseMap.filters.BBoxes[id] = filterBounds;
+					baseMap.filters.BBoxes[event.feature.id] = filterBounds;
 					// Update view
 					baseMap.showSelectedImages(layername, false, layercolor);
 				},
@@ -1248,7 +1248,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					// Delete from layer
 					evt.object.removeFeatures( evt.object.getFeatureById(evt.feature.id) );
 					// Delete from filter list
-					delete baseMap.filters.BBoxes[id];
+					delete baseMap.filters.BBoxes[event.feature.id];
 					baseMap.showSelectedImages(layername, false, layercolor);
 				}
 			});
@@ -1280,7 +1280,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 							var filterBounds = event.feature.geometry.getBounds().clone();
 							filterBounds.transform(baseMap.projection.mercator, baseMap.projection.geographic);
 							console.log( 'id: '+event.feature.id+', bounds: '+filterBounds);
-							baseMap.filters.BBoxes[id] = filterBounds;
+							baseMap.filters.BBoxes[event.feature.id] = filterBounds;
 														
 							baseMap.showSelectedImages(layername, false, layercolor);
 							toggleBBoxDraw($bboxdraw);
