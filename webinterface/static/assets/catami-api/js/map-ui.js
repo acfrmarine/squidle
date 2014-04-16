@@ -1248,6 +1248,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				},
 				'afterfeaturemodified': function(evt) {
 					console.log("Finished with " + evt.feature.id);
+				},
+				"featureclick": function(event) {
+					console.log('id: '+event.feature.id+" clicked");
 				}
 			});
 			baseMap.mapInstance.addLayer(bbLayer);
@@ -1282,10 +1285,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 // 														
 // 							baseMap.showSelectedImages(layername, false, layercolor);
 							toggleBBoxDraw($bboxdraw);
-					    },
-						"featureclick": function(event) {
-							console.log('id: '+event.feature.id+" clicked");
-						}
+					    }
 					}
 			    }
 			);
