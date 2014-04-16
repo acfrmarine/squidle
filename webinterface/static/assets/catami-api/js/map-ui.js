@@ -1282,7 +1282,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 // 														
 // 							baseMap.showSelectedImages(layername, false, layercolor);
 							toggleBBoxDraw($bboxdraw);
-					    }
+					    },
 						"featureclick": function(event) {
 							console.log('id: '+event.feature.id+" clicked");
 						}
