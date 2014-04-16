@@ -1243,14 +1243,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			var bbLayer = new OpenLayers.Layer.Vector(layernameBoundingBoxes);
 			bbLayer.events.on({
 				'beforefeaturemodified': function(evt) {
-					// Currently unused
-					//console.log("\n\nSelected " + evt.feature.id + " for modification\n\n");
+					var bounds = evt.feature.geometry.getBounds().clone();
+					console.log("\n\nSelected " + evt.feature.id + " for modification:");
+					console.log("\tbounds: "+bounds+"\n");
+					
 				},
 				'afterfeaturemodified': function(evt) {
 					console.log("Finished with " + evt.feature.id);
-				},
-				"featureclick": function(event) {
-					console.log('id: '+event.feature.id+" clicked");
 				}
 			});
 			baseMap.mapInstance.addLayer(bbLayer);
