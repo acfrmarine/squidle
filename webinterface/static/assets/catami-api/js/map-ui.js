@@ -1200,7 +1200,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		console.log("Function addBBoxSelect");
         var $bboxdraw = $('<button type="button" id="bboxdraw" class="btn btn-default pull-right btn-sm" title="Draw a bounding box around the images you would like to add to your selection."><i class="icon-crop"></i> Create</button>'),
 			$bboxedit = $('<button type="button" id="bboxedit" class="btn btn-default pull-right btn-sm" title="Edit a bounding box by selecting it."><i class="icon-edit"></i> Edit</button>'),
-			$bboxdel = $('<button type="button" id="bboxdel" class="btn btn-default pull-right btn-sm" title="Delete a bounding box by selecting it."><i class="icon-remove-sign"></i> Delete</button>');
+			$bboxdel  = $('<button type="button" id="bboxdel"  class="btn btn-default pull-right btn-sm" title="Delete a bounding box by selecting it."><i class="icon-remove-sign"></i> Delete</button>');
 		// Setup button action callbacks
         $bboxdraw.click(function (){
             toggleBBoxDraw();
@@ -1249,7 +1249,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				'featureselected': function(evt) {
 					console.log("Feature: "+evt.feature.id+" selected");
 					// Perform this only when the bbdelete button is selected
-					if( baseMap.mapInstance.getControl('bbselect').active ) {
+					if( baseMap.mapInstance.getControl('bbxdelCtrl').active ) {
 						// Delete from filter list
 						delete baseMap.filters.BBoxes[evt.feature.id];
 						// Delete from layer
@@ -1264,20 +1264,20 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			baseMap.mapInstance.addLayer(bbLayer);
 			
 			// A modifier to edit the bounding boxes
-			var bbmod = new OpenLayers.Control.ModifyFeature(bbLayer);
-			bbmod.mode = OpenLayers.Control.ModifyFeature.RESIZE | 
+			var bbeditCtrl = new OpenLayers.Control.ModifyFeature(bbLayer);
+			bbeditCtrl.mode = OpenLayers.Control.ModifyFeature.RESIZE | 
 						 OpenLayers.Control.ModifyFeature.DRAG;
 						 //TODO: If we activate the ROTATE, which we should, we need to change the way the actual 
 						 // filtering is done too in the project creation python code to use Polygon instead
 						 // of min/max filters
 						  //OpenLayers.Control.ModifyFeature.ROTATE;
-			bbmod.id = 'bbmod';
+			bbeditCtrl.id = 'bbeditCtrl';
         	
-			bbselect = new OpenLayers.Control.SelectFeature(bbLayer);
-			bbselect.id = 'bbselect';
+			bbdelCtrl = new OpenLayers.Control.SelectFeature(bbLayer);
+			bbdelCtrl.id = 'bbdelCtrl';
 			
 			// A controller to draw bounding boxes
-    		var bbctrl =  new OpenLayers.Control.DrawFeature(
+    		var bbdrawCtrl =  new OpenLayers.Control.DrawFeature(
 				bbLayer, 
 				OpenLayers.Handler.RegularPolygon, 
 				{
@@ -1297,9 +1297,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					}
 			    }
 			);
-    		bbctrl.id = "bbctrl";
+    		bbdrawCtrl.id = "bbdrawCtrl";
 			
-			baseMap.mapInstance.addControls([bbctrl, bbmod, bbselect]);
+			baseMap.mapInstance.addControls([bbdrawCtl, bbeditCtrl, bbdelCtrl]);
 			
         }
 
@@ -1317,11 +1317,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     function toggleBBoxDraw (forcedeselect) {
         forcedeselect = (( typeof forcedeselect !== 'undefined') ? forcedeselect : false);
         if ($('#bboxdraw').hasClass('active') || forcedeselect) {
-			baseMap.mapInstance.getControl('bbctrl').deactivate();
+			baseMap.mapInstance.getControl('bbdrawCtrl').deactivate();
             $('#bboxdraw').removeClass('active');
         }
         else {
-			baseMap.mapInstance.getControl('bbctrl').activate();
+			baseMap.mapInstance.getControl('bbdrawCtrl').activate();
             $('#bboxdraw').addClass('active');
         }
     }
@@ -1330,7 +1330,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 */
 	function toggleBBoxEdit() {
         if ($('#bbxedit').hasClass('active') ) {
-			baseMap.mapInstance.getControl('bbmod').deactivate();
+			baseMap.mapInstance.getControl('bbxeditCtrl').deactivate();
 			baseMap.mapInstance.getControl('highlightCtrl').activate();
             $('#bbxedit').removeClass('active');
         }
@@ -1338,7 +1338,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			// We need to deactivate the highlightCtrl before the bbmod control actually 
 			// 	gets activated. This is probably because it is also a vector layer!?
 			baseMap.mapInstance.getControl('highlightCtrl').deactivate();
-			baseMap.mapInstance.getControl('bbmod').activate();
+			baseMap.mapInstance.getControl('bbxeditCtrl').activate();
             $('#bbxedit').addClass('active');
         }
 	}
@@ -1347,7 +1347,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 */
 	function toggleBBoxDel() {
         if ($('bbxdel').hasClass('active')) {
-			baseMap.mapInstance.getControl('bbselect').deactivate();
+			baseMap.mapInstance.getControl('bbxdelCtrl').deactivate();
 			baseMap.mapInstance.getControl('highlightCtrl').activate();
             $('bbxdel').removeClass('active');
         }
@@ -1355,7 +1355,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			// We need to deactivate the highlightCtrl before the bbmod control actually 
 			// 	gets activated. This is probably because it is also a vector layer!?
 			baseMap.mapInstance.getControl('highlightCtrl').deactivate();
-			baseMap.mapInstance.getControl('bbselect').activate();
+			baseMap.mapInstance.getControl('bbxdelCtrl').activate();
             $('bbxdel').addClass('active');
         }
 	}	
