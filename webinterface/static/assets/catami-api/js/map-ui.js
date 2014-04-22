@@ -1394,7 +1394,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         var showcreatbtn = false;
 
         // Don't continue until the panel has been created
-        if( ( typeof baseMap.$selectedpanel === 'undefined' ) {
+        if( typeof baseMap.$selectedpanel === 'undefined' ) {
         		return;
         }
         
