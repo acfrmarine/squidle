@@ -993,7 +993,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 		layercolor = this.filtLayerColor;		
 		
-        var $slider = $('<div id="'+ feature+'-slider" style="margin-left:10px; margin-right:10px;"></div>'),
+        var $slider = $('<div id="'+ feature+'-slider" style="margin:10px;"></div>'),
             infoid = feature + '-range',
             $info = $('<span id="' + infoid + '"></span>'),
             filtertitle = feature[0].toUpperCase() + feature.substring(1) + ' range: ', // capitalise first letter
@@ -1188,7 +1188,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			
 			// Add to containers
             var $filtcont = $('<span></span>').append($fromdate, ' to ', $todate);
-            $container.append($("<div></div>").append(filtertitle, "<br>", $filtcont));
+            $container.append($("<div style='margin: 10px;'></div>").append(filtertitle, "<br>", $filtcont));
 			$infocontainer.append($btn);
     }
 	/**
@@ -1198,7 +1198,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 */
     this.addBBoxSelect = function ($container, $infocontainer,layername) {
 		console.log("Function addBBoxSelect");
-        var $bboxdraw = $('<button type="button" id="bboxdraw" class="btn-xs btn-group btn-group-xs" title="Draw a bounding box around the images you would like to add to your selection."><i class="icon-crop"></i> Create</button>'),
+        var $bboxdraw = $('<button type="button" id="bboxdraw" class="btn-xs  btn-group btn-group-xs" title="Draw a bounding box around the images you would like to add to your selection."><i class="icon-crop"></i> Create</button>'),
 			$bboxedit = $('<button type="button" id="bboxedit" class="btn-xs btn-group btn-group-xs" title="Edit a bounding box by selecting it."><i class="icon-edit"></i> Edit</button>'),
 			$bboxdel  = $('<button type="button" id="bboxdel"  class="btn-xs btn-group btn-group-xs" title="Delete a bounding box by selecting it."><i class="icon-remove-sign"></i> Delete</button>');
 		// Setup button action callbacks
@@ -1266,6 +1266,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			// A modifier to edit the bounding boxes
 			var bboxeditCtrl = new OpenLayers.Control.ModifyFeature(bbLayer);
 			bboxeditCtrl.mode = OpenLayers.Control.ModifyFeature.RESIZE | 
+						 OpenLayers.Control.ModifyFeature.RESHAPE |
 						 OpenLayers.Control.ModifyFeature.DRAG;
 						 //TODO: If we activate the ROTATE, which we should, we need to change the way the actual 
 						 // filtering is done too in the project creation python code to use Polygon instead
