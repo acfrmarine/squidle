@@ -543,7 +543,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * Creates a WMS layer
 	 */
 	this.createImageLayer = function(layername, color) {
-		console.log("Function createImageLayer: " + selectlayername);
+		console.log("Function createImageLayer: " + layername);
 		
 		color = (( typeof color !== 'undefined') ? color : "0000FF");
 		
