@@ -866,14 +866,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         $btn.hide();
 		$btn.find("a").click(function () {
 	        // TODO: deselect all check boxes
-			console.log("not implemented yet: "+ $dplselect.val().length);
-			console.log($dplselect);
-			console.log($dplselect.multiselect);
-			for (var i=0 ; i < $dplselect.val().length ; i++) {
-                id = $dplselect.val()[i];
-                console.log('id: ' + id);
-                $dplselect.multiselect('deselect', id);
-			}
+			console.log("selected: "+ $dplselect.val());
+			$dplselect.multiselect('deselect', $dplselect.val());
         });
 		$btn.tooltip({
 			html: true, 
