@@ -217,8 +217,10 @@
 
                     // add current selection info
                     map.addSelectionInfo($curselpanel);
+                    map.updateSelectionInfo();
                     curstate.loginfuncs.push(map.updateSelectionInfo);
 
+					
                 }
 
                 // Add resize function to ensure map resizes on window resize
