@@ -1378,7 +1378,10 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	this.addSelectionInfo = function($container) {
 		baseMap.$selectedpanel = $container;
 		
-		var $createbtn = $('<button class="btn btn-info disabled" style="width:100%; margin-top:10px;"><i class="icon-plus"></i> New Project with selection</button>');
+		var $createbtn = $('<button id="create-button" class="btn btn-info disabled" style="width:100%; margin-top:10px;"><i class="icon-plus"></i> New Project with selection</button>');
+		$createbtn.click(function () {
+            baseMap.openNewCollectionModal()
+        });
 		
 		baseMap.$selectedpanel.append($createbtn);
 	}
@@ -1455,23 +1458,24 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 //        var $createbtn = $('<button class="btn btn-info disabled" style="width:100%; margin-top:10px;"><i class="icon-plus"></i> New Project with selection</button>');
 
-        return;
-        // TODO: if there are any deployments selected then set the showcreatebtn=true
+        
+        // If there are any deployments selected then set the showcreatebtn=true
+        if (baseMap.filters.deployments != null && baseMap.filters.deployments.length > 0) {
+        	showcreatbtn = true;
+        }
+        
         
         if (showcreatbtn && !globalstate.isloggedin) {
             baseMap.$selectedpanel.append('<div class="alert" style="margin-top:10px"><b>NOTE:</b> you need to be logged in to create a Project</div>');
         }
         else if (showcreatbtn && globalstate.isloggedin) {
-            $createbtn.removeClass('disabled');
-            $createbtn.click(function () {
-                baseMap.openNewCollectionModal()
-            });
+            $('#createbutton').removeClass('disabled');
         }
         else {
             baseMap.$selectedpanel.append('<div class="alert"><b>NOTE</b>: no images selected. Use the tools above add images to your project.</div>');
         }
 
-        baseMap.$selectedpanel.append($createbtn);
+        //baseMap.$selectedpanel.append($createbtn);
 		// console.log("END updateSelectionInfo");
     }
 
