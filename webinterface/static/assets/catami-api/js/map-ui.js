@@ -540,6 +540,73 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     }
 
 	/**
+	 * Creates a WMS layer
+	 */
+	this.createImageLayer = function(layername, color) {
+		console.log("Function createImageLayer: " + selectlayername);
+		
+		color = (( typeof color !== 'undefined') ? color : "0000FF");
+		
+		// add the selection layer if required
+		var imglayer = new OpenLayers.Layer.WMS(
+			layername, 
+			this.wmsUrl, 
+			{
+                layers: 'catami:catamidb_images',
+                format: 'image/gif',
+                transparent: 'TRUE',
+                // sld: "http://" + baseMap.hostname + "/geoserverstyle?prop=depth&min=35.0&max=50.0"
+                sld : "http://" + baseMap.hostname + "/geoserverSimplestyle?name=catami:catamidb_images&colour="+color+"&size=5"
+        	}, 
+			{
+                transitionEffect: 'resize',
+				tileOptions: {maxGetUrlLength: 2048}, 
+				isBaseLayer : false
+            }
+		);
+        this.mapInstance.addLayer(imglayer);
+
+        var showFeatureInfoCtrl = new OpenLayers.Control.WMSGetFeatureInfo(
+		{
+            url: baseMap.wmsUrl,
+            title: 'ClickImg',
+            layers: baseMap.mapInstance.getLayersByName(selectlayername),
+            queryVisible: true,
+            hover: false,
+            output: "object",
+            infoFormat: "application/vnd.ogc.gml",
+            maxFeatures: 9,
+            eventListeners: 
+			{
+	    		nogetfeatureinfo : function(event) 
+				{
+					console.log('No queryable layers found');
+	    		},
+				getfeatureinfo: function (event) 
+				{
+                	if (event.features.length > 0) {
+                    	baseMap.$imginfo.html('');
+                    	var fid, $thumb;
+                        for (var i = 0; i < event.features.length; i++) {
+                            fid = event.features[i].attributes.img_id;
+                            $thumb = getImageInfo(fid);
+                            baseMap.$imginfo.append($thumb);
+                        }
+                        baseMap.$imginfo.parent().show();
+                        baseMap.$infopane.show(200);
+                	}
+				}
+        	}
+		});
+		showFeatureInfoCtrl.id = "showFeatureInfoCtrl";
+        baseMap.mapInstance.addControl(showFeatureInfoCtrl);
+        showFeatureInfoCtrl.activate();
+		
+		console.log("\tCreated new layer: " + selectlayername);
+		console.log("END createImageLayer");
+	}
+
+	/**
 	 *
 	 * 
 	 *
@@ -567,68 +634,68 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			// console.log("\tNo filters selected");
 	// 	} 
 		
-		if (this.mapInstance.getLayersByName(selectlayername).length == 0 && !nocreate) {
-			// add the selection layer if required
-			var imglayer = new OpenLayers.Layer.WMS(
-				selectlayername, 
-				this.wmsUrl, 
-				{
-	                layers: 'catami:catamidb_images',
-	                format: 'image/gif',
-	                transparent: 'TRUE',
-	                // sld: "http://" + baseMap.hostname + "/geoserverstyle?prop=depth&min=35.0&max=50.0"
-	                sld : "http://" + baseMap.hostname + "/geoserverSimplestyle?name=catami:catamidb_images&colour="+color+"&size=5"
-            	}, 
-				{
-	                transitionEffect: 'resize',
-					tileOptions: {maxGetUrlLength: 2048}, 
-					isBaseLayer : false
-	            }
-			);
-            this.mapInstance.addLayer(imglayer);
-			console.log("\tCreated new layer: " + selectlayername);
-//            var highlightLayer = new OpenLayers.Control.GetFeature({
-//                protocol: OpenLayers.Protocol.WFS.fromWMSLayer(imglayer),
-//                box: true,
-//                hover: true,
-//                multipleKey: "shiftKey",
-//                toggleKey: "ctrlKey"
-//            });
-//            this.mapInstance.addControl(highlightLayer);
-//            highlightLayer.activate();
-
-            var showFeatureInfoCtrl = new OpenLayers.Control.WMSGetFeatureInfo({
-                url: baseMap.wmsUrl,
-                title: 'ClickImg',
-                layers: baseMap.mapInstance.getLayersByName(selectlayername),
-                queryVisible: true,
-                hover: false,
-                output: "object",
-                infoFormat: "application/vnd.ogc.gml",
-                maxFeatures: 9,
-                eventListeners: {
-			    	nogetfeatureinfo : function(event) {
-						console.log('No queryable layers found');
-			    	},
-					getfeatureinfo: function (event) {
-	                    if (event.features.length > 0) {
-	                        baseMap.$imginfo.html('');
-	                        var fid, $thumb;
-	                        for (var i = 0; i < event.features.length; i++) {
-	                            fid = event.features[i].attributes.img_id;
-	                            $thumb = getImageInfo(fid);
-	                            baseMap.$imginfo.append($thumb);
-	                        }
-	                        baseMap.$imginfo.parent().show();
-	                        baseMap.$infopane.show(200);
-	                    }
-					}
-                }
-            });
-			showFeatureInfoCtrl.id = "showFeatureInfoCtrl";
-            baseMap.mapInstance.addControl(showFeatureInfoCtrl);
-            showFeatureInfoCtrl.activate();
-		}
+		// if (this.mapInstance.getLayersByName(selectlayername).length == 0 && !nocreate) {
+// 			// add the selection layer if required
+// 			var imglayer = new OpenLayers.Layer.WMS(
+// 				selectlayername, 
+// 				this.wmsUrl, 
+// 				{
+// 	                layers: 'catami:catamidb_images',
+// 	                format: 'image/gif',
+// 	                transparent: 'TRUE',
+// 	                // sld: "http://" + baseMap.hostname + "/geoserverstyle?prop=depth&min=35.0&max=50.0"
+// 	                sld : "http://" + baseMap.hostname + "/geoserverSimplestyle?name=catami:catamidb_images&colour="+color+"&size=5"
+//             	}, 
+// 				{
+// 	                transitionEffect: 'resize',
+// 					tileOptions: {maxGetUrlLength: 2048}, 
+// 					isBaseLayer : false
+// 	            }
+// 			);
+//             this.mapInstance.addLayer(imglayer);
+// 			console.log("\tCreated new layer: " + selectlayername);
+// //            var highlightLayer = new OpenLayers.Control.GetFeature({
+// //                protocol: OpenLayers.Protocol.WFS.fromWMSLayer(imglayer),
+// //                box: true,
+// //                hover: true,
+// //                multipleKey: "shiftKey",
+// //                toggleKey: "ctrlKey"
+// //            });
+// //            this.mapInstance.addControl(highlightLayer);
+// //            highlightLayer.activate();
+// 
+//             var showFeatureInfoCtrl = new OpenLayers.Control.WMSGetFeatureInfo({
+//                 url: baseMap.wmsUrl,
+//                 title: 'ClickImg',
+//                 layers: baseMap.mapInstance.getLayersByName(selectlayername),
+//                 queryVisible: true,
+//                 hover: false,
+//                 output: "object",
+//                 infoFormat: "application/vnd.ogc.gml",
+//                 maxFeatures: 9,
+//                 eventListeners: {
+// 			    	nogetfeatureinfo : function(event) {
+// 						console.log('No queryable layers found');
+// 			    	},
+// 					getfeatureinfo: function (event) {
+// 	                    if (event.features.length > 0) {
+// 	                        baseMap.$imginfo.html('');
+// 	                        var fid, $thumb;
+// 	                        for (var i = 0; i < event.features.length; i++) {
+// 	                            fid = event.features[i].attributes.img_id;
+// 	                            $thumb = getImageInfo(fid);
+// 	                            baseMap.$imginfo.append($thumb);
+// 	                        }
+// 	                        baseMap.$imginfo.parent().show();
+// 	                        baseMap.$infopane.show(200);
+// 	                    }
+// 					}
+//                 }
+//             });
+// 			showFeatureInfoCtrl.id = "showFeatureInfoCtrl";
+//             baseMap.mapInstance.addControl(showFeatureInfoCtrl);
+//             showFeatureInfoCtrl.activate();
+// 		}
 
 
 
@@ -636,8 +703,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         if (this.mapInstance.getLayersByName(selectlayername).length == 0) {
         	console.log("This should never happen!!!");
         }
-
-        console.log(this.mapInstance.getLayersByName(selectlayername));
         
         var filterCombined = this.getFilters();
         this.updateMapUsingFilter(filterCombined, selectlayername);
@@ -645,8 +710,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         this.updateSelectionInfo();
 
 		console.log("END showSelectedImages");
-		console.log("");
-		console.log("");
 	};
 
 
@@ -1406,7 +1469,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             $('#create-button').show();
         }
         else {
-            $('#info-button').html("<b>NOTE</b>: no images selected. Use the tools above add images to your project.");
+            $('#info-button').html("<b>NOTE</b>: no images selected. Use the tools above to add images to your project.");
             $('#info-button').show();
             
             $('#create-button').hide();
