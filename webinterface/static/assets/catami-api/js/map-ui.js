@@ -1391,13 +1391,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
      */
     this.updateSelectionInfo = function () {
 		
-        var rangeinfo = '',
-            bboxinfo = '',
-            dplinfo = '',
-            dplids = [],
-            showcreatbtn = false,
-            $newclform = $('#clform');
+        var showcreatbtn = false;
 
+        // Don't continue until the panel has been created
+        if( ( typeof baseMap.$selectedpanel === 'undefined' ) {
+        		return;
+        }
+        
         // baseMap.$selectedpanel.html('');		
 		
 
