@@ -796,11 +796,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	/**
 	 *
 	 */
-    this.addDeploymentSelect = function ($container, layername) {
+    this.addDeploymentSelect = function ($container, $infocontainer, layername) {
 		console.log("Function addDeploymentSelect: " + layername);
 		
         var $dplselect = $('<select multiple id="deploymentSelect" name="deploymentSelect"> </select>');
-
+        var $btn = $('<span id="'+deployment+'-button" class="btn btn-xs" >Deployments filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span><br>');
 
         addCampaignsToSelect($dplselect);
 //        addDeploymentsToSelect($dplselect);
@@ -815,16 +815,16 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             enableCaseInsensitiveFiltering: true,
             buttonText: function (options, select) {
                 if (options.length == 0) return '<i class="icon-th-list"></i> Select deployment(s)';
-                else if (options.length == 1) return '<i class="icon-th-list"></i> '+ options.length+' deployment selected';
+                else if (options.length == 1) return '<i class="icon-th-list"></i> '+ options.length +' deployment selected';
                 else return '<i class="icon-th-list"></i> ' + options.length + ' deployments selected';
             },
             onChange: function (element, checked) {
-                var id,name,$dplinfo;
+                var id, name, $dplinfo, info = '';
                 baseMap.$dplinfo.find("input").prop('checked',false);  // deselect deployment property
                 baseMap.filters.deployments = [];
                 if ($dplselect.val() != null) {
                     baseMap.updateMapBounds("deployment_ids=" + $dplselect.val(), baseMap.deploymentExtentUrl);
-                    for (var i =0 ; i < $dplselect.val().length ; i++) {
+                    for (var i=0 ; i < $dplselect.val().length ; i++) {
                         id = $dplselect.val()[i];
                         name = $dplselect.find("option[value='" + id + "']").text();
                         baseMap.filters.deployments.push({
@@ -839,8 +839,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 //                        if ($dplinfo.length <= 0) $dplinfo.prop('checked', true);
 //                        else baseMap.$dplinfo.prepend(getDeploymentCheckbox(id,name,'checked'));
                     }
+                    $btn.show();
                 }
-                
+                else {
+                	$btn.hide();
+                }
                 //baseMap.showSelectedImages(layername, baseMap.getSelectFilters());
                 //baseMap.showSelectedImages(layername, baseMap.getFilters());
                 baseMap.showSelectedImages(layername,false);
@@ -861,14 +864,29 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         });
 
 
-//        $dplselect.change(function() {
-//            baseMap.filters.deployments = $dplselect.val();
-//            baseMap.showSelectedImages(layername);
-//            baseMap.updateMapBounds("deployment_ids=" + $dplselect.val(), baseMap.deploymentExtentUrl);
-//        });
-
-        //baseMap.mapcontrols.$dplselect = $dplselect;
-
+        // Setup deployment filter button
+        $btn.hide();
+		$btn.find("a").click(function () {
+	        // TODO: deselect all check boxes
+			console.log("not implemented yet");
+        });
+		$btn.tooltip({
+			html: true, 
+			placement: 'left', 
+			trigger:'hover',
+			title: function() {
+				var msg = '';
+				// Show number of deployments and their info
+		        if (baseMap.filters.deployments != null) {
+		            for (var i = 0; i < baseMap.filters.deployments.length; i++) {
+		                msg += baseMap.filters.deployments[i].name + '<br>';
+		            }
+		        }
+				return msg;
+			}
+		});
+		$btn.tooltip("show");
+		$infocontainer.append($btn);
     }
 
     function addCampaignsToSelect($dplselect) {
