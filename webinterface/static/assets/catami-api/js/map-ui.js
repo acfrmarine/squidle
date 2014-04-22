@@ -391,9 +391,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             selecteddpls = '',
             otherdpls = '';
 
-        console.log(event);
-
-
         baseMap.$dplinfo.html('');
 
         // add selected deployments
@@ -796,6 +793,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 else return '<i class="icon-th-list"></i> ' + options.length + ' deployments selected';
             },
             onChange: function (element, checked) {
+            	console.log("$dplselect.multiselect.onChange");
                 var id, name, $dplinfo, info = '';
                 baseMap.$dplinfo.find("input").prop('checked',false);  // deselect deployment property
                 baseMap.filters.deployments = [];
