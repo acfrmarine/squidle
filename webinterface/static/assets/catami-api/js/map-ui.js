@@ -1383,7 +1383,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             baseMap.openNewCollectionModal()
         });
 		
-		baseMap.$selectedpanel.append($createbtn);
+		
+		var $infobtn = $('<div id="info-button" class="alert" style="margin-top:10px"></div>');
+		$infobtn.hide();
+		
+		baseMap.$selectedpanel.append($infobtn, $createbtn);
 	}
 	
     /**
@@ -1466,13 +1470,15 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         
         
         if (showcreatbtn && !globalstate.isloggedin) {
-            baseMap.$selectedpanel.append('<div class="alert" style="margin-top:10px"><b>NOTE:</b> you need to be logged in to create a Project</div>');
+            $('#info-button').html = '';
+            $('#info-button').append("<b>NOTE:</b> you need to be logged in to create a Project");
         }
         else if (showcreatbtn && globalstate.isloggedin) {
-            $('#createbutton').removeClass('disabled');
+            $('#create-button').removeClass('disabled');
         }
         else {
-            baseMap.$selectedpanel.append('<div class="alert"><b>NOTE</b>: no images selected. Use the tools above add images to your project.</div>');
+            $('#info-button').html = '';
+            $('#info-button').append("<b>NOTE</b>: no images selected. Use the tools above add images to your project.");
         }
 
         //baseMap.$selectedpanel.append($createbtn);
