@@ -1378,7 +1378,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
      *
      */
     this.updateSelectionInfo = function () {
-		
+		console.log("Function updateSelectionInfo");
         var showcreatbtn = false;
 
         // Don't continue until the panel has been created
@@ -1394,23 +1394,26 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         
         
         if (showcreatbtn && !globalstate.isloggedin) {
-            $('#info-button').html = '';
+            $('#info-button').innerHTML = '';
             $('#info-button').append("<b>NOTE:</b> you need to be logged in to create a Project");
             $('#info-button').show();
+            
             $('#create-button').hide();
         }
         else if (showcreatbtn && globalstate.isloggedin) {
+        	$('#info-button').hide();
+        	
             $('#create-button').removeClass('disabled');
             $('#create-button').show();
-            $('#info-button').hide();
         }
         else {
-            $('#info-button').html = '';
+            $('#info-button').innerHTML = '';
             $('#info-button').append("<b>NOTE</b>: no images selected. Use the tools above add images to your project.");
             $('#info-button').show();
+            
             $('#create-button').hide();
         }
-
+        console.log("END updateSelectionInfo");
     }
 
     this.openNewCollectionModal = function () {
