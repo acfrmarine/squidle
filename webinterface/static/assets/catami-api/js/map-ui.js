@@ -800,7 +800,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		console.log("Function addDeploymentSelect: " + layername);
 		
         var $dplselect = $('<select multiple id="deploymentSelect" name="deploymentSelect"> </select>');
-        var $btn = $('<span id="'+deployment+'-button" class="btn btn-xs" >Deployments filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span><br>');
+        var $btn = $('<span id="deployment-button" class="btn btn-xs" >Deployments filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span><br>');
 
         addCampaignsToSelect($dplselect);
 //        addDeploymentsToSelect($dplselect);
