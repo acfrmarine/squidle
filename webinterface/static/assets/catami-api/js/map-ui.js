@@ -1455,7 +1455,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 //        var $createbtn = $('<button class="btn btn-info disabled" style="width:100%; margin-top:10px;"><i class="icon-plus"></i> New Project with selection</button>');
 
-
+        return;
         // TODO: if there are any deployments selected then set the showcreatebtn=true
         
         if (showcreatbtn && !globalstate.isloggedin) {
