@@ -1219,7 +1219,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			$bboxdel  = $('<button type="button" id="bboxdel"  class="btn btn-xs btn-group btn-group-xs" title="Delete a bounding box by selecting it."><i class="icon-remove-sign"></i> Delete</button>');
 		// Setup button action callbacks
         $bboxdraw.click(function (){
-            this.toggleBBoxDraw();
+            baseMap.toggleBBoxDraw();
         });
         $bboxdraw.tooltip({
 			html: true, 
@@ -1227,7 +1227,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			trigger:'hover'
 		});
         $bboxedit.click(function (){
-            this.toggleBBoxEdit();
+            baseMap.toggleBBoxEdit();
         });
         $bboxedit.tooltip({
 			html: true, 
@@ -1235,7 +1235,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			trigger:'hover'
 		});
         $bboxdel.click(function (){
-            this.toggleBBoxDel();
+            baseMap.toggleBBoxDel();
         });
         $bboxdel.tooltip({
 			html: true, 
@@ -1260,7 +1260,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					// Update view
 					baseMap.showSelectedImages(layername, false, layercolor);
 					
-					this.toggleBBoxEdit();
+					baseMap.toggleBBoxEdit();
 				},
 				'featureselected': function(evt) {
 					console.log("Feature: "+evt.feature.id+" selected");
@@ -1273,7 +1273,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 						// Update view
 						baseMap.showSelectedImages(layername, false, layercolor);
 						
-						this.toggleBBoxDel();
+						baseMap.toggleBBoxDel();
 					}
 				}
 			});
@@ -1309,7 +1309,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 							baseMap.filters.BBoxes[evt.feature.id] = filterBounds;
 														
 							baseMap.showSelectedImages(layername, false, layercolor);
-							this.toggleBBoxDraw();
+							baseMap.toggleBBoxDraw();
 					    }
 					}
 			    }
