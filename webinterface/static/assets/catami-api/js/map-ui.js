@@ -993,7 +993,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 		layercolor = this.filtLayerColor;		
 		
-        var $slider = $('<div id="'+ feature+'-slider"></div>'),
+        var $slider = $('<div id="'+ feature+'-slider" style="margin-left: 10px; margin-right: 10px;"></div>'),
             infoid = feature + '-range',
             $info = $('<span id="' + infoid + '"></span>'),
             filtertitle = feature[0].toUpperCase() + feature.substring(1) + ' range: ', // capitalise first letter
@@ -1196,14 +1196,14 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * Creates a bounding box filter and adds it to the given container
 	 *
 	 */
-    this.addBBoxSelect = function ($container, $infocontainer,layername) {
-		console.log("Function addBBoxSelect");
+    this.addBBoxFilter = function ($container, $infocontainer,layername) {
+		console.log("Function addBBoxFilter");
         var $bboxdraw = $('<button type="button" id="bboxdraw" class="btn-xs  btn-group btn-group-xs" title="Draw a bounding box around the images you would like to add to your selection."><i class="icon-crop"></i> Create</button>'),
 			$bboxedit = $('<button type="button" id="bboxedit" class="btn-xs btn-group btn-group-xs" title="Edit a bounding box by selecting it."><i class="icon-edit"></i> Edit</button>'),
 			$bboxdel  = $('<button type="button" id="bboxdel"  class="btn-xs btn-group btn-group-xs" title="Delete a bounding box by selecting it."><i class="icon-remove-sign"></i> Delete</button>');
 		// Setup button action callbacks
         $bboxdraw.click(function (){
-            toggleBBoxDraw();
+            this.toggleBBoxDraw();
         });
         $bboxdraw.tooltip({
 			html: true, 
@@ -1211,7 +1211,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			trigger:'hover'
 		});
         $bboxedit.click(function (){
-            toggleBBoxEdit();
+            this.toggleBBoxEdit();
         });
         $bboxedit.tooltip({
 			html: true, 
@@ -1219,7 +1219,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			trigger:'hover'
 		});
         $bboxdel.click(function (){
-            toggleBBoxDel();
+            this.toggleBBoxDel();
         });
         $bboxdel.tooltip({
 			html: true, 
@@ -1244,7 +1244,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					// Update view
 					baseMap.showSelectedImages(layername, false, layercolor);
 					
-					toggleBBoxEdit();
+					this.toggleBBoxEdit();
 				},
 				'featureselected': function(evt) {
 					console.log("Feature: "+evt.feature.id+" selected");
@@ -1257,7 +1257,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 						// Update view
 						baseMap.showSelectedImages(layername, false, layercolor);
 						
-						toggleBBoxDel();
+						this.toggleBBoxDel();
 					}
 				}
 			});
@@ -1293,7 +1293,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 							baseMap.filters.BBoxes[evt.feature.id] = filterBounds;
 														
 							baseMap.showSelectedImages(layername, false, layercolor);
-							toggleBBoxDraw();
+							this.toggleBBoxDraw();
 					    }
 					}
 			    }
@@ -1307,15 +1307,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		
         $container.append($("<div style='margin: 10px;'></div>").append( "Crop box tools:<br>", $bboxdraw, $bboxedit, $bboxdel ));
 		
-		console.log("END addBBoxSelect");
-		console.log("");
-		console.log("");
+		console.log("END addBBoxFilter");
     }
 
 	/**
 	 * Toggles the bounding box draw button and deals with the controllers
 	 */
-    function toggleBBoxDraw (forcedeselect) {
+    this.toggleBBoxDraw = function (forcedeselect) {
         forcedeselect = (( typeof forcedeselect !== 'undefined') ? forcedeselect : false);
         if ($('#bboxdraw').hasClass('active') || forcedeselect) {
 			baseMap.mapInstance.getControl('bboxdrawCtrl').deactivate();
@@ -1329,7 +1327,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	/**
 	 * Toggles the bounding box edit button and deals with the controllers
 	 */
-	function toggleBBoxEdit() {
+	this.toggleBBoxEdit = function() {
         if ($('#bboxedit').hasClass('active') ) {
 			baseMap.mapInstance.getControl('bboxeditCtrl').deactivate();
 			baseMap.mapInstance.getControl('highlightCtrl').activate();
@@ -1346,7 +1344,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	/**
 	 * Toggles the bounding box delete button and deals with the controllers
 	 */
-	function toggleBBoxDel() {
+	this.toggleBBoxDel = function() {
         if ($('#bboxdel').hasClass('active')) {
 			baseMap.mapInstance.getControl('bboxdelCtrl').deactivate();
 			baseMap.mapInstance.getControl('highlightCtrl').activate();
