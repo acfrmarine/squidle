@@ -137,7 +137,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     this.updateMapUsingFilter = function (filterArray, layerName) {
 		console.log("Function updateMapUsingFilter");
         console.log("\tApplying map filter to layer: '"+ layerName + "'");
-
+        console.log(filterArray);
+        
         var filter_1_1 = new OpenLayers.Format.Filter({
             version: "1.1.0"
         });
@@ -341,7 +342,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		this.mapInstance.addLayer(deploymentlayer);
 		deploymentlayer.events.register('loadend', this, function(evt) {
 			//if (this.browseEnabled == true) {
-			mapInstance.zoomToExtent(evt.object.getDataExtent());
+			this.mapInstance.zoomToExtent(evt.object.getDataExtent());
 			//}
 		});
 		var highlightCtrl = new OpenLayers.Control.SelectFeature(deploymentlayer, {
@@ -638,7 +639,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         if (this.mapInstance.getLayersByName(selectlayername).length > 0) {
 
             var filterCombined = this.getFilters();
-			console.log(filterCombined);
             this.updateMapUsingFilter(filterCombined, selectlayername);
         }
         this.updateSelectionInfo();
