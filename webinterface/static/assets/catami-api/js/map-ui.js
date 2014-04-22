@@ -803,8 +803,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         var $btn = $('<span id="deployment-button" class="btn btn-xs" >Deployments filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span><br>');
 
         addCampaignsToSelect($dplselect);
-//        addDeploymentsToSelect($dplselect);
-
 
         $container.append($dplselect);
 
@@ -869,6 +867,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		$btn.find("a").click(function () {
 	        // TODO: deselect all check boxes
 			console.log("not implemented yet");
+			baseMap.$dplinfo.find("input").prop('checked',false);
         });
 		$btn.tooltip({
 			html: true, 
