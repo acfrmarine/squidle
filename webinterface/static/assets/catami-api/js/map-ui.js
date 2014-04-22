@@ -800,7 +800,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		console.log("Function addDeploymentSelect: " + layername);
 		
         var $dplselect = $('<select multiple id="deploymentSelect" name="deploymentSelect"> </select>');
-        var $btn = $('<span id="deployment-button" class="btn btn-xs" >Deployments filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span><br>');
+        var $btn = $('<span id="deployment-button" class="btn btn-xs" title="This is the deployment filter">Deployments filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span><br>');
 
         addCampaignsToSelect($dplselect);
 
@@ -865,8 +865,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         // Setup deployment filter button
         $btn.hide();
 		$btn.find("a").click(function () {
-	        // TODO: deselect all check boxes
-			console.log("selected: "+ $dplselect.val());
+			// Remove all selections
 			$dplselect.multiselect('deselect', $dplselect.val());
         });
 		$btn.tooltip({
@@ -1215,9 +1214,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 */
     this.addBBoxFilter = function ($container, $infocontainer,layername) {
 		console.log("Function addBBoxFilter");
-        var $bboxdraw = $('<button type="button" id="bboxdraw" class="btn-xs  btn-group btn-group-xs" title="Draw a bounding box around the images you would like to add to your selection."><i class="icon-crop"></i> Create</button>'),
-			$bboxedit = $('<button type="button" id="bboxedit" class="btn-xs btn-group btn-group-xs" title="Edit a bounding box by selecting it."><i class="icon-edit"></i> Edit</button>'),
-			$bboxdel  = $('<button type="button" id="bboxdel"  class="btn-xs btn-group btn-group-xs" title="Delete a bounding box by selecting it."><i class="icon-remove-sign"></i> Delete</button>');
+        var $bboxdraw = $('<button type="button" id="bboxdraw" class="btn btn-xs btn-group btn-group-xs" title="Draw a bounding box around the images you would like to add to your selection."><i class="icon-crop"></i> Create</button>'),
+			$bboxedit = $('<button type="button" id="bboxedit" class="btn btn-xs btn-group btn-group-xs" title="Edit a bounding box by selecting it."><i class="icon-edit"></i> Edit</button>'),
+			$bboxdel  = $('<button type="button" id="bboxdel"  class="btn btn-xs btn-group btn-group-xs" title="Delete a bounding box by selecting it."><i class="icon-remove-sign"></i> Delete</button>');
 		// Setup button action callbacks
         $bboxdraw.click(function (){
             this.toggleBBoxDraw();
@@ -1375,17 +1374,20 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             $('#bboxdel').addClass('active');
         }
 	}	
-    // TODO: this is a bit ugly - remove code duplication
+	
+	this.addSelectionInfo = function($container) {
+		baseMap.$selectedpanel = $container;
+		
+		var $createbtn = $('<button class="btn btn-info disabled" style="width:100%; margin-top:10px;"><i class="icon-plus"></i> New Project with selection</button>');
+		
+		baseMap.$selectedpanel.append($createbtn);
+	}
+	
     /**
      *
-     * @param $container (optional - needs to be set on first call)
      */
-    this.updateSelectionInfo = function ($container) {
-		//console.log("Function updateSelectionInfo");
-		return;
+    this.updateSelectionInfo = function () {
 		
-    if ( typeof $container !== 'undefined') baseMap.$selectedpanel = $container;
-
         var rangeinfo = '',
             bboxinfo = '',
             dplinfo = '',
@@ -1397,20 +1399,20 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		
 
 		// Show number of deployments and their info
-        if (baseMap.filters.deployments != null) {
-            for (var i = 0; i < baseMap.filters.deployments.length; i++) {
-                dplinfo += baseMap.filters.deployments[i].name + '<br>';
-                dplids.push(baseMap.filters.deployments[i].id)
-                showcreatbtn = true;
-            }
-            if (dplinfo != '') {
-				// TODO: Why <a>??
-                baseMap.$selectedpanel.append($('<a href="#_" class="btn btn-xs" title="' + dplinfo + '">Deployments <span class="badge">' + i + '</span></a> ').popover({html: true, placement: 'topRight', trigger: 'hover'}));
-                $newclform.find('#id_deployment_ids').val(dplids.join(','));
-            }
-        }
+//        if (baseMap.filters.deployments != null) {
+//            for (var i = 0; i < baseMap.filters.deployments.length; i++) {
+//                dplinfo += baseMap.filters.deployments[i].name + '<br>';
+//                dplids.push(baseMap.filters.deployments[i].id)
+//                showcreatbtn = true;
+//            }
+//            if (dplinfo != '') {
+//				// TODO: Why <a>??
+//                baseMap.$selectedpanel.append($('<a href="#_" class="btn btn-xs" title="' + dplinfo + '">Deployments <span class="badge">' + i + '</span></a> ').popover({html: true, placement: 'topRight', trigger: 'hover'}));
+//                $newclform.find('#id_deployment_ids').val(dplids.join(','));
+//            }
+//        }
 		
-		// Show the range filters		// 
+		// Show the range filters
 		//         var i = 0;
 		//         for (var key in baseMap.filters.featranges) {
 		//             rangeinfo = key + ': ' + baseMap.filters.featranges[key][0] + ' to ' + baseMap.filters.featranges[key][1] + '<br>';
@@ -1451,9 +1453,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		//             $newclform.find('#id_bboxes').val(bboxarr.join(':'));
 		//         }
 
-        var $createbtn = $('<button class="btn btn-info disabled" style="width:100%; margin-top:10px;"><i class="icon-plus"></i> New Project with selection</button>');
+//        var $createbtn = $('<button class="btn btn-info disabled" style="width:100%; margin-top:10px;"><i class="icon-plus"></i> New Project with selection</button>');
 
 
+        // TODO: if there are any deployments selected then set the showcreatebtn=true
+        
         if (showcreatbtn && !globalstate.isloggedin) {
             baseMap.$selectedpanel.append('<div class="alert" style="margin-top:10px"><b>NOTE:</b> you need to be logged in to create a Project</div>');
         }
