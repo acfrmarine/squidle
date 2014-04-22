@@ -1382,7 +1382,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		$createbtn.click(function () {
             baseMap.openNewCollectionModal()
         });
-		
+		$createbtn.hide();
 		
 		var $infobtn = $('<div id="info-button" class="alert" style="margin-top:10px"></div>');
 		$infobtn.hide();
@@ -1401,66 +1401,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         if( typeof baseMap.$selectedpanel === 'undefined' ) {
         		return;
         }
-        
-        // baseMap.$selectedpanel.html('');		
-		
-
-		// Show number of deployments and their info
-//        if (baseMap.filters.deployments != null) {
-//            for (var i = 0; i < baseMap.filters.deployments.length; i++) {
-//                dplinfo += baseMap.filters.deployments[i].name + '<br>';
-//                dplids.push(baseMap.filters.deployments[i].id)
-//                showcreatbtn = true;
-//            }
-//            if (dplinfo != '') {
-//				// TODO: Why <a>??
-//                baseMap.$selectedpanel.append($('<a href="#_" class="btn btn-xs" title="' + dplinfo + '">Deployments <span class="badge">' + i + '</span></a> ').popover({html: true, placement: 'topRight', trigger: 'hover'}));
-//                $newclform.find('#id_deployment_ids').val(dplids.join(','));
-//            }
-//        }
-		
-		// Show the range filters
-		//         var i = 0;
-		//         for (var key in baseMap.filters.featranges) {
-		//             rangeinfo = key + ': ' + baseMap.filters.featranges[key][0] + ' to ' + baseMap.filters.featranges[key][1] + '<br>';
-		//             // $newclform.find('#id_'+key).val(baseMap.filters.featranges[key][0] + ',' + baseMap.filters.featranges[key][1])
-		// 	        if (rangeinfo != '')  {
-		// 		
-		//         var $rangebtn = $('<span class="btn btn-xs" title="' + rangeinfo + '">' + key + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span>');
-		// 
-		//         $rangebtn.find("a").click(function (){
-		// 			console.log("filter before: " + baseMap.filters.featranges);
-		// 			console.log("removing: " + key);
-		// 			delete baseMap.filters.featranges[key];
-		// 			
-		// 			baseMap.
-		// 			
-		// 			console.log("filter after : " + baseMap.filters.featranges);
-		// 			baseMap.showSelectedImages();
-		// 		});
-		//         $rangebtn.tooltip({html: true, placement: 'topRight', trigger:'hover'});
-		// 
-		//         //baseMap.$selectedpanel.append($rangebtn);
-		// 		//baseMap.$selectedpanel.append($('<a class="btn btn-xs" title="' + rangeinfo + '" id="range_'+i+'" onclick="this.removeRangeFilter('+i+');" >' + key + ' filter &nbsp;<span class="badge">X</span></a> ').popover({html: true, placement: 'topRight', trigger:'hover'}));
-		// 	}
-		//             i++;
-		//         }
-		// 
-		// // Show bounding boxes
-		//         var bboxarr = [];
-		//         var bbox = [];
-		//         for (var i = 0; i < baseMap.filters.BBoxes.length; i++) {
-		//             bbox = [baseMap.filters.BBoxes[i].left , baseMap.filters.BBoxes[i].bottom , baseMap.filters.BBoxes[i].right , baseMap.filters.BBoxes[i].top];
-		//             bboxinfo += 'Box 1: ' + bbox.join(',') + '<br>';
-		//             bboxarr.push(bbox.join(','));
-		//             showcreatbtn = true;
-		//         }
-		//         if (bboxinfo != '') {
-		//             baseMap.$selectedpanel.append($('<a class="btn btn-xs" title="' + bboxinfo + '">Bounding boxes <span class="badge">' + i + '</span></a> ').popover({html: true, placement: 'topRight', trigger: 'hover'}));
-		//             $newclform.find('#id_bboxes').val(bboxarr.join(':'));
-		//         }
-
-//        var $createbtn = $('<button class="btn btn-info disabled" style="width:100%; margin-top:10px;"><i class="icon-plus"></i> New Project with selection</button>');
 
         
         // If there are any deployments selected then set the showcreatebtn=true
@@ -1472,17 +1412,21 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         if (showcreatbtn && !globalstate.isloggedin) {
             $('#info-button').html = '';
             $('#info-button').append("<b>NOTE:</b> you need to be logged in to create a Project");
+            $('#info-button').show();
+            $('#create-button').hide();
         }
         else if (showcreatbtn && globalstate.isloggedin) {
             $('#create-button').removeClass('disabled');
+            $('#create-button').show();
+            $('#info-button').hide();
         }
         else {
             $('#info-button').html = '';
             $('#info-button').append("<b>NOTE</b>: no images selected. Use the tools above add images to your project.");
+            $('#info-button').show();
+            $('#create-button').hide();
         }
 
-        //baseMap.$selectedpanel.append($createbtn);
-		// console.log("END updateSelectionInfo");
     }
 
     this.openNewCollectionModal = function () {
