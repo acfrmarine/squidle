@@ -633,11 +633,15 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 
 
-        if (this.mapInstance.getLayersByName(selectlayername).length > 0) {
-
-            var filterCombined = this.getFilters();
-            this.updateMapUsingFilter(filterCombined, selectlayername);
+        if (this.mapInstance.getLayersByName(selectlayername).length == 0) {
+        	console.log("This should never happen!!!");
         }
+
+        console.log(this.mapInstance.getLayersByName(selectlayername));
+        
+        var filterCombined = this.getFilters();
+        this.updateMapUsingFilter(filterCombined, selectlayername);
+
         this.updateSelectionInfo();
 
 		console.log("END showSelectedImages");
@@ -793,7 +797,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 else return '<i class="icon-th-list"></i> ' + options.length + ' deployments selected';
             },
             onChange: function (element, checked) {
-            	console.log("$dplselect.multiselect.onChange");
                 var id, name, $dplinfo, info = '';
                 baseMap.$dplinfo.find("input").prop('checked',false);  // deselect deployment property
                 baseMap.filters.deployments = [];
@@ -802,10 +805,12 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                     for (var i=0 ; i < $dplselect.val().length ; i++) {
                         id = $dplselect.val()[i];
                         name = $dplselect.find("option[value='" + id + "']").text();
-                        baseMap.filters.deployments.push({
-                            id: id,
-                            name: name
-                        });
+                        baseMap.filters.deployments.push(
+                        		{
+                        			id: id,
+                        			name: name
+                        		}
+                        	);
                         //console.log($dplselect.find("option[value='" + $dplselect.val()[i] + "']").text());
 
                         // check selected in info panel, otherwise add to info panel
