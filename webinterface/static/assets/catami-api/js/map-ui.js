@@ -292,11 +292,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				
 		// Create the layer if it does not already exist
 		if (this.mapInstance.getLayersByName(layername).length != 0) {
+			console.log("We should never end here!");
 			return;
 		}
 
-		function style(fill,stroke,size, op){
-
+		function style(fill,stroke,size, op) {
 			return new OpenLayers.Style({
 				pointRadius: "${radius}",
 				fillColor: fill,//"#ffcc66",
@@ -321,30 +321,31 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 		}
 
-		var deploymentlayer = new OpenLayers.Layer.Vector(layername, {
-			strategies: [
-			             new OpenLayers.Strategy.Fixed(),
-			             new OpenLayers.Strategy.Cluster()
-			             ],
-			             protocol: new OpenLayers.Protocol.WFS({
-			            	 url: this.wfsUrl,
-			            	 featureType: "catamidb_deployment"
-			            		 //featureNS : "http://catami"
-			             }),
-			             styleMap: new OpenLayers.StyleMap({
-			            	 "default": style("#000000", "#000000", 4),
-			            	 "select": style("#cccccc", "#000000", 4),
-			            	 "highlight": style("#000000", "#ffffff", 8, 1)
-			             }),
-			             projection: baseMap.projection.geographic
+		var deploymentlayer = new OpenLayers.Layer.Vector(
+			layername, {
+				strategies: [
+					new OpenLayers.Strategy.Fixed(),
+					new OpenLayers.Strategy.Cluster()
+				],
+				protocol: new OpenLayers.Protocol.WFS({
+					url: this.wfsUrl,
+					featureType: "catamidb_deployment"
+					//featureNS : "http://catami"
+				}),
+				styleMap: new OpenLayers.StyleMap({
+					"default": style("#000000", "#000000", 4),
+					"select": style("#cccccc", "#000000", 4),
+					"highlight": style("#000000", "#ffffff", 8, 1)
+				}),
+				projection: baseMap.projection.geographic
 		});
-
 		this.mapInstance.addLayer(deploymentlayer);
 		deploymentlayer.events.register('loadend', this, function(evt) {
 			//if (this.browseEnabled == true) {
 			this.mapInstance.zoomToExtent(evt.object.getDataExtent());
 			//}
 		});
+		
 		var highlightCtrl = new OpenLayers.Control.SelectFeature(deploymentlayer, {
 			hover : true,
 			highlightOnly : true,
@@ -368,11 +369,12 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		selectCtrl.id = "selectCtrl";
 		this.mapInstance.addControl(selectCtrl);
 		selectCtrl.activate();
+		
 		deploymentlayer.events.on({
 			"featureselected" : zoomToDeployments
 		});
 		
-
+		console.log("END showDeployments");
 	};
 	/**
 	 * Event function for when we hover over a deployment
@@ -458,7 +460,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 
 	this.showImages = function(layername) {
-			console.log("Function showImages");
+		console.log("Function showImages");
 		layername = (( typeof layername !== 'undefined') ? layername : "Images");
 		if (this.mapInstance.getLayersByName(layername).length == 0) {
 			var ImagesLayer = this.mapInstance.addLayer(new OpenLayers.Layer.WMS(layername, this.wmsUrl, {
@@ -510,7 +512,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 
     function getImageInfo (id) {
-		// console.log("Function getImageInfo");
+		console.log("Function getImageInfo");
         var imginfo = thlist.getImageInfo(id);
         //console.log(imginfo);
 
@@ -535,7 +537,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         $thumb.tooltip({trigger: "hover", html: true, placement: 'right'});
         $thumb.fancybox();
 		
-		// console.log("END getImageInfo");
+		console.log("END getImageInfo");
         return $thumb;
     }
 
@@ -584,6 +586,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	    		},
 				getfeatureinfo: function (event) 
 				{
+					console.log("getfeatureinfo: " + event);
                 	if (event.features.length > 0) {
                     	baseMap.$imginfo.html('');
                     	var fid, $thumb;
@@ -702,6 +705,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
         if (this.mapInstance.getLayersByName(selectlayername).length == 0) {
         	console.log("This should never happen!!!");
+			this.createImageLayer(selectlayername);
         }
         
         var filterCombined = this.getFilters();
