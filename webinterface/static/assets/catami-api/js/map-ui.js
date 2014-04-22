@@ -993,7 +993,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 		layercolor = this.filtLayerColor;		
 		
-        var $slider = $('<div id="'+ feature+'-slider" style="margin:10px;"></div>'),
+        var $slider = $('<div id="'+ feature+'-slider"></div>'),
             infoid = feature + '-range',
             $info = $('<span id="' + infoid + '"></span>'),
             filtertitle = feature[0].toUpperCase() + feature.substring(1) + ' range: ', // capitalise first letter
@@ -1062,7 +1062,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		$btn.tooltip("show");
 		
 		// Add to containers
-        $container.append($("<div></div>").append(filtertitle, "<br>", $info, params.unit, $slider));
+        $container.append($("<div style='margin: 10px;'></div>").append(filtertitle, "<br>", $info, params.unit, $slider));
         $($slider.data('infoid')).html($slider.slider("values", 0) +' - '+  $slider.slider("values", 1));
 		$infocontainer.append($btn);
 
