@@ -867,7 +867,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		$btn.find("a").click(function () {
 	        // TODO: deselect all check boxes
 			console.log("not implemented yet");
-			baseMap.$dplinfo.find("input").prop('checked',false);
+			console.log($dplselect);
+			console.log($dplselect.multiselect);
+			for (var i=0 ; i < $dplselect.val().length ; i++) {
+                id = $dplselect.val()[i];
+                console.log('id: ' + id);
+                $dplselect('deselect', id);
+			}
         });
 		$btn.tooltip({
 			html: true, 
