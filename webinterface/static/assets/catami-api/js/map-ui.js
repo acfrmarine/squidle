@@ -570,7 +570,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		{
             url: baseMap.wmsUrl,
             title: 'ClickImg',
-            layers: baseMap.mapInstance.getLayersByName(selectlayername),
+            layers: baseMap.mapInstance.getLayersByName(layername),
             queryVisible: true,
             hover: false,
             output: "object",
@@ -602,7 +602,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         baseMap.mapInstance.addControl(showFeatureInfoCtrl);
         showFeatureInfoCtrl.activate();
 		
-		console.log("\tCreated new layer: " + selectlayername);
+		console.log("\tCreated new layer: " + layername);
 		console.log("END createImageLayer");
 	}
 
