@@ -872,7 +872,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			for (var i=0 ; i < $dplselect.val().length ; i++) {
                 id = $dplselect.val()[i];
                 console.log('id: ' + id);
-                $dplselect('deselect', id);
+                $dplselect.multiselect('deselect', id);
 			}
         });
 		$btn.tooltip({
