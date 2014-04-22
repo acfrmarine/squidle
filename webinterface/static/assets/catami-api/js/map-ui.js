@@ -109,7 +109,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 numZoomLevels: 20,
                 wrapDateLine: true
             }
-        ));
+        )); 
 //        this.mapInstance.addLayer(new OpenLayers.Layer.WMS(
 //            "baselayer",
 //            "http://tilecache.emii.org.au/cgi-bin/tilecache.cgi/1.0.0/",
@@ -1198,9 +1198,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 */
     this.addBBoxSelect = function ($container, $infocontainer,layername) {
 		console.log("Function addBBoxSelect");
-        var $bboxdraw = $('<button type="button" id="bboxdraw" class="btn btn-default btn-sm" title="Draw a bounding box around the images you would like to add to your selection."><i class="icon-crop"></i> Create</button>'),
-			$bboxedit = $('<button type="button" id="bboxedit" class="btn btn-default btn-sm" title="Edit a bounding box by selecting it."><i class="icon-edit"></i> Edit</button>'),
-			$bboxdel  = $('<button type="button" id="bboxdel"  class="btn btn-default btn-sm" title="Delete a bounding box by selecting it."><i class="icon-remove-sign"></i> Delete</button>');
+        var $bboxdraw = $('<button type="button" id="bboxdraw" class="btn-group btn-group-sm" title="Draw a bounding box around the images you would like to add to your selection."><i class="icon-crop"></i> Create</button>'),
+			$bboxedit = $('<button type="button" id="bboxedit" class="btn-group btn-group-sm" title="Edit a bounding box by selecting it."><i class="icon-edit"></i> Edit</button>'),
+			$bboxdel  = $('<button type="button" id="bboxdel"  class="btn-group btn-group-sm" title="Delete a bounding box by selecting it."><i class="icon-remove-sign"></i> Delete</button>');
 		// Setup button action callbacks
         $bboxdraw.click(function (){
             toggleBBoxDraw();
