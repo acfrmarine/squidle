@@ -608,7 +608,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				// console.log(this);
 			}
 		})
-		imgLayer.setVisibility(visible);
+		imglayer.setVisibility(visible);
         this.mapInstance.addLayer(imglayer);
 		
         var showFeatureInfoCtrl = new OpenLayers.Control.WMSGetFeatureInfo(
