@@ -571,7 +571,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				isBaseLayer : false
             }
 		);
-		imgLayer.events.on({
+		imglayer.events.on({
 			"loadstart": function(e) {
 				console.log("loadstart");
 			},
