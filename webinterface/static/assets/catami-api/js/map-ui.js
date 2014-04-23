@@ -575,7 +575,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				isBaseLayer : false,
 				
 				alwaysInRange: false,
-				minScale: minScale,
+				minScale: minscale,
 				maxExtend: "auto",
 				maxResolution: "auto"
             }
