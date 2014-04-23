@@ -722,7 +722,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 */
     this.getSelectFilters = function () {
 //		console.log("Function getSelectedFilters");
-        var filters = [],
+        var filter = [],
 			selectfilters = [];
 
         // Get deployment filters
@@ -736,10 +736,10 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 }));
             }
 			
-			filters.push( new OpenLayers.Filter.Logical({
-            	type: OpenLayers.Filter.Logical.OR,
-            	filters: selectfilters 
-			}));
+			filter = new OpenLayers.Filter.Logical({
+	            	type: OpenLayers.Filter.Logical.OR,
+	            	filters: selectfilters 
+				});
         } else { // dirty hack - if no deployments selected, then make an invalid filter
             selectfilters.push(new OpenLayers.Filter.Comparison({
                 type: OpenLayers.Filter.Comparison.EQUAL_TO,
@@ -748,10 +748,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             }));
         }
 
-        if (filters.length > 0) 
-			return filters;
-        else 
-          	return null;
+        if (selectfilters.length > 0) return filter;
+        else return null;
     }
 	/**
 	 * Creates a filter based on the ranges set and bounding boxes drawn
@@ -803,16 +801,16 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             rangefilters = this.getRangeFilters(),
             selectfilters = this.getSelectFilters();
 
+        if (selectfilters !== null) {
+			
+	        if (rangefilters != null) {
+				console.log('merging range filters');
+	            filters = rangefilters;
+	        }
 
-        if (rangefilters != null) {
-			console.log('merging range filters');
-            filters = rangefilters;
-        }
-        if (selectfilters != null) {
 			console.log('merging select filters');
-            filters.push(selectfilters);
-        }
-
+			filters.push( selectfilters );
+		}
 		
         return filters;
     }
