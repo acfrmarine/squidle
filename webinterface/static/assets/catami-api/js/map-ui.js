@@ -739,8 +739,14 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         
 		
 		// From the deployment filter get the selected deployments
-		var deployments = [];
-        for (var i=0 ; i < this.filters.deployments.length; i++) {
+		var deployments = [], 
+			numDeployments = this.filters.deployments.length;
+		if( numDeployments == 0) {
+			console.log('nothing to show');
+			return;
+		}
+		
+        for (var i=0 ; i < numDeployments; i++) {
 			deployments.push( this.filters.deployments[i].id );
 		}
 		// TODO: get info about deployments and use these to adjust the deployment color and filter ranges
@@ -748,19 +754,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		
 		// Update the image and filter layers
 		var filters = [];
-		var selectFilters = this.getSelectFilters();
-		if( selectFilters === null ) {
-			console.log('nothing to show');
-			return;
-		}
-		filters.push(selectFilters);
+		filters.push(this.getSelectFilters());
 		this.updateMapUsingFilter(filters, this.selImageLayerName );
 		
 
-		var rangeFilters = this.getRangeFilters();
-		if(rangeFilters !== null) {
-			filters.push(rangeFilters);
-		}
+		filters = this.getFilters();
 		this.updateMapUsingFilter(filters, this.filtImageLayerName );
 
         this.updateSelectionInfo();
