@@ -25,9 +25,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	this.collectionExtentUrl = collectionExtentUrl;
 	this.hostname = location.hostname;
 
-	this.filtLayername = "filter layer";
-	this.filtLayerColor = "00FF00";
-
 //	this.browseEnabled = true;
 	this.isInitialised = false;
 
@@ -119,6 +116,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 //            }
 //        ));
 
+		this.mapInstance.events.on({
+			"zoomed": function(e) {
+				console.log( this.getZoom() );
+			}
+		});
 		this.isInitialised = true;
 	}
 
@@ -558,7 +560,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 format: 'image/gif',
                 transparent: 'TRUE',
                 // sld: "http://" + baseMap.hostname + "/geoserverstyle?prop=depth&min=35.0&max=50.0"
-                sld : "http://" + baseMap.hostname + "/geoserverSimplestyle?name=catami:catamidb_images&colour="+color+"&size=5"
+                sld : "http://" + baseMap.hostname + "/geoserverSimplestyle?name=catami:catamidb_images&colour="+color+"&size=5",
+				minZoomLevel: 4
         	}, 
 			{
                 transitionEffect: 'resize',
