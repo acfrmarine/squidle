@@ -589,16 +589,18 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		imglayer.events.on({
 			"loadstart": function(e) {
 				console.log("loadstart");
+				//TODO: show a window with the text "refining selection"
 			},
 			"loadend": function(e) {
 				console.log("loadend");
+				//TODO: close the refining window
 			},
 			"visibilitychanged": function(e) {
-				console.log("visibilitychanged");
+				// console.log("visibilitychanged");
 			},
 			"move": function(e) {
-				console.log("move");
-				console.log(this);
+				// console.log("move");
+				// console.log(this);
 			}
 		})
         this.mapInstance.addLayer(imglayer);
@@ -657,7 +659,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			numDeployments = this.filters.deployments.length;
 			
 		if( numDeployments == 0) {
-			console.log('nothing to show');
 			this.mapInstance.getLayersByName(this.selImageLayerName)[0].setVisibility(false);
 			this.mapInstance.getLayersByName(this.filtImageLayerName)[0].setVisibility(false);
 		}
@@ -727,8 +728,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
         // Get deployment filters
         if (this.filters.deployments.length > 0) {
-			console.log('adding select filter');
-            for (var i=0 ; i < this.filters.deployments.length; i++) {
+			for (var i=0 ; i < this.filters.deployments.length; i++) {
                 selectfilters.push(new OpenLayers.Filter.Comparison({
                     type: OpenLayers.Filter.Comparison.EQUAL_TO,
                     property: "deployment_id",
@@ -740,13 +740,15 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	            	type: OpenLayers.Filter.Logical.OR,
 	            	filters: selectfilters 
 				});
-        } else { // dirty hack - if no deployments selected, then make an invalid filter
-            selectfilters.push(new OpenLayers.Filter.Comparison({
-                type: OpenLayers.Filter.Comparison.EQUAL_TO,
-                property: "deployment_id",
-                value: -1
-            }));
         }
+		// Should not be necessary any more 
+		// else { // dirty hack - if no deployments selected, then make an invalid filter
+//             selectfilters.push(new OpenLayers.Filter.Comparison({
+//                 type: OpenLayers.Filter.Comparison.EQUAL_TO,
+//                 property: "deployment_id",
+//                 value: -1
+//             }));
+//         }
 
         if (selectfilters.length > 0) return filter;
         else return null;
@@ -761,8 +763,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
         // get range filters
         for (var key in this.filters.featranges) {
-			console.log('adding range filters');
-            var filtvalues = this.filters.featranges[key];
+			var filtvalues = this.filters.featranges[key];
             filters.push(new OpenLayers.Filter.Comparison({
                 type: OpenLayers.Filter.Comparison.BETWEEN,
                 property: key,
@@ -781,7 +782,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         }
 
         if (bboxfilters.length > 0) {
-			console.log('adding bbox filters');
 			filters.push(new OpenLayers.Filter.Logical({
             	type: OpenLayers.Filter.Logical.OR,
             	filters: bboxfilters
@@ -804,11 +804,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         if (selectfilters !== null) {
 			
 	        if (rangefilters != null) {
-				console.log('merging range filters');
-	            filters = rangefilters;
+				filters = rangefilters;
 	        }
 
-			console.log('merging select filters');
 			filters.push( selectfilters );
 		}
 		

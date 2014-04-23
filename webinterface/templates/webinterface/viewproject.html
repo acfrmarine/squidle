@@ -202,7 +202,7 @@
 					
                     map.showDeployments(depLayer);
 					map.createImageLayer(depImageLayer,  minVisibleScale, '666666');
-                    map.createImageLayer(selImageLayer,  minVisibleScale, '0000FF');
+                    map.createImageLayer(selImageLayer,  minVisibleScale/2, '0000FF'); // For the sake of performance we show this later
                     map.createImageLayer(filtImageLayer, minVisibleScale, '00FF00');
 
                     
