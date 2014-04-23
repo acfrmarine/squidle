@@ -561,6 +561,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 transparent: 'TRUE',
                 // sld: "http://" + baseMap.hostname + "/geoserverstyle?prop=depth&min=35.0&max=50.0"
                 sld : "http://" + baseMap.hostname + "/geoserverSimplestyle?name=catami:catamidb_images&colour="+color+"&size=5",
+				alwaysInRange: false,
 				minZoomLevel: 4,
 				maxZoomLevel: 6
         	}, 
@@ -570,6 +571,20 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				isBaseLayer : false
             }
 		);
+		imgLayer.events.on({
+			"loadstart": function(e) {
+				console.log("loadstart");
+			},
+			"loadend": function(e) {
+				console.log("loadend");
+			},
+			"visibilitychanged": function(e) {
+				console.log("visibilitychanged");
+			},
+			"move": function(e) {
+				console.log("move");
+			}
+		})
         this.mapInstance.addLayer(imglayer);
 
         var showFeatureInfoCtrl = new OpenLayers.Control.WMSGetFeatureInfo(
