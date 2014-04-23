@@ -120,14 +120,16 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 		this.mapInstance.events.on({
 			"zoomend": function(e) {
-				console.log( "this.getZoom(): " + baseMap.mapInstance.getZoom() );
-				if( baseMap.mapInstance.getZoom() < 9 ) {
-					baseMap.mapInstance.getLayersByName('Deployment images')[0].setVisibility(false);
-					baseMap.mapInstance.getLayersByName('Selected images')[0].setVisibility(false);
-				} else {
-					baseMap.mapInstance.getLayersByName('Deployment images')[0].setVisibility(true);
-					baseMap.mapInstance.getLayersByName('Selected images')[0].setVisibility(true);
-				}
+				// This is not necessary as we are dealing with the loading of the image layers through the maxScale 
+				//		option when the layers are created.
+				// console.log( "this.getZoom(): " + baseMap.mapInstance.getZoom() );
+// 				if( baseMap.mapInstance.getZoom() < 9 ) {
+// 					baseMap.mapInstance.getLayersByName('Deployment images')[0].setVisibility(false);
+// 					baseMap.mapInstance.getLayersByName('Selected images')[0].setVisibility(false);
+// 				} else {
+// 					baseMap.mapInstance.getLayersByName('Deployment images')[0].setVisibility(true);
+// 					baseMap.mapInstance.getLayersByName('Selected images')[0].setVisibility(true);
+// 				}
 			}
 		});
 		this.isInitialised = true;
@@ -733,26 +735,18 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 //             baseMap.mapInstance.addControl(showFeatureInfoCtrl);
 //             showFeatureInfoCtrl.activate();
 // 		}
-
-
-
-
-        if (this.mapInstance.getLayersByName(selectlayername).length == 0) {
-        	console.log("This should never happen!!!");
-			this.createImageLayer(selectlayername);
-        }
         
         var filterCombined = this.getFilters();
 		
-		// TODO: from the deployment filter get the selected deployments
+		// From the deployment filter get the selected deployments
 		var deployments = [];
         for (var i=0 ; i < this.filters.deployments.length; i++) {
 			deployments.push( this.filters.deployments[i].id );
 		}
-		console.log(deployments);
 		// TODO: get info about deployments and use these to adjust the deployment color and filter ranges
-		
-        this.updateMapUsingFilter(filterCombined, selectlayername);
+
+		for(var i=0; i < this.imageLayerNames.length; i++ )
+			this.updateMapUsingFilter(filterCombined, this.imageLayerNames[i] );
 
         this.updateSelectionInfo();
 
