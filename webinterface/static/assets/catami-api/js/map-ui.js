@@ -879,7 +879,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
         if (rangefilters != null) {
 			console.log('merging range filters');
-            filters.push(rangefilters);
+            filters = rangefilters;
         }
         if (selectfilters != null) {
 			console.log('merging select filters');
@@ -1153,8 +1153,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				}
 		        // create button in side panel
 		        else {
-					// TODO: is not updating correctly
-					// should tooltip be destroyed and recreated? check out best way to update bootstrap tooltip title
 					$btn.show();
 					// Add to featranges
 					baseMap.filters.featranges[feature] = $slider.slider("values");
@@ -1162,7 +1160,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				
 				
 				// Update map
-                baseMap.showSelectedImages(layername, false, layercolor);
+                baseMap.showSelectedImages();
             }
         });
 		
