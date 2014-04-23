@@ -217,10 +217,10 @@
 					map.addDeploymentSelect($selpanel, $curselpanel, depImageLayer);
 
 					// Add filters
-                    map.addRangeFilter($filterpanel, $curselpanel, imagelayer_filt, 'depth', {step: 1, range: [0, 2000], unit: 'm'});
-                    map.addRangeFilter($filterpanel, $curselpanel, imagelayer_filt, 'altitude', {step: 0.1, range: [0, 10], unit: 'm'});
-                    map.addDateFilter($filterpanel, $curselpanel, imagelayer_filt, 'date_time', {from: '2005-01-01', to: new Date()});
-                    map.addBBoxFilter($filterpanel, $curselpanel, imagelayer_filt);
+                    map.addRangeFilter($filterpanel, $curselpanel, filtImageLayer, 'depth', {step: 1, range: [0, 2000], unit: 'm'});
+                    map.addRangeFilter($filterpanel, $curselpanel, filtImageLayer, 'altitude', {step: 0.1, range: [0, 10], unit: 'm'});
+                    map.addDateFilter($filterpanel, $curselpanel, filtImageLayer, 'date_time', {from: '2005-01-01', to: new Date()});
+                    map.addBBoxFilter($filterpanel, $curselpanel, filtImageLayer);
 
                     // add current selection info
                     map.addSelectionInfo($curselpanel);
