@@ -97,7 +97,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         this.mapInstance.addLayer(new OpenLayers.Layer.Google("Google Satellite", {
             type: google.maps.MapTypeId.SATELLITE,
             numZoomLevels: 20
-        }, {maxScale: 150000}));
+        }, {minScale: 150000}));
         this.mapInstance.addLayer(new OpenLayers.Layer.XYZ("ESRI Ocean Basemap",
             "http://services.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/${z}/${y}/${x}",
             {
