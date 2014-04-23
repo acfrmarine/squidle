@@ -709,6 +709,15 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         }
         
         var filterCombined = this.getFilters();
+		
+		// TODO: from the deployment filter get the selected deployments
+		var deployments = [];
+        for (var i=0 ; i < this.filters.deployments.length; i++) {
+			deployments.push( this.filters.deployments[i].id );
+		}
+		console.log(deployments);
+		// TODO: get info about deployments and use these to adjust the deployment color and filter ranges
+		
         this.updateMapUsingFilter(filterCombined, selectlayername);
 
         this.updateSelectionInfo();
