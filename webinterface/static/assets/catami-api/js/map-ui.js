@@ -66,7 +66,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			units : "m",
 			//maxExtent: world_extent,
             maxResolution : 156543.0399,
-			numZoomLevels : 25,
+			numZoomLevels : 10,
             center : [14431310.938232, -3013453.4026953],
             controls : [new OpenLayers.Control.Navigation(),
                 new OpenLayers.Control.PanZoomBar(),
@@ -568,14 +568,14 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 transparent: 'TRUE',
                 // sld: "http://" + baseMap.hostname + "/geoserverstyle?prop=depth&min=35.0&max=50.0"
                 sld : "http://" + baseMap.hostname + "/geoserverSimplestyle?name=catami:catamidb_images&colour="+color+"&size=5",
-				alwaysInRange: false,
-				minZoomLevel: 4,
-				maxZoomLevel: 6
+				alwaysInRange: false
         	}, 
 			{
                 transitionEffect: 'resize',
 				tileOptions: {maxGetUrlLength: 2048}, 
-				isBaseLayer : false
+				isBaseLayer : false,
+				minZoomLevel: 4,
+				maxZoomLevel: 6
             }
 		);
 		imglayer.events.on({
