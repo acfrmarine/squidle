@@ -41,8 +41,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         deployments : []
 	}
 	
-	this.imageLayerName = '';
-	this.filterLayerName = '';
+	this.depImageLayerName = '';
+	this.selImageLayerName = '';
+	this.filtImageLayerName = '';
 
 	//this.AUVimageSelectionFilter = [];
 	//this.ExploreFilter = [];
@@ -746,8 +747,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 		
 		// Update the image and filter layers
-		this.updateMapUsingFilter(this.getSelectFilters(), this.imageLayerName );
-		this.updateMapUsingFilter(this.getFilters(), this.filterLayerName );
+		this.updateMapUsingFilter(this.getSelectFilters(), this.selImageLayerName );
+		this.updateMapUsingFilter(this.getFilters(), this.filtImageLayerName );
 
         this.updateSelectionInfo();
 

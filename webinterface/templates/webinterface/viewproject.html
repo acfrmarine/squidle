@@ -190,17 +190,20 @@
                     }
                 }
                 else { // Explore mode
-                    var deplayer = "Deployment origins",
-                    	imagelayer = "Deployment images",
-                        imagelayer_filt = "Selected images";
+                    var depLayer 		= "Deployment origins",
+                    	depImageLayer 	= "Deployment images",
+                        selImageLayer 	= "Selected images",
+						filtImageLayer	= "Filtered images";
 					var minVisibleScale = 100000;
 					
-					map.imageLayerName = imagelayer;
-					map.filterLayerName = imagelayer_filt;
+					map.depImageLayerName = depImageLayer;
+					map.selImageLayerName = selImageLayer;
+					map.filtImageLayerName = filtImageLayer;
 					
-                    map.showDeployments(deplayer);
-                    map.createImageLayer(imagelayer		, minVisibleScale, '0000FF');
-                    map.createImageLayer(imagelayer_filt, minVisibleScale, '00FF00');
+                    map.showDeployments(depLayer);
+					map.createImageLayer(depImageLayer,  minVisibleScale, 'CCCCCC');
+                    map.createImageLayer(selImageLayer,  minVisibleScale, '0000FF');
+                    map.createImageLayer(filtImageLayer, minVisibleScale, '00FF00');
 
                     
                     
