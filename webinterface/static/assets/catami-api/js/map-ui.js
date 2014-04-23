@@ -824,6 +824,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
         // get range filters
         for (var key in this.filters.featranges) {
+			console.log('adding range filters');
             var filtvalues = this.filters.featranges[key];
             filters.push(new OpenLayers.Filter.Comparison({
                 type: OpenLayers.Filter.Comparison.BETWEEN,
@@ -834,7 +835,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         }
 
         // get BBox filters
-		for( var key in this.filters.BBoxes) {			
+		for( var key in this.filters.BBoxes) {	
             bboxfilters.push(new OpenLayers.Filter.Spatial({
                 type: OpenLayers.Filter.Spatial.BBOX,
                 property: "position",
@@ -842,11 +843,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             }));
         }
 
-        if (bboxfilters.length > 0) 
+        if (bboxfilters.length > 0) {
+			console.log('adding bbox filters');
 			filters.push(new OpenLayers.Filter.Logical({
             	type: OpenLayers.Filter.Logical.OR,
             	filters: bboxfilters
         	}));
+		}
 
         if (filters.length > 0) return filters;
         else return null;
@@ -863,9 +866,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 
         if (rangefilters != null) {
+			console.log('adding range filters');
             filters.push(rangefilters);
         }
         if (selectfilters != null) {
+			console.log('adding select filters');
             filters.push(selectfilters);
         }
 
