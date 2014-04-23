@@ -195,6 +195,9 @@
                         imagelayer_filt = "Selected images";
 					var minVisibleScale = 100000;
 					
+					map.imageLayerName = imagelayer;
+					map.filterLayerName = imagelayer_filt;
+					
                     map.showDeployments(deplayer);
                     map.createImageLayer(imagelayer		, minVisibleScale, '0000FF');
                     map.createImageLayer(imagelayer_filt, minVisibleScale, '00FF00');

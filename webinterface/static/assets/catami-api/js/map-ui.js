@@ -41,7 +41,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         deployments : []
 	}
 	
-	this.imageLayerNames = [];
+	this.imageLayerName = '';
+	this.filterLayerName = '';
 
 	//this.AUVimageSelectionFilter = [];
 	//this.ExploreFilter = [];
@@ -638,9 +639,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         this.mapInstance.addControl(showFeatureInfoCtrl);
         showFeatureInfoCtrl.activate();
 		
-		this.imageLayerNames.push( layername );
 		console.log("\tCreated new layer: " + layername);
-		console.log(this.imageLayerNames);
 		console.log("END createImageLayer");
 	}
 
@@ -736,7 +735,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 //             showFeatureInfoCtrl.activate();
 // 		}
         
-        var filterCombined = this.getFilters();
+        
 		
 		// From the deployment filter get the selected deployments
 		var deployments = [];
@@ -745,8 +744,10 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		}
 		// TODO: get info about deployments and use these to adjust the deployment color and filter ranges
 
-		for(var i=0; i < this.imageLayerNames.length; i++ )
-			this.updateMapUsingFilter(filterCombined, this.imageLayerNames[i] );
+		
+		// Update the image and filter layers
+		this.updateMapUsingFilter(this.getSelectFilters(), this.imageLayerName );
+		this.updateMapUsingFilter(this.getFilters(), this.filterLayerName );
 
         this.updateSelectionInfo();
 
