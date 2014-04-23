@@ -558,8 +558,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 	/**
 	 * Creates a WMS layer
+	 *
+	 * layername: - Name of layer
+	 * minscale: minimum scale at which it is shown
+	 * visible: visibility at creation
+	 * color: [optional] color of the markers
 	 */
-	this.createImageLayer = function(layername, minscale, color) {
+	this.createImageLayer = function(layername, minscale, visible, color) {
 		console.log("Function createImageLayer: " + layername);
 		
 		color = (( typeof color !== 'undefined') ? color : "0000FF");
@@ -603,6 +608,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				// console.log(this);
 			}
 		})
+		imgLayer.setVisibility(visible);
         this.mapInstance.addLayer(imglayer);
 		
         var showFeatureInfoCtrl = new OpenLayers.Control.WMSGetFeatureInfo(
