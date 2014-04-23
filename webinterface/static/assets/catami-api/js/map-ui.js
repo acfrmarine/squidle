@@ -750,7 +750,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		var selectFilters = this.getSelectFilters();
 		var rangeFilters = this.getRangeFilters();
 		this.updateMapUsingFilter(selectFilters, this.selImageLayerName );
-		this.updateMapUsingFilter([selectFilters, rangeFitlers], this.filtImageLayerName );
+		this.updateMapUsingFilter([selectFilters, rangeFiters], this.filtImageLayerName );
 
         this.updateSelectionInfo();
 
