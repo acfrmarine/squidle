@@ -574,8 +574,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 transitionEffect: 'resize',
 				tileOptions: {maxGetUrlLength: 2048}, 
 				isBaseLayer : false,
-				minZoomLevel: 4,
-				maxZoomLevel: 6
+				minScale: 50000
             }
 		);
 		imglayer.events.on({
@@ -594,7 +593,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			}
 		})
         this.mapInstance.addLayer(imglayer);
-
+		
         var showFeatureInfoCtrl = new OpenLayers.Control.WMSGetFeatureInfo(
 		{
             url: baseMap.wmsUrl,
