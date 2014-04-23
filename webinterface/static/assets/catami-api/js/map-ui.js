@@ -40,6 +40,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		BBoxes : [],
         deployments : []
 	}
+	
+	this.imageLayerNames = [];
 
 	//this.AUVimageSelectionFilter = [];
 	//this.ExploreFilter = [];
@@ -631,10 +633,12 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         	}
 		});
 		showFeatureInfoCtrl.id = "showFeatureInfoCtrl";
-        baseMap.mapInstance.addControl(showFeatureInfoCtrl);
+        this.mapInstance.addControl(showFeatureInfoCtrl);
         showFeatureInfoCtrl.activate();
 		
+		this.imageLayerNames.push( layername );
 		console.log("\tCreated new layer: " + layername);
+		console.log(this.imageLayerNames);
 		console.log("END createImageLayer");
 	}
 
@@ -645,14 +649,15 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * 
 	 */
 	this.showSelectedImages = function(selectlayername, nocreate, color) {
-		console.log("Function showSelectedImages: " + selectlayername);
+		console.log("Function showSelectedImages");
+		// console.log("Function showSelectedImages: " + selectlayername);
 		
-        nocreate = (( typeof nocreate !== 'undefined') ? nocreate : false);
-		color = (( typeof color !== 'undefined') ? color : "0000FF");
-		
-		var //selectlayername = baselayername + ' (selected)',
-            selectedpanelid = 'mapselected',
-            $selectedpanel;
+		//         nocreate = (( typeof nocreate !== 'undefined') ? nocreate : false);
+		// color = (( typeof color !== 'undefined') ? color : "0000FF");
+		// 
+		// var //selectlayername = baselayername + ' (selected)',
+		//             selectedpanelid = 'mapselected',
+		//             $selectedpanel;
 
 		// check if there is a selection
 		// if (this.getSelectFilters() == null) {
