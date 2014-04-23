@@ -193,10 +193,11 @@
                     var deplayer = "Deployment origins",
                     	imagelayer = "Deployment images",
                         imagelayer_filt = "Selected images";
-                    
+					var minVisibleScale = 100000;
+					
                     map.showDeployments(deplayer);
-                    map.createImageLayer(imagelayer, '0000FF');
-                    map.createImageLayer(imagelayer_filt, '00FF00');
+                    map.createImageLayer(imagelayer, minVisibleScale, '0000FF');
+                    map.createImageLayer(imagelayer_filt, minVisible, '00FF00');
 
                     
                     

@@ -553,7 +553,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	/**
 	 * Creates a WMS layer
 	 */
-	this.createImageLayer = function(layername, color) {
+	this.createImageLayer = function(layername, minscale, color) {
 		console.log("Function createImageLayer: " + layername);
 		
 		color = (( typeof color !== 'undefined') ? color : "0000FF");
@@ -567,14 +567,17 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 format: 'image/gif',
                 transparent: 'TRUE',
                 // sld: "http://" + baseMap.hostname + "/geoserverstyle?prop=depth&min=35.0&max=50.0"
-                sld : "http://" + baseMap.hostname + "/geoserverSimplestyle?name=catami:catamidb_images&colour="+color+"&size=5",
-				alwaysInRange: false
+                sld : "http://" + baseMap.hostname + "/geoserverSimplestyle?name=catami:catamidb_images&colour="+color+"&size=5"
         	}, 
 			{
                 transitionEffect: 'resize',
 				tileOptions: {maxGetUrlLength: 2048}, 
 				isBaseLayer : false,
-				minScale: 50000
+				
+				alwaysInRange: false,
+				minScale: minScale,
+				maxExtend: "auto",
+				maxResolution: "auto"
             }
 		);
 		imglayer.events.on({
