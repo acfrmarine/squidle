@@ -214,7 +214,7 @@
                     var $curselpanel = map.addPanel($('#map-panel'), {id: 'mapselected', icon: 'icon-stackexchange', title: 'Current selection', closeable: false});
 					
 					// Add selection tools
-					map.addDeploymentSelect($selpanel, $curselpanel, imagelayer);
+					map.addDeploymentSelect($selpanel, $curselpanel, depImageLayer);
 
 					// Add filters
                     map.addRangeFilter($filterpanel, $curselpanel, imagelayer_filt, 'depth', {step: 1, range: [0, 2000], unit: 'm'});
