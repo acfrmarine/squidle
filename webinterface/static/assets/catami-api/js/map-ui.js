@@ -658,12 +658,12 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			
 		if( numDeployments == 0) {
 			console.log('nothing to show');
-			this.mapInstance.getLayersByName(selImageLayerName)[0].setVisibility(false);
-			this.mapInstance.getLayersByName(filtImageLayerName)[0].setVisibility(false);
+			this.mapInstance.getLayersByName(this.selImageLayerName)[0].setVisibility(false);
+			this.mapInstance.getLayersByName(this.filtImageLayerName)[0].setVisibility(false);
 		}
 		else {
-			this.mapInstance.getLayersByName(selImageLayerName)[0].setVisibility(true);
-			this.mapInstance.getLayersByName(filtImageLayerName)[0].setVisibility(true);
+			this.mapInstance.getLayersByName(this.selImageLayerName)[0].setVisibility(true);
+			this.mapInstance.getLayersByName(this.filtImageLayerName)[0].setVisibility(true);
 		
 			// From the deployment filter get the selected deployments
 	        // TODO: get info about deployments and use these to adjust the deployment color and filter ranges
