@@ -119,6 +119,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		this.mapInstance.events.on({
 			"zoomend": function(e) {
 				console.log( "this.getZoom(): " + baseMap.mapInstance.getZoom() );
+				if( baseMap.mapInstance.getZoom() < 9 ) {
+					baseMap.mapInstance.getLayersByName('Deployment Images').setVisibility(false);
+					baseMap.mapInstance.getLayersByName('Selected Images').setVisibility(false);
+				} else {
+					baseMap.mapInstance.getLayersByName('Deployment Images').setVisibility(true);
+					baseMap.mapInstance.getLayersByName('Selected Images').setVisibility(true);
+				}
 			}
 		});
 		this.isInitialised = true;
@@ -583,6 +590,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			},
 			"move": function(e) {
 				console.log("move");
+				console.log(this);
 			}
 		})
         this.mapInstance.addLayer(imglayer);
