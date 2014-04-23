@@ -118,7 +118,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 		this.mapInstance.events.on({
 			"zoomed": function(e) {
-				console.log( this.getZoom() );
+				console.log( "this.getZoom(): " + baseMap.mapInstance.getZoom() );
 			}
 		});
 		this.isInitialised = true;
@@ -561,7 +561,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 transparent: 'TRUE',
                 // sld: "http://" + baseMap.hostname + "/geoserverstyle?prop=depth&min=35.0&max=50.0"
                 sld : "http://" + baseMap.hostname + "/geoserverSimplestyle?name=catami:catamidb_images&colour="+color+"&size=5",
-				minZoomLevel: 4
+				minZoomLevel: 4,
+				maxZoomLevel: 6
         	}, 
 			{
                 transitionEffect: 'resize',
