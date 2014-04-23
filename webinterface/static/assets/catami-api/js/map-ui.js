@@ -747,10 +747,21 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 		
 		// Update the image and filter layers
+		var filters = [];
 		var selectFilters = this.getSelectFilters();
+		if( selectFilters === null ) {
+			console.log('nothing to show');
+			return;
+		}
+		filters.push(selectFilters);
+		this.updateMapUsingFilter(filters, this.selImageLayerName );
+		
+
 		var rangeFilters = this.getRangeFilters();
-		this.updateMapUsingFilter(selectFilters, this.selImageLayerName );
-		this.updateMapUsingFilter([selectFilters, rangeFilters], this.filtImageLayerName );
+		if(rangeFilters !== null) {
+			filters.push(rangeFilters);
+		}
+		this.updateMapUsingFilter(filters, this.filtImageLayerName );
 
         this.updateSelectionInfo();
 
@@ -795,6 +806,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
         // Get deployment filters
         if (this.filters.deployments.length > 0) {
+			console.log('adding select filter');
             for (var i=0 ; i < this.filters.deployments.length; i++) {
                 selectfilters.push(new OpenLayers.Filter.Comparison({
                     type: OpenLayers.Filter.Comparison.EQUAL_TO,
@@ -868,11 +880,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 
         if (rangefilters != null) {
-			console.log('adding range filters');
+			console.log('merging range filters');
             filters.push(rangefilters);
         }
         if (selectfilters != null) {
-			console.log('adding select filters');
+			console.log('merging select filters');
             filters.push(selectfilters);
         }
 
