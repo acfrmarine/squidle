@@ -863,7 +863,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 
         if (rangefilters != null) {
-            filters = rangefilters;
+            filters.push(rangefilters);
         }
         if (selectfilters != null) {
             filters.push(selectfilters);
