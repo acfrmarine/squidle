@@ -120,11 +120,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			"zoomend": function(e) {
 				console.log( "this.getZoom(): " + baseMap.mapInstance.getZoom() );
 				if( baseMap.mapInstance.getZoom() < 9 ) {
-					baseMap.mapInstance.getLayersByName('Deployment Images')[0].setVisibility(false);
-					baseMap.mapInstance.getLayersByName('Selected Images')[0].setVisibility(false);
+					baseMap.mapInstance.getLayersByName('Deployment images')[0].setVisibility(false);
+					baseMap.mapInstance.getLayersByName('Selected images')[0].setVisibility(false);
 				} else {
-					baseMap.mapInstance.getLayersByName('Deployment Images')[0].setVisibility(true);
-					baseMap.mapInstance.getLayersByName('Selected Images')[0].setVisibility(true);
+					baseMap.mapInstance.getLayersByName('Deployment images')[0].setVisibility(true);
+					baseMap.mapInstance.getLayersByName('Selected images')[0].setVisibility(true);
 				}
 			}
 		});
