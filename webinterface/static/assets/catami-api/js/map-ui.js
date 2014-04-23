@@ -117,7 +117,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 //        ));
 
 		this.mapInstance.events.on({
-			"zoomed": function(e) {
+			"zoomend": function(e) {
 				console.log( "this.getZoom(): " + baseMap.mapInstance.getZoom() );
 			}
 		});
