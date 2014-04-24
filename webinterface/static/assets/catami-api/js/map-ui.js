@@ -597,7 +597,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		imglayer.events.on({
 			"loadstart": function(e) {
 				console.log("loadstart");
-				//TODO: show a window with the text "refining selection"
+				//TODO: change to the style Ari is using to show alerts
 				$( "#load-pane" ).dialog({
 					autoOpen:true				
 				});
