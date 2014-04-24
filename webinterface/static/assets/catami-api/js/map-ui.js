@@ -569,8 +569,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		color = (( typeof color !== 'undefined') ? color : "0000FF");
 		
 		this.$loadpane = '<div id="load-pane" title="Loading selection">Updating map with selection</div>';
-		$('#load-pane').dialog();
-		$('#load-pane').dialog('option', 'hide', true);
+		$('#load-pane').dialog({
+			autoOpen: false
+		});
 		$('#map').append(this.$loadpane);
 		
 		// add the selection layer if required
