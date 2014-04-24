@@ -569,9 +569,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		color = (( typeof color !== 'undefined') ? color : "0000FF");
 		
 		this.$loadpane = '<div id="load-pane" title="Loading selection">Updating map with selection</div>';
-		$('#load-pane').dialog({
-			autoOpen: false
-		});
+		this.$loadpane.hide();
 		$('#map').append(this.$loadpane);
 		
 		// add the selection layer if required
@@ -600,13 +598,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			"loadstart": function(e) {
 				console.log("loadstart");
 				//TODO: show a window with the text "refining selection"
-				// $( "#load-pane" ).dialog( "open" );
+				$( "#load-pane" ).dialog();
 				
 			},
 			"loadend": function(e) {
 				console.log("loadend");
 				//TODO: close the refining window
-				// $( "#load-pane" ).dialog( "close" );
+				$( "#load-pane" ).dialog( "close" );
 			},
 			"visibilitychanged": function(e) {
 				// console.log("visibilitychanged");
@@ -637,7 +635,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	    		},
 				getfeatureinfo: function (event) 
 				{
-					console.log("getfeatureinfo: " + event);
+					console.log("getfeatureinfo event");
                 	if (event.features.length > 0) {
                     	baseMap.$imginfo.html('');
                     	var fid, $thumb;
