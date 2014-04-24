@@ -650,8 +650,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         showFeatureInfoCtrl.activate();
 		
 		
-		this.$loadpane = '<div id="load-pane">Loading selection</div>';
-		this.$loadpane.dialog({
+		var $loadpane = '<div id="load-pane">Loading selection</div>';
+		$loadpane.dialog({
 			appendTo: "#map",
 			autoOpen: true,
 			modal: true,
