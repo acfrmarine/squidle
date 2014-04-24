@@ -603,13 +603,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			"loadstart": function(e) {
 				console.log("loadstart");
 				//TODO: show a window with the text "refining selection"
-				$( "#load-pane" ).dialog( "option", "show", true );
+				$( "#load-pane" ).dialog( "open" );
 				
 			},
 			"loadend": function(e) {
 				console.log("loadend");
 				//TODO: close the refining window
-				$( "#load-pane" ).dialog( "option", "hide", true );
+				$( "#load-pane" ).dialog( "close" );
 			},
 			"visibilitychanged": function(e) {
 				// console.log("visibilitychanged");
