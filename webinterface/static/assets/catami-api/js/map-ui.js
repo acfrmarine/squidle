@@ -651,7 +651,10 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		
 		
 		var $loadpane = '<div id="load-pane" title="Loading selection">Updating map with selection</div>';
-		$('#load-pane').dialog();
+		$('#load-pane').dialog({
+			appendTo: '#map',
+			autoOpen: true
+		});
 		//$('#map').append(this.$loadpane);
 		
 		console.log("\tCreated new layer: " + layername);
