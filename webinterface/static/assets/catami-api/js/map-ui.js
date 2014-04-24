@@ -650,13 +650,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         showFeatureInfoCtrl.activate();
 		
 		
-		var $loadpane = '<div id="load-pane">Loading selection</div>';
-		$loadpane.dialog({
-			appendTo: "#map",
-			autoOpen: true,
-			modal: true,
-			title: "title"
-		});
+		var $loadpane = '<div id="load-pane" title="Loading selection">Updating map with selection</div>';
+		$('#load-pane').dialog();
 		//$('#map').append(this.$loadpane);
 		
 		console.log("\tCreated new layer: " + layername);
