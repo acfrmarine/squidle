@@ -201,9 +201,9 @@
 					map.filtImageLayerName = filtImageLayer;
 					
                     map.showDeployments(depLayer);
-					map.createImageLayer(depImageLayer,  minVisibleScale, true, '666666');
-                    map.createImageLayer(selImageLayer,  minVisibleScale/3, false, '0000FF'); // For the sake of performance we show this later
-                    map.createImageLayer(filtImageLayer, minVisibleScale, false, '00FF00');
+					map.addImageLayer(depImageLayer,  minVisibleScale, true, '666666');
+                    map.addImageLayer(selImageLayer,  minVisibleScale/3, false, '0000FF'); // For the sake of performance we show this later
+                    map.addImageLayer(filtImageLayer, minVisibleScale, false, '00FF00');
 
                     
                     

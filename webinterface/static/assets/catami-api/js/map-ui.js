@@ -15,7 +15,7 @@ OpenLayers.ProxyHost = "/proxy/?url=";
  */
 
 function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globalstate) {
-	console.log("Function BaseMap");
+
 	//Map view code to get moved out later.
 	//prep some data we need to use to display the points
 	this.wmsUrl = geoserverUrl + '/wms';
@@ -55,7 +55,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * @param $mapobj
 	 */
 	this.init = function($mapobj, $mappanel) {
-		console.log("Function init");
 		// set map object
 		this.$mapobj = $mapobj;
         this.$mappanel = $mappanel;
@@ -564,8 +563,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * visible: visibility at creation
 	 * color: [optional] color of the markers
 	 */
-	this.createImageLayer = function(layername, minscale, visible, color) {
-		console.log("Function createImageLayer: " + layername);
+	this.addImageLayer = function(layername, minscale, visible, color) {
+		console.log("Function addImageLayer: " + layername);
 		
 		color = (( typeof color !== 'undefined') ? color : "0000FF");
 		
@@ -595,6 +594,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			"loadstart": function(e) {
 				console.log("loadstart");
 				//TODO: show a window with the text "refining selection"
+				
+				
 			},
 			"loadend": function(e) {
 				console.log("loadend");
@@ -648,8 +649,12 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         this.mapInstance.addControl(showFeatureInfoCtrl);
         showFeatureInfoCtrl.activate();
 		
+		
+		this.$loadpane = '<div id="load-pane" class="alert alert-info">Updating selection</div>';
+		$('#map').append(this.$loadpane);
+		
 		console.log("\tCreated new layer: " + layername);
-		console.log("END createImageLayer");
+		console.log("END addImageLayer");
 	}
 
 	/**
@@ -1409,6 +1414,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         }
 	}	
 	
+	/**
+	 * Sets up the button and info text in the selection pane
+	 *
+	 * $container - The pane to add the button and text to
+	 */
 	this.addSelectionInfo = function($container) {
 		baseMap.$selectedpanel = $container;
 		
@@ -1425,7 +1435,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	}
 	
     /**
-     *
+     * Updates the selection info area depending on the selections made and whether the user is logged in
      */
     this.updateSelectionInfo = function () {
 		console.log("Function updateSelectionInfo");
@@ -1435,7 +1445,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         if( typeof baseMap.$selectedpanel === 'undefined' ) {
         		return;
         }
-
         
         // If there are any deployments selected then set the showcreatebtn=true
         if (baseMap.filters.deployments != null && baseMap.filters.deployments.length > 0) {
@@ -1446,7 +1455,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         if (showcreatbtn && !globalstate.isloggedin) {
             $('#info-button').html("<b>NOTE:</b> you need to be logged in to create a Project");
             $('#info-button').show();
-            
+			
+			$('#create-button').removeClass('disabled');            
             $('#create-button').hide();
         }
         else if (showcreatbtn && globalstate.isloggedin) {
@@ -1459,6 +1469,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             $('#info-button').html("<b>NOTE</b>: no images selected. Use the tools above to add images to your project.");
             $('#info-button').show();
             
+			$('#create-button').removeClass('disabled');
             $('#create-button').hide();
         }
         console.log("END updateSelectionInfo");
@@ -1470,8 +1481,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         $('#new-collection-modal').modal('show');
     }
 
-	
-	console.log("END BaseMap");
+
 }
 
 /*select = new OpenLayers.Layer.Vector("Selection", {styleMap:
