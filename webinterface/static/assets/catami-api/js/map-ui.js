@@ -594,12 +594,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			"loadstart": function(e) {
 				console.log("loadstart");
 				//TODO: show a window with the text "refining selection"
-				
+				$( "#load-pane" ).dialog( "option", "show", true );
 				
 			},
 			"loadend": function(e) {
 				console.log("loadend");
 				//TODO: close the refining window
+				$( "#load-pane" ).dialog( "option", "hide", true );
 			},
 			"visibilitychanged": function(e) {
 				// console.log("visibilitychanged");
@@ -653,7 +654,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		this.$loadpane = '<div id="load-pane" title="Loading selection">Updating map with selection</div>';
 		$('#load-pane').dialog({
 			appendTo: '#map',
-			autoOpen: true
+			autoOpen: false,
+			closeOnEscape: false,
+			modal: true
 		});
 		$('#map').append(this.$loadpane);
 		
