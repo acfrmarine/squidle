@@ -568,7 +568,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		
 		color = (( typeof color !== 'undefined') ? color : "0000FF");
 		
-		var $loadpane = $()'<div id="load-pane" title="Loading selection">Updating map with selection</div>');
+		var $loadpane = $('<div id="load-pane" title="Loading selection">Updating map with selection</div>');
 		$loadpane.dialog({autoOpen:false});
 		$('#map').append($loadpane);
 		
