@@ -568,6 +568,15 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		
 		color = (( typeof color !== 'undefined') ? color : "0000FF");
 		
+		this.$loadpane = '<div id="load-pane" title="Loading selection">Updating map with selection</div>';
+		$('#load-pane').dialog({
+			appendTo: '#map',
+			autoOpen: false,
+			closeOnEscape: false,
+			modal: true
+		});
+		$('#map').append(this.$loadpane);
+		
 		// add the selection layer if required
 		var imglayer = new OpenLayers.Layer.WMS(
 			layername, 
@@ -649,16 +658,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		showFeatureInfoCtrl.id = "showFeatureInfoCtrl";
         this.mapInstance.addControl(showFeatureInfoCtrl);
         showFeatureInfoCtrl.activate();
-		
-		
-		this.$loadpane = '<div id="load-pane" title="Loading selection">Updating map with selection</div>';
-		$('#load-pane').dialog({
-			appendTo: '#map',
-			autoOpen: false,
-			closeOnEscape: false,
-			modal: true
-		});
-		$('#map').append(this.$loadpane);
 		
 		console.log("\tCreated new layer: " + layername);
 		console.log("END addImageLayer");
