@@ -573,7 +573,10 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			appendTo: '#map',
 			autoOpen: false,
 			closeOnEscape: false,
-			modal: true
+			modal: true,
+			create: function(evt, ui) {
+				console.log('created dialog');
+			}
 		});
 		$('#map').append(this.$loadpane);
 		
@@ -603,13 +606,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			"loadstart": function(e) {
 				console.log("loadstart");
 				//TODO: show a window with the text "refining selection"
-				$( "#load-pane" ).dialog( "open" );
+				// $( "#load-pane" ).dialog( "open" );
 				
 			},
 			"loadend": function(e) {
 				console.log("loadend");
 				//TODO: close the refining window
-				$( "#load-pane" ).dialog( "close" );
+				// $( "#load-pane" ).dialog( "close" );
 			},
 			"visibilitychanged": function(e) {
 				// console.log("visibilitychanged");
