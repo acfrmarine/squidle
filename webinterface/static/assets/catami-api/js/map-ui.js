@@ -598,7 +598,10 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			"loadstart": function(e) {
 				console.log("loadstart");
 				//TODO: show a window with the text "refining selection"
-				$( "#load-pane" ).dialog();
+				$( "#load-pane" ).dialog({
+					autoOpen:true,
+					position: "right top"
+				});
 				$( "#load-pane" ).dialog('open');
 			},
 			"loadend": function(e) {
