@@ -596,18 +596,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		);
 		imglayer.events.on({
 			"loadstart": function(e) {
-				console.log("loadstart");
-				//TODO: change to the style Ari is using to show alerts
-				// $( "#load-pane" ).dialog({
-// 					autoOpen:true				
-// 				});
-// 				$( "#load-pane" ).dialog('open');
+				// console.log("loadstart");
+				// show a busy dialog
 				show_busy("Updating selection...");
 			},
 			"loadend": function(e) {
-				console.log("loadend");
-				//TODO: close the refining window
-				//$( "#load-pane" ).dialog( "close" );
+				// console.log("loadend");
+				// hide the busy dialog
 				hide_busy();
 			},
 			"visibilitychanged": function(e) {
@@ -615,7 +610,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			},
 			"move": function(e) {
 				// console.log("move");
-				// console.log(this);
 			}
 		})
 		imglayer.setVisibility(visible);
