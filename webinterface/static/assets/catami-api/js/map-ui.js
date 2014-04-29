@@ -598,15 +598,17 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			"loadstart": function(e) {
 				console.log("loadstart");
 				//TODO: change to the style Ari is using to show alerts
-				$( "#load-pane" ).dialog({
-					autoOpen:true				
-				});
-				$( "#load-pane" ).dialog('open');
+				// $( "#load-pane" ).dialog({
+// 					autoOpen:true				
+// 				});
+// 				$( "#load-pane" ).dialog('open');
+				show_busy("Updating selection...");
 			},
 			"loadend": function(e) {
 				console.log("loadend");
 				//TODO: close the refining window
-				$( "#load-pane" ).dialog( "close" );
+				//$( "#load-pane" ).dialog( "close" );
+				hide_busy();
 			},
 			"visibilitychanged": function(e) {
 				// console.log("visibilitychanged");
