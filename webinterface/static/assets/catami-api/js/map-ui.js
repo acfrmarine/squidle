@@ -1458,23 +1458,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         	$('#info-button').hide();
         	
             $('#create-button').removeClass('disabled');
-            $('#create-button').show();
-			
-			// prepare clform
-			var $newclform = $('#clform');
-			$newclform.find('#id_deployment_ids').val(dplids.join(','));
-			
-
-			if( featranges.length > 0 ) {
-				
-			}
-				
-			if( BBoxes.length > 0 ) {
-				$newclform.find('#id_bboxes').val(bboxarr.join(':'));
-			}
-		        
-			
-			
+            $('#create-button').show();		        
         }
         else {
             $('#info-button').html("<b>NOTE</b>: no images selected. Use the tools above to add images to your project.");
@@ -1488,6 +1472,19 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
     this.openNewCollectionModal = function () {
     	console.log("Function openNewCollectonModal");
+
+		// prepare clform
+		var $newclform = $('#clform');
+		$newclform.find('#id_deployment_ids').val(dplids.join(','));
+		
+
+		if( featranges.length > 0 ) {
+			
+		}
+			
+		if( BBoxes.length > 0 ) {
+			$newclform.find('#id_bboxes').val(bboxarr.join(':'));
+		}
 
         $('#new-collection-modal').modal('show');
     }
