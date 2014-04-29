@@ -427,6 +427,7 @@ function send_collection_form(form_id){
     show_busy("Busy creating your Project...");
     curstate.wsid = 0;
     curstate.asid = 0;
+	console.log( $(form_id).serialize(true) );
     Dajaxice.webinterface.send_collection_form(Dajax.process, {'form':$(form_id).serialize(true),'form_id':form_id});
 }
 
