@@ -1488,8 +1488,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         for (var i = 0; i < this.filters.BBoxes.length; i++) {
             var bbox = [this.filters.BBoxes[i].left, this.filters.BBoxes[i].bottom, this.filters.BBoxes[i].right, this.filters.BBoxes[i].top];
             bboxarr.push(bbox.join(','));
+			console.log(bbox);
+			console.log(bboxarr);
         }
         if (bboxarr.length > 0) {
+			console.log(bboxarr.join(':'));
             $('#clform').find('#id_bboxes').val(bboxarr.join(':'));
         }
 
