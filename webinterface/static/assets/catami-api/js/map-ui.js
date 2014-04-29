@@ -1474,17 +1474,22 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     	console.log("Function openNewCollectonModal");
 
 		// prepare clform
-		var $newclform = $('#clform');
-		$newclform.find('#id_deployment_ids').val(dplids.join(','));
-		
-
-		if( featranges.length > 0 ) {
-			
-		}
-			
-		if( BBoxes.length > 0 ) {
-			$newclform.find('#id_bboxes').val(bboxarr.join(':'));
-		}
+		// this.filters = {
+// 	        featranges : [],
+// 			BBoxes : [],
+// 	        deployments : []
+// 		}
+console.log(this.filters);
+		// $('#clform').find('#id_deployment_ids').val(dplids.join(','));
+// 		
+// 
+// 		if( featranges.length > 0 ) {
+// 			
+// 		}
+// 			
+// 		if( BBoxes.length > 0 ) {
+// 			$('#clform').find('#id_bboxes').val(bboxarr.join(':'));
+// 		}
 
         $('#new-collection-modal').modal('show');
     }
