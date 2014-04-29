@@ -1485,16 +1485,12 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 	}
 
 		var bboxarr = [];
-		console.log( this.filters.BBoxes );
+		console.log(this.filters.BBoxes);
 		for( var key in this.filters.BBoxes) {
-			console.log( this.filters.BBoxes[key] );
             var bbox = [this.filters.BBoxes[key].left, this.filters.BBoxes[key].bottom, this.filters.BBoxes[key].right, this.filters.BBoxes[key].top];
-			console.log(bbox);
 			bboxarr.push(bbox.join(','));
-			console.log(bboxarr);
         }
         if (bboxarr.length > 0) {
-			console.log(bboxarr.join(':'));
             $('#clform').find('#id_bboxes').val(bboxarr.join(':'));
         }
 
