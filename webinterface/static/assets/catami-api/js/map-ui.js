@@ -1474,23 +1474,26 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     	console.log("Function openNewCollectonModal");
 
 		// prepare clform
-		// this.filters = {
-// 	        featranges : [],
-// 			BBoxes : [],
-// 	        deployments : []
-// 		}
-console.log(this.filters);
-		// $('#clform').find('#id_deployment_ids').val(dplids.join(','));
-// 		
-// 
-// 		if( featranges.length > 0 ) {
-// 			
-// 		}
-// 			
-// 		if( BBoxes.length > 0 ) {
-// 			$('#clform').find('#id_bboxes').val(bboxarr.join(':'));
-// 		}
+		var ids = [];
+		for (var i = 0; i < this.filters.deployments.length; i++) {
+			ids.push(this.filters.deployments[i].id)
+		}
+		$('#clform').find('#id_deployment_ids').val(ids.join(','));
 
+		for (var key in this.filters.featranges) {
+			$('#clform').find('#id_'+key).val(this.filters.featranges[key][0] + ',' + this.filters.featranges[key][1]);
+	 	}
+
+		var bboxarr = [];
+        for (var i = 0; i < this.filters.BBoxes.length; i++) {
+            var bbox = [this.filters.BBoxes[i].left, this.filters.BBoxes[i].bottom, this.filters.BBoxes[i].right, this.filters.BBoxes[i].top];
+            bboxarr.push(bbox.join(','));
+        }
+        if (bboxarr.length > 0) {
+            $newclform.find('#id_bboxes').val(bboxarr.join(':'));
+        }
+
+		// Show modal
         $('#new-collection-modal').modal('show');
     }
 
