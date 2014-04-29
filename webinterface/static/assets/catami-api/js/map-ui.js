@@ -183,7 +183,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * @param layersettings {markersize,markercol,isclickable}
 	 */
 	this.updateMapForCollection = function(clid, layername, layersettings) {
-			console.log("Function updateMapForCollection");
+		console.log("Function updateMapForCollection");
 		// overide default settings with layersettings
 		var settings = {
 			markersize : 5,
@@ -1490,7 +1490,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             bboxarr.push(bbox.join(','));
         }
         if (bboxarr.length > 0) {
-            $newclform.find('#id_bboxes').val(bboxarr.join(':'));
+            $('#clform').find('#id_bboxes').val(bboxarr.join(':'));
         }
 
 		// Show modal
