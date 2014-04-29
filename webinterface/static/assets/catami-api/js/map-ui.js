@@ -1485,8 +1485,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 	}
 
 		var bboxarr = [];
-        for (var i = 0; i < this.filters.BBoxes.length; i++) {
-            var bbox = [this.filters.BBoxes[i].left, this.filters.BBoxes[i].bottom, this.filters.BBoxes[i].right, this.filters.BBoxes[i].top];
+		for( var key in this.filters.BBoxes) {
+            var bbox = [this.filters.BBoxes[key].left, this.filters.BBoxes[key].bottom, this.filters.BBoxes[key].right, this.filters.BBoxes[key].top];
             bboxarr.push(bbox.join(','));
 			console.log(bbox);
 			console.log(bboxarr);
