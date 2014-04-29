@@ -1459,6 +1459,22 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         	
             $('#create-button').removeClass('disabled');
             $('#create-button').show();
+			
+			// prepare clform
+			var $newclform = $('#clform');
+			$newclform.find('#id_deployment_ids').val(dplids.join(','));
+			
+
+			if( featranges.length > 0 ) {
+				
+			}
+				
+			if( BBoxes.length > 0 ) {
+				$newclform.find('#id_bboxes').val(bboxarr.join(':'));
+			}
+		        
+			
+			
         }
         else {
             $('#info-button').html("<b>NOTE</b>: no images selected. Use the tools above to add images to your project.");
