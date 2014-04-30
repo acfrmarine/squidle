@@ -442,8 +442,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         
 		$depselect.data('depid', id);
         $depselect.click(function () {
-            if ($(this).checked) $('#deploymentSelect').multiselect('select', $(this).data('depid')); // .find('input')[0]
-            else $('#deploymentSelect').multiselect('deselect', $(this).data('depid'));
+			console.log(this);
+            if (this.checked) {
+				$('#deploymentSelect').multiselect('select', this.data('depid')); // .find('input')[0]
+			}
+            else {
+				$('#deploymentSelect').multiselect('deselect', this.data('depid'));
+			}
         });
 		
 		$depname.find("a").click( function (event) {
