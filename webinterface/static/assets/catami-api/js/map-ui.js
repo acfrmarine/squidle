@@ -1132,7 +1132,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		
 		// Add to containers
 		var $filtcont = $('<div class="row"></div>').append($('<div class="col-sm-12"></div>').append($('<div class="input-group input-group-sm"></div>').append( 
-			$infoMin, "<span class=input-group-addon>-</span>", $infoMax, "<span class=input-group-addon>"+params.unit+"</span>")));   
+			$infoMin, "<span class=input-group-addon>to</span>", $infoMax, "<span class=input-group-addon>"+params.unit+"</span>")));   
         $container.append($("<div style='margin: 10px;'></div>").append(filtertitle, "<br>", $filtcont, "<br>", $slider));
 		$($slider.data('infoidMin')).val($slider.slider("values", 0));
 		$($slider.data('infoidMax')).val($slider.slider("values", 1));
