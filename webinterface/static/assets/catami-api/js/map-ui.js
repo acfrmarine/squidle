@@ -436,7 +436,10 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     function getDeploymentCheckbox (id,name,checked) {
 		// console.log("Function getDeploymentCheckbox");
 		
-        var $depinfo = $('<label class="checkbox"><input type="checkbox" value="' + id + '" '+checked+' > ' + name + '</label>');
+		var $depselect = $('<input type="checkbox" value="' + id + '" '+checked+' >');
+		var $depzoom   = $('<a href="javascript: void(0);"><i class="icon-search"></i></a>');
+		var $depname   = $('<label class="checkbox">' + name + '</label>');
+        var $depinfo   = $('<div></div>').append($depselect, $depzoom, $depname);
         $depinfo.data('depid', id);
         $depinfo.click(function () {
             if ($(this).find('input')[0].checked) $('#deploymentSelect').multiselect('select', $(this).data('depid'));
