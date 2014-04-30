@@ -1367,8 +1367,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				trigger:'hover',
 				title: function() {
 					var msg = '', i = 1;
-					for( var key in this.filters.BBoxes) {
-			            var bbox = [this.filters.BBoxes[key].left, this.filters.BBoxes[key].bottom, this.filters.BBoxes[key].right, this.filters.BBoxes[key].top];
+					for( var key in baseMap.filters.BBoxes) {
+			            var bbox = [baseMap.filters.BBoxes[key].left, baseMap.filters.BBoxes[key].bottom, baseMap.filters.BBoxes[key].right, baseMap.filters.BBoxes[key].top];
 						msg += i + ': [' + bbox.join(',') + ']<br>';
 						i++;
 			        }
