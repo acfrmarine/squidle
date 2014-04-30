@@ -926,8 +926,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
     /**
      * Given a multiselect object this AJAX function retrieves the available campains and adds these to the multiselect
-     *  
-     * TODO: Should it be this.addCampaignsToSelect = function ?
+     * TODO: how do we add a search icon to the multiselect??
      */
     function addCampaignsToSelect($dplselect) {
 		//console.log("Function addCampainsToSelect");
@@ -1023,7 +1022,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 
     this.addInfoPane = function ($container, panelid) {
-		//console.log("Function addInfoPane");
         var $infopane = $('<div id="'+ panelid+'" class="og-dragpane map-pane-draggable"></div>');
 
         this.$imginfo = this.addPanel($infopane, {id:'img-info',icon:'icon-picture',title:'Nearby images', closeable:true});
