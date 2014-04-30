@@ -1048,14 +1048,17 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		layercolor = this.filtLayerColor;		
 		
         var $slider = $('<div id="'+ feature+'-slider" style="margin-left: 10px; margin-right: 10px;"></div>'),
-            infoid = feature + '-range',
-            $info = $('<span id="' + infoid + '"></span>'),
+		infoidMin = feature + '-rangeMin',
+		            infoidMax = feature + '-rangeMax',
+		            $infoMin = $('<input type="number" min=' +params.range[0]+ ' max='+params.range[1]+' name="infoMin" id="' + infoidMin + '" value="" size="8">'),
+		            $infoMax = $('<input type="number" min=' +params.range[0]+ ' max='+params.range[1]+' name="infoMax" id="' + infoidMax + '" value="" size="8">'),
             filtertitle = feature[0].toUpperCase() + feature.substring(1) + ' range: ', // capitalise first letter
             $btn = $('<span id="'+infoid+'-button" class="btn btn-xs" >' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span><br>');
         
 			
 		// create slider
-        $slider.data('infoid', '#'+infoid);
+		$slider.data('infoidMin', '#'+infoidMin);
+		$slider.data('infoidMax', '#'+infoidMax);
         $slider.slider({
             range: true,
             min: params.range[0],
@@ -1063,7 +1066,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             step: params.step,
             values: params.range,
             slide: function (event, ui) {
-                $($slider.data('infoid')).html(ui.values[ 0 ] +' - '+ ui.values[ 1 ]);
+				$($slider.data('infoidMin')).val(ui.values[ 0 ]);
+		        $($slider.data('infoidMax')).val(ui.values[ 1 ]);
             },
             change: function (event, ui) {
                 currMinVal = ui.values[0];
@@ -1072,8 +1076,10 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		        maxVal = $slider.slider("option", "max");
 				
 				// Update slider text
-                $($slider.data('infoid')).html(ui.values[ 0 ] +' - '+ ui.values[ 1 ]);
+				$($slider.data('infoidMin')).val(currMinVal);
+		        $($slider.data('infoidMax')).val(currMaxVal);
 				
+				// Remove filter value and hide button
 				if (currMinVal == minVal && currMaxVal == maxVal) {
 					$btn.hide();
 					// and delete from the featranges
@@ -1091,6 +1097,19 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 baseMap.showSelectedImages();
             }
         });
+		// Event managers for the text fields
+		$infoMin.keyup(function () {
+		    currVal = $slider.slider("option", "values");
+		    newMinVal = $($slider.data('infoidMin')).val();
+		    $slider.slider("option", "values", [newMinVal, currVal[1]]);
+		});
+
+		$infoMax.keyup(function () {
+		    currVal = $slider.slider("option", "values");
+		    newMaxVal = Math.min($($slider.data('infoidMax')).val(), $slider.slider("option", "max"));
+		    $slider.slider("option", "values", [currVal[0], newMaxVal]);
+		});
+		
 		
 		// Create button
 		$btn.hide();
@@ -1112,8 +1131,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		$btn.tooltip("show");
 		
 		// Add to containers
-        $container.append($("<div style='margin: 10px;'></div>").append(filtertitle, "<br>", $info, params.unit, $slider));
-        $($slider.data('infoid')).html($slider.slider("values", 0) +' - '+  $slider.slider("values", 1));
+        $container.append($("<div style='margin: 10px;'></div>").append(filtertitle, "<br>", $infoMin, "-", $infoMax, params.unit, $slider));
+		$($slider.data('infoidMin')).val($slider.slider("values", 0));
+		$($slider.data('infoidMax')).val($slider.slider("values", 1));
 		$infocontainer.append($btn);
 
 	}
