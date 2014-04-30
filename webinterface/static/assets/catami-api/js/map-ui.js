@@ -458,8 +458,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * Zoom to a deployment
 	 **/
 	function zoomToDeployments(event) {
-		console.log('zoomtodep');
-		console.log(event);
+		console.log('zoomToDeployments');
 		// parse the deployment ids
 		//baseMap.test = event;
 		var deploymentIds = [];
@@ -713,6 +712,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 *  'collection_id=[]'
 	 */
 	this.updateMapBounds = function(boundsCriteria, extentUrl) {
+		console.log('updateMapBounds');
 		console.log(boundsCriteria);
 		var mapInstance = this.mapInstance;
 		//var geographic = baseMap.projection.geographic;
