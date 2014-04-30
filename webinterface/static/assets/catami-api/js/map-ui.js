@@ -1259,7 +1259,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		$btn.tooltip("show");
 		
 		// Add to containers
-        var $filtcont = $('<span></span>').append($fromdate, ' to ', $todate);
+        // var $filtcont = $('<span></span>').append($fromdate, ' to ', $todate);
+		var $filtcont = $('<div class="row"></div>').append($('<div class="col-sm-12"></div>').append($('<div class="input-group input-group-sm"></div>').append( 
+			$fromdate, "<span class=input-group-addon>to</span>", $todate, "<span class=input-group-addon>&nbsp;</span>")));   
         $container.append($("<div style='margin: 10px;'></div>").append(filtertitle, "<br>", $filtcont));
 		$infocontainer.append($btn);
     }
