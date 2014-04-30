@@ -1048,12 +1048,12 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		layercolor = this.filtLayerColor;		
 		
         var $slider = $('<div id="'+ feature+'-slider" style="margin-left: 10px; margin-right: 10px;"></div>'),
-		infoidMin = feature + '-rangeMin',
+					infoidMin = feature + '-rangeMin',
 		            infoidMax = feature + '-rangeMax',
 		            $infoMin = $('<input type="number" min=' +params.range[0]+ ' max='+params.range[1]+' name="infoMin" id="' + infoidMin + '" value="" size="8">'),
 		            $infoMax = $('<input type="number" min=' +params.range[0]+ ' max='+params.range[1]+' name="infoMax" id="' + infoidMax + '" value="" size="8">'),
             filtertitle = feature[0].toUpperCase() + feature.substring(1) + ' range: ', // capitalise first letter
-            $btn = $('<span id="'+infoid+'-button" class="btn btn-xs" >' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span><br>');
+            $btn = $('<span id="'+feature+'-button" class="btn btn-xs" >' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span><br>');
         
 			
 		// create slider
