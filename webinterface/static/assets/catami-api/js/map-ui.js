@@ -1376,7 +1376,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				}
 			});
 			$btn.tooltip("show");
-			
+			$infocontainer.append($btn);
 			
 			baseMap.mapInstance.addControls([bboxdrawCtrl, bboxeditCtrl, bboxdelCtrl]);
 			
