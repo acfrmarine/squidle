@@ -442,7 +442,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         
 		$depselect.data('depid', id);
         $depselect.click(function () {
-            if ($(this).find('input')[0].checked) $('#deploymentSelect').multiselect('select', $(this).data('depid'));
+            if ($(this).checked) $('#deploymentSelect').multiselect('select', $(this).data('depid')); // .find('input')[0]
             else $('#deploymentSelect').multiselect('deselect', $(this).data('depid'));
         });
 		
