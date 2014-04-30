@@ -449,6 +449,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			// TODO: zoom to this 
 			var deploymentIds = [id];
 			baseMap.updateMapBounds("deployment_ids=" + deploymentIds, baseMap.deploymentExtentUrl);
+			console.log('zooming to dep: '+deploymentIds);
         });
 		
         return $depinfo;
