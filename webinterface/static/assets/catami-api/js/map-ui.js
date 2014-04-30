@@ -1047,7 +1047,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 		layercolor = this.filtLayerColor;		
 		
-        var $slider = $('<div id="'+ feature+'-slider" style="margin-left: 10px; margin-right: 10px;"></div>'),
+        var $slider = $('<div id="'+feature+'-slider"></div>'),
 			infoidMin = feature + '-rangeMin',
             infoidMax = feature + '-rangeMax',
             $infoMin = $('<input type="number" class="form-control" min=' +params.range[0]+ ' max='+params.range[1]+' name="infoMin" id="' + infoidMin + '" value="" size="8">'),
@@ -1131,7 +1131,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		$btn.tooltip("show");
 		
 		// Add to containers
-		var $filtcont = $('<div class="row"></div>').append($('<div class="col-sm-6"></div>').append($('<div class="input-group input-group-cm"></div>').append($infoMin, ' to ', $infoMax, params.unit)));   
+		var $filtcont = $('<div class="row"></div>').append($('<div class="col-sm-12"></div>').append($('<div class="input-group input-group-sm"></div>').append( 
+			$infoMin, "<span class=input-group-addon>-</span>", $infoMax, "<span class=input-group-addon>"+params.unit+"</span>")));   
         $container.append($("<div style='margin: 10px;'></div>").append(filtertitle, "<br>", $filtcont, "<br>", $slider));
 		$($slider.data('infoidMin')).val($slider.slider("values", 0));
 		$($slider.data('infoidMax')).val($slider.slider("values", 1));
