@@ -857,6 +857,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 else return '<i class="icon-th-list"></i> ' + options.length + ' deployments selected';
             },
             onChange: function (element, checked) {
+				console.log('multiselect.onChange');
                 var id, name, $dplinfo, info = '';
                 baseMap.$dplinfo.find("input").prop('checked',false);  // deselect deployment property
                 baseMap.filters.deployments = [];
