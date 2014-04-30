@@ -1250,7 +1250,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		//console.log("Function addBBoxFilter");
         var $bboxdraw = $('<button type="button" id="bboxdraw" class="btn btn-xs btn-group btn-group-xs" title="Draw a bounding box around the images you would like to add to your selection."><i class="icon-crop"></i> Create</button>'),
 			$bboxedit = $('<button type="button" id="bboxedit" class="btn btn-xs btn-group btn-group-xs" title="Edit a bounding box by selecting it."><i class="icon-edit"></i> Edit</button>'),
-			$bboxdel  = $('<button type="button" id="bboxdel"  class="btn btn-xs btn-group btn-group-xs" title="Delete a bounding box by selecting it."><i class="icon-remove-sign"></i> Delete</button>');
+			$bboxdel  = $('<button type="button" id="bboxdel"  class="btn btn-xs btn-group btn-group-xs" title="Delete a bounding box by selecting it."><i class="icon-remove-sign"></i> Delete</button>'),
+			$btn = $('<span id="bbox-button" class="btn btn-xs" >Crop filters &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span><br>');
 		// Setup button action callbacks
         $bboxdraw.click(function (){
             baseMap.toggleBBoxDraw();
@@ -1341,11 +1342,44 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 														
 							baseMap.showSelectedImages();
 							baseMap.toggleBBoxDraw();
+							$btn.show();
 					    }
 					}
 			    }
 			);
     		bboxdrawCtrl.id = "bboxdrawCtrl";
+			
+			
+			// Create button
+			$btn.hide();
+			$btn.find("a").click(function () {
+				
+				$btn.hide();
+				baseMap.mapInstance.getLayersByName('Bounding boxes')[0].removeAllFeatures();
+				delete baseMap.filters.BBoxes;
+				baseMap.filters.BBoxes = [];
+				// Update map
+				baseMap.showSelectedImages();
+	        });
+			$btn.tooltip({
+				html: true, 
+				placement: 'left', 
+				trigger:'hover',
+				title: function() {
+					var msg = '', i = 1;
+					for( var key in baseMap.filters.BBoxes) {
+			            var bbox = [baseMap.filters.BBoxes[key].left.toFixed(2), 
+									baseMap.filters.BBoxes[key].bottom.toFixed(2), 
+									baseMap.filters.BBoxes[key].right.toFixed(2), 
+									baseMap.filters.BBoxes[key].top.toFixed(2)];
+						msg += i + ': [' + bbox.join(',') + ']<br>';
+						i++;
+			        }
+					return msg;
+				}
+			});
+			$btn.tooltip("show");
+			$infocontainer.append($btn);
 			
 			baseMap.mapInstance.addControls([bboxdrawCtrl, bboxeditCtrl, bboxdelCtrl]);
 			
