@@ -48,7 +48,7 @@
         	<div id='deployment-map'></div>
             <div id="map-panel-container">
                 <div id="map-panel">
-                    <div class="alert alert-danger"><b>UNDER CONSTRUCTION:</b> this website is currently under construction. Click <a href="#info-modal" data-toggle="modal">here</a> for more information.</div>
+                    <div class="alert alert-danger"><b>UNDER CONSTRUCTION:</b> this website is currently under construction. Click <a href="#info-modal" data-toggle="modal" class="alert-link">here</a> for more information.</div>
                 </div>
             </div>
         </div>
@@ -211,24 +211,24 @@
 					// TODO: Is this really necessary? I find it confusing and want to click it every time!
                     var $selpanel = map.addPanel($('#map-panel'), {id: 'mapsel', icon: 'icon-plus-sign-alt', title: 'Selection tools', closeable: false});
                     $selpanel.append('<br>');
-                    map.addDeploymentSelect($selpanel, imagelayer);
-
-                    // Create panels
                     var $filterpanel = map.addPanel($('#map-panel'), {id: 'mapfilters', icon: 'icon-filter', title: 'Filters', closeable: false});
-                    // create selected panel with creation of selection layer
                     var $curselpanel = map.addPanel($('#map-panel'), {id: 'mapselected', icon: 'icon-stackexchange', title: 'Current selection', closeable: false});
 					
-					
+					// Add selection tools
+					map.addDeploymentSelect($selpanel, $curselpanel, depImageLayer);
+
 					// Add filters
-                    map.addRangeFilter($filterpanel, $curselpanel, 'slider', imagelayer_filt, 'depth', {step: 1, range: [0, 2000], unit: 'm'});
-                    map.addRangeFilter($filterpanel, $curselpanel, 'slider', imagelayer_filt, 'altitude', {step: 0.1, range: [0, 10], unit: 'm'});
-                    map.addRangeFilter($filterpanel, $curselpanel, 'date',  imagelayer_filt, 'date_time', {from: '2005-01-01', to: new Date()});
-                    map.addBBoxSelect($filterpanel, $curselpanel, imagelayer_filt);
+                    map.addRangeFilter($filterpanel, $curselpanel, filtImageLayer, 'depth', {step: 1, range: [0, 2000], unit: 'm'});
+                    map.addRangeFilter($filterpanel, $curselpanel, filtImageLayer, 'altitude', {step: 0.1, range: [0, 10], unit: 'm'});
+                    map.addDateFilter($filterpanel, $curselpanel, filtImageLayer, 'date_time', {from: '2005-01-01', to: new Date()});
+                    map.addBBoxFilter($filterpanel, $curselpanel, filtImageLayer);
 
                     // add current selection info
-                    map.updateSelectionInfo($curselpanel);
+                    map.addSelectionInfo($curselpanel);
+                    map.updateSelectionInfo();
                     curstate.loginfuncs.push(map.updateSelectionInfo);
 
+					
                 }
 
                 // Add resize function to ensure map resizes on window resize
