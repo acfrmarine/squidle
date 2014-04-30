@@ -190,12 +190,25 @@
                     }
                 }
                 else { // Explore mode
-                    var imagelayer = "Deployment images",
-                        imagelayer_filt = imagelayer + " (filtered)";
-                    map.showDeployments();
-                    //map.showImages(imagelayer);
+                    var depLayer 		= "Deployment origins",
+                    	depImageLayer 	= "Deployment images",
+                        selImageLayer 	= "Selected images",
+						filtImageLayer	= "Filtered images";
+					var minVisibleScale = 100000;
+					
+					map.depImageLayerName = depImageLayer;
+					map.selImageLayerName = selImageLayer;
+					map.filtImageLayerName = filtImageLayer;
+					
+                    map.showDeployments(depLayer);
+					map.addImageLayer(depImageLayer,  minVisibleScale, true, '666666');
+                    map.addImageLayer(selImageLayer,  minVisibleScale/3, false, '0000FF'); // For the sake of performance we show this layer only when zoomed in further
+                    map.addImageLayer(filtImageLayer, minVisibleScale, false, '00FF00');
 
-                    // Add selection tools
+                    
+                    
+                    // Create panels
+					// TODO: Is this really necessary? I find it confusing and want to click it every time!
                     var $selpanel = map.addPanel($('#map-panel'), {id: 'mapsel', icon: 'icon-plus-sign-alt', title: 'Selection tools', closeable: false});
                     $selpanel.append('<br>');
                     map.addDeploymentSelect($selpanel, imagelayer);
