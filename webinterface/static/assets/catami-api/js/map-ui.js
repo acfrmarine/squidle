@@ -434,11 +434,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	}
 
     function getDeploymentCheckbox (id,name,checked) {
-		
-		var $depname   = $('<label class="checkbox"><input type="checkbox" value="' + id + '" '+checked+' ><a id="'+id+'" href="javascript: void(0);"><i class="icon-search"></i></a>&nbsp;' + name + '</label>');
-        var $depinfo   = $('<div></div>').append($depname);
+		//TODO: this is too long to fit inside "Deployment list"
+		var $depinfo   = $('<label class="checkbox"><input type="checkbox" value="' + id + '" '+checked+' ><a id="'+id+'" href="javascript: void(0);"><i class="icon-search"></i></a>&nbsp;' + name + '</label>');
+        // var $depinfo   = $('<div></div>').append($depname);
         
-        $depname.find("input").click(function () {
+        $depinfo.find("input").click(function () {
 			if (this.checked) {
 				$('#deploymentSelect').multiselect('select', this.value);
 			}
@@ -447,7 +447,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			}
         });
 		
-		$depname.find("a").click( function (event) {
+		$depinfo.find("a").click( function (event) {
 			var deploymentIds = [this.id];
 			baseMap.updateMapBounds("deployment_ids=" + deploymentIds, baseMap.deploymentExtentUrl);
 		});
