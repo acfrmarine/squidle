@@ -463,6 +463,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 **/
 	function zoomToDeployments(event) {
 		console.log('zoomtodep');
+		console.log(event);
 		// parse the deployment ids
 		//baseMap.test = event;
 		var deploymentIds = [];
