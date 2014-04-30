@@ -1355,7 +1355,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			$btn.find("a").click(function () {
 				
 				$btn.hide();
-				baseMap.mapInstance.getLayersByName('Bounding boxes').removeAllFeatures();
+				baseMap.mapInstance.getLayersByName('Bounding boxes')[0].removeAllFeatures();
 				delete baseMap.filters.BBoxes;
 				baseMap.filters.BBoxes = [];
 				// Update map
