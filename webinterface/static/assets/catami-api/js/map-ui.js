@@ -728,6 +728,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				bounds.extend(new OpenLayers.LonLat(boundsArr[0], boundsArr[1]));
 				bounds.extend(new OpenLayers.LonLat(boundsArr[2], boundsArr[3]));
 				mapInstance.zoomToExtent(bounds.transform(baseMap.projection.geographic, baseMap.projection.mercator));
+				console.log(bounds);
 			}
 		});
 	};
