@@ -445,12 +445,15 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             else $('#deploymentSelect').multiselect('deselect', $(this).data('depid'));
         });
 		
-		$depname.find("a").click(function (event) {
-			// TODO: zoom to this 
-			var deploymentIds = [id];
-			baseMap.updateMapBounds("deployment_ids=" + deploymentIds, baseMap.deploymentExtentUrl);
-			console.log('zooming to dep: '+deploymentIds);
-        });
+		$depname.find("a").click( zoomToDeployments
+			
+			// function (event) {
+	// 		// TODO: zoom to this 
+	// 		var deploymentIds = [id];
+	// 		baseMap.updateMapBounds("deployment_ids=" + deploymentIds, baseMap.deploymentExtentUrl);
+	// 		console.log('zooming to dep: '+deploymentIds);
+	//         }
+	);
 		
         return $depinfo;
     }
@@ -459,7 +462,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * Zoom to a deployment
 	 **/
 	function zoomToDeployments(event) {
-		// console.log("Function zoomToDeployments");
+		console.log('zoomtodep');
 		// parse the deployment ids
 		//baseMap.test = event;
 		var deploymentIds = [];
@@ -713,8 +716,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 *  'collection_id=[]'
 	 */
 	this.updateMapBounds = function(boundsCriteria, extentUrl) {
-		// console.log("Function updateMapBounds");
-		
 		var mapInstance = this.mapInstance;
 		//var geographic = baseMap.projection.geographic;
 		//var mercator = baseMap.projection.mercator;
