@@ -1050,8 +1050,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         var $slider = $('<div id="'+ feature+'-slider" style="margin-left: 10px; margin-right: 10px;"></div>'),
 			infoidMin = feature + '-rangeMin',
             infoidMax = feature + '-rangeMax',
-            $infoMin = $('<input type="number" min=' +params.range[0]+ ' max='+params.range[1]+' name="infoMin" id="' + infoidMin + '" value="" size="8">'),
-            $infoMax = $('<input type="number" min=' +params.range[0]+ ' max='+params.range[1]+' name="infoMax" id="' + infoidMax + '" value="" size="8">'),
+            $infoMin = $('<input type="number" class="form-control" min=' +params.range[0]+ ' max='+params.range[1]+' name="infoMin" id="' + infoidMin + '" value="" size="8">'),
+            $infoMax = $('<input type="number" class="form-control" min=' +params.range[0]+ ' max='+params.range[1]+' name="infoMax" id="' + infoidMax + '" value="" size="8">'),
             filtertitle = feature[0].toUpperCase() + feature.substring(1) + ' range: ', // capitalise first letter
             $btn = $('<span id="'+feature+'-button" class="btn btn-xs" >' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span><br>');
         
@@ -1131,7 +1131,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		$btn.tooltip("show");
 		
 		// Add to containers
-		var $filtcont = $('<span></span>').append($infoMin, ' to ', $infoMax, params.unit);
+		var $filtcont = $('<div class="row"></div>').append($('<div class="col-lg-6"></div>').append($('<div class="input-group"></div>').append($infoMin, ' to ', $infoMax, params.unit)));   
         $container.append($("<div style='margin: 10px;'></div>").append(filtertitle, "<br>", $filtcont, "<br>", $slider));
 		$($slider.data('infoidMin')).val($slider.slider("values", 0));
 		$($slider.data('infoidMax')).val($slider.slider("values", 1));
