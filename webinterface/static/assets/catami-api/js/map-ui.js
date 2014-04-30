@@ -1368,7 +1368,10 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				title: function() {
 					var msg = '', i = 1;
 					for( var key in baseMap.filters.BBoxes) {
-			            var bbox = [baseMap.filters.BBoxes[key].left, baseMap.filters.BBoxes[key].bottom, baseMap.filters.BBoxes[key].right, baseMap.filters.BBoxes[key].top];
+			            var bbox = [baseMap.filters.BBoxes[key].left.toFixed(2), 
+									baseMap.filters.BBoxes[key].bottom.toFixed(2), 
+									baseMap.filters.BBoxes[key].right.toFixed(2), 
+									baseMap.filters.BBoxes[key].top.toFixed(2)];
 						msg += i + ': [' + bbox.join(',') + ']<br>';
 						i++;
 			        }
