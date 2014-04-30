@@ -436,23 +436,20 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     function getDeploymentCheckbox (id,name,checked) {
 		// console.log("Function getDeploymentCheckbox");
 		
-		var $depselect = $('<input type="checkbox" value="' + id + '" '+checked+' >');
-		var $depname   = $('<label class="checkbox"><a id="'+id+'" href="javascript: void(0);"><i class="icon-search"></i></a>&nbsp;' + name + '</label>');
-        var $depinfo   = $('<div></div>').append($depselect, $depname);
+		var $depname   = $('<label class="checkbox"><input type="checkbox" value="' + id + '" '+checked+' ><a id="'+id+'" href="javascript: void(0);"><i class="icon-search"></i></a>&nbsp;' + name + '</label>');
+        var $depinfo   = $('<div></div>').append($depname);
         
-		$depselect.data('depid', id);
-        $depselect.click(function () {
-			console.log(this);
-            if (this.checked) {
-				$('#deploymentSelect').multiselect('select', this.data('depid')); // .find('input')[0]
+        $depname.find("input").click(function () {
+			if (this.checked) {
+				$('#deploymentSelect').multiselect('select', this.value);
 			}
             else {
-				$('#deploymentSelect').multiselect('deselect', this.data('depid'));
+				$('#deploymentSelect').multiselect('deselect', this.value);
 			}
         });
 		
 		$depname.find("a").click( function (event) {
-			var deploymentIds = [id];
+			var deploymentIds = [this.id];
 			baseMap.updateMapBounds("deployment_ids=" + deploymentIds, baseMap.deploymentExtentUrl);
 			console.log('zooming to dep: '+deploymentIds);
 		});
