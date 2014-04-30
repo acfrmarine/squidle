@@ -445,15 +445,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             else $('#deploymentSelect').multiselect('deselect', $(this).data('depid'));
         });
 		
-		$depname.find("a").click( zoomToDeployments
-			
-			// function (event) {
-	// 		// TODO: zoom to this 
-	// 		var deploymentIds = [id];
-	// 		baseMap.updateMapBounds("deployment_ids=" + deploymentIds, baseMap.deploymentExtentUrl);
-	// 		console.log('zooming to dep: '+deploymentIds);
-	//         }
-	);
+		$depname.find("a").click( function (event) {
+			var deploymentIds = [id];
+			baseMap.updateMapBounds("deployment_ids=" + deploymentIds, baseMap.deploymentExtentUrl);
+			console.log('zooming to dep: '+deploymentIds);
+		});
 		
         return $depinfo;
     }
