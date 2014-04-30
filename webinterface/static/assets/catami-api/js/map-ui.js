@@ -434,7 +434,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	}
 
     function getDeploymentCheckbox (id,name,checked) {
-		// console.log("Function getDeploymentCheckbox");
 		
 		var $depname   = $('<label class="checkbox"><input type="checkbox" value="' + id + '" '+checked+' ><a id="'+id+'" href="javascript: void(0);"><i class="icon-search"></i></a>&nbsp;' + name + '</label>');
         var $depinfo   = $('<div></div>').append($depname);
@@ -451,7 +450,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		$depname.find("a").click( function (event) {
 			var deploymentIds = [this.id];
 			baseMap.updateMapBounds("deployment_ids=" + deploymentIds, baseMap.deploymentExtentUrl);
-			console.log('zooming to dep: '+deploymentIds);
 		});
 		
         return $depinfo;
@@ -461,7 +459,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * Zoom to a deployment
 	 **/
 	function zoomToDeployments(event) {
-		console.log('zoomToDeployments');
 		// parse the deployment ids
 		//baseMap.test = event;
 		var deploymentIds = [];
@@ -715,8 +712,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 *  'collection_id=[]'
 	 */
 	this.updateMapBounds = function(boundsCriteria, extentUrl) {
-		console.log('updateMapBounds');
-		console.log(boundsCriteria);
 		var mapInstance = this.mapInstance;
 		//var geographic = baseMap.projection.geographic;
 		//var mercator = baseMap.projection.mercator;
@@ -730,7 +725,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				bounds.extend(new OpenLayers.LonLat(boundsArr[0], boundsArr[1]));
 				bounds.extend(new OpenLayers.LonLat(boundsArr[2], boundsArr[3]));
 				mapInstance.zoomToExtent(bounds.transform(baseMap.projection.geographic, baseMap.projection.mercator));
-				console.log(bounds);
 			}
 		});
 	};
@@ -860,8 +854,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 else return '<i class="icon-th-list"></i> ' + options.length + ' deployments selected';
             },
             onChange: function (element, checked) {
-				console.log('multiselect.onChange');
-                var id, name, $dplinfo, info = '';
+				var id, name, $dplinfo, info = '';
                 baseMap.$dplinfo.find("input").prop('checked',false);  // deselect deployment property
                 baseMap.filters.deployments = [];
                 if ($dplselect.val() != null) {
