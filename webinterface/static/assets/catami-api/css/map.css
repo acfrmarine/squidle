@@ -83,7 +83,7 @@
 }
 
 .map-pane-draggable {
-    display: block;
+    display: inline-block;
     position: absolute;
     top: 15px;
     left: 70px;
@@ -92,7 +92,8 @@
 }
 
 .map-pane-draggable .map-panel-content {
-    max-width: 306px;
+    /*max-width: 306px;*/
+    display: inline-block;
 }
 
 .map-panel {
@@ -106,7 +107,7 @@
     min-height: 50px;
     max-height: 250px;
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: auto;
 }
 
 .map-panel button.active {
