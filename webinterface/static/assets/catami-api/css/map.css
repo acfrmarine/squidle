@@ -83,7 +83,7 @@
 }
 
 .map-pane-draggable {
-    display: block;
+    display: inline-block;
     position: absolute;
     top: 15px;
     left: 70px;
