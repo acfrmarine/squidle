@@ -93,6 +93,7 @@
 
 .map-pane-draggable .map-panel-content {
     max-width: 306px;
+    display: inline-block;
 }
 
 .map-panel {
