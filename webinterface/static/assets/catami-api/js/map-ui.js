@@ -1107,13 +1107,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             }
         });
 		// Event managers for the text fields
-		$infoMin.keyup(function () {
+		$infoMin.change(function () {
 		    currVal = $slider.slider("option", "values");
 		    newMinVal = $($slider.data('infoidMin')).val();
 		    $slider.slider("option", "values", [newMinVal, currVal[1]]);
 		});
 
-		$infoMax.keyup(function () {
+		$infoMax.change(function () {
 		    currVal = $slider.slider("option", "values");
 		    newMaxVal = Math.min($($slider.data('infoidMax')).val(), $slider.slider("option", "max"));
 		    $slider.slider("option", "values", [currVal[0], newMaxVal]);
