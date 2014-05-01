@@ -849,7 +849,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             buttonWidth: $container.innerWidth(),
             enableCaseInsensitiveFiltering: true,
 			templates: {
-				li: '<label class="checkbox"><input type="checkbox" ><a href="javascript: void(0);"><i class="icon-search"></i></a></label>'
+				li: '<label class="checkbox"><input type="checkbox" ><a href="javascript: void(0);"><i class="icon-search"></i></a></label>',
+				divider: '<div class="divider" data-role="divider"></div>'
 			},
             buttonText: function (options, select) {
                 if (options.length == 0) return '<i class="icon-th-list"></i> Select deployment(s)';
