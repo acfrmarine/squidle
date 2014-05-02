@@ -1031,6 +1031,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
         this.$imginfo = this.addPanel($infopane, {id:'img-info',icon:'icon-picture',title:'Nearby images', closeable:true});
         this.$dplinfo = this.addPanel($infopane, {id: 'dpl-info', icon: 'icon-list', title: 'Deployment list', closeable: true});
+        // Set the style of the deployment lists to be inline to keep everything on the same line
+        $('dpl-info-content').style.display = 'inline';
         this.$infopane = $infopane;
 
         $container.append($infopane);
