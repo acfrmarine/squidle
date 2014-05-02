@@ -426,7 +426,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             }
 		}
 
-
+	
         baseMap.$imginfo.parent().hide();
         baseMap.$dplinfo.parent().show();
         baseMap.$infopane.show(200);
@@ -988,9 +988,10 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
      * @param panelinfo
      * @returns {*|jQuery|HTMLElement} panel content element
      */
-    this.addPanel = function ($container, panelinfo) {
+    this.addPanel = function ($container, panelinfo, style) {
 		//console.log("Function addPanel");
 		
+	style = (( typeof style !== 'undefined') ? style : '');
         // check if panel exists, otherwise create it
         if ($container.find('#'+ panelinfo.id).length <= 0) {
             var $panel = $('<div id="' + panelinfo.id + '" class="map-panel og-panel"></div>');
@@ -1012,7 +1013,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 });
             }
 
-            var $panelcontent = $('<div id="' + panelinfo.id + '-content" class="map-panel-content"></div>');
+            var $panelcontent = $('<div id="' + panelinfo.id + '-content" class="map-panel-content" style="'+style+'"></div>');
             $panel.append($panelcontent);
             $container.append($panel);
 
@@ -1030,9 +1031,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         var $infopane = $('<div id="'+ panelid+'" class="og-dragpane map-pane-draggable"></div>');
 
         this.$imginfo = this.addPanel($infopane, {id:'img-info',icon:'icon-picture',title:'Nearby images', closeable:true});
-        this.$dplinfo = this.addPanel($infopane, {id: 'dpl-info', icon: 'icon-list', title: 'Deployment list', closeable: true});
-        // Set the style of the deployment lists to be inline to keep everything on the same line
-        $('dpl-info-content').style.display = 'inline';
+        this.$dplinfo = this.addPanel($infopane, {id: 'dpl-info', icon: 'icon-list', title: 'Deployment list', closeable: true}, 'white-space: nowrap');	
         this.$infopane = $infopane;
 
         $container.append($infopane);
