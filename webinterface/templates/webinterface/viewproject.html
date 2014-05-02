@@ -153,6 +153,13 @@
         createDataModal(curstate); // setup modal windows for data
         refresh_dataset_modal();
 
+	// This resizes the size of the panel containing the map.
+	// Set it once on ready and then subscribe to resizes
+	$($('#deployment-map')[0]).width( $(window).width()-$($('#map-panel-container')).width() );
+	resizefuncs.push( function() {
+		$($('#deployment-map')[0]).width( $(window).width()-$($('#map-panel-container')).width() );
+	});
+
         // Update current selection text
         if (curstate.clid) {
             $('#datasel').html(clobj.getCollectionInfo(curstate.clid).name);
