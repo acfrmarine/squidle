@@ -1160,8 +1160,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		layercolor = this.filtLayerColor;		
 
 
-        var $fromdate = $('<input type="text" class="form-control" name="fromdate" placeholder="From date" id="fromdate" size="8">'),
-            $todate   = $('<input type="text" class="form-control" name="todate"   placeholder="To date"   id="todate"   size="8">'),
+        var $fromdate = $('<input type="text" class="form-control input-sm" name="fromdate" placeholder="From date" id="fromdate" size="8">'),
+            $todate   = $('<input type="text" class="form-control input-sm" name="todate"   placeholder="To date"   id="todate"   size="8">'),
             filtertitle = "Date range:",
 			infoid = feature,
 			$btn = $('<span id="'+infoid+'-button" class="btn btn-xs" >' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span><br>');
