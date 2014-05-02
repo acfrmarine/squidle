@@ -24,7 +24,7 @@ import simplejson
 from django.conf import settings
 from collection.api import CollectionResource
 from collection.models import Collection, CollectionManager
-from annotations.models import PointAnnotation, PointAnnotationSet
+from annotations.models import PointAnnotation, PointAnnotationSet, AnnotationCode
 
 from webinterface.forms import CreateCollectionForm, CreateWorksetForm, CreateWorksetAndAnnotation, CreateCollectionExploreForm, CreatePointAnnotationSet, CreateWorksetFromImagelist
 from userena.forms import AuthenticationForm, SignupForm
@@ -39,6 +39,7 @@ from dajax.core import Dajax
 
 logger = logging.getLogger(__name__)
 
+
 def check_permission(user, permission, object):
     """
     A helper function for checking permissions on object. Need this
@@ -50,6 +51,7 @@ def check_permission(user, permission, object):
         user = guardian.utils.get_anonymous_user()
 
     return user.has_perm(permission, object)
+
 
 def get_objects_for_user_wrapper(user, permission_array):
     """
@@ -68,7 +70,7 @@ def index(request):
     """@brief returns root catami html
     """
     #return HttpResponseRedirect('viewproject')
-    return render_to_response('webinterface/index.html',RequestContext(request))
+    return render_to_response('webinterface/index.html', RequestContext(request))
 
 # Info pages
 def faq(request):
@@ -198,14 +200,14 @@ def projects(request):
 def public_collections_all(request):
     collection_list = CollectionResource()
     cl = collection_list.obj_get_list()
-    return render_to_response('webinterface/publiccollections.html', {"collections": cl, "listname":"cl_pub_all"}, RequestContext(request))
-
+    return render_to_response('webinterface/publiccollections.html', {"collections": cl, "listname": "cl_pub_all"},
+                              RequestContext(request))
 
 
 @waffle_switch('Collections')
 def view_collection(request, collection_id):
-    wsform_rand = CreateWorksetForm(initial={'c_id': collection_id, 'method': 'random','n':100})
-    wsform_strat = CreateWorksetForm(initial={'c_id': collection_id, 'method': 'stratified','n':100})
+    wsform_rand = CreateWorksetForm(initial={'c_id': collection_id, 'method': 'random', 'n': 100})
+    wsform_strat = CreateWorksetForm(initial={'c_id': collection_id, 'method': 'stratified', 'n': 100})
     asform = CreatePointAnnotationSet()
 
     # check for optional get parameters
@@ -219,10 +221,10 @@ def view_collection(request, collection_id):
     change_collection = check_permission(request.user, 'collection.view_collection', collection)
 
     return render_to_response('webinterface/viewcollection.html',
-#    return render_to_response('webinterface/viewcollectionalternative.html',
-                              {'wsform_rand' : wsform_rand,
-                               'wsform_strat' : wsform_strat,
-                               'asform' : asform,
+                              #    return render_to_response('webinterface/viewcollectionalternative.html',
+                              {'wsform_rand': wsform_rand,
+                               'wsform_strat': wsform_strat,
+                               'asform': asform,
                                'collection_id': collection_id,
                                'workset_id': workset_id,
                                "annotation_id": annotation_id,
@@ -231,9 +233,9 @@ def view_collection(request, collection_id):
                                'change_collection': change_collection},
                               RequestContext(request))
 
+
 @waffle_switch('Collections')
 def view_project(request):
-
     # check for optional get parameters
     # This avoids needing to specify a new url and view for each optional parameter
     collection_id = request.GET.get("clid", "")
@@ -241,7 +243,7 @@ def view_project(request):
     annotation_id = request.GET.get("asid", "")
 
     # Forms
-    wsasform = CreateWorksetAndAnnotation(initial={'c_id': collection_id, 'n':100})
+    wsasform = CreateWorksetAndAnnotation(initial={'c_id': collection_id, 'n': 100})
 
 
     #check change permissions
@@ -249,20 +251,19 @@ def view_project(request):
     change_collection = check_permission(request.user, 'collection.change_collection', collection)
 
     return render_to_response('webinterface/project.html',
-        #    return render_to_response('webinterface/viewcollectionalternative.html',
-        {'wsasform' : wsasform,
-         'collection_id': collection_id,
-         'workset_id': workset_id,
-         "annotation_id": annotation_id,
-         'WMS_URL': settings.WMS_URL,
-         'WMS_layer_name': settings.WMS_COLLECTION_LAYER_NAME,
-         'change_collection': change_collection},
-        RequestContext(request))
+                              #    return render_to_response('webinterface/viewcollectionalternative.html',
+                              {'wsasform': wsasform,
+                               'collection_id': collection_id,
+                               'workset_id': workset_id,
+                               "annotation_id": annotation_id,
+                               'WMS_URL': settings.WMS_URL,
+                               'WMS_layer_name': settings.WMS_COLLECTION_LAYER_NAME,
+                               'change_collection': change_collection},
+                              RequestContext(request))
 
 
 # NEW VIEWS #########################################################
 def project(request):
-
     # check for optional get parameters
     # This avoids needing to specify a new url and view for each optional parameter
     clid = request.GET.get("clid", "0") if request.GET.get("clid", "") else 0
@@ -278,21 +279,20 @@ def project(request):
     aform = AuthenticationForm()
     suform = SignupForm()
 
-
     return render_to_response('webinterface/viewproject.html',
-        #    return render_to_response('webinterface/viewcollectionalternative.html',
-        {'clid': clid,
-         'wsid': wsid,
-         "asid": asid,
-         "imid": imid,
-         "clform" : clform,
-         "wsform" : wsform,
-         "ulwsform" : ulwsform,
-         "asform" : asform,
-         "aform" : aform,
-         "suform" : suform,
-         "GEOSERVER_URL": settings.GEOSERVER_URL},
-        RequestContext(request))
+                              #    return render_to_response('webinterface/viewcollectionalternative.html',
+                              {'clid': clid,
+                               'wsid': wsid,
+                               "asid": asid,
+                               "imid": imid,
+                               "clform": clform,
+                               "wsform": wsform,
+                               "ulwsform": ulwsform,
+                               "asform": asform,
+                               "aform": aform,
+                               "suform": suform,
+                               "GEOSERVER_URL": settings.GEOSERVER_URL},
+                              RequestContext(request))
 
 ######################################################################
 ## NEW MAPS ##########################################################
@@ -319,15 +319,123 @@ def project(request):
 
 def download_csv(request):
     from djqscsv import render_to_csv_response
+    import pandas as pd
+    import datetime
+    import cStringIO
 
     clid = request.GET.get("clid", "0") if request.GET.get("clid", "") else 0
     asid = request.GET.get("asid", "0") if request.GET.get("asid", "") else 0
+    format = request.GET.get("format", "")
 
-    if asid :
+    if asid:
         annotation = PointAnnotationSet.objects.get(pk=asid)
-        point_annotations = PointAnnotation.objects.filter(annotation_set = annotation).values('image_id', 'image__web_location', 'x', 'y',
-                                                                                               'label_id','label__caab_code','label__code_name','label__cpc_code')
-        return render_to_csv_response(point_annotations, append_datestamp=True)
+        filename = '%s - %s.csv' % (annotation.name, str(datetime.date.today()))
+
+        if format=="dynclasscount" :
+            point_annotations = PointAnnotation.objects.filter(annotation_set=annotation).values('image_id',
+                                                                                                 'x',
+                                                                                                 'y',
+                                                                                                 'label_id',
+                                                                                                 'label__caab_code',
+                                                                                                 'label__code_name',
+                                                                                                 'label__cpc_code',
+                                                                                                 'qualifiers__modifier_name'
+            )
+
+            point_renames = {
+                'image__web_location': 'web_location',
+                'label__caab_code': 'caab',
+                'label__code_name': 'name',
+                'label__cpc_code': 'code',
+                'qualifiers__modifier_name': 'modifiers'
+
+            }
+            rollups = ['name', 'caab', 'code', 'modifiers']
+
+            df = pd.DataFrame(list(point_annotations)).fillna('')
+            df.rename(columns=point_renames, inplace=True)
+            df = df.groupby(['image_id', 'x', 'y']).aggregate({'modifiers': lambda x: ', '.join(x),
+                                                              'name': lambda x: x.iat[0],
+                                                              'caab': lambda x: x.iat[0],
+                                                              'code': lambda x: x.iat[0],
+                                                              'label_id': lambda x: x.iat[0],
+                                                              }).delevel(['image_id', 'x', 'y'])
+            df.pop('x')
+            df.pop('y')
+
+            aggdf = df.groupby(['image_id'] + rollups).label_id.count().unstack(rollups)
+            aggdf = aggdf.T.sortlevel().T
+            images = annotation.collection.images.values('id', 'web_location',
+                                                         'pose__date_time',
+                                                         'pose__depth',
+                                                         'pose__position')
+            image_df = pd.DataFrame(list(images))
+            image_renames = {
+                'id': 'image_id',
+                'pose__date_time': 'date_time',
+                'pose__depth': 'depth',
+                'pose__position': 'position'
+            }
+            image_df.rename(columns=image_renames, inplace=True)
+            image_df.set_index('image_id', inplace=True)
+            image_df['latitude'] = image_df.position.apply(lambda p: p[0])
+            image_df['longitude'] = image_df.position.apply(lambda p: p[1])
+            image_df.pop('position')
+            out_df = image_df.join(aggdf)
+            out_df.delevel('image_id', inplace=True)
+            out_df.set_index(['image_id', 'web_location', 'date_time', 'latitude', 'longitude', 'depth'], inplace=True)
+            out_df.columns = pd.MultiIndex.from_tuples(out_df.columns, names=rollups)
+
+
+
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename=%s;' % filename
+            response['Cache-Control'] = 'no-cache'
+            out_df_strbuff = cStringIO.StringIO()
+            out_df.to_csv(out_df_strbuff, sep=',')
+            out_df_strbuff.reset()
+            response.write(out_df_strbuff.read())
+            return response
+
+        elif format=="classcount":
+            # implement class list
+            classlist = AnnotationCode.objects.all()
+            point_annotations = PointAnnotation.objects.filter(annotation_set=annotation).values('image_id',
+                                                                                                 #'image__web_location', 'x',
+                                                                                                 #'y',
+                                                                                                 'label_id',
+                                                                                                 'label__caab_code',
+                                                                                                 'label__code_name',
+                                                                                                 'label__cpc_code',
+                                                                                                 'qualifiers__modifier_name'
+            )
+            point_renames = {
+                'image__web_location': 'web_location',
+                'label__caab_code': 'caab',
+                'label__code_name': 'name',
+                'label__cpc_code': 'code',
+                'qualifiers__modifier_name': 'modifiers'
+
+            }
+            rollups = ['name', 'caab', 'code', 'modifiers']
+            df = pd.DataFrame(list(point_annotations)).fillna('')
+            df.rename(columns=point_renames, inplace=True)
+
+            pass
+        else :
+            point_annotations = PointAnnotation.objects.filter(annotation_set=annotation).values('image_id',
+                                                                                                 'image__web_location',
+                                                                                                 'x',
+                                                                                                 'y',
+                                                                                                 'label_id',
+                                                                                                 'label__caab_code',
+                                                                                                 'label__code_name',
+                                                                                                 'label__cpc_code',
+                                                                                                 'qualifiers__modifier_name'
+            )
+
+            return render_to_csv_response(point_annotations, filename=filename)
+
     elif clid:
         collection = Collection.objects.get(pk=clid)
         #images = collection.images.filter(
@@ -344,16 +452,16 @@ def download_csv(request):
         #                                  'pose__position',
         #                                  'altitude')
         images = collection.images.values('id', 'web_location',
-                                       'pose__date_time',
-                                       'pose__depth',
-                                       'pose__position')
+                                          'pose__date_time',
+                                          'pose__depth',
+                                          'pose__position')
 
         return render_to_csv_response(images, append_datestamp=True)
 
 
 # This view imports classes from a google spreadsheet
 # TODO: robustify and make better!!!
-def update_classes_gspread (request) :
+def update_classes_gspread(request):
     import gspread
     from annotations.models import AnnotationCode
 
@@ -366,7 +474,7 @@ def update_classes_gspread (request) :
     ss = gc.open("squidle classes") # Open a worksheet from spreadsheet with one shot
 
     response = HttpResponse()
-    if action == "import" :
+    if action == "import":
         # Import new classes from spreadsheet
         # TODO: use headers to determine column numbers
         # 0: CAAB code
@@ -383,10 +491,10 @@ def update_classes_gspread (request) :
         for annotation_list in list_of_lists[1:]:
             try:
                 response.write("Adding: {}...".format(annotation_list[1]))
-                parentclass = AnnotationCode.objects.filter(caab_code = annotation_list[5])[0]
-                newclass = AnnotationCode(caab_code = annotation_list[0],cpc_code = annotation_list[3],
-                                          point_colour = annotation_list[4],code_name = annotation_list[1],
-                                          description = "No description.",parent = parentclass)
+                parentclass = AnnotationCode.objects.filter(caab_code=annotation_list[5])[0]
+                newclass = AnnotationCode(caab_code=annotation_list[0], cpc_code=annotation_list[3],
+                                          point_colour=annotation_list[4], code_name=annotation_list[1],
+                                          description="No description.", parent=parentclass)
                 newclass.save()
                 response.write("...DONE!<br>")
 
@@ -394,7 +502,7 @@ def update_classes_gspread (request) :
                 response.write("...ERROR!!!!!! {}<br>".format(e.message))
 
     # TODO: update other fields too (currently only updates colour
-    elif action == "update" :
+    elif action == "update":
         wks = ss.worksheet("Existing classes (read-only)")
         # 0:ID
         # 1:CAAB code
@@ -420,13 +528,15 @@ def update_classes_gspread (request) :
 
     elif action == "export":
         wks = ss.worksheet("Existing classes (read-only)")
-        allclasses = AnnotationCode.objects.all().order_by('code_name').values_list('id','caab_code', 'code_name', 'description','cpc_code',
-                                                                                    'point_colour','parent_id','parent__caab_code')
+        allclasses = AnnotationCode.objects.all().order_by('code_name').values_list('id', 'caab_code', 'code_name',
+                                                                                    'description', 'cpc_code',
+                                                                                    'point_colour', 'parent_id',
+                                                                                    'parent__caab_code')
         # Select a cell range
         cell_list = wks.range('A{}:H{}'.format(2, len(allclasses) + 1))
         flat_list = [val for subl in allclasses for val in subl] # flatten class list to enable batch updating
 
-        for i in range(0,len(flat_list),1):
+        for i in range(0, len(flat_list), 1):
             cell_list[i].value = flat_list[i]
 
         # Send update in batch mode
@@ -541,14 +651,15 @@ def image_view(request):
                               RequestContext(request))
 
 
-def image_annotate(request,image_id):
+def image_annotate(request, image_id):
     apistring = request.GET.get("apistring", "")
     offset = request.GET.get("offset", "")
     annotation_id = request.GET.get("asid", "")
 
     return render_to_response('webinterface/imageview.html', #imageannotate.html',
-        {"image_id": image_id, "offset": offset, "apistring": apistring, "annotation_id": annotation_id},
-        RequestContext(request))
+                              {"image_id": image_id, "offset": offset, "apistring": apistring,
+                               "annotation_id": annotation_id},
+                              RequestContext(request))
 
 
 def image_edit(request):
@@ -621,6 +732,7 @@ def auvdeployments_map(request):
         {'latest_auvdeployment_list': latest_auvdeployment_list},
         context_instance=RequestContext(request))
 
+
 def auvdeployment_detail(request, auvdeployment_id):
     """@brief AUV Deployment map and data plot for specifed AUV deployment
 
@@ -646,6 +758,7 @@ def auvdeployment_detail(request, auvdeployment_id):
          'WMS_layer_name': settings.WMS_LAYER_NAME,
          'deployment_id': auvdeployment_object.id},
         context_instance=RequestContext(request))
+
 
 def campaigns(request):
     """@brief Campaign list html for entire database
@@ -777,7 +890,6 @@ def get_collection_extent(request):
 
 @csrf_exempt
 def create_collection_from_deployments(request):
-
     if request.method == 'POST':  # If the form has been submitted...
         form = CreateCollectionForm(
             request.POST)  # A form bound to the POST data
@@ -791,9 +903,9 @@ def create_collection_from_deployments(request):
 
     return render(request, 'noworky.html', {'form': form, })
 
+
 @csrf_exempt
 def create_collection_from_explore(request):
-
     if request.method == 'POST':  # If the form has been submitted...
         form = CreateCollectionExploreForm(
             request.POST)  # A form bound to the POST data
@@ -813,7 +925,7 @@ def create_collection_from_explore(request):
                 request.POST.get('salinity__lte'),
                 request.POST.get('altitude__gte'),
                 request.POST.get('altitude__lte')
-                )
+            )
             return HttpResponseRedirect('/projects')  # Redirect after POST
 
     return render(request, 'noworky.html', {'form': form, })
@@ -821,8 +933,7 @@ def create_collection_from_explore(request):
 
 @csrf_exempt
 def proxy(request):
-
-    url = request.GET.get('url',None)
+    url = request.GET.get('url', None)
 
     conn = httplib2.Http()
     if request.method == "GET":
@@ -833,6 +944,7 @@ def proxy(request):
         data = request.body
         resp, content = conn.request(url, request.method, data)
         return HttpResponse(content)
+
 
 def dynamic_style(request):
     """Return XML Style to colour geoserver maps.
@@ -854,6 +966,7 @@ def dynamic_style(request):
 
     return render_to_response('geoserver/sldtemplate.xml', context, rcon, mimetype="application/xml")
 
+
 def dynamic_Simplestyle(request):
     """Return XML Style to colour geoserver maps.
     
@@ -873,6 +986,7 @@ def dynamic_Simplestyle(request):
 
     return render_to_response('geoserver/sldSimpletemplate.xml', context, rcon, mimetype="application/xml")
 
+
 def dynamic_Deploymentstyle(request):
     """Return XML Style to colour geoserver maps.
     
@@ -883,6 +997,7 @@ def dynamic_Deploymentstyle(request):
     rcon = RequestContext(request)
 
     return render_to_response('geoserver/sldDeploymentTemplate.xml', context, rcon, mimetype="application/xml")
+
 
 def dynamic_DeploymentSimplestyle(request):
     """Return XML Style to colour geoserver maps.
@@ -901,6 +1016,7 @@ def dynamic_DeploymentSimplestyle(request):
 
     return render_to_response('geoserver/sldDeploymentSimpleTemplate.xml', context, rcon, mimetype="application/xml")
 
+
 def dynamic_colourmap(request):
     """Return SVG Image to denote colour map for geoserver.
 
@@ -908,6 +1024,7 @@ def dynamic_colourmap(request):
     to colour by.
     """
     import math
+
     context = {}
     rcon = RequestContext(request)
 

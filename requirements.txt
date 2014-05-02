@@ -30,3 +30,6 @@ django-dajax
 django-bootstrap-toolkit
 django-queryset-csv
 gspread
+pandas[all]
+numexpr
+bottleneck

@@ -282,7 +282,7 @@
             history.replaceState(null, '', e.target);
             if (curstate.clid) {
                 $('#datatab').load("/static/html/data-view-example.html", function () {
-                    $('#download-info').html('<li><a href="download_csv?asid='+ curstate.asid+'">Click here to download the ANNOTATION point data</a></li>'+
+                    $('#download-info').html('<li><a href="download_csv?asid='+ curstate.asid+'&format=dynclasscount">Click here to download the ANNOTATION point data</a></li>'+
                             '<li><a href = "download_csv?clid=' + curstate.wsid + '" > Click here to download the SUBSET image data </a></li >'+
                             '<li><a href = "download_csv?clid=' + curstate.clid + '" > Click here to download the PROJECT image data </a></li >');
                 });
