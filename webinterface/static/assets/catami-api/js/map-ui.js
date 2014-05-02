@@ -1060,8 +1060,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         var $slider = $('<div id="'+feature+'-slider"></div>'),
 			infoidMin = feature + '-rangeMin',
             infoidMax = feature + '-rangeMax',
-            $infoMin = $('<input type="number" class="form-control" min=' +params.range[0]+ ' max='+params.range[1]+' name="infoMin" id="' + infoidMin + '" value="" size="8">'),
-            $infoMax = $('<input type="number" class="form-control" min=' +params.range[0]+ ' max='+params.range[1]+' name="infoMax" id="' + infoidMax + '" value="" size="8">'),
+            $infoMin = $('<input type="number" class="form-control input-sm" min="' +params.range[0]+ '" max="'+params.range[1]+'" name="infoMin" id="' + infoidMin + '" value="" size="8">'),
+            $infoMax = $('<input type="number" class="form-control input-sm" min="' +params.range[0]+ '" max="'+params.range[1]+'" name="infoMax" id="' + infoidMax + '" value="" size="8">'),
             filtertitle = feature[0].toUpperCase() + feature.substring(1) + ' range: ', // capitalise first letter
             $btn = $('<span id="'+feature+'-button" class="btn btn-xs" >' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span><br>');
         
