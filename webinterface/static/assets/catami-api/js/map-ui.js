@@ -335,8 +335,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 		}
 
-		var deploymentlayer = new OpenLayers.Layer.Vector(
-			layername, {
+		var deploymentlayer = new OpenLayers.Layer.Vector( layername, {
 				strategies: [
 					new OpenLayers.Strategy.Fixed(),
 					new OpenLayers.Strategy.Cluster()
@@ -348,7 +347,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				}),
 				styleMap: new OpenLayers.StyleMap({
 					"default": style("#000000", "#000000", 4),
-					"select": style("#cccccc", "#000000", 4),
+//					"select": style("#cccccc", "#000000", 4),
+                    "select": style("#0000ff", "#000000", 4),
 					"highlight": style("#000000", "#ffffff", 8, 1)
 				}),
 				projection: baseMap.projection.geographic
