@@ -379,8 +379,14 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		this.mapInstance.addControl(highlightCtrl);
 		highlightCtrl.activate();
 
-		var selectCtrl = new OpenLayers.Control.SelectFeature(deploymentlayer);
-		selectCtrl.id = "selectCtrl";
+		var selectCtrl = new OpenLayers.Control.SelectFeature(deploymentlayer, {
+            eventListener : {
+                featurehighlighted : function(event) {
+                    console.log('selectCtrl featurehighlighted');
+                }
+            }
+        });
+        selectCtrl.id = "selectCtrl";
 		this.mapInstance.addControl(selectCtrl);
 		selectCtrl.activate();
 		
