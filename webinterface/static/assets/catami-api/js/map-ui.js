@@ -362,7 +362,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		
 		var highlightCtrl = new OpenLayers.Control.SelectFeature(deploymentlayer, {
 			hover : true,
-//			highlightOnly : true,
+			highlightOnly : true,
 			renderIntent : "highlight",
 			handlerOptions : {
 				//'delay' : 5000
