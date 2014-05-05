@@ -380,7 +380,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		highlightCtrl.activate();
 
 		var selectCtrl = new OpenLayers.Control.SelectFeature(deploymentlayer, {
-            eventListener : {
+            eventListeners : {
                 featurehighlighted : function(event) {
                     console.log('selectCtrl featurehighlighted');
                 }
