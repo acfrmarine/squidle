@@ -121,7 +121,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 //        ));
 
 		this.mapInstance.events.on({
-			"zoomend": function(e) {
+//			"zoomend": function(e) {
 				// This is not necessary as we are dealing with the loading of the image layers through the maxScale 
 				//		option when the layers are created.
 				// console.log( "this.getZoom(): " + baseMap.mapInstance.getZoom() );
@@ -132,19 +132,18 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 // 					baseMap.mapInstance.getLayersByName('Deployment images')[0].setVisibility(true);
 // 					baseMap.mapInstance.getLayersByName('Selected images')[0].setVisibility(true);
 // 				}
-			},
+//			},
             "moveend" : function(e) {
-                console.log('move:');
-                var map = baseMap;
-
+                // The below code highlights the deployment origin markers if there is a deployment within this marker
+                //  that has been selected
+                // If no deployemnt has been selected
+                if( $('#deploymentSelect').val() == null  ) {
+                    return;
+                }
                 // Get the deployment origin layer
-                depLayer = map.mapInstance.getLayersByName(map.depOriginLayerName)[0];
+                depLayer = baseMap.mapInstance.getLayersByName(baseMap.depOriginLayerName)[0];
                 // Get the select control and clear all features
-                selectCtrl = map.mapInstance.getControlsBy('id', 'selectCtrl')[0];
-                selectCtrl.unselectAll();
-
-                if( $('#deploymentSelect').val() == null  ) return;
-
+                selectCtrl = baseMap.mapInstance.getControlsBy('id', 'selectCtrl')[0];
                 // Get IDs of selected deployments
                 for( dSel = 0; dSel < $('#deploymentSelect').val().length; dSel++ ) {
                     id = ($('#deploymentSelect').val()[dSel]).toString();
