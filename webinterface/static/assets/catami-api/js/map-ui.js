@@ -40,7 +40,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		BBoxes : [],
         deployments : []
 	}
-	
+
+    this.depOriginLayerName = '';
 	this.depImageLayerName = '';
 	this.selImageLayerName = '';
 	this.filtImageLayerName = '';
@@ -131,7 +132,35 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 // 					baseMap.mapInstance.getLayersByName('Deployment images')[0].setVisibility(true);
 // 					baseMap.mapInstance.getLayersByName('Selected images')[0].setVisibility(true);
 // 				}
-			}
+			},
+            "move" : function(e) {
+                console.log('move:');
+                var map = baseMap;
+
+                // Get the deployment origin layer
+                depLayer = map.mapInstance.getLayersByName(map.depOriginLayerName)[0];
+                // Get the select control and clear all features
+                selectCtrl = map.mapInstance.getControlsBy('id', 'selectCtrl')[0];
+                selectCtrl.unselectAll();
+
+                if( $('#deploymentSelect').val() == null  ) return;
+
+                // Get IDs of selected deployments
+                for( dSel = 0; dSel < $('#deploymentSelect').val().length; dSel++ ) {
+                    id = ($('#deploymentSelect').val()[dSel]).toString();
+
+                    // Get the deployment layer feature corresponding to this id
+                    featInd = depLayer.features.map( function(e) {
+                        f = [];
+                        for(i = 0; i < e.cluster.length; i++)
+                            f.push( e.cluster[i].fid.split('.')[1] );
+                        return f;
+                    }).map( function(e) {return e.indexOf(id);} ).map( function(e) { return e >= 0;} ).indexOf( true );
+
+                    console.log(dSel+': id='+id+', featInd='+featInd);
+                    selectCtrl.highlight( depLayer.features[featInd] );
+                }
+            }
 		});
 		this.isInitialised = true;
 	}
@@ -309,6 +338,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			console.log("WARNING: We should never end here!");
 			return;
 		}
+        this.depOriginLayerName = layername;
 
 		function style(fill,stroke,size, op) {
 			return new OpenLayers.Style({
@@ -439,9 +469,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	}
 
     function getDeploymentCheckbox (id,name,checked) {
-		//TODO: this is too long to fit inside "Deployment list"
+		// Checkbox, zoom, deployment name
 		var $depinfo   = $('<label class="checkbox"><input type="checkbox" value="' + id + '" '+checked+' ><a id="'+id+'" href="javascript: void(0);"><i class="icon-search"></i></a>&nbsp;' + name + '</label>');
-        // var $depinfo   = $('<div></div>').append($depname);
         
         $depinfo.find("input").click(function () {
 			if (this.checked) {
@@ -465,7 +494,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 **/
 	function zoomToDeployments(event) {
 		// parse the deployment ids
-		baseMap.test = event;
+		// baseMap.test = event;
 		var deploymentIds = [];
 		for (var i = 0, len = event.feature.cluster.length; i < len; i++) {
 			var fid = event.feature.cluster[i].fid.split(".");
@@ -868,7 +897,10 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 baseMap.$dplinfo.find("input").prop('checked',false);  // deselect deployment property
                 baseMap.filters.deployments = [];
                 if ($dplselect.val() != null) {
+                    console.log('selecting deployments');
                     baseMap.updateMapBounds("deployment_ids=" + $dplselect.val(), baseMap.deploymentExtentUrl);
+
+                    // Loop through selected deployments in the multiselect
                     for (var i=0 ; i < $dplselect.val().length ; i++) {
                         id = $dplselect.val()[i];
                         name = $dplselect.find("option[value='" + id + "']").text();
@@ -887,9 +919,17 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 //                        else baseMap.$dplinfo.prepend(getDeploymentCheckbox(id,name,'checked'));
                     }
                     $btn.show();
+
+
+
+
+
                 }
                 else {
                 	$btn.hide();
+
+                    console.log('deselecting all deployments');
+                    map.mapInstance.getControlsBy('id', 'selectCtrl')[0].unselectAll();
                 }
 
                 baseMap.showSelectedImages();
