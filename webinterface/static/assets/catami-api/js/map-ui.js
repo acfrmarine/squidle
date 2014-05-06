@@ -353,6 +353,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				}),
 				projection: baseMap.projection.geographic
 		});
+        deploymentlayer.events.on({
+			"featureselected" : zoomToDeployments,
+            "loadend" : function(evt) {
+                console.log('deploymentlayer loadend');
+                baseMap.mapInstance.zoomToExtent(evt.object.getDataExtent());
+		    }
+		});
 		this.mapInstance.addLayer(deploymentlayer);
 
 		
@@ -385,21 +392,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         selectCtrl.id = "selectCtrl";
 		this.mapInstance.addControl(selectCtrl);
 		selectCtrl.activate();
-		
-		deploymentlayer.events.on({
-			"featureselected" : zoomToDeployments,
-            "loadend" : function(evt) {
-                console.log('deploymentlayer loadend');
-                baseMap.mapInstance.zoomToExtent(evt.object.getDataExtent());
-		    }
-		});
-//        deploymentlayer.events.register('loadend', this, function(evt) {
-//			//if (this.browseEnabled == true) {
-//			this.mapInstance.zoomToExtent(evt.object.getDataExtent());
-//			//}
-//		});
-		
-		// console.log("END showDeployments");
+
+
 	};
 	/**
 	 * Event function for when we hover over a deployment
@@ -471,7 +465,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 **/
 	function zoomToDeployments(event) {
 		// parse the deployment ids
-		//baseMap.test = event;
+		baseMap.test = event;
 		var deploymentIds = [];
 		for (var i = 0, len = event.feature.cluster.length; i < len; i++) {
 			var fid = event.feature.cluster[i].fid.split(".");
