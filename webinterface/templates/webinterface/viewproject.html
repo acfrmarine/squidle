@@ -43,7 +43,7 @@
 
 
 <div class="container">
-	<div id="alert-construction" class="alert alert-danger alert-dismissable" style="position:absolute; top:0; left:0px; z-index:999;">
+	<div id="alert-construction" class="alert alert-danger alert-dismissable" style="position:absolute; top:0; left:0px; z-index:999; visibility: hidden;" >
 		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 		<i class="icon-cogs"></i>&nbsp;<b>UNDER CONSTRUCTION:</b> Click <a href="#info-modal" data-toggle="modal" class="alert-link">here</a> for more information.
 	</div>
@@ -166,6 +166,7 @@
 	// Set the location of the under construction alert.
 	// And subscribe to the resize	
 	$('#alert-construction')[0].style.left = $('#deployment-map').width()/2-$('#alert-construction').width()/2 + 'px';
+    $('#alert-construction')[0].style.visibility = 'visible';
 	resizefuncs.push( function() {
 		$('#alert-construction')[0].style.left = $('#deployment-map').width()/2-$('#alert-construction').width()/2 + 'px';
 	});
