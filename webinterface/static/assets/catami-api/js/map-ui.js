@@ -301,7 +301,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	/**
 	 * Update the map for a set of deployments
 	 **/
-	this.showDeployments = function(layername) {
+	this.addDeployments = function(layername) {
 		// console.log("Function showDeployments");
 				
 		// Create the layer if it does not already exist
@@ -346,19 +346,15 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					//featureNS : "http://catami"
 				}),
 				styleMap: new OpenLayers.StyleMap({
-					"default": style("#000000", "#000000", 4),
+					"default":   style("#000000", "#000000", 4),
 //					"select": style("#cccccc", "#000000", 4),
-                    "select": style("#0000ff", "#000000", 4),
+                    "select":    style("#0000ff", "#ffffff", 4),
 					"highlight": style("#000000", "#ffffff", 8, 1)
 				}),
 				projection: baseMap.projection.geographic
 		});
 		this.mapInstance.addLayer(deploymentlayer);
-		deploymentlayer.events.register('loadend', this, function(evt) {
-			//if (this.browseEnabled == true) {
-			this.mapInstance.zoomToExtent(evt.object.getDataExtent());
-			//}
-		});
+
 		
 		var highlightCtrl = new OpenLayers.Control.SelectFeature(deploymentlayer, {
 			hover : true,
@@ -391,8 +387,17 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		selectCtrl.activate();
 		
 		deploymentlayer.events.on({
-			"featureselected" : zoomToDeployments
+			"featureselected" : zoomToDeployments,
+            "loadend" : function(evt) {
+                console.log('deploymentlayer loadend');
+                this.mapInstance.zoomToExtent(evt.object.getDataExtent());
+		    }
 		});
+//        deploymentlayer.events.register('loadend', this, function(evt) {
+//			//if (this.browseEnabled == true) {
+//			this.mapInstance.zoomToExtent(evt.object.getDataExtent());
+//			//}
+//		});
 		
 		// console.log("END showDeployments");
 	};
