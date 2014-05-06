@@ -40,7 +40,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		BBoxes : [],
         deployments : []
 	}
-	
+
+    this.depOriginLayerName = '';
 	this.depImageLayerName = '';
 	this.selImageLayerName = '';
 	this.filtImageLayerName = '';
@@ -131,7 +132,35 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 // 					baseMap.mapInstance.getLayersByName('Deployment images')[0].setVisibility(true);
 // 					baseMap.mapInstance.getLayersByName('Selected images')[0].setVisibility(true);
 // 				}
-			}
+			},
+            "moveend" : function(e) {
+                console.log('move:');
+                var map = baseMap;
+
+                // Get the deployment origin layer
+                depLayer = map.mapInstance.getLayersByName(map.depOriginLayerName)[0];
+                // Get the select control and clear all features
+                selectCtrl = map.mapInstance.getControlsBy('id', 'selectCtrl')[0];
+                selectCtrl.unselectAll();
+
+                if( $('#deploymentSelect').val() == null  ) return;
+
+                // Get IDs of selected deployments
+                for( dSel = 0; dSel < $('#deploymentSelect').val().length; dSel++ ) {
+                    id = ($('#deploymentSelect').val()[dSel]).toString();
+
+                    // Get the deployment layer feature corresponding to this id
+                    featInd = depLayer.features.map( function(e) {
+                        f = [];
+                        for(i = 0; i < e.cluster.length; i++)
+                            f.push( e.cluster[i].fid.split('.')[1] );
+                        return f;
+                    }).map( function(e) {return e.indexOf(id);} ).map( function(e) { return e >= 0;} ).indexOf( true );
+
+                    console.log(dSel+': id='+id+', featInd='+featInd);
+                    selectCtrl.highlight( depLayer.features[featInd] );
+                }
+            }
 		});
 		this.isInitialised = true;
 	}
@@ -301,7 +330,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	/**
 	 * Update the map for a set of deployments
 	 **/
-	this.showDeployments = function(layername) {
+	this.addDeployments = function(layername) {
 		// console.log("Function showDeployments");
 				
 		// Create the layer if it does not already exist
@@ -309,6 +338,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			console.log("WARNING: We should never end here!");
 			return;
 		}
+        this.depOriginLayerName = layername;
 
 		function style(fill,stroke,size, op) {
 			return new OpenLayers.Style({
@@ -335,8 +365,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 		}
 
-		var deploymentlayer = new OpenLayers.Layer.Vector(
-			layername, {
+		var deploymentlayer = new OpenLayers.Layer.Vector( layername, {
 				strategies: [
 					new OpenLayers.Strategy.Fixed(),
 					new OpenLayers.Strategy.Cluster()
@@ -347,18 +376,22 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					//featureNS : "http://catami"
 				}),
 				styleMap: new OpenLayers.StyleMap({
-					"default": style("#000000", "#000000", 4),
-					"select": style("#cccccc", "#000000", 4),
+					"default":   style("#000000", "#000000", 4),
+//					"select": style("#cccccc", "#000000", 4),
+                    "select":    style("#0000ff", "#ffffff", 4),
 					"highlight": style("#000000", "#ffffff", 8, 1)
 				}),
 				projection: baseMap.projection.geographic
 		});
-		this.mapInstance.addLayer(deploymentlayer);
-		deploymentlayer.events.register('loadend', this, function(evt) {
-			//if (this.browseEnabled == true) {
-			this.mapInstance.zoomToExtent(evt.object.getDataExtent());
-			//}
+        deploymentlayer.events.on({
+			"featureselected" : zoomToDeployments,
+            "loadend" : function(evt) {
+                console.log('deploymentlayer loadend');
+                baseMap.mapInstance.zoomToExtent(evt.object.getDataExtent());
+		    }
 		});
+		this.mapInstance.addLayer(deploymentlayer);
+
 		
 		var highlightCtrl = new OpenLayers.Control.SelectFeature(deploymentlayer, {
 			hover : true,
@@ -379,16 +412,18 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		this.mapInstance.addControl(highlightCtrl);
 		highlightCtrl.activate();
 
-		var selectCtrl = new OpenLayers.Control.SelectFeature(deploymentlayer);
-		selectCtrl.id = "selectCtrl";
+		var selectCtrl = new OpenLayers.Control.SelectFeature(deploymentlayer, {
+            eventListeners : {
+                featurehighlighted : function(event) {
+                    console.log('selectCtrl featurehighlighted');
+                }
+            }
+        });
+        selectCtrl.id = "selectCtrl";
 		this.mapInstance.addControl(selectCtrl);
 		selectCtrl.activate();
-		
-		deploymentlayer.events.on({
-			"featureselected" : zoomToDeployments
-		});
-		
-		// console.log("END showDeployments");
+
+
 	};
 	/**
 	 * Event function for when we hover over a deployment
@@ -434,9 +469,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	}
 
     function getDeploymentCheckbox (id,name,checked) {
-		//TODO: this is too long to fit inside "Deployment list"
+		// Checkbox, zoom, deployment name
 		var $depinfo   = $('<label class="checkbox"><input type="checkbox" value="' + id + '" '+checked+' ><a id="'+id+'" href="javascript: void(0);"><i class="icon-search"></i></a>&nbsp;' + name + '</label>');
-        // var $depinfo   = $('<div></div>').append($depname);
         
         $depinfo.find("input").click(function () {
 			if (this.checked) {
@@ -460,7 +494,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 **/
 	function zoomToDeployments(event) {
 		// parse the deployment ids
-		//baseMap.test = event;
+		// baseMap.test = event;
 		var deploymentIds = [];
 		for (var i = 0, len = event.feature.cluster.length; i < len; i++) {
 			var fid = event.feature.cluster[i].fid.split(".");
@@ -863,7 +897,10 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 baseMap.$dplinfo.find("input").prop('checked',false);  // deselect deployment property
                 baseMap.filters.deployments = [];
                 if ($dplselect.val() != null) {
+                    console.log('selecting deployments');
                     baseMap.updateMapBounds("deployment_ids=" + $dplselect.val(), baseMap.deploymentExtentUrl);
+
+                    // Loop through selected deployments in the multiselect
                     for (var i=0 ; i < $dplselect.val().length ; i++) {
                         id = $dplselect.val()[i];
                         name = $dplselect.find("option[value='" + id + "']").text();
@@ -882,9 +919,17 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 //                        else baseMap.$dplinfo.prepend(getDeploymentCheckbox(id,name,'checked'));
                     }
                     $btn.show();
+
+
+
+
+
                 }
                 else {
                 	$btn.hide();
+
+                    console.log('deselecting all deployments');
+                    map.mapInstance.getControlsBy('id', 'selectCtrl')[0].unselectAll();
                 }
 
                 baseMap.showSelectedImages();
@@ -1060,8 +1105,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         var $slider = $('<div id="'+feature+'-slider"></div>'),
 			infoidMin = feature + '-rangeMin',
             infoidMax = feature + '-rangeMax',
-            $infoMin = $('<input type="number" class="form-control" min=' +params.range[0]+ ' max='+params.range[1]+' name="infoMin" id="' + infoidMin + '" value="" size="8">'),
-            $infoMax = $('<input type="number" class="form-control" min=' +params.range[0]+ ' max='+params.range[1]+' name="infoMax" id="' + infoidMax + '" value="" size="8">'),
+            $infoMin = $('<input type="number" class="form-control input-sm" min="' +params.range[0]+ '" max="'+params.range[1]+'" name="infoMin" id="' + infoidMin + '" value="" size="8">'),
+            $infoMax = $('<input type="number" class="form-control input-sm" min="' +params.range[0]+ '" max="'+params.range[1]+'" name="infoMax" id="' + infoidMax + '" value="" size="8">'),
             filtertitle = feature[0].toUpperCase() + feature.substring(1) + ' range: ', // capitalise first letter
             $btn = $('<span id="'+feature+'-button" class="btn btn-xs" >' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span><br>');
         
@@ -1160,8 +1205,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		layercolor = this.filtLayerColor;		
 
 
-        var $fromdate = $('<input type="text" class="form-control" name="fromdate" placeholder="From date" id="fromdate" size="8">'),
-            $todate   = $('<input type="text" class="form-control" name="todate"   placeholder="To date"   id="todate"   size="8">'),
+        var $fromdate = $('<input type="text" class="form-control input-sm" name="fromdate" placeholder="From date" id="fromdate" size="8">'),
+            $todate   = $('<input type="text" class="form-control input-sm" name="todate"   placeholder="To date"   id="todate"   size="8">'),
             filtertitle = "Date range:",
 			infoid = feature,
 			$btn = $('<span id="'+infoid+'-button" class="btn btn-xs" >' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span><br>');

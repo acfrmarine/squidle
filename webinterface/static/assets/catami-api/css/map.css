@@ -1,5 +1,5 @@
 #deployment-map {
-	width: 80%;
+    width: 550px;
     float: left;
 }
 
@@ -13,7 +13,7 @@
 }
 
 #map-panel-container {
-    width: 20%;
+    width: 250px;
     overflow: hidden;
     float: right;
     background-color: #333333;

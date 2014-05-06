@@ -31,7 +31,7 @@
             </ul>
         </li>
     </ul>
-
+   
     <ul id="sign-in-status"  class="nav navbar-nav navbar-right">
 
     </ul>
@@ -43,12 +43,15 @@
 
 
 <div class="container">
+	<div id="alert-construction" class="alert alert-danger alert-dismissable" style="position:absolute; top:0; left:0px; z-index:999;">
+		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		<i class="icon-cogs"></i>&nbsp;<b>UNDER CONSTRUCTION:</b> Click <a href="#info-modal" data-toggle="modal" class="alert-link">here</a> for more information.
+	</div>
     <div id="main-tabs"  class="tab-content">
         <div class="tab-pane tab-main" id="map" data-isloaded="">
         	<div id='deployment-map'></div>
             <div id="map-panel-container">
                 <div id="map-panel">
-                    <div class="alert alert-danger"><b>UNDER CONSTRUCTION:</b> this website is currently under construction. Click <a href="#info-modal" data-toggle="modal" class="alert-link">here</a> for more information.</div>
                 </div>
             </div>
         </div>
@@ -153,6 +156,20 @@
         createDataModal(curstate); // setup modal windows for data
         refresh_dataset_modal();
 
+	// This resizes the size of the panel containing the map.
+	// Set it once on ready and then subscribe to resizes
+	$($('#deployment-map')[0]).width( $(window).width()-$($('#map-panel-container')).width() );
+	resizefuncs.push( function() {
+		$($('#deployment-map')[0]).width( $(window).width()-$($('#map-panel-container')).width() );
+	});
+	
+	// Set the location of the under construction alert.
+	// And subscribe to the resize	
+	$('#alert-construction')[0].style.left = $('#deployment-map').width()/2-$('#alert-construction').width()/2 + 'px';
+	resizefuncs.push( function() {
+		$('#alert-construction')[0].style.left = $('#deployment-map').width()/2-$('#alert-construction').width()/2 + 'px';
+	});
+
         // Update current selection text
         if (curstate.clid) {
             $('#datasel').html(clobj.getCollectionInfo(curstate.clid).name);
@@ -201,7 +218,7 @@
 					map.selImageLayerName = selImageLayer;
 					map.filtImageLayerName = filtImageLayer;
 					
-                    map.showDeployments(depLayer);
+                    map.addDeployments(depLayer);
 					map.addImageLayer(depImageLayer,  minVisibleScale, true, '666666');
                     map.addImageLayer(selImageLayer,  minVisibleScale/3, false, '0000FF'); // For the sake of performance we show this layer only when zoomed in further
                     map.addImageLayer(filtImageLayer, minVisibleScale, false, '00FF00');
@@ -212,7 +229,7 @@
 					// TODO: Is this really necessary? I find it confusing and want to click it every time!
                     var $selpanel = map.addPanel($('#map-panel'), {id: 'mapsel', icon: 'icon-plus-sign-alt', title: 'Selection tools', closeable: false});
                     $selpanel.append('<br>');
-                    var $filterpanel = map.addPanel($('#map-panel'), {id: 'mapfilters', icon: 'icon-filter', title: 'Filters', closeable: false});
+                    var $filterpanel = map.addPanel($('#map-panel'), {id: 'mapfilters', icon: 'icon-filter', title: 'Filters', closeable: false}, 'max-height: none; overflow-x: hidden; overflow-y:hidden;');
                     var $curselpanel = map.addPanel($('#map-panel'), {id: 'mapselected', icon: 'icon-stackexchange', title: 'Current selection', closeable: false});
 					
 					// Add selection tools
