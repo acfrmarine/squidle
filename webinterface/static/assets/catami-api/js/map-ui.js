@@ -133,7 +133,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 // 					baseMap.mapInstance.getLayersByName('Selected images')[0].setVisibility(true);
 // 				}
 			},
-            "move" : function(e) {
+            "moveend" : function(e) {
                 console.log('move:');
                 var map = baseMap;
 
