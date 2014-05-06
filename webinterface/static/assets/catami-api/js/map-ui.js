@@ -390,7 +390,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			"featureselected" : zoomToDeployments,
             "loadend" : function(evt) {
                 console.log('deploymentlayer loadend');
-                this.mapInstance.zoomToExtent(evt.object.getDataExtent());
+                baseMap.mapInstance.zoomToExtent(evt.object.getDataExtent());
 		    }
 		});
 //        deploymentlayer.events.register('loadend', this, function(evt) {
