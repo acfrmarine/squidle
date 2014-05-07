@@ -219,7 +219,7 @@
 					map.selImageLayerName = selImageLayer;
 					map.filtImageLayerName = filtImageLayer;
 					
-                    map.addDeploymentsNew(depLayer);
+                    map.addDeployments(depLayer);
 					map.addImageLayer(depImageLayer,  minVisibleScale, true, '666666');
                     map.addImageLayer(selImageLayer,  minVisibleScale/3, false, '0000FF'); // For the sake of performance we show this layer only when zoomed in further
                     map.addImageLayer(filtImageLayer, minVisibleScale, false, '00FF00');
@@ -234,7 +234,7 @@
                     var $curselpanel = map.addPanel($('#map-panel'), {id: 'mapselected', icon: 'icon-stackexchange', title: 'Current selection', closeable: false});
 					
 					// Add selection tools
-					map.addDeploymentSelect($selpanel, $curselpanel, depImageLayer);
+					map.addDeploymentSelectNew($selpanel, $curselpanel, depImageLayer);
 
 					// Add filters
                     map.addRangeFilter($filterpanel, $curselpanel, filtImageLayer, 'depth', {step: 1, range: [0, 2000], unit: 'm'});
