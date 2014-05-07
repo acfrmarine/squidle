@@ -862,6 +862,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 
     this.addDeploymentSelectNew = function($container, $infocontainer, layername) {
+        var $chosen;
         jQuery.getJSON( "../../chosen/chosen.jquery.json", $chosen );
         console.log($chosen);
     }
