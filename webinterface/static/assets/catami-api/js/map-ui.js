@@ -385,7 +385,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         deploymentlayer.events.on({
 			"featureselected" : zoomToDeployments,
             "loadend" : function(evt) {
-                console.log('deploymentlayer loadend');
                 baseMap.mapInstance.zoomToExtent(evt.object.getDataExtent());
 		    }
 		});
@@ -439,19 +438,20 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             checked = '',
             filtdepids = [],
             selecteddpls = '',
-            otherdpls = '';
+            otherdpls = '',
+            i;
 
         baseMap.$dplinfo.html('');
 
         // add selected deployments
-        for (var i = 0; i < baseMap.filters.deployments.length; i++) {
+        for (i = 0; i < baseMap.filters.deployments.length; i++) {
             $depinfo = getDeploymentCheckbox(baseMap.filters.deployments[i].id, baseMap.filters.deployments[i].name, 'checked');
             baseMap.$dplinfo.append($depinfo);
             filtdepids.push(baseMap.filters.deployments[i].id); // create array of selected deployment ids
         }
 
         // add other unselected deployments
-        for (var i = 0, len = event.feature.cluster.length; i < len; i++) {
+        for (i = 0, len = event.feature.cluster.length; i < len; i++) {
             depid = event.feature.cluster[i].fid.split('.')[1];
             if ($.inArray(depid, filtdepids) < 0) {
                 //$depinfo = $('<a href="javascript:void(0)">' + event.feature.cluster[i].data.short_name + '</a>');
@@ -882,10 +882,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             maxHeight: 400,
             buttonWidth: $container.innerWidth(),
             enableCaseInsensitiveFiltering: true,
-			templates: {
-				li: '<label class="checkbox"><input type="checkbox" ><a href="javascript: void(0);"><i class="icon-search"></i></a></label>',
-				divider: '<div class="divider" data-role="divider"></div>'
-			},
             buttonText: function (options, select) {
                 if (options.length == 0) return '<i class="icon-th-list"></i> Select deployment(s)';
                 else if (options.length == 1) return '<i class="icon-th-list"></i> '+ options.length +' deployment selected';
@@ -1098,8 +1094,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 */
     this.addRangeFilter = function ($container,$infocontainer,layername,feature,params) {
 		//console.log("Function addRangeFilter: "+feature);
-
-		layercolor = this.filtLayerColor;		
 		
         var $slider = $('<div id="'+feature+'-slider"></div>'),
 			infoidMin = feature + '-rangeMin',
@@ -1200,8 +1194,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 */
 	this.addDateFilter = function ($container,$infocontainer,layername,feature,params) {
 		//console.log("Function addDateFilter");
-
-		layercolor = this.filtLayerColor;		
 
 
         var $fromdate = $('<input type="text" class="form-control input-sm" name="fromdate" placeholder="From date" id="fromdate" size="8">'),
