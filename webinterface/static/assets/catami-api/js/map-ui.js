@@ -862,9 +862,16 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 
     this.addDeploymentSelectNew = function($container, $infocontainer, layername) {
-        var $chosen;
-        jQuery.getJSON( "/static/assets/chosen/chosen.jquery.json", $chosen );
-        console.log($chosen);
+
+        var $dplselect = $('<select multiple id="deploymentSelect" name="deploymentSelect"> </select>');
+        addCampaignsToSelect($dplselect);
+        $container.append($dplselect);
+
+        $dplselect.chosen({
+            no_results_text: "Oops, no campain found",
+
+        });
+
     }
     
 
