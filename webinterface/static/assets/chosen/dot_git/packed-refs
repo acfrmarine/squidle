@@ -1,0 +1,61 @@
+# pack-refs with: peeled fully-peeled 
+f301b10d97f9f6e77aa50bc89c665727cd60adfa refs/remotes/origin/add_all_options
+b1b9c76ec2b21ade7d634a39ba6962c8a1c40f8a refs/remotes/origin/add_license_to_css_file
+1a9864322b16f8a03aa9ba0e7bcec14c096268bc refs/remotes/origin/add_testing
+589d211d0f7c3314bd54b5136a62de78d95533e2 refs/remotes/origin/chosen_on_mobile_docs
+d90824740cc9c6c063da38cf2a4762a6a4091a4b refs/remotes/origin/fix-hidden-width
+e5a470ecabca73c65e981ddc311418dca903e071 refs/remotes/origin/gh-pages
+edca5915294be20c91e96586adaea1e017846e5a refs/remotes/origin/jacobsimeon-keep_list_open_option
+b6875f1911fdbb4ee5493a0820167c83a8fe1d51 refs/remotes/origin/koenpunt-dedicated-events
+ea0e4f0b5ef11df5e9c1b0eb2ec412bbacae64b6 refs/remotes/origin/koenpunt-rtl-option
+0079a2b3f607537808baf149d0358c059d8e138c refs/remotes/origin/koenpunt-word-boundary-matching
+8fb4c030afcd701e9ddd0b726d45db750c59f9e8 refs/remotes/origin/less-css-nesting
+34e63df490a0a76290b45a155e8a94659c67e165 refs/remotes/origin/master
+4f23b16a8961a5f76da8c01dc992495b5681028e refs/remotes/origin/remove-default-text-after-selection
+191dd97f28c4f55b99c82f1efa1463c68daa8ed2 refs/remotes/origin/winnow-unless-empty
+d6dd8cdbb22d8d45ea2cf63cdfe5feb5a8738af9 refs/tags/0.12.1
+a060ce95e5b4aec45259352a80e5c837548688dd refs/tags/0.13.0
+11942a389c1eec1c629256907905b3bb37fa00f6 refs/tags/0.14.0
+dd04343481b85f8c44a4958ccff080c8266f143d refs/tags/0.9
+b34a5d871d31cd47c62708c81d749695aa7d97ad refs/tags/1.0.0
+dd04343481b85f8c44a4958ccff080c8266f143d refs/tags/semver
+346082bf7d26c1580339fa5c1832f476d6ef51a7 refs/tags/v0.10.0
+^c72a662ccf2621ba7404314b1bdf0f24f9af557f
+b308e73e116e44b1977c4dac698277d7ca9fa194 refs/tags/v0.10.1
+^3a43166e0084bec8ab1e8621e2aaa4670514c1ca
+0438d043fa7cf33325ed6e8c71d926675f02a9ff refs/tags/v0.11.1
+^ff94a4b60baf98fee16f4d7807801687f0db4553
+f9acff41d9aeca42dd181d212edf92e2ea094cb4 refs/tags/v0.12.0
+735bd839abc6ddf27be18d745e7115f2aefde27e refs/tags/v0.9
+^dd04343481b85f8c44a4958ccff080c8266f143d
+beda72826aecabdb04f3d8ac6f7ad46b74cf9621 refs/tags/v0.9.1
+^c41e05e824b46d06c2a129f77ba3eb238b752baf
+09f19ae1e8654f5c91b44df1240f93d4a08234d4 refs/tags/v0.9.10
+^bddaf090439f48698cc6393417f2090674a00ac6
+80f23baf7038720edf2ea993b662ec3d5b1c2411 refs/tags/v0.9.11
+^4371e8fdabe16d4e8aaa3734421edc367e32a296
+9ac3387fbf09a854a1315cd3a1625fec6903ba57 refs/tags/v0.9.12
+^70c46cfac7cb281af61d39f352d333eda9f1a84b
+bff8b02f224922bac387780b075234cc6869bbd2 refs/tags/v0.9.13
+^bd8c6a52d83124d6e44db2369c27e7ad35c4bb5f
+46abd567580917d9ff2a789a4811c456a3b3ec00 refs/tags/v0.9.14
+^f63dd0d33e9b1ba6afaef92478b104902282492e
+fd01ad8845ebebeb3d04893d27764606b1051fcf refs/tags/v0.9.15
+^e1527722fd25b26ac8162c9f928a604e9dcb962e
+174513436bb9050c895ae908c7806c9014fdaabd refs/tags/v0.9.2
+^91763c7d796868eb107841addf45a7f9c5f501b2
+7925ea08b3ed499241d4e501c4c04d1503f6ec2d refs/tags/v0.9.3
+^d9ae47eda4d7d775cfd6c91e022f0012c2f39cfb
+22924b71f6ab99fef506c8d8adaba61ba4681ed3 refs/tags/v0.9.4
+^785020b1898847b7344a2ad3399155cb70558b4f
+150f526bbcd0f2242cbc016ad3002aab66d314a8 refs/tags/v0.9.5
+^1e49c19d204cdac102b705100eebe0dd2f27f199
+7dbb2a730bf9ed54ce3801ea983fa5a4d6dbdcf2 refs/tags/v0.9.6
+^0108f15866630f265e908f536132326782ce600c
+1b18a7312e1f171b83de0d3ec1c4fbd1e2d82a0c refs/tags/v0.9.7
+^c93a52b7e89cf491af0492742d25e0ef40756d25
+422d7f743a842a1f044d74963b3a885a650991e1 refs/tags/v0.9.8
+^923b8b8ffa0d9a19be766971285cf17dfe7b2322
+86768f8993d456c3b9567af33332897503ae6985 refs/tags/v0.9.9
+^606af039b6db46aaae477bebb9586a203dfdc036
+f093b3930e83f2fd656fe63d6cdb35cac52a74dc refs/tags/v1.1.0
