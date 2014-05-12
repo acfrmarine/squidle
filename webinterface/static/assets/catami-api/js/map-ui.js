@@ -880,6 +880,12 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     fileref.setAttribute("src", filename);
     document.getElementsByTagName("head")[0].appendChild(fileref);
 
+    filename = 'http://marine.acfr.usyd.edu.au/datasets/chosen_v1.1.0/chosen.css';
+    fileref=document.createElement("link");
+    fileref.setAttribute("rel", "stylesheet");
+    fileref.setAttribute("type", "text/css");
+    fileref.setAttribute("href", filename);
+
         var $dplselect = $('<select id="depSelect"> </select>');
         addCampaignsToSelect($dplselect);
         $container.append($dplselect);
