@@ -867,26 +867,27 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
     this.addDeploymentSelectNew = function($container, $infocontainer, layername) {
 
-            // FIXME: somehow include these properly!
-    var filename = 'http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
+        // FIXME: somehow include these properly!
+        var filename = 'http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
         fileref=document.createElement('script');
-    fileref.setAttribute("type","text/javascript");
-    fileref.setAttribute("src", filename);
-    document.getElementsByTagName("head")[0].appendChild(fileref);
+        fileref.setAttribute("type","text/javascript");
+        fileref.setAttribute("src", filename);
+        document.getElementsByTagName("head")[0].appendChild(fileref);
 
-    filename = 'http://marine.acfr.usyd.edu.au/datasets/chosen_v1.1.0/chosen.jquery.js';
-    fileref=document.createElement('script');
-    fileref.setAttribute("type","text/javascript");
-    fileref.setAttribute("src", filename);
-    document.getElementsByTagName("head")[0].appendChild(fileref);
+        filename = 'http://marine.acfr.usyd.edu.au/datasets/chosen_v1.1.0/chosen.jquery.js';
+        fileref=document.createElement('script');
+        fileref.setAttribute("type","text/javascript");
+        fileref.setAttribute("src", filename);
+        document.getElementsByTagName("head")[0].appendChild(fileref);
 
-    filename = 'http://marine.acfr.usyd.edu.au/datasets/chosen_v1.1.0/chosen.css';
-    fileref=document.createElement("link");
-    fileref.setAttribute("rel", "stylesheet");
-    fileref.setAttribute("type", "text/css");
-    fileref.setAttribute("href", filename);
+        filename = 'http://marine.acfr.usyd.edu.au/datasets/chosen_v1.1.0/chosen.css';
+        fileref=document.createElement("link");
+        fileref.setAttribute("rel", "stylesheet");
+        fileref.setAttribute("type", "text/css");
+        fileref.setAttribute("href", filename);
+        document.getElementsByTagName("head")[0].appendChild(fileref);
 
-        var $dplselect = $('<select id="depSelect"> </select>');
+        var $dplselect = $('<select multiple id="depSelect"> </select>');
         addCampaignsToSelect($dplselect);
         $container.append($dplselect);
 
