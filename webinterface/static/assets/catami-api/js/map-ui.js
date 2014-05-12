@@ -887,7 +887,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         fileref.setAttribute("href", filename);
         document.getElementsByTagName("head")[0].appendChild(fileref);
 
-        var $dplselect = $('<select multiple id="depSelect"> </select>');
+        var $dplselect = $('<select multiple id="deploymentSelect" name="deploymentSelect"> </select>');
         addCampaignsToSelect($dplselect);
         $container.append($dplselect);
 
