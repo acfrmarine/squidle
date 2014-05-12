@@ -54,7 +54,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 
     // FIXME: somehow include these properly!
-    var filename = 'http://marine.acfr.usyd.edu.au/datasets/jquery/jquery.min.js',
+    var filename = 'http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
         fileref=document.createElement('script');
     fileref.setAttribute("type","text/javascript");
     fileref.setAttribute("src", filename);
