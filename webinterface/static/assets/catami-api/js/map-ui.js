@@ -867,34 +867,27 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
     this.addDeploymentSelectNew = function($container, $infocontainer, layername) {
 
-        // FIXME: somehow include these properly!
-        var filename = 'http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
-        fileref=document.createElement('script');
-        fileref.setAttribute("type","text/javascript");
-        fileref.setAttribute("src", filename);
-        document.getElementsByTagName("head")[0].appendChild(fileref);
-
-        filename = 'http://marine.acfr.usyd.edu.au/datasets/chosen_v1.1.0/chosen.jquery.js';
-        fileref=document.createElement('script');
-        fileref.setAttribute("type","text/javascript");
-        fileref.setAttribute("src", filename);
-        document.getElementsByTagName("head")[0].appendChild(fileref);
-
-        filename = 'http://marine.acfr.usyd.edu.au/datasets/chosen_v1.1.0/chosen.css';
-        fileref=document.createElement("link");
-        fileref.setAttribute("rel", "stylesheet");
-        fileref.setAttribute("type", "text/css");
-        fileref.setAttribute("href", filename);
-        document.getElementsByTagName("head")[0].appendChild(fileref);
 
         var $dplselect = $('<select multiple id="deploymentSelect" name="deploymentSelect"> </select>');
         addCampaignsToSelect($dplselect);
         $container.append($dplselect);
 
-        $dplselect.chosen({
-            no_results_text: "Oops, no campain found",
-
+        $('#deploymentSelect').chosen({
+            placeholder_text_multiple: "Choose deployments",
+            search_contains: true, // searches any place in the word. Set to false to only search from beginning of the word
+            enable_split_word_search: false, // match the entire text
+            no_results_text: "Oops, no deployments found:", // show if no results found
+            display_selected_options: true, // Already selected options should be included (so we can deselect them)
+            single_backstroke_delete: false // first backspace selects, second one deletes
         });
+
+        $('#deploymentSelect').on('change', function (evt, params) {
+            checked = (params.type === 'checked') ? true : false;
+            diveID = params.id;
+
+            console.log('Dive #'+diveID+' is ' + (checked?'checked':'selected'));
+        });
+
 
     }
     
