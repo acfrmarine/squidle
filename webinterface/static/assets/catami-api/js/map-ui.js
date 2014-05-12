@@ -2,6 +2,8 @@
 OpenLayers.ProxyHost = "/proxy/?url=";
 //OpenLayers.ProxyHost = "/cgi-bin/proxy.cgi?url=";
 
+
+
 /**
  * Used for WMS mapping purposes. Takes a WMSUrl and WMS Layer name and configures a map.
  *
@@ -13,7 +15,6 @@ OpenLayers.ProxyHost = "/proxy/?url=";
  * FIXME: Note sure why or whether we need to pass in these urls.
  * @constructor
  */
-
 function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globalstate) {
 
 	//Map view code to get moved out later.
@@ -50,6 +51,23 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	//this.ExploreFilter = [];
 
 	var baseMap = this;
+
+
+    // FIXME: somehow include these properly!
+    var filename = 'http://marine.acfr.usyd.edu.au/datasets/jquery/jquery.min.js',
+        fileref=document.createElement('script');
+    fileref.setAttribute("type","text/javascript");
+    fileref.setAttribute("src", filename);
+    document.getElementsByTagName("head")[0].appendChild(fileref);
+
+    filename = 'http://marine.acfr.usyd.edu.au/datasets/chosen_v1.1.0/chosen.jquery.js';
+    fileref=document.createElement('script');
+    fileref.setAttribute("type","text/javascript");
+    fileref.setAttribute("src", filename);
+    document.getElementsByTagName("head")[0].appendChild(fileref);
+
+
+
 
 	/**
 	 *
@@ -863,7 +881,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
     this.addDeploymentSelectNew = function($container, $infocontainer, layername) {
 
-        var $dplselect = $('<select multiple id="deploymentSelect" name="deploymentSelect"> </select>');
+        var $dplselect = $('<select id="depSelect"> </select>');
         addCampaignsToSelect($dplselect);
         $container.append($dplselect);
 
