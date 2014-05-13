@@ -975,6 +975,7 @@
                 close_link.bind('click.chosen', function (evt) {
                     return _this.choice_destroy_link_click(evt);
                 });
+                close_link.append('<i class="icon-remove-sign"></i>');
                 choice.append(close_link);
             }
             return this.search_container.before(choice);
