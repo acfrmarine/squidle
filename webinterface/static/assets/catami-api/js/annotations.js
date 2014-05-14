@@ -578,10 +578,19 @@ function showThmAnnotationData($items, newtotal) {
             if (labeled <= 0) bgcol = 'red';
             else if (labeled == total) bgcol = 'rgb(69, 184, 69)';
             else bgcol = 'yellow';
-            $el.find('span.og-annotation-count').remove();
-            $tagel = $('<span class="og-annotation-count" style="color:'+bgcol+'" title="'+labeled+'/'+total+' points labeled">'+labeled+'</span>');
-            $tagel.tooltip({trigger: 'hover'});
-            $el.append($tagel);
+            if ($el.find('span.og-annotation-count').length <= 0) {
+                $tagel = $('<span class="og-annotation-count" style="color:' + bgcol + '">' + labeled + '</span>');
+                $tagel.tooltip({trigger: 'hover', container: 'body', title: function() {
+                    $el = $(this).parent('a.thm-link');
+                    return $el.data().annotation_labelled_count + '/' + $el.data().annotation_count + ' points labeled'
+                }});
+                $el.append($tagel);
+            }
+            else {
+                var $acount = $el.find('span.og-annotation-count');
+                $acount.css('color', bgcol);
+                $acount.html(labeled);
+            }
         }
     });
 }
