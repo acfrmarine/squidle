@@ -158,17 +158,17 @@
 
 	// This resizes the size of the panel containing the map.
 	// Set it once on ready and then subscribe to resizes
-	$($('#deployment-map')[0]).width( $(window).width()-$($('#map-panel-container')).width() );
+	$('#deployment-map').width( $(window).width()-$('#map-panel-container').width() );
 	resizefuncs.push( function() {
-		$($('#deployment-map')[0]).width( $(window).width()-$($('#map-panel-container')).width() );
+		$('#deployment-map').width( $(window).width()-$('#map-panel-container').width() );
 	});
 	
 	// Set the location of the under construction alert.
 	// And subscribe to the resize	
-	$('#alert-construction')[0].style.left = $('#deployment-map').width()/2-$('#alert-construction').width()/2 + 'px';
-    $('#alert-construction')[0].style.visibility = 'visible';
+	$('#alert-construction').css( 'left', $('#deployment-map').width()/2-$('#alert-construction').width()/2 + 'px');
+    $('#alert-construction').css( 'visibility', 'visible');
 	resizefuncs.push( function() {
-		$('#alert-construction')[0].style.left = $('#deployment-map').width()/2-$('#alert-construction').width()/2 + 'px';
+		$('#alert-construction').css( 'left', $('#deployment-map').width()/2-$('#alert-construction').width()/2 + 'px');
 	});
 
         // Update current selection text
