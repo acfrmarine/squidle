@@ -16,7 +16,7 @@ framework.
 import os
 import sys
 
-sys.path.insert(0, '/home/auv/git/squidle')
+sys.path.insert(0, '/home/auv/git/squidle-sandbox')
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "catamiPortal.settings")
 

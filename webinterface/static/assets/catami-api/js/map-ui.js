@@ -1,5 +1,5 @@
 //need so the ajax queries can make it outside the projects domain and contact geoserver
-OpenLayers.ProxyHost = "/proxy/?url=";
+//OpenLayers.ProxyHost = "/proxy/?url=";
 //OpenLayers.ProxyHost = "/cgi-bin/proxy.cgi?url=";
 
 
