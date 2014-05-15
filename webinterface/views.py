@@ -331,7 +331,48 @@ def download_csv(request):
         annotation = PointAnnotationSet.objects.get(pk=asid)
         filename = 'annotation-%s-%s-%s.csv' % (annotation.name, format, str(datetime.date.today()))
 
-        if format=="dynclasscount" :
+
+        if format=="rawdbdump" :
+            point_annotations = PointAnnotation.objects.filter(annotation_set=annotation).values('image_id',
+                                                                                                 'image__web_location',
+                                                                                                 'x',
+                                                                                                 'y',
+                                                                                                 'id',
+                                                                                                 'label_id',
+                                                                                                 'label__caab_code',
+                                                                                                 'label__code_name',
+                                                                                                 'label__cpc_code',
+                                                                                                 'qualifiers__modifier_name'
+            )
+
+            # Create pandas data frame, fill holes with blank strings
+            pts_df = pd.DataFrame(list(point_annotations)).fillna('')
+
+            # Rename fields
+            point_renames = {
+                'image__web_location': 'web_location',
+                'label__caab_code': 'caab',
+                'label__code_name': 'name',
+                'label__cpc_code': 'code',
+                'qualifiers__modifier_name': 'modifiers'
+            }
+            pts_df.rename(columns=point_renames, inplace=True)
+
+            # Group by image and point and aggregate modifiers, then reset indexes
+            pts_df = pts_df.groupby(['image_id', 'id']).aggregate({'modifiers': lambda x: ', '.join(x),
+                                                                   'name': lambda x: x.iat[0],
+                                                                   'caab': lambda x: x.iat[0],
+                                                                   'code': lambda x: x.iat[0],
+                                                                   'label_id': lambda x: x.iat[0],
+                                                                   'x': lambda x: x.iat[0],
+                                                                   'y': lambda x: x.iat[0],
+                                                                   'web_location': lambda x: x.iat[0],
+            }).delevel(['image_id', 'id'])
+            pts_df.pop('id')  # remove point ID from output
+            out_df = pts_df
+            #return render_to_csv_response(point_annotations, filename=filename)
+
+        else:
             point_annotations = PointAnnotation.objects.filter(annotation_set=annotation).values('image_id',
                                                                                                  #'x',
                                                                                                  #'y',
@@ -372,23 +413,25 @@ def download_csv(request):
             # Sort class columns (transpose columns to rows then re-transpose to rows to columns)
             #agg_pts_df = agg_pts_df.T.sortlevel().T
 
-            # Reindex columns to include all classes
-            classlist = AnnotationCode.objects.all().order_by('code_name').values_list('code_name',
-                                                                                       'caab_code',
-                                                                                       'cpc_code')
-            classlist = map(lambda t: list(t) + [u''], classlist)  # Add empty modifier
-            classlist = pd.MultiIndex.from_tuples(classlist, names=rollups)  # cast to MultiIndex
+            if format == "dynclasscount":
+                # Reindex columns to include all classes
+                classlist = AnnotationCode.objects.all().order_by('code_name').values_list('code_name',
+                                                                                           'caab_code',
+                                                                                           'cpc_code')
+                classlist = map(lambda t: list(t) + [u''], classlist)  # Add empty modifier
+                classlist = pd.MultiIndex.from_tuples(classlist, names=rollups)  # cast to MultiIndex
 
-            # Full list of classes, and modifiers ordered by class
-            #agg_pts_df = agg_pts_df.reindex(columns=classlist + agg_pts_df.columns)
-            #a = agg_pts_df.reindex(columns=classlist)  # Full list of classes, NO MODIFIERS
-            #b = agg_pts_df.reindex(columns=(agg_pts_df.columns + classlist) - classlist)  # ONLY modified classes
-            # agg_pts_df.xs(u'', level='modifiers', axis=1)  # Get all the columns WITHOUT modifiers
+                # Full list of classes, and modifiers ordered by class
+                #agg_pts_df = agg_pts_df.reindex(columns=classlist + agg_pts_df.columns)
+                #a = agg_pts_df.reindex(columns=classlist)  # Full list of classes, NO MODIFIERS
+                #b = agg_pts_df.reindex(columns=(agg_pts_df.columns + classlist) - classlist)  # ONLY modified classes
+                # agg_pts_df.xs(u'', level='modifiers', axis=1)  # Get all the columns WITHOUT modifiers
 
-            # Full list of classes with modifiers tacked on at the end
-            agg_pts_df = pd.concat([agg_pts_df.reindex(columns=classlist), # Full list of classes, NO MODIFIERS
-                                    agg_pts_df.reindex(columns=(agg_pts_df.columns + classlist) - classlist)], # ONLY modified classes
-                                   axis=1)
+                # Full list of classes with modifiers tacked on at the end
+                agg_pts_df = pd.concat([agg_pts_df.reindex(columns=classlist), # Full list of classes, NO MODIFIERS
+                                        agg_pts_df.reindex(columns=(agg_pts_df.columns + classlist) - classlist)], # ONLY modified classes
+                                       axis=1)
+
 
             # Get list of images with pose information
             images = annotation.collection.images.values('id',
@@ -423,45 +466,6 @@ def download_csv(request):
 
 
 
-        else :  # RAW database dump
-            point_annotations = PointAnnotation.objects.filter(annotation_set=annotation).values('image_id',
-                                                                                                 'image__web_location',
-                                                                                                 'x',
-                                                                                                 'y',
-                                                                                                 'id',
-                                                                                                 'label_id',
-                                                                                                 'label__caab_code',
-                                                                                                 'label__code_name',
-                                                                                                 'label__cpc_code',
-                                                                                                 'qualifiers__modifier_name'
-            )
-
-            # Create pandas data frame, fill holes with blank strings
-            pts_df = pd.DataFrame(list(point_annotations)).fillna('')
-
-            # Rename fields
-            point_renames = {
-                'image__web_location': 'web_location',
-                'label__caab_code': 'caab',
-                'label__code_name': 'name',
-                'label__cpc_code': 'code',
-                'qualifiers__modifier_name': 'modifiers'
-            }
-            pts_df.rename(columns=point_renames, inplace=True)
-
-            # Group by image and point and aggregate modifiers, then reset indexes
-            pts_df = pts_df.groupby(['image_id', 'id']).aggregate({'modifiers': lambda x: ', '.join(x),
-                                                                   'name': lambda x: x.iat[0],
-                                                                   'caab': lambda x: x.iat[0],
-                                                                   'code': lambda x: x.iat[0],
-                                                                   'label_id': lambda x: x.iat[0],
-                                                                   'x': lambda x: x.iat[0],
-                                                                   'y': lambda x: x.iat[0],
-                                                                   'web_location': lambda x: x.iat[0],
-            }).delevel(['image_id', 'id'])
-            pts_df.pop('id')  # remove point ID from output
-            out_df = pts_df
-            #return render_to_csv_response(point_annotations, filename=filename)
 
 
 
