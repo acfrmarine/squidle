@@ -318,7 +318,7 @@ def project(request):
 
 
 def download_csv(request):
-    from djqscsv import render_to_csv_response
+    #from djqscsv import render_to_csv_response
     import pandas as pd
     import datetime
     import cStringIO
@@ -329,12 +329,13 @@ def download_csv(request):
 
     if asid:
         annotation = PointAnnotationSet.objects.get(pk=asid)
-        filename = '%s - %s.csv' % (annotation.name, str(datetime.date.today()))
+        filename = 'annotation-%s-%s-%s.csv' % (annotation.name, format, str(datetime.date.today()))
 
         if format=="dynclasscount" :
             point_annotations = PointAnnotation.objects.filter(annotation_set=annotation).values('image_id',
-                                                                                                 'x',
-                                                                                                 'y',
+                                                                                                 #'x',
+                                                                                                 #'y',
+                                                                                                 'id',
                                                                                                  'label_id',
                                                                                                  'label__caab_code',
                                                                                                  'label__code_name',
@@ -342,33 +343,60 @@ def download_csv(request):
                                                                                                  'qualifiers__modifier_name'
             )
 
+            # Create pandas data frame, fill holes with blank strings
+            pts_df = pd.DataFrame(list(point_annotations)).fillna('')
+
+            # Rename fields
             point_renames = {
                 'image__web_location': 'web_location',
                 'label__caab_code': 'caab',
                 'label__code_name': 'name',
                 'label__cpc_code': 'code',
                 'qualifiers__modifier_name': 'modifiers'
-
             }
-            rollups = ['name', 'caab', 'code', 'modifiers']
+            pts_df.rename(columns=point_renames, inplace=True)
 
-            df = pd.DataFrame(list(point_annotations)).fillna('')
-            df.rename(columns=point_renames, inplace=True)
-            df = df.groupby(['image_id', 'x', 'y']).aggregate({'modifiers': lambda x: ', '.join(x),
+            # Group by image and point and aggregate modifiers, then reset indexes
+            pts_df = pts_df.groupby(['image_id', 'id']).aggregate({'modifiers': lambda x: ', '.join(x),
                                                               'name': lambda x: x.iat[0],
                                                               'caab': lambda x: x.iat[0],
                                                               'code': lambda x: x.iat[0],
                                                               'label_id': lambda x: x.iat[0],
-                                                              }).delevel(['image_id', 'x', 'y'])
-            df.pop('x')
-            df.pop('y')
+                                                              }).delevel(['image_id', 'id'])
+            pts_df.pop('id')  # remove point ID from output
 
-            aggdf = df.groupby(['image_id'] + rollups).label_id.count().unstack(rollups)
-            aggdf = aggdf.T.sortlevel().T
-            images = annotation.collection.images.values('id', 'web_location',
+            # Get counts of common label/modifier combinations and aggregate rows
+            rollups = ['name', 'caab', 'code', 'modifiers']
+            agg_pts_df = pts_df.groupby(['image_id'] + rollups).label_id.count().unstack(rollups)
+
+            # Sort class columns (transpose columns to rows then re-transpose to rows to columns)
+            #agg_pts_df = agg_pts_df.T.sortlevel().T
+
+            # Reindex columns to include all classes
+            classlist = AnnotationCode.objects.all().order_by('code_name').values_list('code_name',
+                                                                                       'caab_code',
+                                                                                       'cpc_code')
+            classlist = map(lambda t: list(t) + [u''], classlist)  # Add empty modifier
+            classlist = pd.MultiIndex.from_tuples(classlist, names=rollups)  # cast to MultiIndex
+
+            # Full list of classes, and modifiers ordered by class
+            #agg_pts_df = agg_pts_df.reindex(columns=classlist + agg_pts_df.columns)
+            #a = agg_pts_df.reindex(columns=classlist)  # Full list of classes, NO MODIFIERS
+            #b = agg_pts_df.reindex(columns=(agg_pts_df.columns + classlist) - classlist)  # ONLY modified classes
+            # agg_pts_df.xs(u'', level='modifiers', axis=1)  # Get all the columns WITHOUT modifiers
+
+            # Full list of classes with modifiers tacked on at the end
+            agg_pts_df = pd.concat([agg_pts_df.reindex(columns=classlist), # Full list of classes, NO MODIFIERS
+                                    agg_pts_df.reindex(columns=(agg_pts_df.columns + classlist) - classlist)], # ONLY modified classes
+                                   axis=1)
+
+            # Get list of images with pose information
+            images = annotation.collection.images.values('id',
+                                                         'web_location',
                                                          'pose__date_time',
                                                          'pose__depth',
                                                          'pose__position')
+            # Create pandas data frame and rename columns
             image_df = pd.DataFrame(list(images))
             image_renames = {
                 'id': 'image_id',
@@ -377,67 +405,69 @@ def download_csv(request):
                 'pose__position': 'position'
             }
             image_df.rename(columns=image_renames, inplace=True)
+
+            # Set index
             image_df.set_index('image_id', inplace=True)
-            image_df['latitude'] = image_df.position.apply(lambda p: p[0])
-            image_df['longitude'] = image_df.position.apply(lambda p: p[1])
+
+            # Convert position to lat and lon
+            image_df['latitude'] = image_df.position.apply(lambda p: p[1])
+            image_df['longitude'] = image_df.position.apply(lambda p: p[0])
             image_df.pop('position')
-            out_df = image_df.join(aggdf)
+
+            # Join images and point label columns and prepare output
+            out_df = image_df.join(agg_pts_df)
             out_df.delevel('image_id', inplace=True)
             out_df.set_index(['image_id', 'web_location', 'date_time', 'latitude', 'longitude', 'depth'], inplace=True)
             out_df.columns = pd.MultiIndex.from_tuples(out_df.columns, names=rollups)
 
 
 
-            response = HttpResponse(content_type='text/csv')
-            response['Content-Disposition'] = 'attachment; filename=%s;' % filename
-            response['Cache-Control'] = 'no-cache'
-            out_df_strbuff = cStringIO.StringIO()
-            out_df.to_csv(out_df_strbuff, sep=',')
-            out_df_strbuff.reset()
-            response.write(out_df_strbuff.read())
-            return response
 
-        elif format=="classcount":
-            # implement class list
-            classlist = AnnotationCode.objects.all()
+        else :  # RAW database dump
             point_annotations = PointAnnotation.objects.filter(annotation_set=annotation).values('image_id',
-                                                                                                 #'image__web_location', 'x',
-                                                                                                 #'y',
+                                                                                                 'image__web_location',
+                                                                                                 'x',
+                                                                                                 'y',
+                                                                                                 'id',
                                                                                                  'label_id',
                                                                                                  'label__caab_code',
                                                                                                  'label__code_name',
                                                                                                  'label__cpc_code',
                                                                                                  'qualifiers__modifier_name'
             )
+
+            # Create pandas data frame, fill holes with blank strings
+            pts_df = pd.DataFrame(list(point_annotations)).fillna('')
+
+            # Rename fields
             point_renames = {
                 'image__web_location': 'web_location',
                 'label__caab_code': 'caab',
                 'label__code_name': 'name',
                 'label__cpc_code': 'code',
                 'qualifiers__modifier_name': 'modifiers'
-
             }
-            rollups = ['name', 'caab', 'code', 'modifiers']
-            df = pd.DataFrame(list(point_annotations)).fillna('')
-            df.rename(columns=point_renames, inplace=True)
+            pts_df.rename(columns=point_renames, inplace=True)
 
-            pass
-        else :
-            point_annotations = PointAnnotation.objects.filter(annotation_set=annotation).values('image_id',
-                                                                                                 'image__web_location',
-                                                                                                 'x',
-                                                                                                 'y',
-                                                                                                 'label_id',
-                                                                                                 'label__caab_code',
-                                                                                                 'label__code_name',
-                                                                                                 'label__cpc_code',
-                                                                                                 'qualifiers__modifier_name'
-            )
+            # Group by image and point and aggregate modifiers, then reset indexes
+            pts_df = pts_df.groupby(['image_id', 'id']).aggregate({'modifiers': lambda x: ', '.join(x),
+                                                                   'name': lambda x: x.iat[0],
+                                                                   'caab': lambda x: x.iat[0],
+                                                                   'code': lambda x: x.iat[0],
+                                                                   'label_id': lambda x: x.iat[0],
+                                                                   'x': lambda x: x.iat[0],
+                                                                   'y': lambda x: x.iat[0],
+                                                                   'web_location': lambda x: x.iat[0],
+            }).delevel(['image_id', 'id'])
+            pts_df.pop('id')  # remove point ID from output
+            out_df = pts_df
+            #return render_to_csv_response(point_annotations, filename=filename)
 
-            return render_to_csv_response(point_annotations, filename=filename)
+
 
     elif clid:
         collection = Collection.objects.get(pk=clid)
+        filename = 'images-%s-%s.csv' % (collection.name, str(datetime.date.today()))
         #images = collection.images.filter(
         #    pose__scientificposemeasurement__measurement_type__normalised_name='altitude').values('id', 'web_location',
         #                                                                                          'pose__date_time',
@@ -451,12 +481,43 @@ def download_csv(request):
         #                                  'pose__depth',
         #                                  'pose__position',
         #                                  'altitude')
-        images = collection.images.values('id', 'web_location',
+        images = collection.images.values('id',
+                                          'web_location',
                                           'pose__date_time',
                                           'pose__depth',
                                           'pose__position')
 
-        return render_to_csv_response(images, append_datestamp=True)
+        # Create pandas data frame and rename columns
+        image_df = pd.DataFrame(list(images))
+        image_renames = {
+            'id': 'image_id',
+            'pose__date_time': 'date_time',
+            'pose__depth': 'depth',
+            'pose__position': 'position'
+        }
+        image_df.rename(columns=image_renames, inplace=True)
+
+        # Set index
+        image_df.set_index('image_id', inplace=True)
+
+        # Convert position to lat and lon
+        image_df['latitude'] = image_df.position.apply(lambda p: p[1])
+        image_df['longitude'] = image_df.position.apply(lambda p: p[0])
+        image_df.pop('position')
+
+        out_df = image_df
+
+        #return render_to_csv_response(images, append_datestamp=True)
+
+    # Prepare response to download as csv mimetype
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=%s;' % filename
+    response['Cache-Control'] = 'no-cache'
+    out_df_strbuff = cStringIO.StringIO()
+    out_df.to_csv(out_df_strbuff, sep=',')
+    out_df_strbuff.reset()
+    response.write(out_df_strbuff.read())
+    return response
 
 
 # This view imports classes from a google spreadsheet
