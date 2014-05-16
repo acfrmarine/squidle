@@ -478,13 +478,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         $depinfo.find("input").click(function () {
 			if (this.checked) {
 				//$('#deploymentSelect').multiselect('select', this.value);
-                $('#deploymentSelect').options[this.value].selected = true;
+                $('#deploymentSelect').find('option[value="'+this.value+'"]').prop('selected', true);
 			}
             else {
 //				$('#deploymentSelect').multiselect('deselect', this.value);
-                $('#deploymentSelect').options[this.value].selected = false;
+                $('#deploymentSelect').find('option[value="'+this.value+'"]').prop('selected', false);
 			}
-            $('#deploymentSelect').chosen.update();
+            $('#deploymentSelect').trigger('chosen:updated');
         });
 		
 		$depinfo.find("a").click( function (event) {
