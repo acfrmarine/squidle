@@ -1,7 +1,7 @@
-		.jw_cleanlink:link { text-decoration: none; color: #000000}
-		.jw_cleanlink:visited { text-decoration: none; color: #000000}
-		.jw_cleanlink:hover { text-decoration: none; color: #000000}
-		.jw_cleanlink:active { text-decoration: none; color: #000000}
+		.jw_cleanlink:link { text-decoration: none; color: #333333}
+		.jw_cleanlink:visited { text-decoration: none; color: #333333}
+		.jw_cleanlink:hover { text-decoration: none; color: #333333}
+		.jw_cleanlink:active { text-decoration: none; color: #333333}
 				
 		div#jw_topLevelMainDiv 
 		{
@@ -12,13 +12,13 @@
 		.jw_cleanFont
 		{
 			font-size: 0.9em;
-			color: #FFFFFF;	
+			color: #333333;	
 			font-family: sans-serif;
 		}
 		
 		.jw_mediumFont
 		{
-			color: #FFFFFF;
+			color: #777777;
 		}
 		
 		.jw_smallerLink
@@ -28,6 +28,7 @@
 		
 		.jw_appName
 		{
+			color: #777777;
 			text-align: center;
 			padding-top: 15px;
 			padding-bottom: 2px;
@@ -43,7 +44,6 @@
 			padding:10px; 
 			overflow: hidden; 
 			width:260px;
-			background-color: #282828;
 		}
 				
 		.jw_lightFont
@@ -98,7 +98,7 @@
 		
 		.jw_recommendedLink
 		{	
-			color: #787878;	
+			color: #71AEDC;	
 		}
 		
 		.jw_topPaddedDiv
@@ -108,13 +108,14 @@
 		
 		.jw_Link
 		{
-			color: #FFFFFF;
+			color: #AAAAAA;
 			cursor: pointer; 
 			cursor: hand;			
 		}
 		
 		.jw_Link:hover
 		{
+			color: #71AEDC;
 			text-decoration: underline;
 		}
 		
