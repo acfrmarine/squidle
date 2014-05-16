@@ -131,10 +131,11 @@
 
 #mapsel-content {
     overflow: visible;
+    max-height: none;
 }
 
 #map-panel-container {
-    overflow: visible;
+    overflow-y: scroll;
 }
 
 .map-panel .multiselect-container {
