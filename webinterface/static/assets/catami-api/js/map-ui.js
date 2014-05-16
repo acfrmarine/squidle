@@ -887,38 +887,44 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             diveID = params.id;
             console.log('Dive #'+diveID+' is ' + (checked?'checked':'selected'));
 
-
-            var id, name, $dplinfo, info = '';
-            baseMap.$dplinfo.find("input").prop('checked',false);  // deselect deployment property
-            baseMap.filters.deployments = [];
-            if ($dplselect.val() != null) {
-                console.log('selecting deployments');
-                baseMap.updateMapBounds("deployment_ids=" + $dplselect.val(), baseMap.deploymentExtentUrl);
-
-                // Loop through selected deployments in the multiselect
-                for (var i=0 ; i < $dplselect.val().length ; i++) {
-                    id = $dplselect.val()[i];
-                    name = $dplselect.find("option[value='" + id + "']").text();
-                    baseMap.filters.deployments.push({
-                        id: id,
-                        name: name
-                    });
-
-                    // check selected in info panel, otherwise add to info panel
-                    $dplinfo = baseMap.$dplinfo.find("input[value='" + id + "']");
-                    $dplinfo.prop('checked', true);
-                }
-//                $btn.show();
-
+            // Zoom to selection
+            if( !checked ) {
+                baseMap.updateMapBounds("deployment_ids=" + [diveID], baseMap.deploymentExtentUrl);
             }
+            // Add to selected
             else {
-//                $btn.hide();
+                var id, name, $dplinfo, info = '';
+                baseMap.$dplinfo.find("input").prop('checked',false);  // deselect deployment property
+                baseMap.filters.deployments = [];
+                if ($dplselect.val() != null) {
+                    console.log('selecting deployments');
+                    baseMap.updateMapBounds("deployment_ids=" + $dplselect.val(), baseMap.deploymentExtentUrl);
 
-                console.log('deselecting all deployments');
-                map.mapInstance.getControlsBy('id', 'selectCtrl')[0].unselectAll();
+                    // Loop through selected deployments in the multiselect
+                    for (var i=0 ; i < $dplselect.val().length ; i++) {
+                        id = $dplselect.val()[i];
+                        name = $dplselect.find("option[value='" + id + "']").text();
+                        baseMap.filters.deployments.push({
+                            id: id,
+                            name: name
+                        });
+
+                        // check selected in info panel, otherwise add to info panel
+                        $dplinfo = baseMap.$dplinfo.find("input[value='" + id + "']");
+                        $dplinfo.prop('checked', true);
+                    }
+    //                $btn.show();
+
+                }
+                else {
+    //                $btn.hide();
+
+                    console.log('deselecting all deployments');
+                    map.mapInstance.getControlsBy('id', 'selectCtrl')[0].unselectAll();
+                }
+
+                baseMap.showSelectedImages();
             }
-
-            baseMap.showSelectedImages();
         });
 
 
