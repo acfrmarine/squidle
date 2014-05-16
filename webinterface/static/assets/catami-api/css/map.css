@@ -135,7 +135,7 @@
 }
 
 #map-panel-container {
-    overflow-y: scroll;
+    overflow: visible;
 }
 
 .map-panel .multiselect-container {
