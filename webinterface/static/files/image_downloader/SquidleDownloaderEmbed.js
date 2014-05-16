@@ -701,7 +701,7 @@
 		if (jwUpdateURL != null)
 			return jwUpdateURL;
 		var url = scriptElement.getAttribute('src');
-		if (url == null || url.charAt(0) == '/')
+		if (url.charAt(0) == '/')
 		{
 			var browserURL = document.location.href;
 			if (browserURL.indexOf("://") == -1)
@@ -901,7 +901,7 @@
 		}
 	}
 	
-	// jwEmbed();
+	jwEmbed();
 	
 	
 	
