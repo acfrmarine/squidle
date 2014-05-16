@@ -264,11 +264,10 @@
             //zoom = '&nbsp;<a href="javascript: void(0);"><img src="https://cdn1.iconfinder.com/data/icons/large-black-icons/512/Zoom_in_magnifying_glass.png" height="10px" /></a>&nbsp' + option.search_text;
             zoom = '&nbsp;';
             if (!(option.disabled && !(option.selected && this.is_multiple)) && !option.selected) {
-                zoom += '<a href="javascript: void(0);">';
+                zoom += '<a href="javascript: void(0);"><i class="icon-search disabled"></i></a>';
             }
-            zoom += '<i class="icon-search disabled"></i>';
-            if (!(option.disabled && !(option.selected && this.is_multiple)) && !option.selected) {
-                zoom += '</a>';
+            else {
+                zoom += '<i class="icon-search disabled"></i>';
             }
             zoom += '&nbsp' + option.search_text;
             chbox = '<input type="checkbox" id="chosen-checkbox-' + option.array_index + '"' + ((option.disabled && !(option.selected && this.is_multiple)) ? ' disabled ' : '') + (option.selected ? ' checked disabled' : '') + '/>';
