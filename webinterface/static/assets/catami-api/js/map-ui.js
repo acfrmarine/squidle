@@ -879,7 +879,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             no_results_text: "Oops, no deployments found:", // show if no results found
             display_selected_options: true, // Already selected options should be included (so we can deselect them)
             single_backstroke_delete: false, // first backspace selects, second one deletes
-            width: $container.innerWidth() // set it here of set the width of the select box above
+            width: $container.innerWidth()+'px' // set it here of set the width of the select box above
         });
 
         $('#deploymentSelect').on('change', function (evt, params) {
