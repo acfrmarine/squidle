@@ -55,6 +55,8 @@ class CreateWorksetForm(forms.Form):
     #method = forms.CharField(widget=forms.HiddenInput())
     c_id = forms.IntegerField(widget=forms.HiddenInput())
 
+    method.widget.attrs["onchange"] = "if ($(this).val() == 'grts') alert('NOTE: the GRTS sample method is still experimental and may not work properly!');"
+
 
 class CreatePointAnnotationSet (forms.Form):
     collection = forms.IntegerField(widget=forms.HiddenInput())
