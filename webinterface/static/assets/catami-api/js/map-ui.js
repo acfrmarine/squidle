@@ -485,7 +485,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 $('#deploymentSelect').find('option[value="'+this.value+'"]').prop('selected', false);
 			}
             $('#deploymentSelect').trigger('chosen:updated');
-            $('#deploymentSelect').trigger('change');
+            baseMap.showSelectedImages();
         });
 		
 		$depinfo.find("a").click( function (event) {
