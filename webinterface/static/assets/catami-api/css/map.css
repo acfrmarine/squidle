@@ -14,7 +14,8 @@
 
 #map-panel-container {
     width: 250px;
-    overflow: hidden;
+    overflow-y: hidden;
+    overflow-x: scroll;
     float: right;
     background-color: #333333;
     padding: 0px;
