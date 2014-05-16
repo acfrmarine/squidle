@@ -1,0 +1,96 @@
+{% if clid %}
+<div class="well" style="width: 50%; text-align: left; margin-left: auto; margin-right: auto; color: #ccc">
+    <h1><i class="icon-th-list"></i> DATA TOOLS:</h1>
+
+    {% if asid %}
+    <form action="download_csv" method="get" id="asdl-form" class="form-horizontal">
+         <h2 style="border-top: 1px solid #404040; padding-top: 10px;" ><i class="icon-tags"></i> Annotation data:</h2>
+        <div class="control-group required">
+            <label class="control-label" for="format">Export CSV format</label>
+            <div class="controls">
+                <select id="format" class="btn btn-primary" name="format">
+                    <option value="allclasses" selected="selected">Class counts per image (all classes + modifiers)</option>
+                    <option value="dynclasscount">Class counts per image (only relevant classes + modifiers)</option>
+                    <option value="rawdbdump">Database dump (point position and label info, classes + modifiers)</option>
+                </select>
+                <input id="asid" name="asid" type="hidden" value="{{ asid }}">
+                <input type="submit" class="btn btn-default" value="DOWNLOAD">
+                <span class="help-inline">Export the annotation data as a CSV file in a number of different formats</span>
+
+            </div>
+        </div>
+    </form>
+    {% endif %}
+
+
+    <form action="download_csv" method="get" id="asdl-form" class="form-horizontal">
+         <h2 style="border-top: 1px solid #404040; padding-top: 10px;" ><i class="icon-picture"></i> Image data:</h2>
+        <div class="control-group required">
+            <label class="control-label" for="clid">Export CSV for</label>
+
+            <div class="controls">
+                <select id="clid" class="btn btn-primary" name="clid">
+                    {% if wsid %}<option value="{{ wsid }}" selected="selected">SUBSET images</option>{% endif %}
+                    <option value="{{ clid }}">All PROJECT images</option>
+                </select>
+                <input type="submit" class="btn btn-default" value="DOWNLOAD">
+                <span class="help-inline">Export a CSV containing a list of images including georeferencing information (eg: lat, lon, depth, etc...)</span>
+
+            </div>
+
+             <h2 style="border-top: 1px solid #404040; padding-top: 10px;" ><i class="icon-download"></i> Download images:</h2>
+            <label class="control-label">Tool for your OS</label>
+            <div class="controls">
+                <script type="text/javascript"
+                        src="{{ STATIC_URL }}files/image_downloader/SquidleDownloaderEmbed.js"></script>
+                <script id="jwEmbed" type="text/javascript">
+                    var updateURL = "/static/files/image_downloader/"
+                    var onlineURL = updateURL + jwGetDetectedFilename(true, null);
+                    var offlineURL = updateURL + jwGetDetectedFilename(false, null);
+                    document.write("<a class='btn btn-default' href = '" + onlineURL + "'>DOWNLOAD</a>");
+                </script>
+                <br>
+                <span class="help-inline">Using this downloader tool and one of the CSV files above, you can easily download the list of images that you have been working on.</span>
+            </div>
+        </div>
+    </form>
+
+
+
+
+
+
+</div>
+
+
+<div class="well" style="width: 50%; text-align: left; margin-left: auto; margin-right: auto; color: #ccc">
+    <p>This section will also eventually contain information additional about the selected datataset. It will provide:</p>
+    <ul style="margin-left: 20px">
+        <li>Statistical summaries of the data</li>
+        <li>Access to results from machine learning tools. <b></b><a href="#myModal" data-toggle="modal"> Click here for
+            a brief overview of our superpixel classification framework</a></b>.
+        </li>
+    </ul>
+</div>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width: 840px">
+                <div class="modal-body" style="width: 800px;">
+                    <iframe src="/static/html/superpixel-info.html" style="width: 800px; height: 700px; border: 0">
+
+                    </iframe>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+{% else %}
+    There is no dataset selected. Select or create a dataset by<br>
+    clicking the dropdown menu on the top navigation bar.
+{% endif %}

@@ -20,7 +20,7 @@
         <li title="View Map" class="icon-text"><a id="map-nav" href="#map" data-toggle="tab" ><i class="icon-globe"></i>Map</a></li>
         <li title="View Images for selected dataset" class="icon-text"><a id="image-nav" href="#thm" data-toggle="tab"><i class="icon-picture"></i>Images</a></li>
         <!--<li title="Manage Datasets" class="icon-text"><a href="javascript:void(0)" onclick="$('#data-modal').modal('show')"><i class="icon-th-list"></i>Data</a></li>-->
-        <li title="Data tools for selected dataset" class="icon-text"><a id="data-nav" href="#datatab" data-toggle="tab"><i class="icon-th-list"></i>Download</a></li>
+        <li title="Data tools for selected dataset" class="icon-text"><a id="data-nav" href="#datatab" data-toggle="tab"><i class="icon-th-list"></i>Data</a></li>
         <li class="dropdown"><a id="datasel" href="#" class="dropdown-toggle" data-toggle="dropdown">No dataset selected <b class="caret"></b></a>
             <ul class="dropdown-menu">
                 <li><a href="javascript:void(0)" onclick="$('#data-modal').modal('show')"><i class="icon-th-list"></i>
@@ -59,8 +59,7 @@
             <ul id="og-grid-0" class="og-grid"></ul>
         </div>
         <div class="tab-pane tab-main main" id="datatab" data-isloaded="">
-            There is no dataset selected. Select or create a dataset by<br>
-            clicking the dropdown menu on the top navigation bar.
+            {% include "webinterface/subtemplates/dataset-tab.html" %}
         </div>
     </div>
 </div>
@@ -298,13 +297,7 @@
 
         $('#data-nav').on('shown.bs.tab', function (e) {
             history.replaceState(null, '', e.target);
-            if (curstate.clid) {
-                $('#datatab').load("/static/html/data-view-example.html", function () {
-                    $('#download-info').html('<li><a href="download_csv?asid='+ curstate.asid+'&format=dynclasscount">Click here to download the ANNOTATION point data</a></li>'+
-                            '<li><a href = "download_csv?clid=' + curstate.wsid + '" > Click here to download the SUBSET image data </a></li >'+
-                            '<li><a href = "download_csv?clid=' + curstate.clid + '" > Click here to download the PROJECT image data </a></li >');
-                });
-            }
+
         });
 
         // Activate tabs from anchor in url links
@@ -323,12 +316,12 @@
 
 
     function showLoader() {
-        $('#nav-icon').removeClass('icon-edit-sign').addClass('icon-spin icon-spinner');
+        $('#nav-icon').removeClass('icon-edit-sign').addClass('icon-spin icon-spinner red');
         thmgrid.$loaderdiv.html('Loading images...');
 
     }
     function hideLoader() {
-        $('#nav-icon').removeClass('icon-spin icon-spinner').addClass('icon-edit-sign');
+        $('#nav-icon').removeClass('icon-spin icon-spinner red').addClass('icon-edit-sign');
         thmgrid.$loaderdiv.html('');
     }
 
