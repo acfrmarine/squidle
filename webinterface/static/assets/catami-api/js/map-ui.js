@@ -477,11 +477,14 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         
         $depinfo.find("input").click(function () {
 			if (this.checked) {
-				$('#deploymentSelect').multiselect('select', this.value);
+				//$('#deploymentSelect').multiselect('select', this.value);
+                $('#deploymentSelect').options[this.value].selected = true;
 			}
             else {
-				$('#deploymentSelect').multiselect('deselect', this.value);
+//				$('#deploymentSelect').multiselect('deselect', this.value);
+                $('#deploymentSelect').options[this.value].selected = false;
 			}
+            $('#deploymentSelect').chosen.update();
         });
 		
 		$depinfo.find("a").click( function (event) {
