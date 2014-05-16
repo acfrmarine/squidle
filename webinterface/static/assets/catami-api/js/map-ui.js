@@ -879,14 +879,46 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             no_results_text: "Oops, no deployments found:", // show if no results found
             display_selected_options: true, // Already selected options should be included (so we can deselect them)
             single_backstroke_delete: false, // first backspace selects, second one deletes
-            width: '225px' // set it here of set the width of the select box above
+            width: $container.innerWidth() // set it here of set the width of the select box above
         });
 
         $('#deploymentSelect').on('change', function (evt, params) {
             checked = (params.type === 'checked') ? true : false;
             diveID = params.id;
-
             console.log('Dive #'+diveID+' is ' + (checked?'checked':'selected'));
+
+
+            var id, name, $dplinfo, info = '';
+            baseMap.$dplinfo.find("input").prop('checked',false);  // deselect deployment property
+            baseMap.filters.deployments = [];
+            if ($dplselect.val() != null) {
+                console.log('selecting deployments');
+                baseMap.updateMapBounds("deployment_ids=" + $dplselect.val(), baseMap.deploymentExtentUrl);
+
+                // Loop through selected deployments in the multiselect
+                for (var i=0 ; i < $dplselect.val().length ; i++) {
+                    id = $dplselect.val()[i];
+                    name = $dplselect.find("option[value='" + id + "']").text();
+                    baseMap.filters.deployments.push({
+                        id: id,
+                        name: name
+                    });
+
+                    // check selected in info panel, otherwise add to info panel
+                    $dplinfo = baseMap.$dplinfo.find("input[value='" + id + "']");
+                    $dplinfo.prop('checked', true);
+                }
+//                $btn.show();
+
+            }
+            else {
+//                $btn.hide();
+
+                console.log('deselecting all deployments');
+                map.mapInstance.getControlsBy('id', 'selectCtrl')[0].unselectAll();
+            }
+
+            baseMap.showSelectedImages();
         });
 
 
