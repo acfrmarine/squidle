@@ -485,7 +485,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 $('#deploymentSelect').find('option[value="'+this.value+'"]').prop('selected', false);
 			}
             $('#deploymentSelect').trigger('chosen:updated');
-            baseMap.showSelectedImages();
+            $('#deploymentSelect').trigger('chosen:change');
         });
 		
 		$depinfo.find("a").click( function (event) {
@@ -866,7 +866,42 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         return filters;
     }
 
+    this.updateDeploymentInfo = function() {
+        // Get the select DOM
+        $dplselect = $('#deploymentSelect');
 
+        // deselect deployment property
+        baseMap.$dplinfo.find("input").prop('checked',false);
+        // Loop through selected deployments in the multiselect
+        for (var i=0 ; i < $dplselect.val().length ; i++) {
+            id = $dplselect.val()[i];
+            // check selected in info panel, otherwise add to info panel
+            $dplinfo = baseMap.$dplinfo.find("input[value='" + id + "']");
+            $dplinfo.prop('checked', true);
+        }
+    }
+
+    this.updateDeploymentFilter = function() {
+
+        // Get the select DOM
+        $dplselect = $('#deploymentSelect');
+
+        this.filters.deployments = [];
+        // Loop through selected deployments in the multiselect
+        for (var i=0 ; i < $dplselect.val().length ; i++) {
+            id = $dplselect.val()[i];
+            name = $dplselect.find("option[value='" + id + "']").text();
+            this.filters.deployments.push({
+                id: id,
+                name: name
+            });
+
+            // TODO: move this code to an independent function
+            // check selected in info panel, otherwise add to info panel
+            $dplinfo = baseMap.$dplinfo.find("input[value='" + id + "']");
+            $dplinfo.prop('checked', true);
+        }
+    }
 
 
     this.addDeploymentSelectNew = function($container, $infocontainer, layername) {
@@ -897,32 +932,33 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             }
             // Add to selected
             else {
-                var id, name, $dplinfo, info = '';
-                baseMap.$dplinfo.find("input").prop('checked',false);  // deselect deployment property
-                baseMap.filters.deployments = [];
+//                var id, name, $dplinfo, info = '';
+//                baseMap.$dplinfo.find("input").prop('checked',false);  // deselect deployment property
+//                baseMap.filters.deployments = [];
                 if ($dplselect.val() != null) {
-                    console.log('selecting deployments');
                     baseMap.updateMapBounds("deployment_ids=" + $dplselect.val(), baseMap.deploymentExtentUrl);
 
-                    // Loop through selected deployments in the multiselect
-                    for (var i=0 ; i < $dplselect.val().length ; i++) {
-                        id = $dplselect.val()[i];
-                        name = $dplselect.find("option[value='" + id + "']").text();
-                        baseMap.filters.deployments.push({
-                            id: id,
-                            name: name
-                        });
+//                    // TODO: move this code to an independent function
+//                    // Loop through selected deployments in the multiselect
+//                    for (var i=0 ; i < $dplselect.val().length ; i++) {
+//                        id = $dplselect.val()[i];
+//                        name = $dplselect.find("option[value='" + id + "']").text();
+//                        baseMap.filters.deployments.push({
+//                            id: id,
+//                            name: name
+//                        });
+//
+//                        // TODO: move this code to an independent function
+//                        // check selected in info panel, otherwise add to info panel
+//                        $dplinfo = baseMap.$dplinfo.find("input[value='" + id + "']");
+//                        $dplinfo.prop('checked', true);
+//                    }
 
-                        // check selected in info panel, otherwise add to info panel
-                        $dplinfo = baseMap.$dplinfo.find("input[value='" + id + "']");
-                        $dplinfo.prop('checked', true);
-                    }
-    //                $btn.show();
+                    baseMap.updateDeploymentFilter();
+                    baseMap.updateDeploymentInfo();
 
                 }
                 else {
-    //                $btn.hide();
-
                     console.log('deselecting all deployments');
                     map.mapInstance.getControlsBy('id', 'selectCtrl')[0].unselectAll();
                 }
@@ -933,7 +969,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 
     }
-    
 
 	/**
 	 *
