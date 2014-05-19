@@ -490,7 +490,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             // TODO: If we could trigger the change event of the select we didn't have to do this
             baseMap.updateDeploymentFilter();
             baseMap.updateDeploymentInfo();
-
+            baseMap.showSelectedImages();
         });
 		
 		$depinfo.find("a").click( function (event) {
