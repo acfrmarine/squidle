@@ -921,7 +921,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             width: $container.innerWidth()+'px' // set it here of set the width of the select box above
         });
 
-        $('#deploymentSelect').on('change', function (evt, params) {
+        $('#deploymentSelect').change( function (evt, params) {
             checked = (params.type === 'checked') ? true : false;
             diveID = params.id;
             console.log('Dive #'+diveID+' is ' + (checked?'checked':'selected'));
@@ -932,28 +932,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             }
             // Add to selected
             else {
-//                var id, name, $dplinfo, info = '';
-//                baseMap.$dplinfo.find("input").prop('checked',false);  // deselect deployment property
-//                baseMap.filters.deployments = [];
                 if ($dplselect.val() != null) {
                     baseMap.updateMapBounds("deployment_ids=" + $dplselect.val(), baseMap.deploymentExtentUrl);
-
-//                    // TODO: move this code to an independent function
-//                    // Loop through selected deployments in the multiselect
-//                    for (var i=0 ; i < $dplselect.val().length ; i++) {
-//                        id = $dplselect.val()[i];
-//                        name = $dplselect.find("option[value='" + id + "']").text();
-//                        baseMap.filters.deployments.push({
-//                            id: id,
-//                            name: name
-//                        });
-//
-//                        // TODO: move this code to an independent function
-//                        // check selected in info panel, otherwise add to info panel
-//                        $dplinfo = baseMap.$dplinfo.find("input[value='" + id + "']");
-//                        $dplinfo.prop('checked', true);
-//                    }
-
                     baseMap.updateDeploymentFilter();
                     baseMap.updateDeploymentInfo();
 
