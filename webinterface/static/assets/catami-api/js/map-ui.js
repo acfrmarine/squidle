@@ -473,8 +473,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
     function getDeploymentCheckbox (id,name,checked) {
 		// Checkbox, zoom, deployment name
-		var $depinfo   = $('<label class="checkbox"><input type="checkbox" value="' + id + '" '+checked+' ><a id="'+id+'" href="javascript: void(0);"><i class="icon-search"></i></a>&nbsp;' + name + '</label>');
-        
+		/*var $depinfo   = $('<label class="checkbox"><input type="checkbox" value="' + id + '" '+checked+' ><a id="'+id+'" href="javascript: void(0);"><i class="icon-search"></i></a>&nbsp;' + name + '</label>');
+
         $depinfo.find("input").click(function () {
 			if (this.checked) {
 				//$('#deploymentSelect').multiselect('select', this.value);
@@ -497,7 +497,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			var deploymentIds = [this.id];
 			baseMap.updateMapBounds("deployment_ids=" + deploymentIds, baseMap.deploymentExtentUrl);
 		});
-		
+		*/
+        var $depinfo = $('#'+id).clone();
         return $depinfo;
     }
 
