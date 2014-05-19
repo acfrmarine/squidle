@@ -484,8 +484,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 //				$('#deploymentSelect').multiselect('deselect', this.value);
                 $('#deploymentSelect').find('option[value="'+this.value+'"]').prop('selected', false);
 			}
+            // Get chosen to update based on the new selections
             $('#deploymentSelect').trigger('chosen:updated');
-            $('#deploymentSelect').trigger('chosen:change');
+            // Update deployment filter and deployment info pane
+            // TODO: If we could trigger the change event of the select we didn't have to do this
+            baseMap.updateDeploymentFilter();
+            baseMap.updateDeploymentInfo();
+
         });
 		
 		$depinfo.find("a").click( function (event) {
