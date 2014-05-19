@@ -260,7 +260,7 @@
             option_el.className = classes.join(" ");
             option_el.style.cssText = option.style;
             option_el.setAttribute("data-option-array-index", option.array_index);
-
+            console.log(option);
             //zoom = '&nbsp;<a href="javascript: void(0);"><img src="https://cdn1.iconfinder.com/data/icons/large-black-icons/512/Zoom_in_magnifying_glass.png" height="10px" /></a>&nbsp' + option.search_text;
             zoom = '&nbsp;';
             if (!(option.disabled && !(option.selected && this.is_multiple)) && !option.selected) {
