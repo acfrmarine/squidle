@@ -958,6 +958,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	/**
 	 *
 	 */
+    /*
     this.addDeploymentSelect = function ($container, $infocontainer, layername) {
 		// console.log("Function addDeploymentSelect: " + layername);
 
@@ -1059,7 +1060,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		$btn.tooltip("show");
 		$infocontainer.append($btn);
     }
-
+*/
     /**
      * Given a multiselect object this AJAX function retrieves the available campains and adds these to the multiselect
      * TODO: how do we add a search icon to the multiselect??
