@@ -926,7 +926,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             width: $container.innerWidth()+'px' // set it here of set the width of the select box above
         });
 
-        $('#deploymentSelect').change( function (evt, params) {
+//        $('#deploymentSelect')
+        $('.chosen-choices').change( function (evt, params) {
             checked = (params.type === 'checked') ? true : false;
             diveID = params.id;
             console.log('Dive #'+diveID+' is ' + (checked?'checked':'selected'));
