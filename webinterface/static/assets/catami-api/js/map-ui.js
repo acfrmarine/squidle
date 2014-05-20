@@ -919,7 +919,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         addCampaignsToSelect($dplselect);
         $container.append($dplselect);
 
-        $('#deploymentSelect').chosen({
+        $dplselect.chosen({
             placeholder_text_multiple: "Choose deployments",
             search_contains: true, // searches any place in the word. Set to false to only search from beginning of the word
             enable_split_word_search: false, // match the entire text
@@ -929,7 +929,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             width: $container.innerWidth()+'px' // set it here of set the width of the select box above
         });
 
-        $('#deploymentSelect').change( function (evt, params) {
+        // Open and close the multiselect list to have it populated
+        $dplselect.trigger('chosen:open');
+        $dplselect.trigger('chosen:close');
+
+        $dplselect.change( function (evt, params) {
             checked = (params.type === 'checked') ? true : false;
             diveID = params.id;
             console.log('Dive #'+diveID+' is ' + (checked?'checked':'selected'));
