@@ -413,7 +413,7 @@ def download_csv(request):
             # Sort class columns (transpose columns to rows then re-transpose to rows to columns)
             #agg_pts_df = agg_pts_df.T.sortlevel().T
 
-            if format == "dynclasscount":
+            if format == "allclasses":
                 # Reindex columns to include all classes
                 classlist = AnnotationCode.objects.all().order_by('code_name').values_list('code_name',
                                                                                            'caab_code',
