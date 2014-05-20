@@ -498,7 +498,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			baseMap.updateMapBounds("deployment_ids=" + deploymentIds, baseMap.deploymentExtentUrl);
 		});
 		*/
+        console.log('getDeploymentCheckbox: id='+id);
         var $depinfo = $('#'+id).clone();
+        console.log($depinfo);
         return $depinfo;
     }
 
