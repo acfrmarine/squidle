@@ -445,12 +445,12 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             otherdpls = '',
             i;
 
-        baseMap.$dplinfo.html('');
+        baseMap.$dplinfo.html('<ul></ul>');
 
         // add selected deployments
         for (i = 0; i < baseMap.filters.deployments.length; i++) {
             $depinfo = getDeploymentCheckbox(baseMap.filters.deployments[i].id, baseMap.filters.deployments[i].name, 'checked');
-            baseMap.$dplinfo.append($depinfo);
+            baseMap.$dplinfo.find('ul').append($depinfo);
             filtdepids.push(baseMap.filters.deployments[i].id); // create array of selected deployment ids
         }
 
@@ -460,7 +460,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             if ($.inArray(depid, filtdepids) < 0) {
                 //$depinfo = $('<a href="javascript:void(0)">' + event.feature.cluster[i].data.short_name + '</a>');
                 $depinfo = getDeploymentCheckbox(depid, event.feature.cluster[i].data.short_name, '');
-                baseMap.$dplinfo.append($depinfo);
+                baseMap.$dplinfo.find('ul').append($depinfo);
             }
 		}
 
@@ -473,16 +473,20 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
     function getDeploymentCheckbox (id,name,checked) {
 		// Checkbox, zoom, deployment name
-		/*var $depinfo   = $('<label class="checkbox"><input type="checkbox" value="' + id + '" '+checked+' ><a id="'+id+'" href="javascript: void(0);"><i class="icon-search"></i></a>&nbsp;' + name + '</label>');
+	    //var $depinfo   = $('<label class="checkbox"><input type="checkbox" value="' + id + '" '+checked+' ><a id="'+id+'" href="javascript: void(0);"><i class="icon-search"></i></a>&nbsp;' + name + '</label>');
+
+        // Get a clone of the list element
+        var $depinfo = $('#'+id).clone();
+        // Update element IDs
+        $depinfo[0].id = 'depinfo-'+$depinfo[0].id
 
         $depinfo.find("input").click(function () {
+            console.log(this);
 			if (this.checked) {
-				//$('#deploymentSelect').multiselect('select', this.value);
-                $('#deploymentSelect').find('option[value="'+this.value+'"]').prop('selected', true);
+				$('#deploymentSelect').find('option[value="'+this.value+'"]').prop('selected', true);
 			}
             else {
-//				$('#deploymentSelect').multiselect('deselect', this.value);
-                $('#deploymentSelect').find('option[value="'+this.value+'"]').prop('selected', false);
+//				$('#deploymentSelect').find('option[value="'+this.value+'"]').prop('selected', false);
 			}
             // Get chosen to update based on the new selections
             $('#deploymentSelect').trigger('chosen:updated');
@@ -494,13 +498,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         });
 		
 		$depinfo.find("a").click( function (event) {
+            console.log(this);
 			var deploymentIds = [this.id];
 			baseMap.updateMapBounds("deployment_ids=" + deploymentIds, baseMap.deploymentExtentUrl);
 		});
-		*/
-        console.log('getDeploymentCheckbox: id='+id);
-        var $depinfo = $('#'+id).clone();
-        console.log($depinfo);
+
         return $depinfo;
     }
 
@@ -915,7 +917,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     this.addDeploymentSelectNew = function($container, $infocontainer, layername) {
 
 
-        var $dplselect = $('<select multiple id="deploymentSelect" name="deploymentSelect"> </select>');
+        var $dplselect = $('<select multiple id="deploymentSelect" class="triggable" name="deploymentSelect"> </select>');
         addCampaignsToSelect($dplselect);
         $container.append($dplselect);
 
@@ -933,7 +935,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         $dplselect.trigger('chosen:open');
         $dplselect.trigger('chosen:close');
 
-        $dplselect.change( function (evt, params) {
+        $('.triggable').change( function (evt, params) {
             checked = (params.type === 'checked') ? true : false;
             diveID = params.id;
             console.log('Dive #'+diveID+' is ' + (checked?'checked':'selected'));

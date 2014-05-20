@@ -271,7 +271,7 @@
                 zoom += '<i class="icon-search disabled"></i>';
             }
             zoom += '&nbsp' + option.search_text;
-            chbox = '<input type="checkbox" id="chosen-checkbox-' + option.array_index + '"' + ((option.disabled && !(option.selected && this.is_multiple)) ? ' disabled ' : '') + (option.selected ? ' checked disabled' : '') + '/>';
+            chbox = '<input type="checkbox" id="chosen-checkbox-' + option.array_index + '" value="'+option.value+'" ' + ((option.disabled && !(option.selected && this.is_multiple)) ? ' disabled ' : '') + (option.selected ? ' checked disabled' : '') + '/>';
             //option_el.innerHTML = '<input type="checkbox" id="chosen-checkbox-'+option.array_index+'" />&nbsp;' + option.search_text;
 
             $(option_el).append('<span style="display:inline">', chbox, zoom, '</span>');
