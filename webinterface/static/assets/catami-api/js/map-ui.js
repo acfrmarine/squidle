@@ -1652,7 +1652,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             $('#info-button').html("<b>NOTE:</b> you need to be logged in to create a Project");
             $('#info-button').show();
 			
-			$('#create-button').removeClass('disabled');            
+			$('#create-button').addClass('disabled');
             //$('#create-button').hide();
         }
         else if (showcreatbtn && globalstate.isloggedin) {
@@ -1665,7 +1665,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             $('#info-button').html("<b>NOTE</b>: no images selected. Use the tools above to add images to your project.");
             $('#info-button').show();
             
-			$('#create-button').removeClass('disabled');
+			$('#create-button').addClass('disabled');
             //$('#create-button').hide();
         }
         // console.log("END updateSelectionInfo");
