@@ -993,12 +993,14 @@
         Chosen.prototype.choice_destroy_link_click = function (evt) {
             evt.preventDefault();
             evt.stopPropagation();
+            console.log(evt);
             if (!this.is_disabled) {
                 return this.choice_destroy($(evt.target));
             }
         };
 
         Chosen.prototype.choice_destroy = function (link) {
+            console.log(link);
             if (this.result_deselect(link[0].getAttribute("data-option-array-index"))) {
                 this.show_search_field_default();
                 if (this.is_multiple && this.choices_count() > 0 && this.search_field.val().length < 1) {
