@@ -933,7 +933,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
         // Open and close the multiselect list to have it populated
         $dplselect.trigger('chosen:open');
-        window.setTimeout( $dplselect.trigger('chosen:close'), 10); // just any delay so it actually gets executed
+        window.setTimeout( $('#deploymentSelect').trigger('chosen:close'), 10); // just any delay so it actually gets executed
 
         $('.triggable').change( function (evt, params) {
             checked = (params.type === 'checked') ? true : false;
