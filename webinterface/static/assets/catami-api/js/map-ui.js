@@ -447,12 +447,22 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
         baseMap.$dplinfo.html('<ul></ul>');
 
+        // Deselect all
+        $('#deploymentSelect :selected').prop('selected', false);
+
         // add selected deployments
         for (i = 0; i < baseMap.filters.deployments.length; i++) {
-            $depinfo = getDeploymentCheckbox(baseMap.filters.deployments[i].id, baseMap.filters.deployments[i].name, 'checked');
+            depid = baseMap.filters.deployments[i].id;
+
+            $depinfo = getDeploymentCheckbox(depid, baseMap.filters.deployments[i].name, 'checked');
             baseMap.$dplinfo.find('ul').append($depinfo);
-            filtdepids.push(baseMap.filters.deployments[i].id); // create array of selected deployment ids
+            filtdepids.push(depid); // create array of selected deployment ids
+
+            $('#deploymentSelect').find('option[value="'+depid+'"]').prop('selected', true);
         }
+
+        // Disable everything that has not been selected
+        $('#deploymentSelect option:not(selected)').prop('disabled', true);
 
         // add other unselected deployments
         for (i = 0, len = event.feature.cluster.length; i < len; i++) {
@@ -461,9 +471,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 //$depinfo = $('<a href="javascript:void(0)">' + event.feature.cluster[i].data.short_name + '</a>');
                 $depinfo = getDeploymentCheckbox(depid, event.feature.cluster[i].data.short_name, '');
                 baseMap.$dplinfo.find('ul').append($depinfo);
+
+                // enable again
+                $('#deploymentSelect').find('option[value="'+depid+'"]').prop('disabled', false);
             }
 		}
 
+        $('#deploymentSelect').trigger('chosen:updated');
 	
         baseMap.$imginfo.parent().hide();
         baseMap.$dplinfo.parent().show();
