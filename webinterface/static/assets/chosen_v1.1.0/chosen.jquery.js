@@ -1001,8 +1001,7 @@
 
         Chosen.prototype.choice_destroy = function (link) {
             console.log(link);
-            $target = null;
-            link[0].getAttribute("data-option-array-index");
+            $target = link[0].getAttribute("data-option-array-index");
             if (this.result_deselect($target)) {
                 this.show_search_field_default();
                 if (this.is_multiple && this.choices_count() > 0 && this.search_field.val().length < 1) {
