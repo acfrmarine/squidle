@@ -993,16 +993,13 @@
         Chosen.prototype.choice_destroy_link_click = function (evt) {
             evt.preventDefault();
             evt.stopPropagation();
-            console.log(evt.target.parentNode);
             if (!this.is_disabled) {
                 return this.choice_destroy($(evt.target.parentNode));
             }
         };
 
         Chosen.prototype.choice_destroy = function (link) {
-            console.log(link);
-            $target = link[0].getAttribute("data-option-array-index");
-            if (this.result_deselect($target)) {
+            if (this.result_deselect(link[0].getAttribute("data-option-array-index"))) {
                 this.show_search_field_default();
                 if (this.is_multiple && this.choices_count() > 0 && this.search_field.val().length < 1) {
                     this.results_hide();
@@ -1108,8 +1105,6 @@
         Chosen.prototype.result_deselect = function (pos) {
             var result_data;
             result_data = this.results_data[pos];
-            console.log(this.results_data);
-            console.log(pos);
             if (!this.form_field.options[result_data.options_index].disabled) {
                 result_data.selected = false;
                 this.form_field.options[result_data.options_index].selected = false;
