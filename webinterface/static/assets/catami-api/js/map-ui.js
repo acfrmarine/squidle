@@ -979,7 +979,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
         $dplselect.hiding_dropdown( function(evt, params) {
             console.log('hiding');
-           $('#deploymentSelect :disabled')..prop('disabled', false);
+           $('#deploymentSelect :disabled').prop('disabled', false);
         });
 
     }
