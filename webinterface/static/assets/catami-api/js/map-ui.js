@@ -949,7 +949,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         });
 
 
-        $dplselect.change( function (evt, params) {
+        $dplselect.on('change', function (evt, params) {
             checked = (params.type === 'checked') ? true : false;
             diveID = params.id;
             console.log('Dive #'+diveID+' is ' + (checked?'checked':'selected'));
@@ -977,7 +977,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
         });
 
-        $dplselect.hiding_dropdown( function(evt, params) {
+        $dplselect.on( 'hiding_dropdown', function(evt, params) {
             console.log('hiding');
            $('#deploymentSelect :disabled').prop('disabled', false);
         });
