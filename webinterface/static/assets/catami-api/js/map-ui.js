@@ -473,12 +473,12 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
     function getDeploymentCheckbox (id,name,checked) {
 		// Checkbox, zoom, deployment name
-	    //var $depinfo   = $('<label class="checkbox"><input type="checkbox" value="' + id + '" '+checked+' ><a id="'+id+'" href="javascript: void(0);"><i class="icon-search"></i></a>&nbsp;' + name + '</label>');
-
+//	    var $depinfo   = $('<label class="checkbox"><input type="checkbox" value="' + id + '" '+checked+' ><a id="'+id+'" href="javascript: void(0);"><i class="icon-search"></i></a>&nbsp;' + name + '</label>');
+        var $depinfo   = $('<li class="checkbox"><input type="checkbox" value="' + id + '" '+checked+' ><a id="'+id+'" href="javascript: void(0);"><i class="icon-search"></i></a>&nbsp;' + name + '</li>');
         // Get a clone of the list element
-        var $depinfo = $('#'+id).clone();
+        //var $depinfo = $('#'+id).clone();
         // Update element IDs
-        $depinfo[0].id = 'depinfo-'+$depinfo[0].id
+        //$depinfo[0].id = 'depinfo-'+$depinfo[0].id
 
         $depinfo.find("input").click(function () {
             console.log(this);
