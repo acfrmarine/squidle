@@ -486,7 +486,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				$('#deploymentSelect').find('option[value="'+this.value+'"]').prop('selected', true);
 			}
             else {
-//				$('#deploymentSelect').find('option[value="'+this.value+'"]').prop('selected', false);
+				$('#deploymentSelect').find('option[value="'+this.value+'"]').prop('selected', false);
 			}
             // Get chosen to update based on the new selections
             $('#deploymentSelect').trigger('chosen:updated');
@@ -495,6 +495,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             baseMap.updateDeploymentFilter();
             baseMap.updateDeploymentInfo();
             baseMap.showSelectedImages();
+            baseMap.updateMapBounds("deployment_ids=" + $('#deploymentSelect').val(), baseMap.deploymentExtentUrl);
         });
 		
 		$depinfo.find("a").click( function (event) {
@@ -917,7 +918,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     this.addDeploymentSelectNew = function($container, $infocontainer, layername) {
 
 
-        var $dplselect = $('<select multiple id="deploymentSelect" class="triggable" name="deploymentSelect"> </select>');
+        var $dplselect = $('<select multiple id="deploymentSelect" name="deploymentSelect"> </select>');
         addCampaignsToSelect($dplselect);
         $container.append($dplselect);
 
@@ -935,7 +936,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         $dplselect.trigger('chosen:open');
         window.setTimeout( function() {$('#deploymentSelect').trigger('chosen:close');}, 10); // just any delay so it actually gets executed
 
-        $('.triggable').change( function (evt, params) {
+        $dplselect.change( function (evt, params) {
             checked = (params.type === 'checked') ? true : false;
             diveID = params.id;
             console.log('Dive #'+diveID+' is ' + (checked?'checked':'selected'));
@@ -1622,7 +1623,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		$createbtn.click(function () {
             baseMap.openNewCollectionModal()
         });
-		$createbtn.hide();
+		//$createbtn.hide();
 		
 		var $infobtn = $('<div id="info-button" class="alert" style="margin-top:10px"></div>');
 		$infobtn.hide();
@@ -1653,20 +1654,20 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             $('#info-button').show();
 			
 			$('#create-button').removeClass('disabled');            
-            $('#create-button').hide();
+            //$('#create-button').hide();
         }
         else if (showcreatbtn && globalstate.isloggedin) {
         	$('#info-button').hide();
         	
             $('#create-button').removeClass('disabled');
-            $('#create-button').show();		        
+            //$('#create-button').show();
         }
         else {
             $('#info-button').html("<b>NOTE</b>: no images selected. Use the tools above to add images to your project.");
             $('#info-button').show();
             
 			$('#create-button').removeClass('disabled');
-            $('#create-button').hide();
+            //$('#create-button').hide();
         }
         // console.log("END updateSelectionInfo");
     }
