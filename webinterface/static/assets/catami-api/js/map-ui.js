@@ -928,6 +928,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             enable_split_word_search: false, // match the entire text
             no_results_text: "Oops, no deployments found:", // show if no results found
             display_selected_options: true, // Already selected options should be included (so we can deselect them)
+            display_disabled_options: false, // Hide options that are diabled
             single_backstroke_delete: false, // first backspace selects, second one deletes
             width: $container.innerWidth()+'px' // set it here of set the width of the select box above
         });
