@@ -454,9 +454,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         for (i = 0; i < baseMap.filters.deployments.length; i++) {
             depid = baseMap.filters.deployments[i].id;
 
-            $depinfo = getDeploymentCheckbox(depid, baseMap.filters.deployments[i].name, 'checked');
-            baseMap.$dplinfo.find('ul').append($depinfo);
-            filtdepids.push(depid); // create array of selected deployment ids
+//            $depinfo = getDeploymentCheckbox(depid, baseMap.filters.deployments[i].name, 'checked');
+//            baseMap.$dplinfo.find('ul').append($depinfo);
+//            filtdepids.push(depid); // create array of selected deployment ids
 
             $('#deploymentSelect').find('option[value="'+depid+'"]').prop('selected', true);
         }
@@ -469,8 +469,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             depid = event.feature.cluster[i].fid.split('.')[1];
             if ($.inArray(depid, filtdepids) < 0) {
                 //$depinfo = $('<a href="javascript:void(0)">' + event.feature.cluster[i].data.short_name + '</a>');
-                $depinfo = getDeploymentCheckbox(depid, event.feature.cluster[i].data.short_name, '');
-                baseMap.$dplinfo.find('ul').append($depinfo);
+//                $depinfo = getDeploymentCheckbox(depid, event.feature.cluster[i].data.short_name, '');
+//                baseMap.$dplinfo.find('ul').append($depinfo);
 
                 // enable again
                 $('#deploymentSelect').find('option[value="'+depid+'"]').prop('disabled', false);
@@ -480,9 +480,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         $('#deploymentSelect').trigger('chosen:updated');
         $('#deploymentSelect').trigger('chosen:open');
 	
-        baseMap.$imginfo.parent().hide();
-        baseMap.$dplinfo.parent().show();
-        baseMap.$infopane.show(200);
+//        baseMap.$imginfo.parent().hide();
+//        baseMap.$dplinfo.parent().show();
+//        baseMap.$infopane.show(200);
 
 	}
 
@@ -978,7 +978,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         });
 
         $dplselect.on( 'chosen:hiding_dropdown', function(evt, params) {
-            console.log('hiding');
             $('#deploymentSelect :disabled').prop('disabled', false);
             $('#deploymentSelect').trigger('chosen:updated');
         });
