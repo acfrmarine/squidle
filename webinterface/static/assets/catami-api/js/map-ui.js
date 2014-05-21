@@ -478,6 +478,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		}
 
         $('#deploymentSelect').trigger('chosen:updated');
+        $('#deploymentSelect').trigger('chosen:open');
 	
         baseMap.$imginfo.parent().hide();
         baseMap.$dplinfo.parent().show();
@@ -976,6 +977,10 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
         });
 
+        $dplselect.hiding_dropdown( function(evt, params) {
+            console.log('hiding');
+           $('#deploymentSelect :disabled')..prop('disabled', false);
+        });
 
     }
 
