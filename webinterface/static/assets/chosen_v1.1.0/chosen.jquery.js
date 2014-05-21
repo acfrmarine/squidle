@@ -1105,7 +1105,8 @@
         Chosen.prototype.result_deselect = function (pos) {
             var result_data;
             result_data = this.results_data[pos];
-            console.log(result_data);
+            console.log(results_data);
+            console.log(pos);
             if (!this.form_field.options[result_data.options_index].disabled) {
                 result_data.selected = false;
                 this.form_field.options[result_data.options_index].selected = false;

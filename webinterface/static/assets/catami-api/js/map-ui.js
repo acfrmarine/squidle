@@ -932,34 +932,33 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             width: $container.innerWidth()+'px' // set it here of set the width of the select box above
         });
 
-        // Open and close the multiselect list to have it populated
-        $dplselect.trigger('chosen:open');
-        window.setTimeout( function() {$('#deploymentSelect').trigger('chosen:close');}, 10); // just any delay so it actually gets executed
 
         $dplselect.change( function (evt, params) {
             checked = (params.type === 'checked') ? true : false;
             diveID = params.id;
             console.log('Dive #'+diveID+' is ' + (checked?'checked':'selected'));
 
-            // Zoom to selection
-            if( !checked ) {
-                baseMap.updateMapBounds("deployment_ids=" + [diveID], baseMap.deploymentExtentUrl);
-            }
-            // Add to selected
-            else {
-                if ($dplselect.val() != null) {
-                    baseMap.updateMapBounds("deployment_ids=" + $dplselect.val(), baseMap.deploymentExtentUrl);
-                    baseMap.updateDeploymentFilter();
-                    baseMap.updateDeploymentInfo();
-
-                }
-                else {
+            // Nothing selected
+            if ($dplselect.val() === null) {
                     console.log('deselecting all deployments');
                     map.mapInstance.getControlsBy('id', 'selectCtrl')[0].unselectAll();
-                }
+            }
 
+            // Add to selected
+            if( params.type === 'checked' ) {
+                baseMap.updateDeploymentFilter();
+                baseMap.updateDeploymentInfo();
                 baseMap.showSelectedImages();
             }
+            // Zoom to selection
+            else if( params.type === 'selected' ) {
+                baseMap.updateMapBounds("deployment_ids=" + [diveID], baseMap.deploymentExtentUrl);
+            }
+            // The dive was de-selected
+            else {
+                baseMap.updateMapBounds("deployment_ids=" + $dplselect.val(), baseMap.deploymentExtentUrl);
+            }
+
         });
 
 
