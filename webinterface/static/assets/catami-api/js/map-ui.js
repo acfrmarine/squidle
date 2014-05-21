@@ -977,6 +977,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
         });
 
+        $dplselect.on( 'chosen:showing_dropdown', function(evt, params) {
+            resultsHeight = $('.chosen-results').height();
+            mapHeight = $('#map-panel-container').height();
+
+            $('.chosen-drop').height( Math.min( mapHeight, resultsHeight) );
+        });
+
         $dplselect.on( 'chosen:hiding_dropdown', function(evt, params) {
             $('#deploymentSelect :disabled').prop('disabled', false);
             $('#deploymentSelect').trigger('chosen:updated');
