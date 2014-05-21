@@ -995,7 +995,7 @@
             evt.stopPropagation();
             console.log(evt);
             if (!this.is_disabled) {
-                return this.choice_destroy($($(evt.target).parentNode);
+                return this.choice_destroy($($(evt.target).parentNode));
             }
         };
 
