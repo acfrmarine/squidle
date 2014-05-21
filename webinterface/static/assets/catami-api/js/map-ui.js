@@ -977,7 +977,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
         });
 
-        $dplselect.on( 'hiding_dropdown', function(evt, params) {
+        $dplselect.on( 'chosen:hiding_dropdown', function(evt, params) {
             console.log('hiding');
            $('#deploymentSelect :disabled').prop('disabled', false);
         });
