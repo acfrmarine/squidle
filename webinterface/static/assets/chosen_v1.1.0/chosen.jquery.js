@@ -628,7 +628,7 @@
 
             this.container = $("<div />", container_props);
             if (this.is_multiple) {
-                this.container.html('<ul class="chosen-choices"><li class="search-field"><input type="text" value="' + this.default_text + '" class="default" autocomplete="off" style="width:25px;" /></li></ul><div class="chosen-drop"><span class="badge badge-sm" style="position:absolute;top:5px;right:5px;" onclick="">clear filter <i class="icon-remove-sign"></i></span><ul class="chosen-results"></ul></div>');
+                this.container.html('<ul class="chosen-choices"><li class="search-field"><input type="text" value="' + this.default_text + '" class="default" autocomplete="off" style="width:25px;" /></li></ul><div class="chosen-drop"><span class="badge badge-sm" style="position:absolute;top:5px;right:5px;">show all <i class="icon-remove-sign"></i></span><ul class="chosen-results"></ul></div>');
             } else {
                 search.html('<a class="chosen-single chosen-default" tabindex="-1"><span>' + this.default_text + '</span><div><b></b></div></a><div class="chosen-drop"><ul class="chosen-results"></ul></div><div class="chosen-search"><input type="text" autocomplete="off" /></div>');
             }
@@ -648,6 +648,11 @@
                 this.search_container = this.container.find('div.chosen-search').first();
                 this.selected_item = this.container.find('.chosen-single').first();
             }
+
+            this.dropbadge.on('click', function(){
+               console.log('click');
+            });
+
             this.results_build();
             this.set_tab_index();
             this.set_label_behavior();
