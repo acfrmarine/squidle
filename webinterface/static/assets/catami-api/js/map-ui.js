@@ -978,10 +978,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         });
 
         $dplselect.on( 'chosen:showing_dropdown', function(evt, params) {
-            resultsHeight = $('.chosen-results').height();
-            mapHeight = $('#map-panel-container').height();
-
-            $('.chosen-drop').height( Math.min( mapHeight, resultsHeight) );
+            console.log('dropdown');
+//            resultsHeight = $('.chosen-results').height();
+//            mapHeight = $('#map-panel-container').height();
+//
+//            $('.chosen-drop').height( Math.min( mapHeight, resultsHeight) );
         });
 
         $dplselect.on( 'chosen:hiding_dropdown', function(evt, params) {
