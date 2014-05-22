@@ -180,6 +180,10 @@
 		$('#alert-construction').css( 'left', $('#deployment-map').width()/2-$('#alert-construction').width()/2 + 'px');
 	});
 
+    $('.chosen-drop').css('max-height', $('#map-panel-container').height()+'px');
+    resizefuncs.push(function () {
+        $('.chosen-drop').css('max-height', $('#map-panel-container').height()+'px');
+    });
 
 
         // Update current selection text
