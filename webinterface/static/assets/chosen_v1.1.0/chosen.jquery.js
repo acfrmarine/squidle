@@ -263,18 +263,17 @@
             option_el.setAttribute("id", option.value);
 
             //zoom = '&nbsp;<a href="javascript: void(0);"><img src="https://cdn1.iconfinder.com/data/icons/large-black-icons/512/Zoom_in_magnifying_glass.png" height="10px" /></a>&nbsp' + option.search_text;
-            zoom = '&nbsp;';
             if (!(option.disabled && !(option.selected && this.is_multiple)) && !option.selected) {
-                zoom += '<a href="javascript: void(0);"><i class="icon-search disabled"></i></a>';
+                zoom = '<a href="javascript: void(0);"><i class="icon-zoom-in disabled"></i></a>';
             }
             else {
-                zoom += '<i class="icon-search disabled"></i>';
+                zoom = '<i class="icon-search disabled"></i>';
             }
-            zoom += '&nbsp' + option.search_text;
+            //zoom += '&nbsp';
             chbox = '<input type="checkbox" id="chosen-checkbox-' + option.array_index + '" value="'+option.value+'" ' + ((option.disabled && !(option.selected && this.is_multiple)) ? ' disabled ' : '') + (option.selected ? ' checked disabled' : '') + '/>';
             //option_el.innerHTML = '<input type="checkbox" id="chosen-checkbox-'+option.array_index+'" />&nbsp;' + option.search_text;
 
-            $(option_el).append('<span style="display:inline">', chbox, zoom, '</span>');
+            $(option_el).append('<span style="display:inline">', zoom, chbox, option.search_text, '</span>');
             return this.outerHTML(option_el);
         };
 
@@ -1042,6 +1041,7 @@
         Chosen.prototype.result_select = function (evt) {
             console.log('result_select');
             var high, item;
+            console.log(evt);
             // Is the event triggered by clicking the checkbox?
             var isCheckbox = evt.target.id.search('checkbox') >= 0;
 
