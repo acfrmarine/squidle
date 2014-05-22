@@ -341,7 +341,7 @@
             mapHeight = $('#map-panel-container').height();
 
             this.dropdown.css('max-height', mapHeight-10+'px');
-            this.dropdown.height( Math.min( mapHeight, resultsHeight) );
+            this.dropdown.height( Math.max(Math.min( mapHeight, resultsHeight), 15) );
 
             console.log('dropdown max height: '+ this.dropdown.height() );
         }
