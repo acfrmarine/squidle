@@ -389,7 +389,7 @@
                         }
                     }
                 }
-                else {
+                else if(option.disabled){
                     shortList = true;
                 }
             }
