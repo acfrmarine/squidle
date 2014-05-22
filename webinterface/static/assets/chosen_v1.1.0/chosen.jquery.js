@@ -389,7 +389,7 @@
                         }
                     }
                 }
-                else if(option.disabled && (option.text.localeCompare("No dpeloyments found") === 0)){
+                else if(option.disabled && (option.text.localeCompare("No dpeloyments found") !== 0)){
                     console.log(option);
                     console.log(option.text.localeCompare("No dpeloyments found"));
                     shortList = true;
