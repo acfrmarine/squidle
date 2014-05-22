@@ -343,7 +343,7 @@
         };
 
         AbstractChosen.prototype.winnow_results = function () {
-            var escapedSearchText, option, regex, regexAnchor, results, results_group, searchText, startpos, text, zregex, _i, _len, _ref;
+            var escapedSearchText, option, regex, regexAnchor, results, results_group, searchText, startpos, text, zregex, _i, _len, _ref, shortList=false;
             this.no_results_clear();
             results = 0;
             searchText = this.get_search_text();
@@ -352,6 +352,7 @@
             regex = new RegExp(regexAnchor + escapedSearchText, 'i');
             zregex = new RegExp(escapedSearchText, 'i');
             _ref = this.results_data;
+            this.dropdown.removeClass('chosen-shortlist');
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
                 option = _ref[_i];
                 option.search_match = false;
@@ -388,6 +389,9 @@
                         }
                     }
                 }
+                else {
+                    shortList = true;
+                }
             }
             this.result_clear_highlight();
             if (results < 1 && searchText.length) {
@@ -395,6 +399,7 @@
                 return this.no_results(searchText);
             } else {
                 this.update_results_content(this.results_option_build());
+                this.dropdown.addClass('chosen-shortlist');
                 this.form_field_jq.trigger("chosen:new_results", {
                     chosen: this
                 });
@@ -628,7 +633,7 @@
 
             this.container = $("<div />", container_props);
             if (this.is_multiple) {
-                this.container.html('<ul class="chosen-choices"><li class="search-field"><input type="text" value="' + this.default_text + '" class="default" autocomplete="off" style="width:25px;" /></li></ul><div class="chosen-drop"><span class="badge badge-sm" style="position:absolute;top:5px;right:5px;">show all <i class="icon-remove-sign"></i></span><ul class="chosen-results"></ul></div>');
+                this.container.html('<ul class="chosen-choices"><li class="search-field"><input type="text" value="' + this.default_text + '" class="default" autocomplete="off" style="width:25px;" /></li></ul><div class="chosen-drop"><ul class="chosen-results"><span class="badge badge-sm" style="position:absolute;top:5px;right:5px;">show all <i class="icon-remove-sign"></i></span></ul></div>');
             } else {
                 search.html('<a class="chosen-single chosen-default" tabindex="-1"><span>' + this.default_text + '</span><div><b></b></div></a><div class="chosen-drop"><ul class="chosen-results"></ul></div><div class="chosen-search"><input type="text" autocomplete="off" /></div>');
             }
@@ -636,7 +641,6 @@
             this.form_field_jq.hide().after(this.container);
             this.dropdown = this.container.find('div.chosen-drop').first();
             this.dropbadge = this.container.find('span.badge').first();
-            console.log(this.dropbadge);
             this.search_field = this.container.find('input').first();
             this.search_results = this.container.find('ul.chosen-results').first();
             this.search_field_scale();
