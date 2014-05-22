@@ -997,6 +997,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         $dplselect.on( 'chosen:no_results', function(evt, params) {
             baseMap.updateChosenDropHeight();
         });
+        // TODO: add a button on the drop-result pane to call this
 //        $dplselect.on( 'chosen:hiding_dropdown', function(evt, params) {
 //            $('#deploymentSelect :disabled').prop('disabled', false);
 //            $('#deploymentSelect').trigger('chosen:updated');

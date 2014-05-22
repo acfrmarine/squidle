@@ -342,16 +342,6 @@
             }
         };
 
-        AbstractChosen.prototype.update_drop_height = function() {
-            resultsHeight = this.search_results.height();
-            mapHeight = $('#map-panel-container').height();
-
-            this.dropdown.css('max-height', mapHeight-10+'px');
-            this.dropdown.height( Math.max(Math.min( mapHeight, resultsHeight), 50) );
-
-            console.log('dropdown max height: '+ this.dropdown.height() );
-        }
-
         AbstractChosen.prototype.winnow_results = function () {
             var escapedSearchText, option, regex, regexAnchor, results, results_group, searchText, startpos, text, zregex, _i, _len, _ref;
             this.no_results_clear();
@@ -638,13 +628,15 @@
 
             this.container = $("<div />", container_props);
             if (this.is_multiple) {
-                this.container.html('<ul class="chosen-choices"><li class="search-field"><input type="text" value="' + this.default_text + '" class="default" autocomplete="off" style="width:25px;" /></li></ul><div class="chosen-drop"><ul class="chosen-results"></ul></div>');
+                this.container.html('<ul class="chosen-choices"><li class="search-field"><input type="text" value="' + this.default_text + '" class="default" autocomplete="off" style="width:25px;" /></li></ul><div class="chosen-drop"><span class="badge badge-sm" style="position:absolute;top:5px;right:5px;" onclick="">clear filter <i class="icon-remove-sign"></i></span><ul class="chosen-results"></ul></div>');
             } else {
                 search.html('<a class="chosen-single chosen-default" tabindex="-1"><span>' + this.default_text + '</span><div><b></b></div></a><div class="chosen-drop"><ul class="chosen-results"></ul></div><div class="chosen-search"><input type="text" autocomplete="off" /></div>');
             }
 
             this.form_field_jq.hide().after(this.container);
             this.dropdown = this.container.find('div.chosen-drop').first();
+            this.dropbadge = this.container.find('span.badge').first();
+            console.log(this.dropbadge);
             this.search_field = this.container.find('input').first();
             this.search_results = this.container.find('ul.chosen-results').first();
             this.search_field_scale();
