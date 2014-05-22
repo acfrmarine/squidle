@@ -343,7 +343,7 @@
         };
 
         AbstractChosen.prototype.winnow_results = function () {
-            var escapedSearchText, option, regex, regexAnchor, results, results_group, searchText, startpos, text, zregex, _i, _len, _ref, shortList=false;
+            var escapedSearchText, option, regex, regexAnchor, results, results_group, searchText, startpos, text, zregex, _i, _len, _ref, shortList=0;
             this.no_results_clear();
             results = 0;
             searchText = this.get_search_text();
@@ -391,7 +391,7 @@
                 }
                 // TODO: remove the two options from the data base
                 else if((option.text.localeCompare("No dpeloyments found") !== 0)){
-                    shortList = true;
+                    shortList++;
                 }
             }
             this.result_clear_highlight();
@@ -402,7 +402,7 @@
                 this.update_results_content(this.results_option_build());
                 if( shortList) {
                     this.dropdown.addClass('chosen-shortlist');
-                    this.dropdown.append('<span class="badge badge-sm" style="position:absolute;top:5px;right:5px;">show all <i class="icon-remove-sign"></i></span>');
+                    this.dropdown.append('<span class="badge badge-sm" style="position:absolute;top:5px;right:5px;">showing '+_ref.length-shortList+'/'+_ref.length+' <i class="icon-remove-sign"></i></span>');
                 }
                 this.form_field_jq.trigger("chosen:new_results", {
                     chosen: this
