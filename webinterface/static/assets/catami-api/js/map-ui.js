@@ -935,7 +935,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         mapHeight = $('#map-panel-container').height();
 
         $('.chosen-drop').css('max-height', mapHeight-10+'px');
-        $('.chosen-drop').height( Math.min( mapHeight, resultsHeight) );
+        $('.chosen-drop').height( Math.max(Math.min( mapHeight, resultsHeight), 50) );
 
         console.log('dropdown max height: '+ $('.chosen-drop').height() );
     }
