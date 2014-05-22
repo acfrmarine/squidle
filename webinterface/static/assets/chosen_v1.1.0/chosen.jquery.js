@@ -961,6 +961,7 @@
         };
 
         Chosen.prototype.search_results_mouseup = function (evt) {
+            console.log(evt);
             var target;
             target = $(evt.target).hasClass("active-result") ? $(evt.target) : $(evt.target).parents(".active-result").first();
             if (target.length) {
