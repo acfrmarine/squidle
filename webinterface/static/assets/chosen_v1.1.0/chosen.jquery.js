@@ -390,6 +390,7 @@
                     }
                 }
                 else if(option.disabled){
+                    console.log(option);
                     shortList = true;
                 }
             }
