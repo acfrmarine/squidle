@@ -655,11 +655,6 @@
                 this.search_container = this.container.find('div.chosen-search').first();
                 this.selected_item = this.container.find('.chosen-single').first();
             }
-
-            this.dropbadge.on('click', function(){
-               console.log('click');
-            });
-
             this.results_build();
             this.set_tab_index();
             this.set_label_behavior();
