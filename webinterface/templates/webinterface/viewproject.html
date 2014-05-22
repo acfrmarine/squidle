@@ -180,9 +180,10 @@
 		$('#alert-construction').css( 'left', $('#deployment-map').width()/2-$('#alert-construction').width()/2 + 'px');
 	});
 
-    $('.chosen-drop').css('max-height', $('#map-panel-container').height()+'px');
+    // TODO: The subtraction of 10 is due to the top and bottom margins. Get this from the element dynamically
+    $('.chosen-drop').css('max-height', $('#map-panel-container').height()-10+'px');
     resizefuncs.push(function () {
-        $('.chosen-drop').css('max-height', $('#map-panel-container').height()+'px');
+        $('.chosen-drop').css('max-height', $('#map-panel-container').height()-10+'px');
     });
 
 
