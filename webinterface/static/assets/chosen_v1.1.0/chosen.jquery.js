@@ -874,6 +874,16 @@
             return this.result_highlight = null;
         };
 
+        Chosen.prototype.update_drop_height = function() {
+            resultsHeight = this.search_results.height();
+            mapHeight = $('#map-panel-container').height();
+
+            this.dropdown.css('max-height', mapHeight-10+'px');
+            this.dropdown.height( Math.min( mapHeight, resultsHeight) );
+
+            console.log('dropdown max height: '+ this.dropdown.height() );
+        }
+
         Chosen.prototype.results_show = function () {
             if (this.is_multiple && this.max_selected_options <= this.choices_count()) {
                 this.form_field_jq.trigger("chosen:maxselected", {
@@ -887,6 +897,7 @@
             this.search_field.focus();
             this.search_field.val(this.search_field.val());
             this.winnow_results();
+            this.update_drop_height();
             return this.form_field_jq.trigger("chosen:showing_dropdown", {
                 chosen: this
             });

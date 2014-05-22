@@ -931,13 +931,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     }
 
     this.updateChosenDropHeight = function() {
-        resultsHeight = $('.chosen-results').height();
-        mapHeight = $('#map-panel-container').height();
-
-        $('.chosen-drop').css('max-height', mapHeight-10+'px');
-        $('.chosen-drop').height( Math.min( mapHeight, resultsHeight) );
-
-        console.log('dropdown max height: '+ $('.chosen-drop').height() );
+//        resultsHeight = $('.chosen-results').height();
+//        mapHeight = $('#map-panel-container').height();
+//
+//        $('.chosen-drop').css('max-height', mapHeight-10+'px');
+//        $('.chosen-drop').height( Math.min( mapHeight, resultsHeight) );
+//
+//        console.log('dropdown max height: '+ $('.chosen-drop').height() );
     }
 
     this.addDeploymentSelectNew = function($container, $infocontainer, layername) {
