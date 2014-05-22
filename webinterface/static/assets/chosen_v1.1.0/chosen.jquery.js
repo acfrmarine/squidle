@@ -389,8 +389,8 @@
                         }
                     }
                 }
+                // TODO: remove the two options from the data base
                 else if((option.text.localeCompare("No dpeloyments found") !== 0)){
-                    console.log(option);
                     shortList = true;
                 }
             }
@@ -402,6 +402,7 @@
                 this.update_results_content(this.results_option_build());
                 if( shortList) {
                     this.dropdown.addClass('chosen-shortlist');
+                    this.dropdown.append('<span class="badge badge-sm" style="position:absolute;top:5px;right:5px;">show all <i class="icon-remove-sign"></i></span>');
                 }
                 this.form_field_jq.trigger("chosen:new_results", {
                     chosen: this
@@ -636,14 +637,13 @@
 
             this.container = $("<div />", container_props);
             if (this.is_multiple) {
-                this.container.html('<ul class="chosen-choices"><li class="search-field"><input type="text" value="' + this.default_text + '" class="default" autocomplete="off" style="width:25px;" /></li></ul><div class="chosen-drop"><ul class="chosen-results"><span class="badge badge-sm" style="position:absolute;top:5px;right:5px;">show all <i class="icon-remove-sign"></i></span></ul></div>');
+                this.container.html('<ul class="chosen-choices"><li class="search-field"><input type="text" value="' + this.default_text + '" class="default" autocomplete="off" style="width:25px;" /></li></ul><div class="chosen-drop"><ul class="chosen-results"></ul></div>');
             } else {
                 search.html('<a class="chosen-single chosen-default" tabindex="-1"><span>' + this.default_text + '</span><div><b></b></div></a><div class="chosen-drop"><ul class="chosen-results"></ul></div><div class="chosen-search"><input type="text" autocomplete="off" /></div>');
             }
 
             this.form_field_jq.hide().after(this.container);
             this.dropdown = this.container.find('div.chosen-drop').first();
-            this.dropbadge = this.container.find('span.badge').first();
             this.search_field = this.container.find('input').first();
             this.search_results = this.container.find('ul.chosen-results').first();
             this.search_field_scale();
