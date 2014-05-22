@@ -396,11 +396,15 @@
             this.result_clear_highlight();
             if (results < 1 && searchText.length) {
                 this.update_results_content("");
-                this.update_drop_height();
+                return this.form_field_jq.trigger("chosen:new_results", {
+                    chosen: this
+                });
                 return this.no_results(searchText);
             } else {
                 this.update_results_content(this.results_option_build());
-                this.update_drop_height();
+                return this.form_field_jq.trigger("chosen:new_results", {
+                    chosen: this
+                });
                 return this.winnow_results_set_highlight();
             }
         };
