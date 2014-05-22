@@ -336,6 +336,16 @@
             }
         };
 
+        AbstractChosen.prototype.update_drop_height = function() {
+            resultsHeight = this.search_results.height();
+            mapHeight = $('#map-panel-container').height();
+
+            this.dropdown.css('max-height', mapHeight-10+'px');
+            this.dropdown.height( Math.min( mapHeight, resultsHeight) );
+
+            console.log('dropdown max height: '+ this.dropdown.height() );
+        }
+
         AbstractChosen.prototype.winnow_results = function () {
             var escapedSearchText, option, regex, regexAnchor, results, results_group, searchText, startpos, text, zregex, _i, _len, _ref;
             this.no_results_clear();
@@ -386,9 +396,11 @@
             this.result_clear_highlight();
             if (results < 1 && searchText.length) {
                 this.update_results_content("");
+                this.update_drop_height();
                 return this.no_results(searchText);
             } else {
                 this.update_results_content(this.results_option_build());
+                this.update_drop_height();
                 return this.winnow_results_set_highlight();
             }
         };
@@ -874,16 +886,6 @@
             return this.result_highlight = null;
         };
 
-        Chosen.prototype.update_drop_height = function() {
-            resultsHeight = this.search_results.height();
-            mapHeight = $('#map-panel-container').height();
-
-            this.dropdown.css('max-height', mapHeight-10+'px');
-            this.dropdown.height( Math.min( mapHeight, resultsHeight) );
-
-            console.log('dropdown max height: '+ this.dropdown.height() );
-        }
-
         Chosen.prototype.results_show = function () {
             if (this.is_multiple && this.max_selected_options <= this.choices_count()) {
                 this.form_field_jq.trigger("chosen:maxselected", {
@@ -897,7 +899,6 @@
             this.search_field.focus();
             this.search_field.val(this.search_field.val());
             this.winnow_results();
-            this.update_drop_height();
             return this.form_field_jq.trigger("chosen:showing_dropdown", {
                 chosen: this
             });
