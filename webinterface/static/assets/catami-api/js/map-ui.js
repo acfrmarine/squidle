@@ -479,7 +479,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
         $('#deploymentSelect').trigger('chosen:updated');
         $('#deploymentSelect').trigger('chosen:open');
-	    baseMap.setChosenDropHeight();
+	    baseMap.updateChosenDropHeight();
 
 //        baseMap.$imginfo.parent().hide();
 //        baseMap.$dplinfo.parent().show();
@@ -930,10 +930,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         }
     }
 
-    this.setChosenDropHeight = function() {
+    this.updateChosenDropHeight = function() {
         resultsHeight = $('.chosen-results').height();
         mapHeight = $('#map-panel-container').height();
 
+        $('.chosen-drop').css('max-height', mapHeight-10+'px');
         $('.chosen-drop').height( Math.min( mapHeight, resultsHeight) );
 
         console.log('dropdown max height: '+ $('.chosen-drop').height() );
@@ -987,7 +988,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         });
 
         $dplselect.on( 'chosen:showing_dropdown', function(evt, params) {
-            baseMap.setChosenDropHeight();
+            baseMap.updateChosenDropHeight();
         });
 
         $dplselect.on( 'chosen:hiding_dropdown', function(evt, params) {
