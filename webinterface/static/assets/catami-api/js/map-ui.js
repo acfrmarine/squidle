@@ -479,7 +479,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
         $('#deploymentSelect').trigger('chosen:updated');
         $('#deploymentSelect').trigger('chosen:open');
-	
+	    baseMap.setChosenDropHeight();
+
 //        baseMap.$imginfo.parent().hide();
 //        baseMap.$dplinfo.parent().show();
 //        baseMap.$infopane.show(200);
@@ -929,6 +930,14 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         }
     }
 
+    this.setChosenDropHeight = function() {
+        resultsHeight = $('.chosen-results').height();
+        mapHeight = $('#map-panel-container').height();
+
+        $('.chosen-drop').height( Math.min( mapHeight, resultsHeight) );
+
+        console.log('dropdown max height: '+ $('.chosen-drop').height() );
+    }
 
     this.addDeploymentSelectNew = function($container, $infocontainer, layername) {
 
@@ -978,13 +987,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         });
 
         $dplselect.on( 'chosen:showing_dropdown', function(evt, params) {
-            resultsHeight = $('.chosen-results').height();
-            mapHeight = $('#map-panel-container').height();
-
-            $('.chosen-drop').height( Math.min( mapHeight, resultsHeight) );
-
-            console.log('dropdown max height: '+ $('.chosen-drop').height() );
-
+            baseMap.setChosenDropHeight();
         });
 
         $dplselect.on( 'chosen:hiding_dropdown', function(evt, params) {
