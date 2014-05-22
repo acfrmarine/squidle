@@ -264,16 +264,22 @@
 
             //zoom = '&nbsp;<a href="javascript: void(0);"><img src="https://cdn1.iconfinder.com/data/icons/large-black-icons/512/Zoom_in_magnifying_glass.png" height="10px" /></a>&nbsp' + option.search_text;
             if (!(option.disabled && !(option.selected && this.is_multiple)) && !option.selected) {
-                zoom = '<a href="javascript: void(0);"><i class="icon-zoom-in disabled"></i></a>';
+                $zoom = $('<a href="javascript: void(0);"><i class="icon-zoom-in"></i></a>');
+                $zoom.tooltip({
+                    html: true,
+                    placement: 'left',
+                    trigger:'hover',
+                    title: 'click to preview'
+                });
             }
             else {
-                zoom = '<i class="icon-search disabled"></i>';
+                $zoom = '<i class="icon-zoom-in disabled"></i>';
             }
-            //zoom += '&nbsp';
+//            zoom += '&nbsp';
             chbox = '<input type="checkbox" id="chosen-checkbox-' + option.array_index + '" value="'+option.value+'" ' + ((option.disabled && !(option.selected && this.is_multiple)) ? ' disabled ' : '') + (option.selected ? ' checked disabled' : '') + '/>';
             //option_el.innerHTML = '<input type="checkbox" id="chosen-checkbox-'+option.array_index+'" />&nbsp;' + option.search_text;
 
-            $(option_el).append('<span style="display:inline">', zoom, chbox, option.search_text, '</span>');
+            $(option_el).append('<span style="display:inline">', $zoom, chbox, option.search_text, '</span>');
             return this.outerHTML(option_el);
         };
 
@@ -1043,13 +1049,16 @@
             var high, item;
             console.log(evt);
             // Is the event triggered by clicking the checkbox?
-            var isCheckbox = evt.target.id.search('checkbox') >= 0;
+//            var isCheckbox = evt.target.id.search('checkbox') >= 0;
+            var isCheckbox = evt.target.nodeName.localeCompare( 'INPUT' ) === 0;
+            var isText = evt.target.nodeName.localeCompare( 'LI' ) === 0;
+            var isZoom = evt.target.nodeName.localeCompare( 'I' ) === 0;
 
             high = this.result_highlight;
             item = this.results_data[high[0].getAttribute("data-option-array-index")];
             if (this.result_highlight) {
                 // If the checkbox was clicked the item is selected and a 'checked' event is triggered
-                if (isCheckbox) {
+                if (isCheckbox || isText) {
                     console.log('checked');
 
                     this.result_clear_highlight();
