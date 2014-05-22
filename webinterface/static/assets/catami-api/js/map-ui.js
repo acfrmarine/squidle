@@ -975,13 +975,14 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 baseMap.updateDeploymentFilter();
                 baseMap.updateDeploymentInfo();
                 baseMap.showSelectedImages();
+                baseMap.updateMapBounds("deployment_ids=" + $dplselect.val(), baseMap.deploymentExtentUrl);
             }
             // Zoom to selection
             else if( params.type === 'selected' ) {
                 baseMap.updateMapBounds("deployment_ids=" + [diveID], baseMap.deploymentExtentUrl);
             }
             // The dive was de-selected
-            else {
+            else if($dplselect.val() !== null) {
                 baseMap.updateMapBounds("deployment_ids=" + $dplselect.val(), baseMap.deploymentExtentUrl);
             }
 

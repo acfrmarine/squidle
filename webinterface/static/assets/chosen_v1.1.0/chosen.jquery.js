@@ -265,6 +265,7 @@
             //zoom = '&nbsp;<a href="javascript: void(0);"><img src="https://cdn1.iconfinder.com/data/icons/large-black-icons/512/Zoom_in_magnifying_glass.png" height="10px" /></a>&nbsp' + option.search_text;
             if (!(option.disabled && !(option.selected && this.is_multiple)) && !option.selected) {
                 $zoom = $('<a href="javascript: void(0);"><i class="icon-zoom-in"></i></a>');
+                // TODO: this is not working. Find out why
                 $zoom.tooltip({
                     html: true,
                     placement: 'left',
