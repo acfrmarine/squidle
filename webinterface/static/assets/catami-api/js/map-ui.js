@@ -993,7 +993,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         $dplselect.on( 'chosen:new_results', function(evt, params) {
             baseMap.updateChosenDropHeight();
         });
-
+        $dplselect.on( 'chosen:no_results', function(evt, params) {
+            baseMap.updateChosenDropHeight();
+        });
         $dplselect.on( 'chosen:hiding_dropdown', function(evt, params) {
             $('#deploymentSelect :disabled').prop('disabled', false);
             $('#deploymentSelect').trigger('chosen:updated');
