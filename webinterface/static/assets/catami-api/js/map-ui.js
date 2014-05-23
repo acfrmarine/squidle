@@ -453,6 +453,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         for (i = 0; i < baseMap.filters.deployments.length; i++) {
             depid = baseMap.filters.deployments[i].id;
             $('#deploymentSelect').find('option[value="'+depid+'"]').prop('selected', true);
+            $('#deploymentSelect').find('option[value="'+depid+'"]').prop('disabled', false);
         }
 
         // Disable everything that has not been selected
