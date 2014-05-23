@@ -986,7 +986,7 @@
             else if( (target = $(evt.target).hasClass("icon-zoom-in") ? $(evt.target) : null) !== null ) {
                 // The item was not checked but the name was clicked. Let's raise a 'selected' event so we can zoom in
 
-
+                    console.log($(evt.target).parents(".result-selected").first());
                     this.form_field_jq.trigger("change", {
                         'id': this.form_field.options[item.options_index].value,
                         'type': 'selected'
