@@ -968,6 +968,7 @@
             // TODO: let's catch the press on the badge and do something
             console.log(target);
             if (target.length) {
+                console.log(target[0].localName.localeCompare('li'));
                 this.result_highlight = target;
                 this.result_select(evt);
                 return this.search_field.focus();
