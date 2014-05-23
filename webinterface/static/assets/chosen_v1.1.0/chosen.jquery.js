@@ -444,7 +444,6 @@
 
         AbstractChosen.prototype.choices_click = function (evt) {
             evt.preventDefault();
-            console.log('choices_click. results_showing='+this.results_showing+', is_disabled='+this.is_disabled);
             if (!(this.results_showing || this.is_disabled)) {
                 this.enable_disabled();
                 return this.results_show();
@@ -771,6 +770,7 @@
             if (!this.is_disabled) {
                 if (evt && evt.type === "mousedown" && !this.results_showing) {
                     evt.preventDefault();
+                    this.enable_disabled();
                 }
                 if (!((evt != null) && ($(evt.target)).hasClass("search-choice-close"))) {
                     if (!this.active_field) {
