@@ -1040,6 +1040,7 @@
         };
 
         Chosen.prototype.results_reset = function () {
+            console.log('results_reset');
             this.enable_disabled();
             this.reset_single_select_options();
             this.form_field.options[0].selected = true;
