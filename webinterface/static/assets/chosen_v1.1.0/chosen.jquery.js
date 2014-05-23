@@ -965,6 +965,8 @@
             console.log(evt);
             var target;
             target = $(evt.target).hasClass("active-result") ? $(evt.target) : $(evt.target).parents(".active-result").first();
+            // TODO: let's catch the press on the badge and do something
+            console.log(target);
             if (target.length) {
                 this.result_highlight = target;
                 this.result_select(evt);
