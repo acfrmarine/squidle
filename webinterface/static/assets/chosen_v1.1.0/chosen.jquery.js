@@ -401,7 +401,7 @@
                 this.update_results_content(this.results_option_build());
                 if(shortList) {
                     numVisible = _ref.length-shortList;
-                    this.dropdown.find('ul').append( '<span class="badge badge-sm" style="position:absolute;top:5px;right:5px;z=1100;">Showing ' + numVisible +'/'+ _ref.length + '&nbsp;<i class="icon-remove-sign"></i></span>');
+                    this.dropdown.find('ul').append( '<span class="badge badge-sm" style="position:absolute;top:5px;right:5px;z=1100;">Showing ' + numVisible +'/'+ _ref.length + '&nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign chosen-shortlist"></i></a></span>');
                 }
                 this.form_field_jq.trigger("chosen:new_results", {
                     chosen: this
@@ -968,10 +968,13 @@
             // TODO: let's catch the press on the badge and do something
             console.log(target);
             if (target.length) {
-                console.log(target[0].localName.localeCompare('li'));
                 this.result_highlight = target;
                 this.result_select(evt);
                 return this.search_field.focus();
+            }
+            else {
+                target = $(evt.target).hasClass("chosen-shortlist") ? $(evt.target) : null;
+                console.log(target);
             }
         };
 
