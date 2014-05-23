@@ -160,7 +160,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                         return f;
                     }).map( function(e) {return e.indexOf(id);} ).map( function(e) { return e >= 0;} ).indexOf( true );
 
-                    console.log(dSel+': id='+id+', featInd='+featInd);
                     selectCtrl.highlight( depLayer.features[featInd] );
                 }
             }
@@ -545,6 +544,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 		//var f = event.feature;
 		//console.log(event.feature);
+
+        // Open the dropdown again
+        $('#deploymentSelect').trigger('chosen:open');
 	}
 
 

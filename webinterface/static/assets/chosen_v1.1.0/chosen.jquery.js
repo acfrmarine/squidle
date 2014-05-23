@@ -399,6 +399,7 @@
                 return this.no_results(searchText);
             } else {
                 this.update_results_content(this.results_option_build());
+                // If this is a short list of all the elements
                 if(shortList) {
                     numVisible = _ref.length-shortList;
                     this.dropdown.find('ul').append( '<span class="badge badge-sm" style="position:absolute;top:5px;right:5px;z=1100;">Showing ' + numVisible +'/'+ _ref.length + '&nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign chosen-shortlist"></i></a></span>');
@@ -962,11 +963,8 @@
         };
 
         Chosen.prototype.search_results_mouseup = function (evt) {
-            console.log(evt);
             var target;
             target = $(evt.target).hasClass("active-result") ? $(evt.target) : $(evt.target).parents(".active-result").first();
-            // TODO: let's catch the press on the badge and do something
-            console.log(target);
             if (target.length) {
                 this.result_highlight = target;
                 this.result_select(evt);
@@ -978,9 +976,7 @@
                 this.form_field_jq.find(':disabled').each(function(){
                     this.disabled = false; //!this.disabled;
                 });
-                // Trigger event
-                // TODO: Do I really need to trigger this or just call an internal function?
-                //this.form_field_jq.trigger('chosen:updated');
+                // update
                 this.results_update_field();
 
             }
