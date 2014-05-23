@@ -970,6 +970,7 @@
             this.form_field_jq.find(':disabled').each(function(){
                 this.disabled = false; //!this.disabled;
             });
+            this.results_update_field();
             console.log(this.form_field_jq);
         }
 
