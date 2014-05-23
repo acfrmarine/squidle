@@ -983,7 +983,7 @@
                 // Enable all the disabled elements
                 this.enable_disabled();
             }
-            else if( (target = $(evt.target).hasClass("result-selected") ? $(evt.target) : null) !== null ) {
+            else if( (target = $(evt.target).hasClass("icon-zoom-in") ? $(evt.target) : null) !== null ) {
                 // The item was not checked but the name was clicked. Let's raise a 'selected' event so we can zoom in
 
 
