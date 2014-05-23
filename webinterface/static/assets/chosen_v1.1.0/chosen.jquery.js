@@ -987,9 +987,9 @@
                 // The item was not checked but the name was clicked. Let's raise a 'selected' event so we can zoom in
 
                     console.log();
-                index = $(evt.target).parents(".result-selected")[0].getAttribute("data-option-array-index");
+                depid = $(evt.target).parents(".result-selected")[0].id;
                 this.form_field_jq.trigger("change", {
-                    'id': this.form_field.options[index].value,
+                    'id': depid,
                     'type': 'selected'
                 });
 
