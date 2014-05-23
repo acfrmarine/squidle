@@ -333,7 +333,6 @@
         };
 
         AbstractChosen.prototype.results_search = function (evt) {
-            console.log('results_search');
             if (this.results_showing) {
                 return this.winnow_results();
             } else {
@@ -445,6 +444,7 @@
 
         AbstractChosen.prototype.choices_click = function (evt) {
             evt.preventDefault();
+            console.log('choices_click');
             if (!(this.results_showing || this.is_disabled)) {
                 return this.results_show();
             }
@@ -1040,8 +1040,6 @@
         };
 
         Chosen.prototype.results_reset = function () {
-            console.log('results_reset');
-            this.enable_disabled();
             this.reset_single_select_options();
             this.form_field.options[0].selected = true;
             this.single_set_selected_text();
