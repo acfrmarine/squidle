@@ -456,7 +456,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         }
 
         // Disable everything that has not been selected
-        $('#deploymentSelect option:not(selected)').prop('disabled', true);
+        $('#deploymentSelect option:not(selected)').each( function() { this.disabled = true; } );
 
         // add other unselected deployments
         for (i = 0, len = event.feature.cluster.length; i < len; i++) {
