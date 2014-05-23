@@ -402,7 +402,7 @@
                 this.update_results_content(this.results_option_build());
                 if( shortList) {
                     this.dropdown.addClass('chosen-shortlist');
-                    this.dropdown.find('span').append(_ref.length);
+                    this.dropdown.find('i').innerHTML(_ref.length);
                 }
                 this.form_field_jq.trigger("chosen:new_results", {
                     chosen: this
