@@ -400,7 +400,7 @@
                 // If this is a short list of all the elements
                 if(shortList) {
                     numVisible = _ref.length-shortList;
-                    this.dropdown.find('ul').append( '<span class="badge badge-sm" style="position:absolute;top:5px;right:5px;z=1100;">Showing ' + numVisible +'/'+ _ref.length + '&nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign chosen-shortlist"></i></a></span>');
+                    this.dropdown.find('ul').append( '<span class="badge badge-sm" style="position:absolute;top:5px;right:5px;z=1100;">Showing ' + results +'/'+ _ref.length + '&nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign chosen-shortlist"></i></a></span>');
                 }
                 this.form_field_jq.trigger("chosen:new_results", {
                     chosen: this
