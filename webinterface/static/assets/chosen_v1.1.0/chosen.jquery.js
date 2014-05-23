@@ -353,6 +353,7 @@
             zregex = new RegExp(escapedSearchText, 'i');
             _ref = this.results_data;
             this.dropdown.removeClass('chosen-shortlist');
+            this.dropdown.removeClass('chosen-fulllist');
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
                 option = _ref[_i];
                 option.search_match = false;
@@ -401,9 +402,12 @@
             } else {
                 this.update_results_content(this.results_option_build());
                 if( shortList) {
+                    numVisible = _ref.length-shortList;
                     this.dropdown.addClass('chosen-shortlist');
-                    console.log('shortList: '+shortList);
-                    this.dropdown.find('span').html(('Showing ' + _ref.length-shortList) +'/'+ _ref.length + '&nbsp;<i class="icon-remove-sign"></i>');
+                    this.dropdown.find('span').html('Showing ' + numVisible +'/'+ _ref.length + '&nbsp;<i class="icon-remove-sign"></i>');
+                }
+                else {
+                    this.dropdown.addClass('chosen-fulllist');
                 }
                 this.form_field_jq.trigger("chosen:new_results", {
                     chosen: this
@@ -638,7 +642,7 @@
 
             this.container = $("<div />", container_props);
             if (this.is_multiple) {
-                this.container.html('<ul class="chosen-choices"><li class="search-field"><input type="text" value="' + this.default_text + '" class="default" autocomplete="off" style="width:25px;" /></li></ul><div class="chosen-drop"><span class="badge badge-sm" style="position:absolute;top:5px;right:5px;z=1100;visibility: hidden;"><i class="icon-remove-sign"></i></span><ul class="chosen-results"></ul></div>');
+                this.container.html('<ul class="chosen-choices"><li class="search-field"><input type="text" value="' + this.default_text + '" class="default" autocomplete="off" style="width:25px;" /></li></ul><div class="chosen-drop"><span class="badge badge-sm" style="position:absolute;top:5px;right:5px;z=1100;"><i class="icon-remove-sign"></i></span><ul class="chosen-results"></ul></div>');
             } else {
                 search.html('<a class="chosen-single chosen-default" tabindex="-1"><span>' + this.default_text + '</span><div><b></b></div></a><div class="chosen-drop"><ul class="chosen-results"></ul></div><div class="chosen-search"><input type="text" autocomplete="off" /></div>');
             }
