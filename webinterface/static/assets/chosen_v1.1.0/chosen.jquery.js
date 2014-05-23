@@ -352,8 +352,6 @@
             regex = new RegExp(regexAnchor + escapedSearchText, 'i');
             zregex = new RegExp(escapedSearchText, 'i');
             _ref = this.results_data;
-            this.dropdown.removeClass('chosen-shortlist');
-            this.dropdown.removeClass('chosen-fulllist');
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
                 option = _ref[_i];
                 option.search_match = false;
@@ -403,11 +401,11 @@
                 this.update_results_content(this.results_option_build());
                 if( shortList) {
                     numVisible = _ref.length-shortList;
-                    this.dropdown.addClass('chosen-shortlist');
                     this.dropdown.find('span').html('Showing ' + numVisible +'/'+ _ref.length + '&nbsp;<i class="icon-remove-sign"></i>');
+                    this.dropdown.find('span').css('visibility', 'visible');
                 }
                 else {
-                    this.dropdown.addClass('chosen-fulllist');
+                    this.dropdown.find('span').css('visibility', 'hidden');
                 }
                 this.form_field_jq.trigger("chosen:new_results", {
                     chosen: this
