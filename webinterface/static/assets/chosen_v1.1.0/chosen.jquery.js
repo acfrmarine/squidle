@@ -262,8 +262,7 @@
             option_el.setAttribute("data-option-array-index", option.array_index);
             option_el.setAttribute("id", option.value);
 
-            //zoom = '&nbsp;<a href="javascript: void(0);"><img src="https://cdn1.iconfinder.com/data/icons/large-black-icons/512/Zoom_in_magnifying_glass.png" height="10px" /></a>&nbsp' + option.search_text;
-            if (!(option.disabled && !(option.selected && this.is_multiple)) && !option.selected) {
+            //if (!(option.disabled && !(option.selected && this.is_multiple)) && !option.selected) {
                 $zoom = $('<a href="javascript: void(0);"><i class="icon-zoom-in"></i></a>');
                 // TODO: this is not working. Find out why
                 $zoom.tooltip({
@@ -272,13 +271,13 @@
                     trigger:'hover',
                     title: 'click to preview'
                 });
-            }
-            else {
-                $zoom = '<i class="icon-zoom-in disabled"></i>';
-            }
-//            zoom += '&nbsp';
+            //}
+            //else {
+            //    $zoom = '<i class="icon-zoom-in disabled"></i>';
+            //}
+
             chbox = '&nbsp;<input type="checkbox" id="chosen-checkbox-' + option.array_index + '" value="'+option.value+'" ' + ((option.disabled && !(option.selected && this.is_multiple)) ? ' disabled ' : '') + (option.selected ? ' checked disabled' : '') + '/>&nbsp;';
-            //option_el.innerHTML = '<input type="checkbox" id="chosen-checkbox-'+option.array_index+'" />&nbsp;' + option.search_text;
+
 
             $(option_el).append('<span style="display:inline">', $zoom, chbox, option.search_text, '</span>');
             return this.outerHTML(option_el);
@@ -962,6 +961,12 @@
             }
         };
 
+        Chosen.prototype.enable_disabled() {
+            this.form_field_jq.find(':disabled').each(function(){
+                this.disabled = false; //!this.disabled;
+            });
+        }
+
         Chosen.prototype.search_results_mouseup = function (evt) {
             var target;
             target = $(evt.target).hasClass("active-result") ? $(evt.target) : $(evt.target).parents(".active-result").first();
@@ -971,11 +976,8 @@
                 return this.search_field.focus();
             }
             else if( (target = $(evt.target).hasClass("chosen-shortlist") ? $(evt.target) : null) !== null ) {
-                console.log('enabling the disabled');
                 // Enable all the disabled elements
-                this.form_field_jq.find(':disabled').each(function(){
-                    this.disabled = false; //!this.disabled;
-                });
+                this.enable_disabled();
                 // update
                 this.results_update_field();
 
@@ -1039,6 +1041,7 @@
 
         Chosen.prototype.results_reset = function () {
             this.reset_single_select_options();
+            this.enable_disabled();
             this.form_field.options[0].selected = true;
             this.single_set_selected_text();
             this.show_search_field_default();

@@ -452,11 +452,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         // add selected deployments
         for (i = 0; i < baseMap.filters.deployments.length; i++) {
             depid = baseMap.filters.deployments[i].id;
-
-//            $depinfo = getDeploymentCheckbox(depid, baseMap.filters.deployments[i].name, 'checked');
-//            baseMap.$dplinfo.find('ul').append($depinfo);
-//            filtdepids.push(depid); // create array of selected deployment ids
-
             $('#deploymentSelect').find('option[value="'+depid+'"]').prop('selected', true);
         }
 
@@ -466,14 +461,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         // add other unselected deployments
         for (i = 0, len = event.feature.cluster.length; i < len; i++) {
             depid = event.feature.cluster[i].fid.split('.')[1];
-            if ($.inArray(depid, filtdepids) < 0) {
-                //$depinfo = $('<a href="javascript:void(0)">' + event.feature.cluster[i].data.short_name + '</a>');
-//                $depinfo = getDeploymentCheckbox(depid, event.feature.cluster[i].data.short_name, '');
-//                baseMap.$dplinfo.find('ul').append($depinfo);
-
-                // enable again
-                $('#deploymentSelect').find('option[value="'+depid+'"]').prop('disabled', false);
-            }
+            // enable again
+            $('#deploymentSelect').find('option[value="'+depid+'"]').prop('disabled', false);
 		}
 
         $('#deploymentSelect').trigger('chosen:updated');
@@ -933,17 +922,18 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     }
 
     this.updateChosenDropHeight = function() {
+        // Hight of the results section
         resultsHeight = $('.chosen-results').height();
+        // Hight of the map area
         mapHeight = $('#map-panel-container').height();
-
+        // TODO: get the margin of the .chosen-drop from the css instead of coding it here (the 10px)
         $('.chosen-drop').css('max-height', mapHeight-10+'px');
+        // The min height of 50px is for when the results section is empty because there was no matching to the text
+        //  search
         $('.chosen-drop').height( Math.max(Math.min( mapHeight, resultsHeight), 50) );
-
-        console.log('dropdown max height: '+ $('.chosen-drop').height() );
     }
 
     this.addDeploymentSelectNew = function($container, $infocontainer, layername) {
-
 
         var $dplselect = $('<select multiple id="deploymentSelect" name="deploymentSelect"> </select>');
         addCampaignsToSelect($dplselect);
