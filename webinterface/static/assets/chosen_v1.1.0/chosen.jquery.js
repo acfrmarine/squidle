@@ -961,7 +961,7 @@
             }
         };
 
-        Chosen.prototype.enable_disabled() {
+        Chosen.prototype.enable_disabled = function() {
             this.form_field_jq.find(':disabled').each(function(){
                 this.disabled = false; //!this.disabled;
             });
