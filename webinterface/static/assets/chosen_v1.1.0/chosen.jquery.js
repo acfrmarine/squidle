@@ -980,7 +980,9 @@
                 });
                 // Trigger event
                 // TODO: Do I really need to trigger this or just call an internal function?
-                this.form_field_jq.trigger('chosen:updated');
+                //this.form_field_jq.trigger('chosen:updated');
+                this.results_update_field();
+
             }
         };
 
