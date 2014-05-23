@@ -972,18 +972,8 @@
 
         Chosen.prototype.search_results_mouseup = function (evt) {
             var target;
-            target = $(evt.target).hasClass("active-result") ? $(evt.target) : $(evt.target).parents(".active-result").first();
             console.log(evt);
-            if (target.length) {
-                this.result_highlight = target;
-                this.result_select(evt);
-                return this.search_field.focus();
-            }
-            else if( (target = $(evt.target).hasClass("chosen-shortlist") ? $(evt.target) : null) !== null ) {
-                // Enable all the disabled elements
-                this.enable_disabled();
-            }
-            else if( (target = $(evt.target).hasClass("icon-zoom-in") ? $(evt.target) : null) !== null ) {
+            if( (target = $(evt.target).hasClass("icon-zoom-in") ? $(evt.target) : null) !== null ) {
                 // The item was not checked but the name was clicked. Let's raise a 'selected' event so we can zoom in
 
                     console.log();
@@ -995,6 +985,21 @@
 
 
             }
+            else if( (target = $(evt.target).hasClass("chosen-shortlist") ? $(evt.target) : null) !== null ) {
+                // Enable all the disabled elements
+                this.enable_disabled();
+            }
+
+            target = $(evt.target).hasClass("active-result") ? $(evt.target) : $(evt.target).parents(".active-result").first();
+
+            if (target.length) {
+                this.result_highlight = target;
+                this.result_select(evt);
+                return this.search_field.focus();
+            }
+
+
+
         };
 
         Chosen.prototype.search_results_mouseover = function (evt) {
@@ -1121,15 +1126,6 @@
                     }
                 }
                 return this.search_field_scale();
-            }
-            // The item was not checked but the name was clicked. Let's raise a 'selected' event so we can zoom in
-            else {
-                if (this.is_multiple || this.form_field.selectedIndex !== this.current_selectedIndex) {
-                    this.form_field_jq.trigger("change", {
-                        'id': this.form_field.options[item.options_index].value,
-                        'type': 'selected'
-                    });
-                }
             }
         };
 
