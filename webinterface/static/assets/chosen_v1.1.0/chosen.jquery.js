@@ -1107,19 +1107,16 @@
                         });
                     }
                 }
-                // The item was not checked but the name was clicked. Let's raise a 'selected' event so we can zoom in
-                else {
-                    if (this.is_multiple || this.form_field.selectedIndex !== this.current_selectedIndex) {
-                        this.form_field_jq.trigger("change", {
-                            'id': this.form_field.options[item.options_index].value,
-                            'type': 'selected'
-                        });
-                    }
-                }
                 return this.search_field_scale();
             }
-            {
-                console.log('not highlight');
+            // The item was not checked but the name was clicked. Let's raise a 'selected' event so we can zoom in
+            else {
+                if (this.is_multiple || this.form_field.selectedIndex !== this.current_selectedIndex) {
+                    this.form_field_jq.trigger("change", {
+                        'id': this.form_field.options[item.options_index].value,
+                        'type': 'selected'
+                    });
+                }
             }
         };
 
