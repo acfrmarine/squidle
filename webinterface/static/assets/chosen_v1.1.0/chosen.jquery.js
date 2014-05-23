@@ -446,6 +446,7 @@
             evt.preventDefault();
             console.log('choices_click');
             if (!(this.results_showing || this.is_disabled)) {
+                this.enable_disabled();
                 return this.results_show();
             }
         };
