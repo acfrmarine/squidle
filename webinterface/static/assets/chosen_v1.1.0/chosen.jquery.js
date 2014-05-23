@@ -972,9 +972,15 @@
                 this.result_select(evt);
                 return this.search_field.focus();
             }
-            else {
-                target = $(evt.target).hasClass("chosen-shortlist") ? $(evt.target) : null;
-                console.log(target);
+            else if( (target = $(evt.target).hasClass("chosen-shortlist") ? $(evt.target) : null) !== null ) {
+                console.log('enabling the disabled');
+                // Enable all the disabled elements
+                this.form_field_jq.find(':disabled').each(function(){
+                    this.disabled = false; //!this.disabled;
+                });
+                // Trigger event
+                // TODO: Do I really need to trigger this or just call an internal function?
+                this.form_field_jq.trigger('chosen:updated');
             }
         };
 
