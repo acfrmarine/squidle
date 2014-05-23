@@ -975,15 +975,11 @@
             console.log(evt);
             if( (target = $(evt.target).hasClass("icon-zoom-in") ? $(evt.target) : null) !== null ) {
                 // The item was not checked but the name was clicked. Let's raise a 'selected' event so we can zoom in
-
-                    console.log();
-                depid = $(evt.target).parents(".result-selected")[0].id;
+                depid = $(evt.target).parents(".group-option")[0].id;
                 this.form_field_jq.trigger("change", {
                     'id': depid,
                     'type': 'selected'
                 });
-
-
             }
             else if( (target = $(evt.target).hasClass("chosen-shortlist") ? $(evt.target) : null) !== null ) {
                 // Enable all the disabled elements
@@ -991,7 +987,6 @@
             }
 
             target = $(evt.target).hasClass("active-result") ? $(evt.target) : $(evt.target).parents(".active-result").first();
-
             if (target.length) {
                 this.result_highlight = target;
                 this.result_select(evt);
