@@ -770,6 +770,7 @@
             if (!this.is_disabled) {
                 console.log('container_mousedown');
                 if (evt && evt.type === "mousedown" && !this.results_showing) {
+                    console.log('!results_showing');
                     evt.preventDefault();
                     this.enable_disabled();
                 }
