@@ -353,6 +353,7 @@
             zregex = new RegExp(escapedSearchText, 'i');
             _ref = this.results_data;
             this.dropdown.removeClass('chosen-shortlist');
+            console.log(this.dropdown);
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
                 option = _ref[_i];
                 option.search_match = false;
@@ -402,7 +403,6 @@
                 this.update_results_content(this.results_option_build());
                 if( shortList) {
                     this.dropdown.addClass('chosen-shortlist');
-                    this.dropdown.find('ul').append('<span class="badge badge-sm" style="position:absolute;top:5px;right:5px;">showing '+_ref.length-shortList+'/'+_ref.length+' <i class="icon-remove-sign"></i></span>');
                 }
                 this.form_field_jq.trigger("chosen:new_results", {
                     chosen: this
