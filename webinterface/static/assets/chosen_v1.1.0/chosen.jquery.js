@@ -1149,7 +1149,8 @@
                     this.winnow_results();
                 }
                 this.form_field_jq.trigger("change", {
-                    deselected: this.form_field.options[result_data.options_index].value
+                    'id': this.form_field.options[result_data.options_index].value,
+                    'type': 'unchecked'
                 });
                 this.search_field_scale();
                 return true;

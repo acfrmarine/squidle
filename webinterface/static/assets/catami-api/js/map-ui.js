@@ -954,8 +954,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
         $dplselect.on('change', function (evt, params) {
             checked = (params.type === 'checked') ? true : false;
+            unchecked = (params.type === 'unchecked') ? true : false;
             diveID = params.id;
-            console.log('Dive #'+diveID+' is ' + (checked?'checked':'selected'));
+            console.log('Dive #'+diveID+' is ' + (checked?'checked':(unchecked?'unchecked':'selected')));
 
             // Nothing selected
             if ($dplselect.val() === null) {
@@ -963,8 +964,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                     map.mapInstance.getControlsBy('id', 'selectCtrl')[0].unselectAll();
             }
 
-            // Add to selected
-            if( params.type === 'checked' ) {
+            // Added/Removed
+            if( params.type === 'checked' || params.type === 'unchecked') {
                 baseMap.updateDeploymentFilter();
                 baseMap.updateDeploymentInfo();
                 baseMap.showSelectedImages();
