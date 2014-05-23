@@ -444,7 +444,7 @@
 
         AbstractChosen.prototype.choices_click = function (evt) {
             evt.preventDefault();
-            console.log('choices_click');
+            console.log('choices_click. results_showing='+this.results_showing+', is_disabled='+this.is_disabled);
             if (!(this.results_showing || this.is_disabled)) {
                 this.enable_disabled();
                 return this.results_show();
