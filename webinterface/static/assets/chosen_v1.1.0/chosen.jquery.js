@@ -984,11 +984,16 @@
                 this.enable_disabled();
             }
             else if( (target = $(evt.target).hasClass("icon-zoom-in") ? $(evt.target) : null) !== null ) {
-                depid = $(evt.target).parents(".result-selected").first()[0].id;
+                // The item was not checked but the name was clicked. Let's raise a 'selected' event so we can zoom in
+
+                    console.log();
+                index = $(evt.target).parents(".result-selected")[0].getAttribute("data-option-array-index");
                 this.form_field_jq.trigger("change", {
-                    'id': this.form_field.options[depid].value,
+                    'id': this.form_field.options[index].value,
                     'type': 'selected'
                 });
+
+
             }
         };
 
