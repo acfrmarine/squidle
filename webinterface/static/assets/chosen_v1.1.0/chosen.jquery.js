@@ -445,7 +445,6 @@
         AbstractChosen.prototype.choices_click = function (evt) {
             evt.preventDefault();
             if (!(this.results_showing || this.is_disabled)) {
-                this.enable_disabled();
                 return this.results_show();
             }
         };
@@ -768,9 +767,7 @@
 
         Chosen.prototype.container_mousedown = function (evt) {
             if (!this.is_disabled) {
-                console.log('container_mousedown');
                 if (evt && evt.type === "mousedown" && !this.results_showing) {
-                    console.log('!results_showing');
                     evt.preventDefault();
                     this.enable_disabled();
                 }
@@ -971,7 +968,6 @@
                 this.disabled = false; //!this.disabled;
             });
             this.results_update_field();
-            console.log(this.form_field_jq);
         }
 
         Chosen.prototype.search_results_mouseup = function (evt) {
@@ -985,9 +981,6 @@
             else if( (target = $(evt.target).hasClass("chosen-shortlist") ? $(evt.target) : null) !== null ) {
                 // Enable all the disabled elements
                 this.enable_disabled();
-                // update
-                this.results_update_field();
-
             }
         };
 

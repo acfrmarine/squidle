@@ -447,7 +447,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         baseMap.$dplinfo.html('<ul></ul>');
 
         // Deselect all
-        $('#deploymentSelect :selected').prop('selected', false);
+        //$('#deploymentSelect :selected').prop('selected', false);
 
         // add selected deployments
         for (i = 0; i < baseMap.filters.deployments.length; i++) {
