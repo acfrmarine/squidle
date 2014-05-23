@@ -915,6 +915,7 @@
         };
 
         Chosen.prototype.results_hide = function () {
+            console.log('results_hide');
             if (this.results_showing) {
                 this.result_clear_highlight();
                 this.container.removeClass("chosen-with-drop");
