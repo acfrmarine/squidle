@@ -966,6 +966,7 @@
             this.form_field_jq.find(':disabled').each(function(){
                 this.disabled = false; //!this.disabled;
             });
+            console.log(this.form_field_jq);
         }
 
         Chosen.prototype.search_results_mouseup = function (evt) {
