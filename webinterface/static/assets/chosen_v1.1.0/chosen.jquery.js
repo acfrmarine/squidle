@@ -893,6 +893,7 @@
         };
 
         Chosen.prototype.results_show = function () {
+            console.log('results_show');
             if (this.is_multiple && this.max_selected_options <= this.choices_count()) {
                 this.form_field_jq.trigger("chosen:maxselected", {
                     chosen: this
