@@ -341,9 +341,10 @@
         };
 
         AbstractChosen.prototype.winnow_results = function () {
-            var escapedSearchText, option, regex, regexAnchor, results, results_group, searchText, startpos, text, zregex, _i, _len, _ref, shortList=0;
+            var escapedSearchText, option, regex, regexAnchor, results, results_group, searchText, startpos, text, zregex, _i, _len, _ref;
             this.no_results_clear();
             results = 0;
+            results_nogroup = 0; total_nogroup = 0;
             searchText = this.get_search_text();
             escapedSearchText = searchText.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
             regexAnchor = this.search_contains ? "" : "^";
@@ -354,6 +355,9 @@
                 option = _ref[_i];
                 option.search_match = false;
                 results_group = null;
+                if(!option.group) {
+                    total_nogroup += 1;
+                }
                 if (this.include_option_in_results(option)) {
                     if (option.group) {
                         option.group_match = false;
@@ -371,6 +375,7 @@
                         option.search_match = this.search_string_match(option.search_text, regex);
                         if (option.search_match && !option.group) {
                             results += 1;
+                            results_nogroup += 1;
                         }
                         if (option.search_match) {
                             if (searchText.length) {
@@ -386,10 +391,6 @@
                         }
                     }
                 }
-                // TODO: remove the two options from the data base
-                else if((option.text.localeCompare("No dpeloyments found") !== 0)){
-                    shortList++;
-                }
             }
             this.result_clear_highlight();
             if (results < 1 && searchText.length) {
@@ -398,9 +399,8 @@
             } else {
                 this.update_results_content(this.results_option_build());
                 // If this is a short list of all the elements
-                if(shortList) {
-                    numVisible = _ref.length-shortList;
-                    this.dropdown.find('ul').append( '<span class="badge badge-sm" style="position:absolute;top:5px;right:5px;z=1100;">Showing ' + results +'/'+ _ref.length + '&nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign chosen-shortlist"></i></a></span>');
+                if(results_nogroup < total_nogroup) {
+                    this.dropdown.find('ul').append( '<span class="badge badge-sm" style="position:absolute;top:5px;right:5px;z=1100;">Showing ' + results_nogroup +'/'+ total_nogroup + '&nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign chosen-shortlist"></i></a></span>');
                 }
                 this.form_field_jq.trigger("chosen:new_results", {
                     chosen: this
