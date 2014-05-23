@@ -1040,8 +1040,8 @@
         };
 
         Chosen.prototype.results_reset = function () {
-            this.reset_single_select_options();
             this.enable_disabled();
+            this.reset_single_select_options();
             this.form_field.options[0].selected = true;
             this.single_set_selected_text();
             this.show_search_field_default();
