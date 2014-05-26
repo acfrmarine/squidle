@@ -976,7 +976,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 baseMap.updateDeploymentFilter();
                 baseMap.updateDeploymentInfo();
                 baseMap.showSelectedImages();
-                baseMap.updateMapBounds("deployment_ids=" + $dplselect.val(), baseMap.deploymentExtentUrl);
+                if( $dplselect.val() !=== null ) {
+                    baseMap.updateMapBounds("deployment_ids=" + $dplselect.val(), baseMap.deploymentExtentUrl);
+                }
             }
             // Zoom to selection
             else if( params.type === 'selected' ) {
