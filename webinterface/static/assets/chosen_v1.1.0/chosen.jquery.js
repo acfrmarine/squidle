@@ -844,7 +844,7 @@
                 return this.active_field = true;
             } else {
                 this.close_field();
-                return this.blur_test();
+                return this.input_blur();
             }
         };
 
