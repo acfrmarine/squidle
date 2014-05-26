@@ -930,8 +930,8 @@
                 this.result_clear_highlight();
                 this.container.removeClass("chosen-with-drop");
                 this.dropdown.removeClass("chosen-with-drop");
+                 console.log('triggering hiding_dropdown');
                 this.form_field_jq.trigger("chosen:hiding_dropdown", {
-                    console.log('triggering hiding_dropdown');
                     chosen: this
                 });
             }
