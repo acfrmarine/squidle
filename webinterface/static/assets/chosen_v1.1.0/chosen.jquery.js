@@ -843,7 +843,8 @@
             if (active_container.length && this.container[0] === active_container[0]) {
                 return this.active_field = true;
             } else {
-                return this.close_field();
+                this.close_field();
+                return this.blur_test();
             }
         };
 
