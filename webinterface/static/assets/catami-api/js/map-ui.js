@@ -976,7 +976,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 baseMap.updateDeploymentFilter();
                 baseMap.updateDeploymentInfo();
                 baseMap.showSelectedImages();
-                if( $dplselect.val() !=== null ) {
+                if( $dplselect.val() !== null ) {
                     baseMap.updateMapBounds("deployment_ids=" + $dplselect.val(), baseMap.deploymentExtentUrl);
                 }
             }
