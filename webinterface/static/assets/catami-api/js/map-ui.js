@@ -977,7 +977,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 else {
                     console.log('deselecting all deployments');
                     baseMap.mapInstance.getControlsBy('id', 'selectCtrl')[0].unselectAll();
-                    baseMap.mapInstance.zoomToExtent(evt.object.getDataExtent());
+                    baseMap.mapInstance.zoomToExtent(
+                        baseMap.mapInstance.getLayersByName('Deployment origins')[0].getDataExtent() );
                 }
             }
             // Zoom to selection
