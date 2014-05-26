@@ -907,10 +907,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
     this.updateDeploymentFilter = function() {
 
+        this.filters.deployments = [];
+
         // Get the select DOM
         $dplselect = $('#deploymentSelect');
         if( $dplselect.val() !== null ) {
-            this.filters.deployments = [];
             // Loop through selected deployments in the multiselect
             for (var i=0 ; i < $dplselect.val().length ; i++) {
                 id = $dplselect.val()[i];

@@ -784,6 +784,7 @@
                         $(this.container[0].ownerDocument).bind('click.chosen', this.click_test_action);
                         this.results_show();
                     } else if (!this.is_multiple && evt && (($(evt.target)[0] === this.selected_item[0]) || $(evt.target).parents("a.chosen-single").length)) {
+                        console.log('probably should not end in here');
                         evt.preventDefault();
                         this.results_toggle();
                     }
