@@ -772,7 +772,7 @@
                 if (evt && evt.type === "mousedown" && !this.results_showing) {
                     console.log('enable_disabled');
                     evt.preventDefault();
-                    this.enable_disabled();
+                    //this.enable_disabled();
                 }
                 if (!((evt != null) && ($(evt.target)).hasClass("search-choice-close"))) {
                     if (!this.active_field) {
