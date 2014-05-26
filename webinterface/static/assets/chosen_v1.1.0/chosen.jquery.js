@@ -837,6 +837,7 @@
         };
 
         Chosen.prototype.test_active_click = function (evt) {
+            console.log('test_active_click');
             var active_container;
             active_container = $(evt.target).closest('.chosen-container');
             if (active_container.length && this.container[0] === active_container[0]) {
