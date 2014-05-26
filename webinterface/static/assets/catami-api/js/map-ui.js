@@ -141,7 +141,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 // The below code highlights the deployment origin markers if there is a deployment within this marker
                 //  that has been selected
                 // If no deployemnt has been selected
-                if( $('#deploymentSelect').val() === null  ) {
+                if( $('#deploymentSelect').val() === null || typeof $('#deploymentSelect').val() === 'undefined' ) {
                     return;
                 }
                 // Get the deployment origin layer
