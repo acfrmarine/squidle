@@ -263,10 +263,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				infoFormat : "application/vnd.ogc.gml",
 				eventListeners : {
 					nogetfeatureinfo : function(event) {
-						console.log('No queryable layers found');
 					},
 					beforegetfeatureinfo : function(event) {
-                        console.log('beforegetfeatureinfo');
 						// build CQL_FILTER param list from active info layer CQL_FILTER params
 						var layers = this.findLayers();
 						var filter = "";
@@ -278,14 +276,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 								filter += lyrCQL;
 							}
 						}
-						console.log(filter);
 						this.vendorParams = {
 							'FILTER' : filter
 						};
 					},
 					getfeatureinfo : function(event) {
-
-						console.log('getfeatureinfo');
 						var imageNames = [];
 						if (event.features.length > 0) {
 							var fid = event.features[0].attributes.id;
@@ -694,11 +689,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			{
 	    		nogetfeatureinfo : function(event) 
 				{
-					console.log('No queryable layers found');
+                    // Remove focus from the selected input box
+                    $('input :focus').blur();
 	    		},
 				getfeatureinfo: function (event) 
 				{
-					console.log("getfeatureinfo event");
                 	if (event.features.length > 0) {
                     	baseMap.$imginfo.html('');
                     	var fid, $thumb;
