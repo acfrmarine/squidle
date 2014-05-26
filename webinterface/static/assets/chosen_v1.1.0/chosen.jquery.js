@@ -776,6 +776,7 @@
                 }
                 if (!((evt != null) && ($(evt.target)).hasClass("search-choice-close"))) {
                     console.log('here');
+                    console.log(evt);
                     if (!this.active_field) {
                         if (this.is_multiple) {
                             console.log('search_field.val("")');

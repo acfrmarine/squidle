@@ -975,7 +975,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 }
                 // No deployments selected
                 else {
-                    console.log('deselecting all deployments');
+                    console.log('all deployments deselected. zooming all the way out');
                     baseMap.mapInstance.getControlsBy('id', 'selectCtrl')[0].unselectAll();
                     baseMap.mapInstance.zoomToExtent(
                         baseMap.mapInstance.getLayersByName('Deployment origins')[0].getDataExtent() );
