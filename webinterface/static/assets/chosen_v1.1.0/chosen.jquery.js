@@ -822,6 +822,7 @@
         };
 
         Chosen.prototype.close_field = function () {
+            console.log('close_field:')
             console.log('this.active_field = false');
             $(this.container[0].ownerDocument).unbind("click.chosen", this.click_test_action);
             this.active_field = false;
