@@ -1122,9 +1122,10 @@
                         this.single_set_selected_text(item.text);
                     }
                     // NOTE: if we disable this the result window will not auto close
-                    if (!((evt.metaKey || evt.ctrlKey) && this.is_multiple)) {
+                    //if (!((evt.metaKey || evt.ctrlKey) && this.is_multiple)) {
                         //this.results_hide();
-                    }
+                    //}
+                    this.winnow_results();
                     this.search_field.val("");
 
                     this.current_selectedIndex = this.form_field.selectedIndex;
