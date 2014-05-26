@@ -769,8 +769,8 @@
         Chosen.prototype.container_mousedown = function (evt) {
             console.log('container_mousedown');
             if (!this.is_disabled) {
-                console.log($(evt.target).parents("a.search-choice-close"));
-                if( $(evt.target).parent("a.search-choice-close").length ) {
+                if( evt && evt.type === "mousedown" && $(evt.target).parent("a.search-choice-close").length ) {
+                    console.log($(evt.target).parents("a.search-choice-close"));
                     return this.choice_destroy_link_click(evt);
                 }
                 if (evt && evt.type === "mousedown" && !this.results_showing) {
