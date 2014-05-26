@@ -690,7 +690,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	    		nogetfeatureinfo : function(event) 
 				{
                     // Remove focus from the selected input box
-                    $('input :focus').blur();
+                    console.log( $('input:focus') );
 	    		},
 				getfeatureinfo: function (event) 
 				{
@@ -955,7 +955,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                     console.log('all deployments deselected. zooming all the way out');
                     baseMap.mapInstance.getControlsBy('id', 'selectCtrl')[0].unselectAll();
                     baseMap.mapInstance.zoomToExtent(
-                        baseMap.mapInstance.getLayersByName('Deployment origins')[0].getDataExtent() );
+                       baseMap.mapInstance.getLayersByName('Deployment origins')[0].getDataExtent() );
                 }
             }
             // Zoom to selection
