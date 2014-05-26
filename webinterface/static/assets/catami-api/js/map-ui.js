@@ -886,8 +886,14 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     }
 
     this.updateDeploymentInfo = function() {
+        return;
+
         // Get the select DOM
         $dplselect = $('#deploymentSelect');
+
+        if( $dplselect.val() === null ) {
+            return;
+        }
 
         // deselect deployment property
         baseMap.$dplinfo.find("input").prop('checked',false);
@@ -895,8 +901,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         for (var i=0 ; i < $dplselect.val().length ; i++) {
             id = $dplselect.val()[i];
             // check selected in info panel, otherwise add to info panel
-            $dplinfo = baseMap.$dplinfo.find("input[value='" + id + "']");
-            $dplinfo.prop('checked', true);
+            baseMap.$dplinfo.find("input[value='" + id + "']").prop('checked', true);
         }
     }
 
