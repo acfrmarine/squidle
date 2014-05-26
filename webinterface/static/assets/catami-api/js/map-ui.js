@@ -266,6 +266,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 						console.log('No queryable layers found');
 					},
 					beforegetfeatureinfo : function(event) {
+                        console.log('beforegetfeatureinfo');
 						// build CQL_FILTER param list from active info layer CQL_FILTER params
 						var layers = this.findLayers();
 						var filter = "";
@@ -283,7 +284,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 						};
 					},
 					getfeatureinfo : function(event) {
-						console.log(event);
+
+						console.log('getfeatureinfo');
 						var imageNames = [];
 						if (event.features.length > 0) {
 							var fid = event.features[0].attributes.id;
@@ -500,7 +502,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             // Update deployment filter and deployment info pane
             // TODO: If we could trigger the change event of the select we didn't have to do this
             baseMap.updateDeploymentFilter();
-            baseMap.updateDeploymentInfo();
             baseMap.showSelectedImages();
             baseMap.updateMapBounds("deployment_ids=" + $('#deploymentSelect').val(), baseMap.deploymentExtentUrl);
         });
@@ -887,26 +888,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         return filters;
     }
 
-    this.updateDeploymentInfo = function() {
-        return;
-
-        // Get the select DOM
-        $dplselect = $('#deploymentSelect');
-
-        if( $dplselect.val() === null ) {
-            return;
-        }
-
-        // deselect deployment property
-        baseMap.$dplinfo.find("input").prop('checked',false);
-        // Loop through selected deployments in the multiselect
-        for (var i=0 ; i < $dplselect.val().length ; i++) {
-            id = $dplselect.val()[i];
-            // check selected in info panel, otherwise add to info panel
-            baseMap.$dplinfo.find("input[value='" + id + "']").prop('checked', true);
-        }
-    }
-
     this.updateDeploymentFilter = function() {
 
         this.filters.deployments = [];
@@ -970,7 +951,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             // Added/Removed
             if( params.type === 'checked' || params.type === 'unchecked') {
                 baseMap.updateDeploymentFilter();
-                baseMap.updateDeploymentInfo();
                 baseMap.showSelectedImages();
                 if( $dplselect.val() !== null ) {
                     baseMap.updateMapBounds("deployment_ids=" + $dplselect.val(), baseMap.deploymentExtentUrl);
@@ -1003,11 +983,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         $dplselect.on( 'chosen:no_results', function(evt, params) {
             baseMap.updateChosenDropHeight();
         });
-        // TODO: add a button on the drop-result pane to call this
-//        $dplselect.on( 'chosen:hiding_dropdown', function(evt, params) {
-//            $('#deploymentSelect :disabled').prop('disabled', false);
-//            $('#deploymentSelect').trigger('chosen:updated');
-//        });
 
     }
 
@@ -1179,7 +1154,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     this.addPanel = function ($container, panelinfo, style) {
 		//console.log("Function addPanel");
 		
-	style = (( typeof style !== 'undefined') ? style : '');
+	    style = (( typeof style !== 'undefined') ? style : '');
         // check if panel exists, otherwise create it
         if ($container.find('#'+ panelinfo.id).length <= 0) {
             var $panel = $('<div id="' + panelinfo.id + '" class="map-panel og-panel"></div>');

@@ -11,7 +11,6 @@
  */
 
 (function () {
-    console.log('chosen loading');
     var $, AbstractChosen, Chosen, SelectParser, _ref,
         __hasProp = {}.hasOwnProperty,
         __extends = function (child, parent) {
@@ -201,7 +200,6 @@
         };
 
         AbstractChosen.prototype.input_blur = function (evt) {
-            console.log('input_blur');
             var _this = this;
             if (!this.mouse_on_container) {
                 this.active_field = false;
@@ -812,14 +810,12 @@
         };
 
         Chosen.prototype.blur_test = function (evt) {
-            console.log('blur_test');
             if (!this.active_field && this.container.hasClass("chosen-container-active")) {
                 return this.close_field();
             }
         };
 
         Chosen.prototype.close_field = function () {
-            console.log('close_field');
             $(this.container[0].ownerDocument).unbind("click.chosen", this.click_test_action);
             this.active_field = false;
             this.results_hide();
@@ -837,7 +833,6 @@
         };
 
         Chosen.prototype.test_active_click = function (evt) {
-            console.log('test_active_click');
             var active_container;
             active_container = $(evt.target).closest('.chosen-container');
             if (active_container.length && this.container[0] === active_container[0]) {
