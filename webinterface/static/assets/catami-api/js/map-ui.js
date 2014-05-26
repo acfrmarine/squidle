@@ -691,6 +691,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				{
                     // Remove focus from the selected input box
                     console.log( $('input:focus') );
+                    $('input:focus').blur();
 	    		},
 				getfeatureinfo: function (event) 
 				{
