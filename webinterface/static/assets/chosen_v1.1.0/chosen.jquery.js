@@ -204,7 +204,7 @@
             var _this = this;
             console.log('input_blur');
             if (!this.mouse_on_container) {
-                console.log('! mouse_on_container');
+                console.log('this.active_field = false');
                 this.active_field = false;
                 return setTimeout((function () {
                     return _this.blur_test();
@@ -822,6 +822,7 @@
         };
 
         Chosen.prototype.close_field = function () {
+            console.log('this.active_field = false');
             $(this.container[0].ownerDocument).unbind("click.chosen", this.click_test_action);
             this.active_field = false;
             this.results_hide();
