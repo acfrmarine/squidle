@@ -770,7 +770,7 @@
             console.log('container_mousedown');
             if (!this.is_disabled) {
                 if( $(evt.target).parents("a.search-choice-close").length ) {
-                    console.log('remove icon pressed');
+                    return this.choice_destroy_link_click(evt);
                 }
                 if (evt && evt.type === "mousedown" && !this.results_showing) {
                     console.log('enable_disabled');
@@ -1048,6 +1048,7 @@
             evt.stopPropagation();
             if (!this.is_disabled) {
                 console.log('choice_destroy_link_click');
+                console.log(evt);
                 return this.choice_destroy($(evt.target.parentNode));
             }
         };
