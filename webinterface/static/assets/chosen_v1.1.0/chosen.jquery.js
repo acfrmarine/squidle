@@ -202,9 +202,7 @@
 
         AbstractChosen.prototype.input_blur = function (evt) {
             var _this = this;
-            console.log('input_blur');
             if (!this.mouse_on_container) {
-                console.log('this.active_field = false');
                 this.active_field = false;
                 return setTimeout((function () {
                     return _this.blur_test();
@@ -445,7 +443,6 @@
         };
 
         AbstractChosen.prototype.choices_click = function (evt) {
-            console.log('choices_click');
             evt.preventDefault();
             if (!(this.results_showing || this.is_disabled)) {
                 return this.results_show();
@@ -769,7 +766,6 @@
         };
 
         Chosen.prototype.container_mousedown = function (evt) {
-            console.log('container_mousedown');
             if (!this.is_disabled) {
                 if( evt && evt.type === "mousedown" && $(evt.target).parent("a.search-choice-close").length ) {
                     return this.choice_destroy_link_click(evt);
@@ -779,7 +775,6 @@
                     this.enable_disabled();
                 }
                 if (!((evt != null) && ($(evt.target)).hasClass("search-choice-close"))) {
-                    console.log('active_field: ' + this.active_field);
                     if (!this.active_field) {
                         if (this.is_multiple) {
                             this.search_field.val("");
@@ -822,8 +817,6 @@
         };
 
         Chosen.prototype.close_field = function () {
-            console.log('close_field:')
-            console.log('this.active_field = false');
             $(this.container[0].ownerDocument).unbind("click.chosen", this.click_test_action);
             this.active_field = false;
             this.results_hide();
@@ -902,7 +895,6 @@
         };
 
         Chosen.prototype.results_show = function () {
-            console.log('results_show');
             if (this.is_multiple && this.max_selected_options <= this.choices_count()) {
                 this.form_field_jq.trigger("chosen:maxselected", {
                     chosen: this
@@ -925,12 +917,10 @@
         };
 
         Chosen.prototype.results_hide = function () {
-            console.log('results_hide');
             if (this.results_showing) {
                 this.result_clear_highlight();
                 this.container.removeClass("chosen-with-drop");
                 this.dropdown.removeClass("chosen-with-drop");
-                 console.log('triggering hiding_dropdown');
                 this.form_field_jq.trigger("chosen:hiding_dropdown", {
                     chosen: this
                 });
@@ -983,7 +973,6 @@
 
         Chosen.prototype.search_results_mouseup = function (evt) {
             var target;
-            console.log(evt);
             if( (target = $(evt.target).hasClass("icon-zoom-in") ? $(evt.target) : null) !== null ) {
                 // The item was not checked but the name was clicked. Let's raise a 'selected' event so we can zoom in
                 depid = $(evt.target).parents(".group-option")[0].id;
@@ -1048,15 +1037,11 @@
             evt.preventDefault();
             evt.stopPropagation();
             if (!this.is_disabled) {
-                console.log('choice_destroy_link_click');
-                console.log(evt);
                 return this.choice_destroy($(evt.target.parentNode));
             }
         };
 
         Chosen.prototype.choice_destroy = function (link) {
-            console.log('choice_destroy');
-            console.log(link);
             if (this.result_deselect(link[0].getAttribute("data-option-array-index"))) {
                 this.show_search_field_default();
                 if (this.is_multiple && this.choices_count() > 0 && this.search_field.val().length < 1) {
@@ -1085,11 +1070,8 @@
         };
 
         Chosen.prototype.result_select = function (evt) {
-            console.log('result_select');
             var high, item;
-            console.log(evt);
-            // Is the event triggered by clicking the checkbox?
-//            var isCheckbox = evt.target.id.search('checkbox') >= 0;
+
             var isCheckbox = evt.target.nodeName.localeCompare( 'INPUT' ) === 0;
             var isText = evt.target.nodeName.localeCompare( 'LI' ) === 0;
             var isZoom = evt.target.nodeName.localeCompare( 'I' ) === 0;
@@ -1099,7 +1081,6 @@
             if (this.result_highlight) {
                 // If the checkbox was clicked the item is selected and a 'checked' event is triggered
                 if (isCheckbox || isText) {
-                    console.log('checked');
                     this.result_clear_highlight();
                     if (this.is_multiple && this.max_selected_options <= this.choices_count()) {
                         this.form_field_jq.trigger("chosen:maxselected", {
