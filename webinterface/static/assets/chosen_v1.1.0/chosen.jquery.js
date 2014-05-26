@@ -1123,7 +1123,7 @@
                     }
                     // NOTE: if we disable this the result window will not auto close
                     if (!((evt.metaKey || evt.ctrlKey) && this.is_multiple)) {
-                        this.results_hide();
+                        //this.results_hide();
                     }
                     this.search_field.val("");
 
