@@ -931,6 +931,7 @@
                 this.container.removeClass("chosen-with-drop");
                 this.dropdown.removeClass("chosen-with-drop");
                 this.form_field_jq.trigger("chosen:hiding_dropdown", {
+                    console.log('triggering hiding_dropdown');
                     chosen: this
                 });
             }
@@ -1121,6 +1122,7 @@
                     } else {
                         this.single_set_selected_text(item.text);
                     }
+                    // NOTE: if we disable this the result window will not auto close
                     if (!((evt.metaKey || evt.ctrlKey) && this.is_multiple)) {
                         this.results_hide();
                     }
