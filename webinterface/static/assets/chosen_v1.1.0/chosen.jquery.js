@@ -202,7 +202,9 @@
 
         AbstractChosen.prototype.input_blur = function (evt) {
             var _this = this;
+            console.log('input_blur');
             if (!this.mouse_on_container) {
+                console.log('! mouse_on_container');
                 this.active_field = false;
                 return setTimeout((function () {
                     return _this.blur_test();
@@ -770,25 +772,21 @@
             console.log('container_mousedown');
             if (!this.is_disabled) {
                 if( evt && evt.type === "mousedown" && $(evt.target).parent("a.search-choice-close").length ) {
-                    console.log($(evt.target).parents("a.search-choice-close"));
                     return this.choice_destroy_link_click(evt);
                 }
                 if (evt && evt.type === "mousedown" && !this.results_showing) {
-                    console.log('enable_disabled');
                     evt.preventDefault();
                     this.enable_disabled();
                 }
                 if (!((evt != null) && ($(evt.target)).hasClass("search-choice-close"))) {
-                    console.log('active: ' + this.active_field);
+                    console.log('active_field: ' + this.active_field);
                     if (!this.active_field) {
                         if (this.is_multiple) {
-                            console.log('search_field.val("")');
                             this.search_field.val("");
                         }
                         $(this.container[0].ownerDocument).bind('click.chosen', this.click_test_action);
                         this.results_show();
                     } else if (!this.is_multiple && evt && (($(evt.target)[0] === this.selected_item[0]) || $(evt.target).parents("a.chosen-single").length)) {
-                        console.log('probably should not end in here');
                         evt.preventDefault();
                         this.results_toggle();
                     }
@@ -1100,7 +1098,6 @@
                 // If the checkbox was clicked the item is selected and a 'checked' event is triggered
                 if (isCheckbox || isText) {
                     console.log('checked');
-
                     this.result_clear_highlight();
                     if (this.is_multiple && this.max_selected_options <= this.choices_count()) {
                         this.form_field_jq.trigger("chosen:maxselected", {
