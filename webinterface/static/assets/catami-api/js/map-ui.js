@@ -968,7 +968,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             // Nothing selected
             if ($dplselect.val() === null) {
                     console.log('deselecting all deployments');
-                    map.mapInstance.getControlsBy('id', 'selectCtrl')[0].unselectAll();
+                    baseMap.mapInstance.getControlsBy('id', 'selectCtrl')[0].unselectAll();
             }
 
             // Added/Removed
