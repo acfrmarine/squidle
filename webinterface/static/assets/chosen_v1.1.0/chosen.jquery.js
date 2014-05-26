@@ -201,6 +201,7 @@
         };
 
         AbstractChosen.prototype.input_blur = function (evt) {
+            console.log('input_blur');
             var _this = this;
             if (!this.mouse_on_container) {
                 this.active_field = false;
