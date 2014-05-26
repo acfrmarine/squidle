@@ -812,6 +812,7 @@
         };
 
         Chosen.prototype.blur_test = function (evt) {
+            console.log('blur_test');
             if (!this.active_field && this.container.hasClass("chosen-container-active")) {
                 return this.close_field();
             }
