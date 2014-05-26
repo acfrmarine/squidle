@@ -443,6 +443,7 @@
         };
 
         AbstractChosen.prototype.choices_click = function (evt) {
+            console.log('choices_click');
             evt.preventDefault();
             if (!(this.results_showing || this.is_disabled)) {
                 return this.results_show();
@@ -766,8 +767,10 @@
         };
 
         Chosen.prototype.container_mousedown = function (evt) {
+            console.log('container_mousedown');
             if (!this.is_disabled) {
                 if (evt && evt.type === "mousedown" && !this.results_showing) {
+                    console.log('enable_disabled');
                     evt.preventDefault();
                     this.enable_disabled();
                 }

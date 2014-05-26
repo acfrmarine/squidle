@@ -904,21 +904,22 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
         // Get the select DOM
         $dplselect = $('#deploymentSelect');
+        if( $dplselect.val() !== null ) {
+            this.filters.deployments = [];
+            // Loop through selected deployments in the multiselect
+            for (var i=0 ; i < $dplselect.val().length ; i++) {
+                id = $dplselect.val()[i];
+                name = $dplselect.find("option[value='" + id + "']").text();
+                this.filters.deployments.push({
+                    id: id,
+                    name: name
+                });
 
-        this.filters.deployments = [];
-        // Loop through selected deployments in the multiselect
-        for (var i=0 ; i < $dplselect.val().length ; i++) {
-            id = $dplselect.val()[i];
-            name = $dplselect.find("option[value='" + id + "']").text();
-            this.filters.deployments.push({
-                id: id,
-                name: name
-            });
-
-            // TODO: move this code to an independent function
-            // check selected in info panel, otherwise add to info panel
-            $dplinfo = baseMap.$dplinfo.find("input[value='" + id + "']");
-            $dplinfo.prop('checked', true);
+                // TODO: move this code to an independent function
+                // check selected in info panel, otherwise add to info panel
+                $dplinfo = baseMap.$dplinfo.find("input[value='" + id + "']");
+                $dplinfo.prop('checked', true);
+            }
         }
     }
 
