@@ -141,7 +141,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 // The below code highlights the deployment origin markers if there is a deployment within this marker
                 //  that has been selected
                 // If no deployemnt has been selected
-                if( $('#deploymentSelect').val() == null  ) {
+                if( $('#deploymentSelect').val() === null  ) {
                     return;
                 }
                 // Get the deployment origin layer
@@ -965,12 +965,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             diveID = params.id;
             console.log('Dive #'+diveID+' is ' + (checked?'checked':(unchecked?'unchecked':'selected')));
 
-            // Nothing selected
-            if ($dplselect.val() === null) {
-                    console.log('deselecting all deployments');
-                    baseMap.mapInstance.getControlsBy('id', 'selectCtrl')[0].unselectAll();
-            }
-
             // Added/Removed
             if( params.type === 'checked' || params.type === 'unchecked') {
                 baseMap.updateDeploymentFilter();
@@ -978,6 +972,12 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 baseMap.showSelectedImages();
                 if( $dplselect.val() !== null ) {
                     baseMap.updateMapBounds("deployment_ids=" + $dplselect.val(), baseMap.deploymentExtentUrl);
+                }
+                // No deployments selected
+                else {
+                    console.log('deselecting all deployments');
+                    baseMap.mapInstance.getControlsBy('id', 'selectCtrl')[0].unselectAll();
+                    baseMap.mapInstance.zoomToExtent(evt.object.getDataExtent());
                 }
             }
             // Zoom to selection
