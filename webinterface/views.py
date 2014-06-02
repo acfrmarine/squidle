@@ -17,7 +17,7 @@ import httplib2
 #not API compliant - to be removed after the views are compliant
 from catamidb.api import ImageResource
 from catamidb.models import Pose, Image, Campaign, AUVDeployment, \
-    BRUVDeployment, DOVDeployment, Deployment, TIDeployment, TVDeployment
+    BRUVDeployment, DOVDeployment, Deployment, TIDeployment, TVDeployment, ScientificPoseMeasurement
 from django.contrib.gis.geos import fromstr
 from django.db.models import Max, Min
 import simplejson
@@ -934,6 +934,32 @@ def get_multiple_deployment_extent(request):
         simplejson.dumps({"message": "GET operation invalid, must use POST."}),
         mimetype="application/json")
 
+
+@csrf_exempt
+def get_extents(request):
+
+    type = request.GET.get('type')
+    feature = 'filters'
+
+
+    #if request.method == 'POST':  # If the form has been submitted...
+        # ids = request.POST.get('ids').__str__().split(",")
+    ids = request.GET.get('ids').__str__().split(",")
+
+    if feature == 'poses' :
+        extent = Pose.objects.filter(deployment_id__in=ids).extent().__str__()
+        response_data = {"extent": extent}
+    elif feature == 'filters' :
+        altitude = ScientificPoseMeasurement.objects.filter(pose__deployment__id__in=ids, measurement_type__normalised_name="altitude")
+        depth = Pose.objects.filter(deployment_id__in=ids)
+        extent = {'altitude':dict(altitude.aggregate(Min('value')).items() + altitude.aggregate(Max('value')).items()),
+                  'depth':dict(depth.aggregate(Min('depth')).items() + depth.aggregate(Max('depth')).items())}
+        #print extent
+        response_data = extent
+
+    return HttpResponse(simplejson.dumps(response_data), mimetype="application/json")
+
+    #return HttpResponse(simplejson.dumps({"message": "GET operation invalid, must use POST."}), mimetype="application/json")
 
 @csrf_exempt
 def get_collection_extent(request):

@@ -68,6 +68,8 @@ urlpatterns = patterns(
 
     url(r'^update_classes$','update_classes_gspread'),
 
+    url(r'^get_extents$','get_extents'),
+
     #####################################################################
 
     #Collection Object Views
