@@ -399,13 +399,15 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		highlightCtrl.activate();
 
 		var selectCtrl = new OpenLayers.Control.SelectFeature(deploymentlayer
-//            , {
-//            eventListeners : {
-//                featurehighlighted : function(event) {
-//                    console.log('selectCtrl featurehighlighted');
-//                }
-//            }
-//            }
+            , {
+            eventListeners : {
+                featurehighlighted : function(event) {
+                    console.log('selectCtrl featurehighlighted');
+                    // Remove focus from the selected input box
+                    //$('input:focus').blur();
+                }
+            }
+            }
         );
         selectCtrl.id = "selectCtrl";
 		this.mapInstance.addControl(selectCtrl);
@@ -465,7 +467,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * Zoom to a deployment
 	 **/
 	function zoomToDeployments(event) {
-	   event.preventDefault();
 		// parse the deployment ids
 		// baseMap.test = event;
 		var deploymentIds = [];
@@ -632,8 +633,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			{
 	    		nogetfeatureinfo : function(event) 
 				{
-                    // Remove focus from the selected input box
-                    $('input:focus').blur();
+                    
 	    		},
 				getfeatureinfo: function (event) 
 				{
