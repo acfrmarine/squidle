@@ -896,10 +896,15 @@
                 high_top = this.result_highlight.position().top + this.search_results.scrollTop();
                 high_bottom = high_top + this.result_highlight.outerHeight();
                 if (high_bottom >= visible_bottom) {
-                    return this.search_results.scrollTop((high_bottom - maxHeight) > 0 ? high_bottom - maxHeight : 0);
+                    /*return*/ this.search_results.scrollTop((high_bottom - maxHeight) > 0 ? high_bottom - maxHeight : 0);
                 } else if (high_top < visible_top) {
-                    return this.search_results.scrollTop(high_top);
+                    /*return*/ this.search_results.scrollTop(high_top);
                 }
+                console.log(el);
+                this.form_field_jq.trigger("change", {
+                    'id': el.id,
+                    'type': 'highlighted'
+                });
             }
         };
 
