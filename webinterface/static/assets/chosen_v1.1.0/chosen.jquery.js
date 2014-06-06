@@ -617,27 +617,27 @@
             }
 
             // My version
-//            this.container = $('<div class="chosen"></div>');
-//            search = $("<div />", container_props);
-//            if (this.is_multiple) {
-//                search.html('<ul class="chosen-choices"><li class="search-field"><input type="text" value="' + this.default_text + '" class="default" autocomplete="off" style="width:25px;" /></li></ul>');
-//                drop = $('<div class="chosen-drop"><ul class="chosen-results"></ul></div>)');
+            this.container = $('<div class="chosen"></div>');
+            search = $("<div />", container_props);
+            if (this.is_multiple) {
+                search.html('<ul class="chosen-choices"><li class="search-field"><input type="text" value="' + this.default_text + '" class="default" autocomplete="off" style="width:25px;" /></li></ul>');
+                drop = $('<div class="chosen-drop"><ul class="chosen-results"></ul></div>)');
 //            } else {
 //                search.html('<a class="chosen-single chosen-default" tabindex="-1"><span>' + this.default_text + '</span><div><b></b></div></a><div class="chosen-drop"><ul class="chosen-results"></ul></div>');
 //                drop = $('<div class="chosen-search"><input type="text" autocomplete="off" /></div>');
 //            }
-//            this.container.append(search, drop);
+            this.container.append(search);
+			$('#deployment-map').append(drop);
 
             // Original verison
-
-            this.container = $('<div class="chosen"></div>');
-
-            this.container = $("<div />", container_props);
-            if (this.is_multiple) {
-                this.container.html('<ul class="chosen-choices"><li class="search-field"><input type="text" value="' + this.default_text + '" class="default" autocomplete="off" style="width:25px;" /></li></ul><div class="chosen-drop"><ul class="chosen-results"></ul></div>');
-            } else {
-                search.html('<a class="chosen-single chosen-default" tabindex="-1"><span>' + this.default_text + '</span><div><b></b></div></a><div class="chosen-drop"><ul class="chosen-results"></ul></div><div class="chosen-search"><input type="text" autocomplete="off" /></div>');
-            }
+            // this.container = $('<div class="chosen"></div>');
+// 
+//             this.container = $("<div />", container_props);
+//             if (this.is_multiple) {
+//                 this.container.html('<ul class="chosen-choices"><li class="search-field"><input type="text" value="' + this.default_text + '" class="default" autocomplete="off" style="width:25px;" /></li></ul><div class="chosen-drop"><ul class="chosen-results"></ul></div>');
+//             } else {
+//                 search.html('<a class="chosen-single chosen-default" tabindex="-1"><span>' + this.default_text + '</span><div><b></b></div></a><div class="chosen-drop"><ul class="chosen-results"></ul></div><div class="chosen-search"><input type="text" autocomplete="off" /></div>');
+//             }
 
             this.form_field_jq.hide().after(this.container);
             this.dropdown = this.container.find('div.chosen-drop').first();
