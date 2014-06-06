@@ -936,7 +936,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 baseMap.updateMapBounds("deployment_ids=" + [diveID], baseMap.deploymentExtentUrl);
             }
             else if (params.type === 'highlighted') {
-            	console.log(diveId + ' highlighted');
+            	// console.log(diveId + ' highlighted');
             }
             // The dive was de-selected
             else if($dplselect.val() !== null) {
