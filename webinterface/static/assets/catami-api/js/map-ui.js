@@ -915,7 +915,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             // unchecked = (params.type === 'unchecked') ? true : false;
             diveID = params.id;
             // console.log('Dive #'+diveID+' is ' + (checked?'checked':(unchecked?'unchecked':'selected')));
-
+            console.log(params);
+            
             // Added/Removed
             if( params.type === 'checked' || params.type === 'unchecked') {
                 baseMap.updateDeploymentFilter();
