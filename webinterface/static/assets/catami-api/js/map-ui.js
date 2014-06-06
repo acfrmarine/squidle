@@ -148,7 +148,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 			    onClick: function(evt) {
 			        // Remove focus from the selected input box
-					$('input:focus').blur();
+					// $('input:focus').blur();
+					$('#deploymentSelect').trigger('chosen:close');
 			    }
 			}
 		);
