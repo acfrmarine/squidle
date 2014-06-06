@@ -147,9 +147,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			    }, 
 
 			    onClick: function(evt) {
-			        $( '#info' ).html(
-			            '<p>' + data[i].title + '<br />' + data[i].addr + '</p>'
-			        );
+			        console.log(evt);
 			    },
 			}
 		);
