@@ -124,6 +124,45 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 //            }
 //        ));
 
+		OpenLayers.Control.ListenToClick = OpenLayers.Class(OpenLayers.Control, 
+			{
+			    defaultHandlerOptions: {
+			        'single': true,
+			        'pixelTolerance': 0,
+			        'stopSingle': false
+			    },
+
+			    initialize: function(options) {
+			        this.handlerOptions = OpenLayers.Util.extend(
+			            {}, this.defaultHandlerOptions
+			        );
+			        OpenLayers.Control.prototype.initialize.apply(
+			            this, arguments
+			        ); 
+			        this.handler = new OpenLayers.Handler.Click(
+			            this, {
+			                'click': this.onClick,
+			            }, this.handlerOptions
+			        );
+			    }, 
+
+			    onClick: function(evt) {
+			        $( '#info' ).html(
+			            '<p>' + data[i].title + '<br />' + data[i].addr + '</p>'
+			        );
+			    },
+			}
+		);
+		var ctmControl = new OpenLayers.Control.ListenToClick({
+		    handlerOptions: {
+		        'single': true,
+		        'pixelTolerance': 0,
+		        'stopSingle': false
+		    }
+		});
+		map.addControl(ctmControl);
+		ctmControl.activate();
+
 		this.mapInstance.events.on({
 //			"zoomend": function(e) {
 				// This is not necessary as we are dealing with the loading of the image layers through the maxScale 
@@ -164,6 +203,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 }
             }
 		});
+
+
 		this.isInitialised = true;
 	}
 
