@@ -147,8 +147,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			    }, 
 
 			    onClick: function(evt) {
-			        console.log(evt);
-			    },
+			        // Remove focus from the selected input box
+					$('input:focus').blur();
+			    }
 			}
 		);
 		var ctmControl = new OpenLayers.Control.ListenToClick({
@@ -199,11 +200,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
                     selectCtrl.highlight( depLayer.features[featInd] );
                 }
-            },
-            "onClick" : function(e) {
-            	console.log('here');
-            	// Remove focus from the selected input box
-				$('input:focus').blur();
             }
 		});
 
