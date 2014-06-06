@@ -628,7 +628,8 @@
            }
             this.container.append(search);
 			$('.container').append(drop);
-
+			this.dropdown = drop;
+			
             // Original verison
             // this.container = $('<div class="chosen"></div>');
 // 
@@ -638,9 +639,9 @@
 //             } else {
 //                 search.html('<a class="chosen-single chosen-default" tabindex="-1"><span>' + this.default_text + '</span><div><b></b></div></a><div class="chosen-drop"><ul class="chosen-results"></ul></div><div class="chosen-search"><input type="text" autocomplete="off" /></div>');
 //             }
-
+			// this.dropdown = this.container.find('div.chosen-drop').first();
+			
             this.form_field_jq.hide().after(this.container);
-            this.dropdown = this.container.find('div.chosen-drop').first();
             this.search_field = this.container.find('input').first();
             this.search_results = this.container.find('ul.chosen-results').first();
             this.search_field_scale();
