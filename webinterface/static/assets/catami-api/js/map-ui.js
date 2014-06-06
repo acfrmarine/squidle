@@ -928,7 +928,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                     console.log('all deployments deselected. zooming all the way out');
                     baseMap.mapInstance.getControlsBy('id', 'selectCtrl')[0].unselectAll();
                     baseMap.mapInstance.zoomToExtent(
-                       baseMap.mapInstance.getLayersByName('Deployment origins')[0].getDataExtent() );
+                    baseMap.mapInstance.getLayersByName('Deployment origins')[0].getDataExtent() );
                 }
             }
             // Zoom to selection
@@ -936,7 +936,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 baseMap.updateMapBounds("deployment_ids=" + [diveID], baseMap.deploymentExtentUrl);
             }
             else if (params.type === 'highlighted') {
-            	// console.log(diveId + ' highlighted');
+            	console.log(diveId + ' highlighted');
             }
             // The dive was de-selected
             else if($dplselect.val() !== null) {
