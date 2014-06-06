@@ -158,7 +158,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		        'stopSingle': false
 		    }
 		});
-		map.addControl(ctmControl);
+		this.mapInstance.addControl(ctmControl);
 		ctmControl.activate();
 
 		this.mapInstance.events.on({
