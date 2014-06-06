@@ -1,5 +1,4 @@
-/*!
- Chosen, a Select Box Enhancer for jQuery and Prototype
+/*! Chosen, a Select Box Enhancer for jQuery and Prototype
  by Patrick Filler for Harvest, http://getharvest.com
 
  Version 1.1.0
@@ -617,42 +616,51 @@
             }
 
             // My version
-            this.container = $('<div class="chosen"></div>');
-            search = $("<div />", container_props);
-            if (this.is_multiple) {
-                search.html('<ul class="chosen-choices"><li class="search-field"><input type="text" value="' + this.default_text + '" class="default" autocomplete="off" style="width:25px;" /></li></ul>');
-                drop = $('<div class="chosen-drop"><ul class="chosen-results"></ul></div>)');
-//            } else {
-//                search.html('<a class="chosen-single chosen-default" tabindex="-1"><span>' + this.default_text + '</span><div><b></b></div></a><div class="chosen-drop"><ul class="chosen-results"></ul></div>');
-//                drop = $('<div class="chosen-search"><input type="text" autocomplete="off" /></div>');
-           }
-            this.container.append(search);
-			$('.container').append(drop);
-			this.dropdown = drop;
-			
-            // Original verison
-            // this.container = $('<div class="chosen"></div>');
-// 
-//             this.container = $("<div />", container_props);
-//             if (this.is_multiple) {
-//                 this.container.html('<ul class="chosen-choices"><li class="search-field"><input type="text" value="' + this.default_text + '" class="default" autocomplete="off" style="width:25px;" /></li></ul><div class="chosen-drop"><ul class="chosen-results"></ul></div>');
-//             } else {
-//                 search.html('<a class="chosen-single chosen-default" tabindex="-1"><span>' + this.default_text + '</span><div><b></b></div></a><div class="chosen-drop"><ul class="chosen-results"></ul></div><div class="chosen-search"><input type="text" autocomplete="off" /></div>');
-//             }
-			// this.dropdown = this.container.find('div.chosen-drop').first();
-			
-            this.form_field_jq.hide().after(this.container);
-            this.search_field = this.container.find('input').first();
-            this.search_results = this.container.find('ul.chosen-results').first();
-            this.search_field_scale();
-            this.search_no_results = this.container.find('li.no-results').first();
-            if (this.is_multiple) {
-                this.search_choices = this.container.find('ul.chosen-choices').first();
-                this.search_container = this.container.find('li.search-field').first();
-            } else {
-                this.search_container = this.container.find('div.chosen-search').first();
-                this.selected_item = this.container.find('.chosen-single').first();
+            if( 1 ) {
+                this.container = $('<div class="chosen"></div>');
+                search = $("<div />", container_props);
+                if (this.is_multiple) {
+                    search.html('<ul class="chosen-choices"><li class="search-field"><input type="text" value="' + this.default_text + '" class="default" autocomplete="off" style="width:25px;" /></li></ul>');
+                    var drop = $('<div class="chosen-drop"><ul class="chosen-results"></ul></div>)');
+                } else {
+                    search.html('<a class="chosen-single chosen-default" tabindex="-1"><span>' + this.default_text + '</span><div><b></b></div></a><div class="chosen-drop"><ul class="chosen-results"></ul></div>');
+                    drop = $('<div class="chosen-search"><input type="text" autocomplete="off" /></div>');
+                }
+                this.container.append(search);
+    			$('.container').append(drop);
+    			this.form_field_jq.hide().after(this.container);
+
+                this.dropdown = $('.container').find('div.chosen-drop').first();
+                this.search_field = this.container.find('input').first();
+                this.search_results = $('.container').find('ul.chosen-results').first();
+                this.search_field_scale();
+                
             }
+            // Original verison
+            else {
+                this.container = $('<div class="chosen"></div>');
+                this.container = $("<div />", container_props);
+                if (this.is_multiple) {
+                    this.container.html('<ul class="chosen-choices"><li class="search-field"><input type="text" value="' + this.default_text + '" class="default" autocomplete="off" style="width:25px;" /></li></ul><div class="chosen-drop"><ul class="chosen-results"></ul></div>');
+                } else {
+                    search.html('<a class="chosen-single chosen-default" tabindex="-1"><span>' + this.default_text + '</span><div><b></b></div></a><div class="chosen-drop"><ul class="chosen-results"></ul></div><div class="chosen-search"><input type="text" autocomplete="off" /></div>');
+                }
+                this.form_field_jq.hide().after(this.container);
+
+                this.dropdown = this.container.find('div.chosen-drop').first();
+                this.search_field = this.container.find('input').first();
+                this.search_results = this.container.find('ul.chosen-results').first();
+                this.search_field_scale();
+                this.search_no_results = this.container.find('li.no-results').first();
+                if (this.is_multiple) {
+                    this.search_choices = this.container.find('ul.chosen-choices').first();
+                    this.search_container = this.container.find('li.search-field').first();
+                } else {
+                    this.search_container = this.container.find('div.chosen-search').first();
+                    this.selected_item = this.container.find('.chosen-single').first();
+                }
+            }
+
             this.results_build();
             this.set_tab_index();
             this.set_label_behavior();
