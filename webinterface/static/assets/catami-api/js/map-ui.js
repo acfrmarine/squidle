@@ -199,7 +199,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
                     selectCtrl.highlight( depLayer.features[featInd] );
                 }
-            }
+            },
             "onClick" : function(e) {
             	console.log('here');
             	// Remove focus from the selected input box
