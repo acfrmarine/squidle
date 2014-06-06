@@ -935,7 +935,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             else if( params.type === 'selected' ) {
                 baseMap.updateMapBounds("deployment_ids=" + [diveID], baseMap.deploymentExtentUrl);
             }
-            else if (params.type === 'highlightedh') {
+            else if (params.type === 'highlighted') {
             	console.log(diveId + ' highlighted');
             }
             // The dive was de-selected
