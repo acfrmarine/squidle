@@ -182,24 +182,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 if( $('#deploymentSelect').val() === null || typeof $('#deploymentSelect').val() === 'undefined' ) {
                     return;
                 }
-                // Get the deployment origin layer
-                depLayer = baseMap.mapInstance.getLayersByName(baseMap.depOriginLayerName)[0];
-                // Get the select control and clear all features
-                selectCtrl = baseMap.mapInstance.getControlsBy('id', 'selectCtrl')[0];
-                // Get IDs of selected deployments
-                for( dSel = 0; dSel < $('#deploymentSelect').val().length; dSel++ ) {
-                    id = ($('#deploymentSelect').val()[dSel]).toString();
-
-                    // Get the deployment layer feature corresponding to this id
-                    featInd = depLayer.features.map( function(e) {
-                        f = [];
-                        for(i = 0; i < e.cluster.length; i++)
-                            f.push( e.cluster[i].fid.split('.')[1] );
-                        return f;
-                    }).map( function(e) {return e.indexOf(id);} ).map( function(e) { return e >= 0;} ).indexOf( true );
-
-                    selectCtrl.highlight( depLayer.features[featInd] );
-                }
+                baseMap.highlightDeployments([]);
             }
 		});
 
@@ -237,7 +220,44 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         layer.redraw();
     };
 
+    this.highlightDeployments = function(deployments) {
 
+        // Get the deployment origin layer
+        depLayer = baseMap.mapInstance.getLayersByName(baseMap.depOriginLayerName)[0];
+        // Get the select control and clear all features
+        selectCtrl = baseMap.mapInstance.getControlsBy('id', 'selectCtrl')[0];
+        // Get IDs of selected deployments
+        for( dSel = 0; dSel < $('#deploymentSelect').val().length; dSel++ ) {
+            id = ($('#deploymentSelect').val()[dSel]).toString();
+
+            // Get the deployment layer feature corresponding to this id
+            featInd = depLayer.features.map( function(e) {
+                f = [];
+                for(i = 0; i < e.cluster.length; i++)
+                    f.push( e.cluster[i].fid.split('.')[1] );
+                return f;
+            }).map( function(e) {return e.indexOf(id);} ).map( function(e) { return e >= 0;} ).indexOf( true );
+
+            selectCtrl.highlight( depLayer.features[featInd] );
+        }
+
+        if( typeof deployments === 'undefined' )
+        	return;
+
+		for( dSel = 0; dSel < deployments.length; dSel++ ) {
+            id = deployments[dSel];
+
+            // Get the deployment layer feature corresponding to this id
+            featInd = depLayer.features.map( function(e) {
+                f = [];
+                for(i = 0; i < e.cluster.length; i++)
+                    f.push( e.cluster[i].fid.split('.')[1] );
+                return f;
+            }).map( function(e) {return e.indexOf(id);} ).map( function(e) { return e >= 0;} ).indexOf( true );
+
+            selectCtrl.highlight( depLayer.features[featInd] );
+        }        
+    }
 
 	/**
 	 * Will take a collectionId and update the collection layer and
@@ -916,7 +936,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             diveID = params.id;
             // console.log('Dive #'+diveID+' is ' + (checked?'checked':(unchecked?'unchecked':'selected')));
             console.log(params);
-            
+
             // Added/Removed
             if( params.type === 'checked' || params.type === 'unchecked') {
                 baseMap.updateDeploymentFilter();
@@ -938,6 +958,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             }
             else if (params.type === 'highlighted') {
             	console.log(diveID + ' highlighted');
+            	baseMap.highlightDeployments( [diveID] );
             }
             // The dive was de-selected
             else if($dplselect.val() !== null) {
