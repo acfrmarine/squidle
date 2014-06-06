@@ -616,7 +616,7 @@
             }
 
             // My version
-            if( 1 ) {
+            if( 0 ) {
                 this.container = $('<div class="chosen"></div>');
                 search = $("<div />", container_props);
                 if (this.is_multiple) {
