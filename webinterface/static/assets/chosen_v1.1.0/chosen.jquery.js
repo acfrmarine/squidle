@@ -627,7 +627,7 @@
 //                drop = $('<div class="chosen-search"><input type="text" autocomplete="off" /></div>');
            }
             this.container.append(search);
-			$('#deployment-map').append(drop);
+			$('.container').append(drop);
 
             // Original verison
             // this.container = $('<div class="chosen"></div>');
