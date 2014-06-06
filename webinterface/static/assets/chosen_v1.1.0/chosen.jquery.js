@@ -625,7 +625,7 @@
 //            } else {
 //                search.html('<a class="chosen-single chosen-default" tabindex="-1"><span>' + this.default_text + '</span><div><b></b></div></a><div class="chosen-drop"><ul class="chosen-results"></ul></div>');
 //                drop = $('<div class="chosen-search"><input type="text" autocomplete="off" /></div>');
-//            }
+           }
             this.container.append(search);
 			$('#deployment-map').append(drop);
 
