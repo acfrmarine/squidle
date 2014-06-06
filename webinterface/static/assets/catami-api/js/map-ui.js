@@ -911,10 +911,10 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 
         $dplselect.on('change', function (evt, params) {
-            checked = (params.type === 'checked') ? true : false;
-            unchecked = (params.type === 'unchecked') ? true : false;
+            // checked = (params.type === 'checked') ? true : false;
+            // unchecked = (params.type === 'unchecked') ? true : false;
             diveID = params.id;
-            console.log('Dive #'+diveID+' is ' + (checked?'checked':(unchecked?'unchecked':'selected')));
+            // console.log('Dive #'+diveID+' is ' + (checked?'checked':(unchecked?'unchecked':'selected')));
 
             // Added/Removed
             if( params.type === 'checked' || params.type === 'unchecked') {
@@ -934,6 +934,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             // Zoom to selection
             else if( params.type === 'selected' ) {
                 baseMap.updateMapBounds("deployment_ids=" + [diveID], baseMap.deploymentExtentUrl);
+            }
+            else if (params.type === 'highlightedh') {
+            	console.log(diveId + ' highlighted');
             }
             // The dive was de-selected
             else if($dplselect.val() !== null) {
