@@ -900,7 +900,7 @@
                 } else if (high_top < visible_top) {
                     /*return*/ this.search_results.scrollTop(high_top);
                 }
-                console.log(el);
+                console.log(el.id);
                 this.form_field_jq.trigger("change", {
                     'id': el.id,
                     'type': 'highlighted'
