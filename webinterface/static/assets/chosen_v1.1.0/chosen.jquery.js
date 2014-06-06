@@ -634,7 +634,14 @@
                 this.search_field = this.container.find('input').first();
                 this.search_results = $('.container').find('ul.chosen-results').first();
                 this.search_field_scale();
-                
+                this.search_no_results = this.container.find('li.no-results').first();
+                if (this.is_multiple) {
+                    this.search_choices = this.container.find('ul.chosen-choices').first();
+                    this.search_container = this.container.find('li.search-field').first();
+                } else {
+                    this.search_container = this.container.find('div.chosen-search').first();
+                    this.selected_item = this.container.find('.chosen-single').first();
+                }
             }
             // Original verison
             else {
