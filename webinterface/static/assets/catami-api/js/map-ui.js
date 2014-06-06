@@ -378,7 +378,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				styleMap: new OpenLayers.StyleMap({
 					"default":   style("#000000", "#000000", 4),
 //					"select": style("#cccccc", "#000000", 4),
-                    "select":    style("#0000ff", "#ffffff", 4),
+                    "select":    style("#00ff00", "#ffffff", 4),
 					"highlight": style("#000000", "#ffffff", 8, 1)
 				}),
 				projection: baseMap.projection.geographic
