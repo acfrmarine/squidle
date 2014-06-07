@@ -226,41 +226,33 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         depLayer = baseMap.mapInstance.getLayersByName(baseMap.depOriginLayerName)[0];
         // Get the select control and clear all features
         selectCtrl = baseMap.mapInstance.getControlsBy('id', 'selectCtrl')[0];
-        // Get IDs of selected deployments
-
         selectCtrl.unselectAll();
-        for( dSel = 0; dSel < $('#deploymentSelect').val().length; dSel++ ) {
-            id = ($('#deploymentSelect').val()[dSel]).toString();
 
-            // Get the deployment layer feature corresponding to this id
-            featInd = depLayer.features.map( function(e) {
-                f = [];
-                for(i = 0; i < e.cluster.length; i++)
-                    f.push( e.cluster[i].fid.split('.')[1] );
-                return f;
-            }).map( function(e) {return e.indexOf(id);} ).map( function(e) { return e >= 0;} ).indexOf( true );
-
-            selectCtrl.highlight( depLayer.features[featInd] );
+        if( typeof deployments === 'undefined' || deployments == null ) {
+        	deployments = [];
         }
 
-        if( typeof deployments === 'undefined' )
-        	return;
+		// Get IDs of selected deployments
+        if( typeof $('#deploymentSelect').val !== 'undefined' && $('#deploymentSelect').val() !== null ) {
+	        deployments.contact( $('#deploymentSelect').val() );
+		}
 
-		for( dSel = 0; dSel < deployments.length; dSel++ ) {
-            id = deployments[dSel];
+        if( typeof deployments !== 'undefined' && deployments !== null ) {
+			for( dSel = 0; dSel < deployments.length; dSel++ ) {
+	            id = deployments[dSel];
 
-            // Get the deployment layer feature corresponding to this id
-            featInd = depLayer.features.map( function(e) {
-                f = [];
-                for(i = 0; i < e.cluster.length; i++)
-                    f.push( e.cluster[i].fid.split('.')[1] );
-                return f;
-            }).map( function(e) {return e.indexOf(id);} ).map( function(e) { return e >= 0;} ).indexOf( true );
+	            // Get the deployment layer feature corresponding to this id
+	            featInd = depLayer.features.map( function(e) {
+	                f = [];
+	                for(i = 0; i < e.cluster.length; i++)
+	                    f.push( e.cluster[i].fid.split('.')[1] );
+	                return f;
+	            }).map( function(e) {return e.indexOf(id);} ).map( function(e) { return e >= 0;} ).indexOf( true );
 
-            selectCtrl.highlight( depLayer.features[featInd] );
-        }        
-    }
-
+	            selectCtrl.highlight( depLayer.features[featInd] );
+	        }        
+	    }
+	}
 	/**
 	 * Will take a collectionId and update the collection layer and
 	 * set the map boundaries
