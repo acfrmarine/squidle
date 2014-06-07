@@ -221,16 +221,19 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     };
 
     this.highlightDeployments = function(deployments) {
-
+    	if( typeof deployments === 'undefined' || deployments == null ) {
+        	deployments = [];
+        }
+        
         // Get the deployment origin layer
         depLayer = baseMap.mapInstance.getLayersByName(baseMap.depOriginLayerName)[0];
         // Get the select control and clear all features
         selectCtrl = baseMap.mapInstance.getControlsBy('id', 'selectCtrl')[0];
-        selectCtrl.unselectAll();
-
-        if( typeof deployments === 'undefined' || deployments == null ) {
-        	deployments = [];
+        for( dSel = 0; dSel < depLayer.features.length; dSel++ ) {
+        	selectCtrl.unhighlight( depLayer.features[dSel] );
         }
+
+        
 
 		// Get IDs of selected deployments
         if( typeof $('#deploymentSelect').val !== 'undefined' && $('#deploymentSelect').val() !== null ) {
