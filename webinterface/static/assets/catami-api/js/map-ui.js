@@ -227,6 +227,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         // Get the select control and clear all features
         selectCtrl = baseMap.mapInstance.getControlsBy('id', 'selectCtrl')[0];
         // Get IDs of selected deployments
+
+        selectCtrl.unselectAll();
         for( dSel = 0; dSel < $('#deploymentSelect').val().length; dSel++ ) {
             id = ($('#deploymentSelect').val()[dSel]).toString();
 
