@@ -224,7 +224,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     	if( typeof deployments === 'undefined' || deployments == null ) {
         	deployments = [];
         }
-        
+
         // Get the deployment origin layer
         depLayer = baseMap.mapInstance.getLayersByName(baseMap.depOriginLayerName)[0];
         // Get the select control and clear all features
@@ -237,7 +237,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 		// Get IDs of selected deployments
         if( typeof $('#deploymentSelect').val !== 'undefined' && $('#deploymentSelect').val() !== null ) {
-	        deployments.contact( $('#deploymentSelect').val() );
+	        deployments.concat( $('#deploymentSelect').val() );
 		}
 
         if( typeof deployments !== 'undefined' && deployments !== null ) {
