@@ -237,7 +237,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 		// Get IDs of selected deployments
         if( typeof $('#deploymentSelect').val !== 'undefined' && $('#deploymentSelect').val() !== null ) {
-	        deployments.concat( $('#deploymentSelect').val() );
+	        deployments = deployments.concat( $('#deploymentSelect').val() );
 		}
 
         if( typeof deployments !== 'undefined' && deployments !== null ) {
