@@ -240,7 +240,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		dplselect = $('#deploymentSelect');
         if( typeof dplselect.val !== 'undefined' && dplselect.val() !== null ) {
 	        //deployments = deployments.concat( $('#deploymentSelect').val() );
-	        for( dSel = 0; dSel < dplselect.val().length; dSel++ ) {]
+	        for( dSel = 0; dSel < dplselect.val().length; dSel++ ) {
 	        	id = dplselect.val()[dSel];
 
 	        	// Get the deployment layer feature corresponding to this id
