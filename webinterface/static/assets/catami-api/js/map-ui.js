@@ -489,7 +489,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	};
 
 	this.enableSelected = function(deployments) {
-
+		for (var i = 0; i < deployments.length; i++) {
+            $('#deploymentSelect').find('option[value="'+deployments[i]+'"]').prop('disabled', false);
+		}
 	}
 
 	/**
@@ -504,22 +506,25 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
         // Disable everything that has not been selected
         $('#deploymentSelect option:not(selected)').each( function() { this.disabled = true; } );
+
+
         deployments = baseMap.getFeatureIDsFromCluster( event.feature ).concat( baseMap.filters.deployments );
+        baseMap.enableSelected( deployments );
         console.log( 'showDeploymentInfo deps: ' + deployments);
 
         // enable deployments that are part of this cluster
-        for (i = 0, len = event.feature.cluster.length; i < len; i++) {
-            depid = event.feature.cluster[i].fid.split('.')[1];
-            // enable again
-            $('#deploymentSelect').find('option[value="'+depid+'"]').prop('disabled', false);
-		}
+  //       for (i = 0, len = event.feature.cluster.length; i < len; i++) {
+  //           depid = event.feature.cluster[i].fid.split('.')[1];
+  //           // enable again
+  //           $('#deploymentSelect').find('option[value="'+depid+'"]').prop('disabled', false);
+		// }
 
-         // enable deployments that are already selected
-        for (i = 0; i < baseMap.filters.deployments.length; i++) {
-            depid = baseMap.filters.deployments[i].id;
-            $('#deploymentSelect').find('option[value="'+depid+'"]').prop('selected', true);
-            $('#deploymentSelect').find('option[value="'+depid+'"]').prop('disabled', false);
-        }
+  //        // enable deployments that are already selected
+  //       for (i = 0; i < baseMap.filters.deployments.length; i++) {
+  //           depid = baseMap.filters.deployments[i].id;
+  //           $('#deploymentSelect').find('option[value="'+depid+'"]').prop('selected', true);
+  //           $('#deploymentSelect').find('option[value="'+depid+'"]').prop('disabled', false);
+  //       }
 
         $('#deploymentSelect').trigger('chosen:updated');
         $('#deploymentSelect').trigger('chosen:open');
