@@ -962,8 +962,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             baseMap.updateChosenDropHeight();
         });
         $dplselect.on( 'chosen:hiding_dropdown', function(evt, params) {
-            baseMap.highlightDeployments();
             baseMap.showDeployments( baseMap.visibleDeployments );
+            baseMap.highlightDeployments();
         });
         $dplselect.on( 'chosen:new_results', function(evt, params) {
             baseMap.updateChosenDropHeight();
