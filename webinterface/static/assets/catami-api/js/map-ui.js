@@ -187,11 +187,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			    for( var i = 0; i < depLayer.features.length; i++ ) { 
 			    	var f = depLayer.features[i]; 
 			    	if( extent.intersectsBounds(f.geometry.getBounds()) ) { 
-			    		visible = visible.concat( baseMap.getFeatureIDsFromCluster(f) );
+			    		visible = visible.concat( baseMap.getIDsFromClusterFeature(f) );
 			    	} 
 			    }
 			    baseMap.visibleDeployments = visible;
-
+			    baseMap.showDeployments( visible );
                 baseMap.highlightDeployments([]);
             }
 		});
@@ -230,7 +230,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         layer.redraw();
     };
 
-    this.getFeatureIDsFromCluster = function(e) {
+    this.getIDsFromClusterFeature = function(e) {
     	ids = [];
         for(i = 0; i < e.cluster.length; i++)
             ids.push( e.cluster[i].fid.split('.')[1] );
@@ -465,7 +465,10 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			 */
 			eventListeners : {
 				//beforefeaturehighlighted: report,
-				featurehighlighted : showDeploymentInfo
+				featurehighlighted : function(evt) { 
+					deploymentIds = baseMap.getIDsFromClusterFeature(evt.feature);
+					baseMap.showDeployments( deploymentIds ); 
+				}
 			}
 		});
 		highlightCtrl.id = "highlightCtrl";
@@ -488,43 +491,25 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 	};
 
-	this.enableSelected = function(deployments) {
-		for (var i = 0; i < deployments.length; i++) {
-            $('#deploymentSelect').find('option[value="'+deployments[i]+'"]').prop('disabled', false);
-		}
-	}
-
 	/**
 	 * Event function for when we hover over a deployment
 	 */
-	function showDeploymentInfo(event) {
-		if (event.feature.cluster.length == 0) {
-			return;
-		}
-		
+	this.showDeployments = function(deploymentIds) {
 		var depid = 0, i;
 
         // Disable everything that has not been selected
         $('#deploymentSelect option:not(selected)').each( function() { this.disabled = true; } );
+		// enable deployments that are already selected
+		for (i = 0; i < baseMap.filters.deployments.length; i++) {
+			depid = baseMap.filters.deployments[i].id;
+			$('#deploymentSelect').find('option[value="'+depid+'"]').prop('selected', true);
+			$('#deploymentSelect').find('option[value="'+depid+'"]').prop('disabled', false);
+		}
 
-
-        deployments = baseMap.getFeatureIDsFromCluster( event.feature ).concat( baseMap.filters.deployments );
-        baseMap.enableSelected( deployments );
-        console.log( 'showDeploymentInfo deps: ' + deployments);
-
-        // enable deployments that are part of this cluster
-  //       for (i = 0, len = event.feature.cluster.length; i < len; i++) {
-  //           depid = event.feature.cluster[i].fid.split('.')[1];
-  //           // enable again
-  //           $('#deploymentSelect').find('option[value="'+depid+'"]').prop('disabled', false);
-		// }
-
-  //        // enable deployments that are already selected
-  //       for (i = 0; i < baseMap.filters.deployments.length; i++) {
-  //           depid = baseMap.filters.deployments[i].id;
-  //           $('#deploymentSelect').find('option[value="'+depid+'"]').prop('selected', true);
-  //           $('#deploymentSelect').find('option[value="'+depid+'"]').prop('disabled', false);
-  //       }
+        // enable deployments
+        for (i = 0, len = deploymentIds.length; i < len; i++) {
+            $('#deploymentSelect').find('option[value="'+deploymentIds[i]+'"]').prop('disabled', false);
+		}
 
         $('#deploymentSelect').trigger('chosen:updated');
         $('#deploymentSelect').trigger('chosen:open');
