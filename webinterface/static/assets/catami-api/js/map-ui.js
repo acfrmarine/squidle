@@ -928,8 +928,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 else {
                     console.log('all deployments deselected. zooming all the way out');
                     baseMap.mapInstance.getControlsBy('id', 'selectCtrl')[0].unselectAll();
-                    baseMap.mapInstance.zoomToExtent(
-                    baseMap.mapInstance.getLayersByName('Deployment origins')[0].getDataExtent() );
+                    baseMap.mapInstance.zoomToExtent( baseMap.mapInstance.getLayersByName('Deployment origins')[0].getDataExtent() );
+                    baseMap.highlightDeployments();
                 }
             }
             // Zoom to selection
