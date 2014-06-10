@@ -176,6 +176,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 // 				}
 //			},
             "moveend" : function(e) {
+            	console.log('moveend');
                 // The below code highlights the deployment origin markers if there is a deployment within this marker
                 //  that has been selected
                 // If no deployemnt has been selected
@@ -911,10 +912,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 
         $dplselect.on('change', function (evt, params) {
-            // checked = (params.type === 'checked') ? true : false;
-            // unchecked = (params.type === 'unchecked') ? true : false;
             diveID = params.id;
-            // console.log('Dive #'+diveID+' is ' + (checked?'checked':(unchecked?'unchecked':'selected')));
             console.log(params);
 
             // Added/Removed
