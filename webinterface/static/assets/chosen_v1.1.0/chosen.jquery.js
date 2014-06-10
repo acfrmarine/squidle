@@ -1007,7 +1007,7 @@
                 // Enable all the disabled elements
                 this.enable_disabled();
             }
-            else if( evt.target.nodeName.localeCompare( 'INPUT' ) === 0 && evt.target.parentNode.hasClass('result-selected') ) {
+            else if( evt.target.nodeName.localeCompare( 'INPUT' ) === 0 && $(evt.target).parentNode.hasClass('result-selected') ) {
                 console.log('should deselect it');
             }
 
