@@ -229,7 +229,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         depLayer = baseMap.mapInstance.getLayersByName(baseMap.depOriginLayerName)[0];
         // Get the select control and clear all features
         selectCtrl = baseMap.mapInstance.getControlsBy('id', 'selectCtrl')[0];
-        selectCtrl.unselectAll();
         for( dSel = 0; dSel < depLayer.features.length; dSel++ ) {
         	selectCtrl.unhighlight( depLayer.features[dSel] );
         }
@@ -239,21 +238,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		// Get IDs of selected deployments
 		dplselect = $('#deploymentSelect');
         if( typeof dplselect.val !== 'undefined' && dplselect.val() !== null ) {
-	        //deployments = deployments.concat( $('#deploymentSelect').val() );
-	        for( dSel = 0; dSel < dplselect.val().length; dSel++ ) {
-	        	id = dplselect.val()[dSel];
-
-	        	// Get the deployment layer feature corresponding to this id
-	            featInd = depLayer.features.map( function(e) {
-	                f = [];
-	                for(i = 0; i < e.cluster.length; i++)
-	                    f.push( e.cluster[i].fid.split('.')[1] );
-	                return f;
-	            }).map( function(e) {return e.indexOf(id);} ).map( function(e) { return e >= 0;} ).indexOf( true );
-
-	            selectCtrl.select( depLayer.features[featInd] );
-
-	        }
+	        deployments = deployments.concat( dplselect.val() );
 		}
 
         if( typeof deployments !== 'undefined' && deployments !== null ) {
@@ -438,7 +423,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				styleMap: new OpenLayers.StyleMap({
 					"default":   style("#000000", "#000000", 4),
 //					"select": style("#cccccc", "#000000", 4),
-                    "select":    style("#0000ff", "#ffffff", 4),
+                    "select":    style("#00ff00", "#ffffff", 4),
 					"highlight": style("#000000", "#ffffff", 8, 1)
 				}),
 				projection: baseMap.projection.geographic
@@ -471,17 +456,15 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		this.mapInstance.addControl(highlightCtrl);
 		highlightCtrl.activate();
 
-		var selectCtrl = new OpenLayers.Control.SelectFeature(deploymentlayer
-            , {
-            eventListeners : {
-                featurehighlighted : function(event) {
-                    console.log('selectCtrl featurehighlighted');
-                    // Remove focus from the selected input box
-                    //$('input:focus').blur();
-                }
-            }
-            }
-        );
+		var selectCtrl = new OpenLayers.Control.SelectFeature(deploymentlayer, {
+            // eventListeners : {
+            //     featurehighlighted : function(event) {
+            //         console.log('selectCtrl featurehighlighted');
+            //         // Remove focus from the selected input box
+            //         //$('input:focus').blur();
+            //     }
+            // }
+		});
         selectCtrl.id = "selectCtrl";
 		this.mapInstance.addControl(selectCtrl);
 		selectCtrl.activate();
@@ -496,30 +479,19 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			return;
 		}
 		
-		var $depinfo,
-            depid = 0,
-            checked = '',
-            filtdepids = [],
-            selecteddpls = '',
-            otherdpls = '',
-            i;
-
-//        baseMap.$dplinfo.html('<ul></ul>');
-
-        // Deselect all
-        //$('#deploymentSelect :selected').prop('selected', false);
+		var depid = 0, i;
 
         // Disable everything that has not been selected
         $('#deploymentSelect option:not(selected)').each( function() { this.disabled = true; } );
 
-        // add other unselected deployments
+        // enable deployments that are part of this cluster
         for (i = 0, len = event.feature.cluster.length; i < len; i++) {
             depid = event.feature.cluster[i].fid.split('.')[1];
             // enable again
             $('#deploymentSelect').find('option[value="'+depid+'"]').prop('disabled', false);
 		}
 
-         // add selected deployments
+         // enable deployments that are already selected
         for (i = 0; i < baseMap.filters.deployments.length; i++) {
             depid = baseMap.filters.deployments[i].id;
             $('#deploymentSelect').find('option[value="'+depid+'"]').prop('selected', true);
@@ -529,11 +501,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         $('#deploymentSelect').trigger('chosen:updated');
         $('#deploymentSelect').trigger('chosen:open');
 	    baseMap.updateChosenDropHeight();
-
-//        baseMap.$imginfo.parent().hide();
-//        baseMap.$dplinfo.parent().show();
-//        baseMap.$infopane.show(200);
-
 	}
 
 	/**
