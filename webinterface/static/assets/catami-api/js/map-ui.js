@@ -468,6 +468,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				featurehighlighted : function(evt) { 
 					deploymentIds = baseMap.getIDsFromClusterFeature(evt.feature);
 					baseMap.showDeployments( deploymentIds ); 
+					$('#deploymentSelect').trigger('chosen:open');
+	    			baseMap.updateChosenDropHeight();
 				}
 			}
 		});
@@ -499,6 +501,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
         // Disable everything that has not been selected
         $('#deploymentSelect option:not(selected)').each( function() { this.disabled = true; } );
+
 		// enable deployments that are already selected
 		for (i = 0; i < baseMap.filters.deployments.length; i++) {
 			depid = baseMap.filters.deployments[i].id;
@@ -506,14 +509,12 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			$('#deploymentSelect').find('option[value="'+depid+'"]').prop('disabled', false);
 		}
 
-        // enable deployments
+        // enable deployments that are passed in
         for (i = 0, len = deploymentIds.length; i < len; i++) {
             $('#deploymentSelect').find('option[value="'+deploymentIds[i]+'"]').prop('disabled', false);
 		}
 
         $('#deploymentSelect').trigger('chosen:updated');
-        $('#deploymentSelect').trigger('chosen:open');
-	    baseMap.updateChosenDropHeight();
 	}
 
 	/**
