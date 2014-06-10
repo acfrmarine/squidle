@@ -191,7 +191,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			    	} 
 			    }
 			    baseMap.visibleDeployments = visible;
-			    
+
                 baseMap.highlightDeployments([]);
             }
 		});
@@ -487,6 +487,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 
 	};
+
+	this.enableSelected = function(deployments) {
+
+	}
+
 	/**
 	 * Event function for when we hover over a deployment
 	 */
@@ -499,6 +504,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
         // Disable everything that has not been selected
         $('#deploymentSelect option:not(selected)').each( function() { this.disabled = true; } );
+        deployments = baseMap.getFeatureIDsFromCluster( event.feature ).concat( baseMap.filters.deployments );
+        console.log( 'showDeploymentInfo deps: ' + deployments);
 
         // enable deployments that are part of this cluster
         for (i = 0, len = event.feature.cluster.length; i < len; i++) {
