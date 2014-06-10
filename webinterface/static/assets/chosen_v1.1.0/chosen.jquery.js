@@ -995,7 +995,7 @@
         Chosen.prototype.search_results_mouseup = function (evt) {
             var target;
             console.log(evt);
-            console.log($(evt.target)[0].checked);
+            console.log(evt.target.checked);
             if( (target = $(evt.target).hasClass("icon-zoom-in") ? $(evt.target) : null) !== null ) {
                 // The item was not checked but the name was clicked. Let's raise a 'selected' event so we can zoom in
                 depid = $(evt.target).parents(".group-option")[0].id;
@@ -1008,8 +1008,9 @@
                 // Enable all the disabled elements
                 this.enable_disabled();
             }
-            else if( evt.target.nodeName.localeCompare( 'INPUT' ) === 0 && $(evt.target).checked ) {
+            else if( evt.target.nodeName.localeCompare( 'INPUT' ) === 0 && evt.target.checked ) {
                 console.log('should deselect it');
+                return this.choice_destroy($(evt.target.parentNode));
             }
 
             target = $(evt.target).hasClass("active-result") ? $(evt.target) : $(evt.target).parents(".active-result").first();
