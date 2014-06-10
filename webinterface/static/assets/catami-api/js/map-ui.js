@@ -228,7 +228,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         // Get the deployment origin layer
         depLayer = baseMap.mapInstance.getLayersByName(baseMap.depOriginLayerName)[0];
         // Get the select control and clear all features
-        selectCtrl = baseMap.mapInstance.getControlsBy('id', 'highlightCtrl')[0];
+        selectCtrl = baseMap.mapInstance.getControlsBy('id', 'selectCtrl')[0];
+        selectCtrl.unselectAll();
         for( dSel = 0; dSel < depLayer.features.length; dSel++ ) {
         	selectCtrl.unhighlight( depLayer.features[dSel] );
         }
@@ -236,8 +237,23 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         
 
 		// Get IDs of selected deployments
-        if( typeof $('#deploymentSelect').val !== 'undefined' && $('#deploymentSelect').val() !== null ) {
-	        deployments = deployments.concat( $('#deploymentSelect').val() );
+		dplselect = $('#deploymentSelect');
+        if( typeof dplselect.val !== 'undefined' && dplselect.val() !== null ) {
+	        //deployments = deployments.concat( $('#deploymentSelect').val() );
+	        for( dSel = 0; dSel < dplselect.val().length; dSel++ ) {]
+	        	id = dplselect.val()[dSel];
+
+	        	// Get the deployment layer feature corresponding to this id
+	            featInd = depLayer.features.map( function(e) {
+	                f = [];
+	                for(i = 0; i < e.cluster.length; i++)
+	                    f.push( e.cluster[i].fid.split('.')[1] );
+	                return f;
+	            }).map( function(e) {return e.indexOf(id);} ).map( function(e) { return e >= 0;} ).indexOf( true );
+
+	            selectCtrl.select( depLayer.features[featInd] );
+
+	        }
 		}
 
         if( typeof deployments !== 'undefined' && deployments !== null ) {
