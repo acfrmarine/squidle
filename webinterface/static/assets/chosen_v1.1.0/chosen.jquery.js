@@ -1007,6 +1007,9 @@
                 // Enable all the disabled elements
                 this.enable_disabled();
             }
+            else if( evt.target.nodeName.localeCompare( 'INPUT' ) === 0 && evt.target.parentNode.hasClass('result-selected') ) {
+                console.log('should deselect it');
+            }
 
             target = $(evt.target).hasClass("active-result") ? $(evt.target) : $(evt.target).parents(".active-result").first();
             if (target.length) {
