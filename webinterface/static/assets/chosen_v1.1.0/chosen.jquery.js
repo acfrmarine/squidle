@@ -1010,7 +1010,9 @@
             }
             else if( evt.target.nodeName.localeCompare( 'INPUT' ) === 0 && evt.target.checked ) {
                 console.log('should deselect it');
-                return this.choice_destroy($(evt.target.parentNode));
+                index = $(evt.target).parentNode.getAttribute("data-option-array-index");
+                console.log(index);
+                return this.choice_destroy($('.search-choice').find('[data-option-array-index='+ index +']');
             }
 
             target = $(evt.target).hasClass("active-result") ? $(evt.target) : $(evt.target).parents(".active-result").first();
