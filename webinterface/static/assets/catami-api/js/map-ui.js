@@ -52,6 +52,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 	var baseMap = this;
 
+	var visibleDeployments = [];
 
 
 
@@ -177,12 +178,20 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 //			},
             "moveend" : function(e) {
             	console.log('moveend');
-                // The below code highlights the deployment origin markers if there is a deployment within this marker
-                //  that has been selected
-                // If no deployemnt has been selected
-                if( $('#deploymentSelect').val() === null || typeof $('#deploymentSelect').val() === 'undefined' ) {
-                    return;
-                }
+            	// Get the deployment origin layer
+        		depLayer = baseMap.mapInstance.getLayersByName(baseMap.depOriginLayerName)[0];
+
+            	var extent = this.getExtent();
+			    baseMap.visibleDeployments = [];
+			    visible = [];
+			    for( var i = 0; i < depLayer.features.length; i++ ) { 
+			    	var f = depLayer.features[i]; 
+			    	if( extent.intersectsBounds(f.geometry.getBounds()) ) { 
+			    		visible = visible.concat( baseMap.getFeatureIDsFromCluster(f) );
+			    	} 
+			    }
+			    baseMap.visibleDeployments = visible;
+			    
                 baseMap.highlightDeployments([]);
             }
 		});
@@ -220,6 +229,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
         layer.redraw();
     };
+
+    this.getFeatureIDsFromCluster = function(e) {
+    	ids = [];
+        for(i = 0; i < e.cluster.length; i++)
+            ids.push( e.cluster[i].fid.split('.')[1] );
+        return ids;
+    }
 
     this.highlightDeployments = function(deployments) {
     	if( typeof deployments === 'undefined' || deployments == null ) {
@@ -423,7 +439,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				}),
 				styleMap: new OpenLayers.StyleMap({
 					"default":   style("#000000", "#000000", 4),
-//					"select": style("#cccccc", "#000000", 4),
                     "select":    style("#00ff00", "#ffffff", 4),
 					"highlight": style("#000000", "#ffffff", 8, 1)
 				}),
