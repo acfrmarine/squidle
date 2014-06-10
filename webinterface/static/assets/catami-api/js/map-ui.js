@@ -228,7 +228,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         // Get the deployment origin layer
         depLayer = baseMap.mapInstance.getLayersByName(baseMap.depOriginLayerName)[0];
         // Get the select control and clear all features
-        selectCtrl = baseMap.mapInstance.getControlsBy('id', 'selectCtrl')[0];
+        selectCtrl = baseMap.mapInstance.getControlsBy('id', 'highlightCtrl')[0];
         for( dSel = 0; dSel < depLayer.features.length; dSel++ ) {
         	selectCtrl.unhighlight( depLayer.features[dSel] );
         }
