@@ -274,7 +274,7 @@
             //    $zoom = '<i class="icon-zoom-in disabled"></i>';
             //}
 
-            chbox = '&nbsp;<input type="checkbox" id="chosen-checkbox-' + option.array_index + '" value="'+option.value+'" ' + ((option.disabled && !(option.selected && this.is_multiple)) ? ' disabled ' : '') + (option.selected ? ' checked disabled' : '') + '/>&nbsp;';
+            chbox = '&nbsp;<input type="checkbox" id="chosen-checkbox-' + option.array_index + '" value="'+option.value+'" ' + ((option.disabled && !(option.selected && this.is_multiple)) ? ' disabled ' : '') + (option.selected ? ' checked ' : '') + '/>&nbsp;'; // removed disabled from here
 
 
             $(option_el).append('<span style="display:inline">', $zoom, chbox, option.search_text, '</span>');
@@ -1139,6 +1139,9 @@
                     }
                 }
                 return this.search_field_scale();
+            } 
+            else {
+                console.log( 'not highlighted');
             }
         };
 
