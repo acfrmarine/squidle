@@ -986,10 +986,10 @@
         };
 
         Chosen.prototype.enable_disabled = function() {
-            this.form_field_jq.find(':disabled').each(function(){
-                this.disabled = false; //!this.disabled;
-            });
-            this.results_update_field();
+            // this.form_field_jq.find(':disabled').each(function(){
+            //     this.disabled = false; //!this.disabled;
+            // });
+            // this.results_update_field();
         }
 
         Chosen.prototype.search_results_mouseup = function (evt) {
