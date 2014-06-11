@@ -399,11 +399,14 @@
                 // If this is a short list of all the elements
                 if(results_nogroup < total_nogroup) {
 					
-					showing = '<span class="badge badge-sm" style="z=1100;">Showing ' + results_nogroup +'/'+ total_nogroup;
-					showView = '<span class="badge badge-sm" style="z=1100;">Show visible&nbsp<a href="javascript: void(0);"><i class="icon-remove-sign chosen-viewport"></i></a></span>';
-					showAll = '<span class="badge badge-sm" style="z=1100;">Show all&nbsp<a href="javascript: void(0);"><i class="icon-remove-sign chosen-everything"></i></a></span>';
+					var $showing = $('<span class="badge badge-sm" style="margin: 5px; z=1100;">Showing ' + results_nogroup +'/'+ total_nogroup);
+					var $showView = $('<span class="badge badge-sm" style="margin: 5px; z=1100;">Show visible&nbsp<a href="javascript: void(0);"><i class="icon-remove-sign chosen-viewport"></i></a></span>');
+					var $showAll = $('<span class="badge badge-sm" style="margin: 5px; z=1100;">Show all&nbsp<a href="javascript: void(0);"><i class="icon-remove-sign chosen-everything"></i></a></span>');
+					$showView.find('a').click( function() {
+						console.log('click');
+					});
 					this.search_badges.html('');
-                    this.search_badges.append( showing, showView, showAll);
+                    this.search_badges.append( $showing, $showView, $showAll);
                 }
                 this.form_field_jq.trigger("chosen:new_results", {
                     chosen: this
