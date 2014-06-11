@@ -426,7 +426,7 @@
                 if(results_nogroup == total_nogroup) {
 					$showAll.css('visibility', 'hidden');
 				}
-				if(results_nogroup == total_enable) {
+				if(results_nogroup == total_enabled) {
 					$showView.css('visibility', 'hidden');
 				}
 				
