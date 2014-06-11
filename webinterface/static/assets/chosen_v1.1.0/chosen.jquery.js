@@ -426,9 +426,9 @@
                 if(results_nogroup == total_nogroup) {
 					$showAll.css('visibility', 'hidden');
 				}
-				if(results_nogroup == total_enabled) {
-					$showView.css('visibility', 'hidden');
-				}
+				//if(results_nogroup == total_enabled) {
+				//	$showView.css('visibility', 'hidden');
+				//}
 				
                 this.form_field_jq.trigger("chosen:new_results", {
                     chosen: this
