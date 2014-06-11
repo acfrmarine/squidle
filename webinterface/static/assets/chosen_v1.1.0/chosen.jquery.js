@@ -1026,6 +1026,7 @@
         }
 		
 		Chosen.prototype.trigger_visible = function() {
+			console.log('trigger_visible');
 			this.form_field_jq.trigger( "chosen:show_visible", {
 				chosen: this
 			});
