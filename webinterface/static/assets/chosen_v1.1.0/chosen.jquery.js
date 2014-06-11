@@ -401,25 +401,29 @@
                 return this.no_results(searchText);
             } else {
                 this.update_results_content(this.results_option_build());
+                
+				var _this = this;
+				var $showing = $('<span class="badge badge-sm" style="margin: 5px; z=1100;">Showing ' + results_nogroup +'/'+ total_nogroup + '</span>');
+				var $showView = $('<span class="badge badge-sm" style="margin: 5px; z=1100;">Show in view&nbsp<a href="javascript: void(0);"><i class="icon-remove-sign chosen-viewport"></i></a></span>');
+				var $showAll = $('<span class="badge badge-sm" style="margin: 5px; z=1100;">Show all&nbsp<a href="javascript: void(0);"><i class="icon-remove-sign chosen-everything"></i></a></span>');
+				$showView.find('a').click( function() {
+					console.log('click:show visible');
+					console.log(_this.form_field_jq);
+					_this.form_field_jq.trigger("chosen:show_visible");
+					return;
+				});
+				$showAll.find('a').click( function() {
+					console.log('click:show all');
+					_this.enable_disabled();
+				});
+				this.search_badges.html('');
+                this.search_badges.append( $showing, $showView, $showAll);
+                
                 // If this is a short list of all the elements
-                if(results_nogroup < total_nogroup) {
-					var _this = this;
-					var $showing = $('<span class="badge badge-sm" style="margin: 5px; z=1100;">Showing ' + results_nogroup +'/'+ total_nogroup + '</span>');
-					var $showView = $('<span class="badge badge-sm" style="margin: 5px; z=1100;">Show in view&nbsp<a href="javascript: void(0);"><i class="icon-remove-sign chosen-viewport"></i></a></span>');
-					var $showAll = $('<span class="badge badge-sm" style="margin: 5px; z=1100;">Show all&nbsp<a href="javascript: void(0);"><i class="icon-remove-sign chosen-everything"></i></a></span>');
-					$showView.find('a').click( function() {
-						console.log('click:show visible');
-						console.log(_this.form_field_jq);
-						_this.form_field_jq.trigger("chosen:show_visible");
-						return;
-					});
-					$showAll.find('a').click( function() {
-						console.log('click:show all');
-						_this.enable_disabled();
-					});
-					this.search_badges.html('');
-                    this.search_badges.append( $showing, $showView, $showAll);
-                }
+                if(results_nogroup == total_nogroup) {
+					$showAll.css('visibility', 'hidden');
+				}
+				
                 this.form_field_jq.trigger("chosen:new_results", {
                     chosen: this
                 });
