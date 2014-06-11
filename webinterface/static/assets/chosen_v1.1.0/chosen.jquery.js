@@ -352,7 +352,7 @@
                 option = _ref[_i];
 				
 				// Count number of non-group header elements that are valid (have a value)
-				if( !option.value && !option.group ) {
+				if( !option.group && option.value ) {
 					total_nogroup += 1;
 				}
 				
