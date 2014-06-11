@@ -357,14 +357,15 @@
 				
                 option.search_match = false;
                 results_group = null;
-                if(!option.group) {
-                    total_nogroup += 1;
-                }
                 if (this.include_option_in_results(option)) {
                     if (option.group) {
                         option.group_match = false;
                         option.active_options = 0;
                     }
+					else {
+						total_nogroup += 1;
+					}
+					
                     if ((option.group_array_index != null) && this.results_data[option.group_array_index]) {
                         results_group = this.results_data[option.group_array_index];
                         if (results_group.active_options === 0 && results_group.search_match) {
@@ -404,12 +405,13 @@
                 if(results_nogroup < total_nogroup) {
 					var _this = this;
 					var $showing = $('<span class="badge badge-sm" style="margin: 5px; z=1100;">Showing ' + results_nogroup +'/'+ total_nogroup + '</span>');
-					var $showView = $('<span class="badge badge-sm" style="margin: 5px; z=1100;">Show visible&nbsp<a href="javascript: void(0);"><i class="icon-remove-sign chosen-viewport"></i></a></span>');
+					var $showView = $('<span class="badge badge-sm" style="margin: 5px; z=1100;">Show in view&nbsp<a href="javascript: void(0);"><i class="icon-remove-sign chosen-viewport"></i></a></span>');
 					var $showAll = $('<span class="badge badge-sm" style="margin: 5px; z=1100;">Show all&nbsp<a href="javascript: void(0);"><i class="icon-remove-sign chosen-everything"></i></a></span>');
 					$showView.find('a').click( function() {
 						console.log('click:show visible');
 						console.log(_this.form_field_jq);
 						_this.form_field_jq.trigger("chosen:show_visible");
+						return;
 					});
 					$showAll.find('a').click( function() {
 						console.log('click:show all');
