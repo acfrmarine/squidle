@@ -409,7 +409,11 @@
 				var $showAll = $('<span class="badge badge-sm" style="margin: 5px; z=1100;">Show all&nbsp<a href="javascript: void(0);"><i class="icon-remove-sign chosen-everything"></i></a></span>');
 				$showView.find('a').click( function() {
 					console.log('click:show visible');
-					return _this.trigger_visible();
+	                _this.form_field_jq.trigger("chosen:new_results", {
+	                    chosen: this,
+						params: 'bla'
+	                });
+					return;
 				});
 				$showAll.find('a').click( function() {
 					console.log('click:show all');
@@ -1028,8 +1032,9 @@
 		
 		Chosen.prototype.trigger_visible = function() {
 			console.log('trigger_visible');
-			this.form_field_jq.trigger( "chosen:show_visible", {
-				chosen: this
+			this.form_field_jq.trigger( "chosen:new_results", {
+				chosen: this,
+				params: 'bla'
 			});
 			// $('#deploymentSelect').trigger('chosen:show_visible');
 		}
