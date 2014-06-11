@@ -408,7 +408,7 @@
 							chosen: _this
 						});
 					});
-					$showView.find('a').click( function() {
+					$showAll.find('a').click( function() {
 						console.log('click:show all');
 						_this.enable_disabled();
 					});
