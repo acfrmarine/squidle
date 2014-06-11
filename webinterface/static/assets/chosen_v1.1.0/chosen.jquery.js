@@ -404,14 +404,17 @@
                 this.update_results_content(this.results_option_build());
                 
 				var _this = this;
-				var $showing = $('<span class="badge badge-sm" style="margin: 5px; z=1100;">Showing ' + results_nogroup +'/'+ total_nogroup + '</span>');
-				var $showView = $('<span class="badge badge-sm" style="margin: 5px; z=1100;">Show in view&nbsp<a href="javascript: void(0);"><i class="icon-remove-sign chosen-viewport"></i></a></span>');
-				var $showAll = $('<span class="badge badge-sm" style="margin: 5px; z=1100;">Show all&nbsp<a href="javascript: void(0);"><i class="icon-remove-sign chosen-everything"></i></a></span>');
-				$showView.find('a').click( function() {
+				var $showing  = $('<span class="badge badge-sm" style="margin: 5px; z=1100;">Showing ' + results_nogroup +'/'+ total_nogroup + '</span>');
+				var $showView = $('<a href="javascript: void(0);" class="badge badge-sm" style="margin: 5px; z=1100;">Show in view&nbsp<i class="icon-remove-sign chosen-viewport"></i></a>');
+				var $showAll  = $('<a href="javascript: void(0);" class="badge badge-sm" style="margin: 5px; z=1100;">Show all&nbsp<i class="icon-remove-sign chosen-everything"></i></a>');
+				$showView.click( function() {
 					console.log('click:show visible');
-	                $('#deploymentSelect').trigger("show_visible");
+					console.log(_this.form_field_jq);
+	                _this.form_field_jq.trigger("chosen:show_visible", {
+	                	chosen: _this
+	                });
 				});
-				$showAll.find('a').click( function() {
+				$showAll.click( function() {
 					console.log('click:show all');
 					return _this.enable_disabled();
 				});
@@ -961,7 +964,7 @@
             this.search_field.focus();
             this.search_field.val(this.search_field.val());
             this.winnow_results();
-            return this.form_field_jq.trigger("chosen:showing_dropdown", {
+            return this.form_field_jq.trigger("chosen:showing_drop", {
                 chosen: this
             });
         };
