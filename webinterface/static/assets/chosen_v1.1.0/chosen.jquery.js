@@ -351,7 +351,7 @@
             _ref = this.results_data;
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
                 option = _ref[_i];
-				if( _i < 10 ) {
+				if( !option.value ) {
 					console.log(option);
 				}
 				
@@ -409,9 +409,7 @@
 					$showView.find('a').click( function() {
 						console.log('click:show visible');
 						console.log(_this.form_field_jq);
-						_this.form_field_jq.trigger("chosen:show_visible", {
-							chosen: _this
-						});
+						_this.form_field_jq.trigger("chosen:show_visible");
 					});
 					$showAll.find('a').click( function() {
 						console.log('click:show all');
@@ -525,6 +523,12 @@
             if (!this.display_disabled_options && option.disabled) {
                 return false;
             }
+			if( option.group && option.children === 0 ) {
+				return false;
+			}
+			if( !option.group && !option.value ) {
+				return false;
+			}
             if (option.empty) {
                 return false;
             }
