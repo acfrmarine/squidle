@@ -341,8 +341,7 @@
         AbstractChosen.prototype.winnow_results = function () {
             var escapedSearchText, option, regex, regexAnchor, results, results_group, searchText, startpos, text, zregex, _i, _len, _ref;
             this.no_results_clear();
-            results = 0;
-            results_nogroup = 0; total_nogroup = 0;
+            var results = 0, results_nogroup = 0, total_enabled = 0, total_nogroup = 0;
             searchText = this.get_search_text();
             escapedSearchText = searchText.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
             regexAnchor = this.search_contains ? "" : "^";
@@ -351,8 +350,10 @@
             _ref = this.results_data;
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
                 option = _ref[_i];
-				if( !option.value ) {
-					console.log(option);
+				
+				// Count number of non-group header elements that are valid (have a value)
+				if( !option.value && !option.group ) {
+					total_nogroup += 1;
 				}
 				
                 option.search_match = false;
@@ -363,7 +364,7 @@
                         option.active_options = 0;
                     }
 					else {
-						total_nogroup += 1;
+						total_enabled += 1;
 					}
 					
                     if ((option.group_array_index != null) && this.results_data[option.group_array_index]) {
@@ -409,7 +410,9 @@
 				$showView.find('a').click( function() {
 					console.log('click:show visible');
 					console.log(_this.form_field_jq);
-					_this.form_field_jq.trigger("chosen:show_visible");
+					_this.form_field_jq.trigger("chosen:show_visible", {
+						chosen: _this
+					});
 					return;
 				});
 				$showAll.find('a').click( function() {
@@ -422,6 +425,9 @@
                 // If this is a short list of all the elements
                 if(results_nogroup == total_nogroup) {
 					$showAll.css('visibility', 'hidden');
+				}
+				if(results_nogroup == total_enable) {
+					$showView.css('visibility', 'hidden');
 				}
 				
                 this.form_field_jq.trigger("chosen:new_results", {
