@@ -410,8 +410,9 @@
 				$showView.find('a').click( function() {
 					console.log('click:show visible');
 					console.log(_this.form_field_jq);
-					_this.form_field_jq.trigger("chosen:show_visible", {
-						chosen: _this
+					_this.form_field_jq.trigger("chosen:new_results", {
+						chosen: _this,
+						param: 'show visible'
 					});
 					return;
 				});
