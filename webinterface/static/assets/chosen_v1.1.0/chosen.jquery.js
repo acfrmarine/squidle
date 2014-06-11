@@ -398,7 +398,8 @@
                 this.update_results_content(this.results_option_build());
                 // If this is a short list of all the elements
                 if(results_nogroup < total_nogroup) {
-                    this.dropdown.find('ul').append( '<span class="badge badge-sm" style="position:absolute;top:5px;right:5px;z=1100;">Showing ' + results_nogroup +'/'+ total_nogroup + '&nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign chosen-shortlist"></i></a></span>');
+					this.search_badges.html('');
+                    this.search_badges.append( '<span class="badge badge-sm" style="position:absolute;top:5px;right:5px;z=1100;">Showing ' + results_nogroup +'/'+ total_nogroup + '&nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign chosen-shortlist"></i></a></span>');
                 }
                 this.form_field_jq.trigger("chosen:new_results", {
                     chosen: this
@@ -648,7 +649,7 @@
                 this.container = $('<div class="chosen"></div>');
                 this.container = $("<div />", container_props);
                 if (this.is_multiple) {
-                    this.container.html('<ul class="chosen-choices"><li class="search-field"><input type="text" value="' + this.default_text + '" class="default" autocomplete="off" style="width:25px;" /></li></ul><div class="chosen-drop"><ul class="chosen-results"></ul></div>');
+                    this.container.html('<ul class="chosen-choices"><li class="search-field"><input type="text" value="' + this.default_text + '" class="default" autocomplete="off" style="width:100%;" /></li></ul><div class="chosen-drop"><div class="chosen-badges"></div><ul class="chosen-results"></ul></div>');
                 } else {
                     search.html('<a class="chosen-single chosen-default" tabindex="-1"><span>' + this.default_text + '</span><div><b></b></div></a><div class="chosen-drop"><ul class="chosen-results"></ul></div><div class="chosen-search"><input type="text" autocomplete="off" /></div>');
                 }
@@ -657,6 +658,7 @@
                 this.dropdown = this.container.find('div.chosen-drop').first();
                 this.search_field = this.container.find('input').first();
                 this.search_results = this.container.find('ul.chosen-results').first();
+				this.search_badges = this.container.find('div.chosen-badges').first();
                 this.search_field_scale();
                 this.search_no_results = this.container.find('li.no-results').first();
                 if (this.is_multiple) {
