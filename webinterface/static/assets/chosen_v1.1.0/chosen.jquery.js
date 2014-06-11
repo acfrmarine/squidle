@@ -351,6 +351,10 @@
             _ref = this.results_data;
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
                 option = _ref[_i];
+				if( _i < 10 ) {
+					console.log(option);
+				}
+				
                 option.search_match = false;
                 results_group = null;
                 if(!option.group) {
@@ -404,6 +408,7 @@
 					var $showAll = $('<span class="badge badge-sm" style="margin: 5px; z=1100;">Show all&nbsp<a href="javascript: void(0);"><i class="icon-remove-sign chosen-everything"></i></a></span>');
 					$showView.find('a').click( function() {
 						console.log('click:show visible');
+						console.log(_this.form_field_jq);
 						_this.form_field_jq.trigger("chosen:show_visible", {
 							chosen: _this
 						});
