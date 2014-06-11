@@ -398,8 +398,12 @@
                 this.update_results_content(this.results_option_build());
                 // If this is a short list of all the elements
                 if(results_nogroup < total_nogroup) {
+					
+					showing = '<span class="badge badge-sm" style="z=1100;">Showing ' + results_nogroup +'/'+ total_nogroup;
+					showView = '<span class="badge badge-sm" style="z=1100;">Show visible&nbsp<a href="javascript: void(0);"><i class="icon-remove-sign chosen-viewport"></i></a></span>';
+					showAll = '<span class="badge badge-sm" style="z=1100;">Show all&nbsp<a href="javascript: void(0);"><i class="icon-remove-sign chosen-everything"></i></a></span>';
 					this.search_badges.html('');
-                    this.search_badges.append( '<span class="badge badge-sm" style="position:absolute;top:5px;right:5px;z=1100;">Showing ' + results_nogroup +'/'+ total_nogroup + '&nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign chosen-shortlist"></i></a></span>');
+                    this.search_badges.append( showing, showView, showAll);
                 }
                 this.form_field_jq.trigger("chosen:new_results", {
                     chosen: this
