@@ -409,7 +409,8 @@
 				var $showAll = $('<span class="badge badge-sm" style="margin: 5px; z=1100;">Show all&nbsp<a href="javascript: void(0);"><i class="icon-remove-sign chosen-everything"></i></a></span>');
 				$showView.find('a').click( function() {
 					console.log('click:show visible');
-					_this.trigger_visible();
+					//_this.trigger_visible();
+					$('#deploymentSelect').trigger('chosen:show_visible');
 				});
 				$showAll.find('a').click( function() {
 					console.log('click:show all');
