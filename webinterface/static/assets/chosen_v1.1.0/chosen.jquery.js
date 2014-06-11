@@ -787,7 +787,7 @@
                 }
                 if (evt && evt.type === "mousedown" && !this.results_showing) {
                     evt.preventDefault();
-                    this.enable_disabled();
+                    //this.enable_disabled();
                 }
                 if (!((evt != null) && ($(evt.target)).hasClass("search-choice-close"))) {
                     if (!this.active_field) {
@@ -986,10 +986,10 @@
         };
 
         Chosen.prototype.enable_disabled = function() {
-            // this.form_field_jq.find(':disabled').each(function(){
-            //     this.disabled = false; //!this.disabled;
-            // });
-            // this.results_update_field();
+            this.form_field_jq.find(':disabled').each(function(){
+            	this.disabled = false; //!this.disabled;
+            });
+            this.results_update_field();
         }
 
         Chosen.prototype.search_results_mouseup = function (evt) {
