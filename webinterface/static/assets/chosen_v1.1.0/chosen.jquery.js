@@ -267,7 +267,8 @@
                     html: true,
                     placement: 'left',
                     trigger:'hover',
-                    title: 'click to preview'
+                    title: 'click to preview',
+					container: 'body'
                 });
             //}
             //else {
@@ -341,7 +342,6 @@
         AbstractChosen.prototype.winnow_results = function () {
             var escapedSearchText, option, regex, regexAnchor, results, results_group, searchText, startpos, text, zregex, _i, _len, _ref;
             this.no_results_clear();
-            var results = 0, results_nogroup = 0, total_enabled = 0, total_nogroup = 0;
             searchText = this.get_search_text();
             escapedSearchText = searchText.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
             regexAnchor = this.search_contains ? "" : "^";
@@ -351,11 +351,6 @@
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
                 option = _ref[_i];
 				
-				// Count number of non-group header elements that are valid (have a value)
-				if( !option.group && option.value ) {
-					total_nogroup += 1;
-				}
-				
                 option.search_match = false;
                 results_group = null;
                 if (this.include_option_in_results(option)) {
@@ -363,24 +358,14 @@
                         option.group_match = false;
                         option.active_options = 0;
                     }
-					else {
-						total_enabled += 1;
-					}
 					
                     if ((option.group_array_index != null) && this.results_data[option.group_array_index]) {
                         results_group = this.results_data[option.group_array_index];
-                        if (results_group.active_options === 0 && results_group.search_match) {
-                            results += 1;
-                        }
                         results_group.active_options += 1;
                     }
                     if (!(option.group && !this.group_search)) {
                         option.search_text = option.group ? option.label : option.html;
                         option.search_match = this.search_string_match(option.search_text, regex);
-                        if (option.search_match && !option.group) {
-                            results += 1;
-                            results_nogroup += 1;
-                        }
                         if (option.search_match) {
                             if (searchText.length) {
                                 startpos = option.search_text.search(zregex);
@@ -402,33 +387,6 @@
                 return this.no_results(searchText);
             } else {
                 this.update_results_content(this.results_option_build());
-                
-				var _this = this;
-				var $showing  = $('<span class="badge badge-sm" style="margin: 5px; z=1100;">Showing ' + results_nogroup +'/'+ total_nogroup + '</span>');
-				var $showView = $('<a href="javascript: void(0);" class="badge badge-sm" style="margin: 5px; z=1100;">Show in view&nbsp<i class="icon-remove-sign chosen-viewport"></i></a>');
-				var $showAll  = $('<a href="javascript: void(0);" class="badge badge-sm" style="margin: 5px; z=1100;">Show all&nbsp<i class="icon-remove-sign chosen-everything"></i></a>');
-				$showView.click( function() {
-					console.log('click:show visible');
-					console.log(_this.form_field_jq);
-	                _this.form_field_jq.trigger("chosen:show_visible", {
-	                	chosen: _this
-	                });
-				});
-				$showAll.click( function() {
-					console.log('click:show all');
-					return _this.enable_disabled();
-				});
-				this.search_badges.html('');
-                this.search_badges.append( $showing, $showView, $showAll);
-                
-                // If this is a short list of all the elements
-                if(results_nogroup == total_nogroup) {
-					$showAll.css('visibility', 'hidden');
-				}
-				//if(results_nogroup == total_enabled) {
-				//	$showView.css('visibility', 'hidden');
-				//}
-				
                 this.form_field_jq.trigger("chosen:new_results", {
                     chosen: this
                 });
@@ -683,7 +641,7 @@
                 this.container = $('<div class="chosen"></div>');
                 this.container = $("<div />", container_props);
                 if (this.is_multiple) {
-                    this.container.html('<ul class="chosen-choices"><li class="search-field"><input type="text" value="' + this.default_text + '" class="default" autocomplete="off" style="width:100%;" /></li></ul><div class="chosen-drop"><div class="chosen-badges"></div><ul class="chosen-results"></ul></div>');
+                    this.container.html('<ul class="chosen-choices"><li class="search-field"><input type="text" value="' + this.default_text + '" class="default" autocomplete="off" style="width:100%;" /></li></ul><div class="chosen-drop"><ul class="chosen-results"></ul></div>');
                 } else {
                     search.html('<a class="chosen-single chosen-default" tabindex="-1"><span>' + this.default_text + '</span><div><b></b></div></a><div class="chosen-drop"><ul class="chosen-results"></ul></div><div class="chosen-search"><input type="text" autocomplete="off" /></div>');
                 }
@@ -692,8 +650,7 @@
                 this.dropdown = this.container.find('div.chosen-drop').first();
                 this.search_field = this.container.find('input').first();
                 this.search_results = this.container.find('ul.chosen-results').first();
-				this.search_badges = this.container.find('div.chosen-badges').first();
-                this.search_field_scale();
+				this.search_field_scale();
                 this.search_no_results = this.container.find('li.no-results').first();
                 if (this.is_multiple) {
                     this.search_choices = this.container.find('ul.chosen-choices').first();
@@ -823,7 +780,6 @@
                 }
                 if (evt && evt.type === "mousedown" && !this.results_showing) {
                     evt.preventDefault();
-                    //this.enable_disabled();
                 }
                 if (!((evt != null) && ($(evt.target)).hasClass("search-choice-close"))) {
                     if (!this.active_field) {
@@ -1027,16 +983,6 @@
             });
             this.results_update_field();
         }
-		
-		
-		Chosen.prototype.trigger_visible = function() {
-			console.log('trigger_visible');
-			this.form_field_jq.trigger( "chosen:new_results", {
-				chosen: this,
-				params: 'bla'
-			});
-			// $('#deploymentSelect').trigger('chosen:show_visible');
-		}
 
         Chosen.prototype.search_results_mouseup = function (evt) {
             var target;

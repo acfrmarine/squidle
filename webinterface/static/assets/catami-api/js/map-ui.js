@@ -186,13 +186,16 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			    visible = [];
 			    for( var i = 0; i < depLayer.features.length; i++ ) { 
 			    	var f = depLayer.features[i]; 
+					// No need to check the extent. This is done by the map when updating the features
 			    	//if( extent.intersectsBounds(f.geometry.getBounds()) ) { 
 			    		visible = visible.concat( baseMap.getIDsFromClusterFeature(f) );
-						//} 
+					//} 
 			    }
 			    baseMap.visibleDeployments = visible;
-			    baseMap.showDeployments( visible );
-                baseMap.highlightDeployments([]);
+			    
+				baseMap.setActiveDeployments( visible );
+				baseMap.showDeploymentSelect();
+                baseMap.highlightDeployments();
             }
 		});
 
@@ -453,29 +456,27 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		this.mapInstance.addLayer(deploymentlayer);
 
 		
-		// var highlightCtrl = new OpenLayers.Control.SelectFeature(deploymentlayer, {
-// 			hover : true,
-// 			highlightOnly : true,
-// 			renderIntent : "highlight",
-// 			handlerOptions : {
-// 				//'delay' : 5000
-// 			},
-// 			/*
-// 			 * could update some information about the highlighted deployments
-// 			 */
-// 			eventListeners : {
-// 				//beforefeaturehighlighted: report,
-// 				featurehighlighted : function(evt) { 
-// 					deploymentIds = baseMap.getIDsFromClusterFeature(evt.feature);
-// 					baseMap.showDeployments( deploymentIds ); 
-// 					$('#deploymentSelect').trigger('chosen:open');
-// 	    			baseMap.updateChosenDropHeight();
-// 				}
-// 			}
-// 		});
-// 		highlightCtrl.id = "highlightCtrl";
-// 		this.mapInstance.addControl(highlightCtrl);
-// 		highlightCtrl.activate();
+		var highlightCtrl = new OpenLayers.Control.SelectFeature(deploymentlayer, {
+			hover : true,
+			highlightOnly : true,
+			renderIntent : "highlight",
+			handlerOptions : {
+				//'delay' : 5000
+			},
+			/*
+			 * could update some information about the highlighted deployments
+			 */
+			eventListeners : {
+				//beforefeaturehighlighted: report,
+				featurehighlighted : function(evt) { 
+					deploymentIds = baseMap.getIDsFromClusterFeature(evt.feature);
+
+				}
+			}
+		});
+		highlightCtrl.id = "highlightCtrl";
+		this.mapInstance.addControl(highlightCtrl);
+		highlightCtrl.activate();
 
 		var selectCtrl = new OpenLayers.Control.SelectFeature(deploymentlayer, {
             // eventListeners : {
@@ -492,11 +493,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 
 	};
-
-	/**
-	 * Event function for when we hover over a deployment
-	 */
-	this.showDeployments = function(deploymentIds) {
+	this.setActiveDeployments = function(deploymentIds) {
 		var depid = 0, i;
 
         // Disable everything that has not been selected
@@ -513,8 +510,14 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         for (i = 0, len = deploymentIds.length; i < len; i++) {
             $('#deploymentSelect').find('option[value="'+deploymentIds[i]+'"]').prop('disabled', false);
 		}
-
+	}
+	/**
+	 * Event function for when we hover over a deployment
+	 */
+	this.showDeploymentSelect = function() {
         $('#deploymentSelect').trigger('chosen:updated');
+		$('#deploymentSelect').trigger('chosen:open');
+		this.updateChoseDropHeight();
 	}
 
 	/**
@@ -957,17 +960,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             }
 
         });
-		$dplselect.on( 'chosen:show_visible', function(evt, params) {
-			console.log('chosen:show_visible');
-			// baseMap.showDeployments( baseMap.visibleDeployments );
-// 			$('#deploymentSelect').trigger('chosen:open');
-// 			baseMap.updateChosenDropHeight();
-		});
 		$dplselect.on( 'chosen:showing_dropdown', function(evt, params) {
             baseMap.updateChosenDropHeight();
         });
         $dplselect.on( 'chosen:hiding_dropdown', function(evt, params) {
-            baseMap.showDeployments( baseMap.visibleDeployments );
+            baseMap.setActiveDeployments( baseMap.visibleDeployments );
             baseMap.highlightDeployments();
         });
         $dplselect.on( 'chosen:new_results', function(evt, params) {
