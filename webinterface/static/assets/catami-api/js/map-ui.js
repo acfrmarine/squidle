@@ -517,9 +517,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	this.showDeploymentSelect = function() {
         $('#deploymentSelect').trigger('chosen:updated');
 		$('#deploymentSelect').trigger('chosen:open');
-		this.updateChoseDropHeight();
+		this.updateChosenDropHeight();
 	}
-
+ 
 	/**
 	 * Zoom to a deployment
 	 **/
