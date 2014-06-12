@@ -187,14 +187,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			    for( var i = 0; i < depLayer.features.length; i++ ) { 
 			    	var f = depLayer.features[i]; 
 					// No need to check the extent. This is done by the map when updating the features
-			    	//if( extent.intersectsBounds(f.geometry.getBounds()) ) { 
+			    	if( extent.intersectsBounds(f.geometry.getBounds()) ) { 
 			    		visible = visible.concat( baseMap.getIDsFromClusterFeature(f) );
-					//} 
+					} 
 			    }
 			    baseMap.visibleDeployments = visible;
 			    
 				baseMap.setActiveDeployments( visible );
-				baseMap.showDeploymentSelect();
                 baseMap.highlightDeployments();
             }
 		});
@@ -234,12 +233,18 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     };
 
     this.getIDsFromClusterFeature = function(e) {
-    	ids = [];
-        for(i = 0; i < e.cluster.length; i++)
-            ids.push( e.cluster[i].fid.split('.')[1] );
+    	ids = e.cluster.map( function(e,i) { return e.data.id; } )
         return ids;
     }
 
+    this.getCampaignsFromClusterFeature = function(e) {
+    	deps = e.cluster.map( function(e,i) {return e.data.campaign_name} );
+        return deps;
+    }
+
+	/** 
+	 * Given a list of deployments, we find the markers that these correspond to and highlight them
+	 */
     this.highlightDeployments = function(deployments) {
     	if( typeof deployments === 'undefined' || deployments == null ) {
         	deployments = [];
@@ -437,7 +442,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				],
 				protocol: new OpenLayers.Protocol.WFS({
 					url: this.wfsUrl,
-					featureType: "catamidb_deployment"
+					featureType: "deployments"
 					//featureNS : "http://catami"
 				}),
 				styleMap: new OpenLayers.StyleMap({
@@ -448,14 +453,58 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				projection: baseMap.projection.geographic
 		});
         deploymentlayer.events.on({
+			"featureadded" : function(evt) {
+				console.log('featureadded');
+				console.log(evt);
+				baseMap.tmpEvt = evt;
+				camps = baseMap.getCampaignsFromClusterFeature(evt.feature);
+				baseMap.tmpDeps = camps;
+				
+				var $btnZoom = $('<button type="button" id="btnZoom" class="btn btn-xs btn-group btn-group-xs" title="Zoom into deployments.">Zoom</button>');
+				var $btnList = $('<button type="button" id="btnList" class="btn btn-xs btn-group btn-group-xs" title="List deployments.">List</button>');
+				$btnZoom.click( function() {
+					console.log('zoom clicked');
+				});
+				$btnList.click( function() {
+					console.log('list clicked');
+				});
+				var $divBtns = $('<div id="tooltip_buttons"></div>');
+				$divBtns.append($btnZoom,$btnList);
+				var $divNames = $('<div id="tooltip_campaign_names"></div>');
+				$divNames.append( $.unique(camps).join('<br>') );
+				
+				// $toolHTML = $('<div id="tooltip_'+evt.feature.id.split('_')[1]+'"></div>');
+// 				$toolHTML.append($divNames, $divBtns);
+				
+				
+				
+				
+				$c = $('circle');
+				for( i = 0; i < $c.length; i++ ) {
+					if( evt.feature.geometry.id === $c[i].id )
+					break;
+				}
+				$($c[i]).tooltip({
+					'html': true,
+					'container': '#deployment-map',
+					'placement': 'right',
+					'trigger': 'hover',
+					'title': $divNames[0] //$toolHTML[0]
+				});
+				$($c[i]).popover({
+					'html': true,
+					'container': $($c[i]).id,
+					'placement': 'right',
+					'trigger': 'click',
+					'title': $divNames[0], //$toolHTML[0]
+					'content': $divBtns[0]
+				});
+			},
 			"featureselected" : function(evt) {
 				console.log('featureselected: should pop up a new with available campains and offer to zoom or list them');
-				// If zoom
-				//baseMap.zoomToDeployments();
-				// If view
-				// deploymentIds = baseMap.getIDsFromClusterFeature(evt.feature);
-				// baseMap.setActiveDeployments(deploymentIds);
-				// baseMap.showDeploymentSelect();
+				// $('.tooltip').tooltip('hide');
+// 				$('.popover').tooltip('show');
+				
 			},
             "loadend" : function(evt) {
                 baseMap.mapInstance.zoomToExtent(evt.object.getDataExtent());
@@ -476,10 +525,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			 */
 			eventListeners : {
 				//beforefeaturehighlighted: report,
-				featurehighlighted : function(evt) { 
-					console.log('featurehighlighted: should show a tooltip with available campains');
-					// deploymentIds = baseMap.getIDsFromClusterFeature(evt.feature);
-
+				featurehighlighted : function(evt) {
+					console.log('featurehighlighted'); 
+					// $('.tooltip').tooltip('show');
+					// $('.popover').tooltip('hide');
+					//$($c[i]).tooltip('show');
 				}
 			}
 		});
@@ -499,9 +549,12 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         selectCtrl.id = "selectCtrl";
 		this.mapInstance.addControl(selectCtrl);
 		selectCtrl.activate();
-
-
+		
 	};
+	
+	/**
+	 * Updates the multiselect so the chosen deployments are enabled and the rest disabled (will not show in drop)
+	 */
 	this.setActiveDeployments = function(deploymentIds) {
 		var depid = 0, i;
 
@@ -519,11 +572,15 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         for (i = 0, len = deploymentIds.length; i < len; i++) {
             $('#deploymentSelect').find('option[value="'+deploymentIds[i]+'"]').prop('disabled', false);
 		}
+		
+		$('#deploymentSelect').trigger('chosen:updated');
 	}
 	/**
-	 * Event function for when we hover over a deployment
+	 * Triggers chosen update command to read from the multiselect, opens chosen and sets the appropriate height
+	 * 	of the drop window
 	 */
 	this.showDeploymentSelect = function() {
+		console.log('showDeploymentSelect');
         $('#deploymentSelect').trigger('chosen:updated');
 		$('#deploymentSelect').trigger('chosen:open');
 		this.updateChosenDropHeight();
@@ -546,13 +603,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			baseMap.updateMapBounds("deployment_ids=" + deploymentIds, baseMap.deploymentExtentUrl);
 			//(deploymentIds);
 		}
-		// hide the popup if it was visible
-		//this.setFullHeight = ide();
 
-		//var f = event.feature;
-
-        // Open the dropdown again
-        $('#deploymentSelect').trigger('chosen:open');
 	}
 
 
