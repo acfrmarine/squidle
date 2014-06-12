@@ -456,7 +456,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				// deploymentIds = baseMap.getIDsFromClusterFeature(evt.feature);
 				// baseMap.setActiveDeployments(deploymentIds);
 				// baseMap.showDeploymentSelect();
-			}
+			},
             "loadend" : function(evt) {
                 baseMap.mapInstance.zoomToExtent(evt.object.getDataExtent());
 		    }
