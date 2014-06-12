@@ -448,7 +448,15 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				projection: baseMap.projection.geographic
 		});
         deploymentlayer.events.on({
-			"featureselected" : zoomToDeployments,
+			"featureselected" : function(evt) {
+				console.log('featureselected: should pop up a new with available campains and offer to zoom or list them');
+				// If zoom
+				//baseMap.zoomToDeployments();
+				// If view
+				// deploymentIds = baseMap.getIDsFromClusterFeature(evt.feature);
+				// baseMap.setActiveDeployments(deploymentIds);
+				// baseMap.showDeploymentSelect();
+			}
             "loadend" : function(evt) {
                 baseMap.mapInstance.zoomToExtent(evt.object.getDataExtent());
 		    }
@@ -469,7 +477,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			eventListeners : {
 				//beforefeaturehighlighted: report,
 				featurehighlighted : function(evt) { 
-					deploymentIds = baseMap.getIDsFromClusterFeature(evt.feature);
+					console.log('featurehighlighted: should show a tooltip with available campains');
+					// deploymentIds = baseMap.getIDsFromClusterFeature(evt.feature);
 
 				}
 			}

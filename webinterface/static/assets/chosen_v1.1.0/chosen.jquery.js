@@ -997,7 +997,7 @@
             }
             else if( (target = $(evt.target).hasClass("chosen-shortlist") ? $(evt.target) : null) !== null ) {
                 // Enable all the disabled elements
-                this.enable_disabled();
+                //this.enable_disabled();
             }
             else if( evt.target.nodeName.localeCompare( 'INPUT' ) === 0 && evt.target.checked ) {
                 // checkbox deselected
