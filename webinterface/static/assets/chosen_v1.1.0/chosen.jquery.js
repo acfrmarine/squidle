@@ -340,7 +340,7 @@
         };
 
         AbstractChosen.prototype.winnow_results = function () {
-            var escapedSearchText, option, regex, regexAnchor, results, results_group, searchText, startpos, text, zregex, _i, _len, _ref;
+            var escapedSearchText, option, regex, regexAnchor, results, results_group, searchText, startpos, text, zregex, _i, _len, _refm, results=0;
             this.no_results_clear();
             searchText = this.get_search_text();
             escapedSearchText = searchText.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
@@ -374,9 +374,11 @@
                             }
                             if (results_group != null) {
                                 results_group.group_match = true;
+								results += 1;
                             }
                         } else if ((option.group_array_index != null) && this.results_data[option.group_array_index].search_match) {
                             option.search_match = true;
+							results += 1;
                         }
                     }
                 }
@@ -934,7 +936,7 @@
                 this.result_clear_highlight();
                 this.container.removeClass("chosen-with-drop");
                 this.dropdown.removeClass("chosen-with-drop");
-                this.form_field_jq.trigger("chosen:hiding_dropdown", {
+                this.form_field_jq.trigger("chosen:hiding_drop", {
                     chosen: this
                 });
             }
@@ -1138,9 +1140,6 @@
                 }
                 return this.search_field_scale();
             } 
-            else {
-                console.log( 'not highlighted');
-            }
         };
 
         Chosen.prototype.single_set_selected_text = function (text) {

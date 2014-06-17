@@ -1,8 +1,6 @@
 //need so the ajax queries can make it outside the projects domain and contact geoserver
 OpenLayers.ProxyHost = "/proxy/?url=";
-//OpenLayers.ProxyHost = "/cgi-bin/proxy.cgi?url=";
-
-
+//OpenLayers.ProxyHost = "/cgi-bin/proxy.cgi?url=";   
 
 /**
  * Used for WMS mapping purposes. Takes a WMSUrl and WMS Layer name and configures a map.
@@ -151,12 +149,19 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					console.log('onClick');
 			        // Remove focus from the selected input box
 					$('input:focus').blur();
+					// Set the visible deps in the drop
+					baseMap.setActiveDeployments( baseMap.getVisibleDeployments() );
+	                baseMap.highlightDeployments();
+					
 					if( baseMap.$tooltipOnDeployment ) {
-						console.log('hiding');
-						//$('.tooltip-buttons').remove();
 						baseMap.$tooltipOnDeployment.tooltip('hide');
 						baseMap.$tooltipOnDeployment = null;
+						
+						// TODO: Get this working. Ideally we want the highlight control to be deactivated when a tooltip is active
+						//	and reenabled here when closed. However, the dep click select stops working after deactivation :-/
+						//baseMap.mapInstance.getControl('highlightCtrl').activate();
 					}
+
 			    }
 			}
 		);
@@ -171,37 +176,29 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		ctmControl.activate();
 
 		this.mapInstance.events.on({
-//			"zoomend": function(e) {
-				// This is not necessary as we are dealing with the loading of the image layers through the maxScale 
-				//		option when the layers are created.
-				// console.log( "this.getZoom(): " + baseMap.mapInstance.getZoom() );
-// 				if( baseMap.mapInstance.getZoom() < 9 ) {
-// 					baseMap.mapInstance.getLayersByName('Deployment images')[0].setVisibility(false);
-// 					baseMap.mapInstance.getLayersByName('Selected images')[0].setVisibility(false);
-// 				} else {
-// 					baseMap.mapInstance.getLayersByName('Deployment images')[0].setVisibility(true);
-// 					baseMap.mapInstance.getLayersByName('Selected images')[0].setVisibility(true);
-// 				}
-//			},
+			"zoomend": function(e) {
+				console.log( "this.getZoom(): " + baseMap.mapInstance.getZoom() );
+				if( baseMap.mapInstance.getLayersByName('Deployment images')[0].inRange && !baseMap.mapInstance.getControlsBy('id','showFeatureInfoCtrl')[0].active ) {
+					console.log('activating');
+					baseMap.mapInstance.getControlsBy('id','showFeatureInfoCtrl')[0].activate();
+				} else if( baseMap.mapInstance.getControlsBy('id','showFeatureInfoCtrl')[0].active ) {
+					console.log('deactivating');
+					baseMap.mapInstance.getControlsBy('id','showFeatureInfoCtrl')[0].deactivate();
+				}
+			},
             "moveend" : function(e) {
             	console.log('moveend');
-            	// Get the deployment origin layer
-        		depLayer = baseMap.mapInstance.getLayersByName(baseMap.depOriginLayerName)[0];
-
-            	var extent = this.getExtent();
-			    baseMap.visibleDeployments = [];
-			    visible = [];
-			    for( var i = 0; i < depLayer.features.length; i++ ) { 
-			    	var f = depLayer.features[i]; 
-					// No need to check the extent. This is done by the map when updating the features
-			    	if( extent.intersectsBounds(f.geometry.getBounds()) ) { 
-			    		visible = visible.concat( baseMap.getIDsFromClusterFeature(f) );
-					} 
-			    }
+            	visible = baseMap.getVisibleDeployments();
 			    baseMap.visibleDeployments = visible;
 			    
 				baseMap.setActiveDeployments( visible );
                 baseMap.highlightDeployments();
+				
+				// A work-around to avoid having tooltips sticking during zoom
+				$('.tooltip').hide();
+				if( baseMap.$tooltipOnDeployment ) {
+					baseMap.$tooltipOnDeployment = null;
+				}
             }
 		});
 
@@ -258,11 +255,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * Given a list of deployments, we find the markers that these correspond to and highlight them
 	 */
     this.highlightDeployments = function(deployments) {
-		console.log('highlightDeployments');
+		console.log('highlightDeployments()');
 		if( typeof deployments === 'undefined' || deployments == null ) {
         	deployments = [];
         }
-		console.log('here 1');
+		
         // Get the deployment origin layer
         depLayer = baseMap.mapInstance.getLayersByName(baseMap.depOriginLayerName)[0];
         // Get the select control and clear all features
@@ -270,29 +267,28 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         for( dSel = 0; dSel < depLayer.features.length; dSel++ ) {
         	selectCtrl.unhighlight( depLayer.features[dSel] );
         }
-		console.log('here 2');
-        
-
+		
 		// Get IDs of selected deployments
 		dplselect = $('#deploymentSelect');
         if( typeof dplselect.val !== 'undefined' && dplselect.val() !== null ) {
 	        deployments = deployments.concat( dplselect.val() );
 		}
-		console.log('here 3');
+		
         if( typeof deployments !== 'undefined' && deployments !== null ) {
 			for( dSel = 0; dSel < deployments.length; dSel++ ) {
 	            id = deployments[dSel];
 
 	            // Get the deployment layer feature corresponding to this id
 	            featInd = depLayer.features.map( function(e) {
-	                f = baseMap.getIDsFromClusterFeature( e );
-					return f;
-	            }).map( function(e) {return e.indexOf(id);} ).map( function(e) { return e >= 0;} ).indexOf( true );
-				console.log('id='+id+', featInd='+featInd);
+	                return baseMap.getIDsFromClusterFeature( e );
+	            }).map( function(e) {
+					return e.indexOf(id);
+				}).map( function(e) { 
+					return e >= 0;
+				}).indexOf( true );
 	            selectCtrl.highlight( depLayer.features[featInd] );
 	        }        
 	    }
-		console.log('here 4');
 	}
 	/**
 	 * Will take a collectionId and update the collection layer and
@@ -471,7 +467,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				circId = evt.feature.geometry.id;
 				circIdShort = circId.split('_')[1];
 				
-				// TODO: If no clusters, get the dive name instead
+				// If no clusters, get the dive name instead
 				if( evt.feature.cluster.length === 1 ) {
 					names = baseMap.getDeploymentsFromClusterFeature(evt.feature);
 				}
@@ -486,7 +482,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				// Create the content of the tooltip when the circle is generated by the map
 				var $btnZoom = $('<button type="button" id="tooltip-btn-zoom-'+circIdShort+'" class="btn btn-xs btn-group btn-group-xs" title="Zoom into deployments."><i class="icon-zoom-in"></i>&nbsp;Zoom</button>');
 				var $btnList = $('<button type="button" id="tooltip-btn-list-'+circIdShort+'" class="btn btn-xs btn-group btn-group-xs" title="List deployments."><i class="icon-list"></i>&nbsp;List</button>');
-				var $divBtns = $('<div id="tooltip-btns-'+circIdShort+'" class="tooltip-buttons"></div>');
+				var $divBtns = $('<div id="tooltip-btns-'+circIdShort+'" class="tooltip-buttons" style="border-top: solid 1px #777777; margin-top: 3px; padding-top: 5px;"></div>');
 				$divBtns.append($btnZoom, $btnList);
 				
 				var $divNames = $('<div id="tooltip-campaign-names-'+circIdShort+'"></div>');
@@ -502,7 +498,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 						$($c[i]).data('title',$toolHTML[0]);
 						$($c[i]).tooltip({
 							'html': true,
-							'container': 'body',
+							'container': 'body', // TODO: attach to the element itself
 							'placement': 'right',
 							'trigger': 'manual',
 							'title': function() {
@@ -542,6 +538,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					baseMap.$tooltipOnDeployment.tooltip('hide');
 					baseMap.$tooltipOnDeployment = null;
 				}
+				// TODO: disable the highlight control and reenable when the tooptip is closed.
+				// 	Currently, when reenabled the click selection stops working!
+				//baseMap.mapInstance.getControl('highlightCtrl').deactivate();
 				
 				// Find the circle that triggered the event
 				baseMap.tmp = this;
@@ -555,6 +554,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				baseMap.$tooltipOnDeployment = $($c[i]);
 				
 				$($c[i]).tooltip('show');
+				$('.tooltip-inner').css('max-width','400px');
 
 				_evt = evt;
 				$('#tooltip-btn-zoom-'+circId.split('_')[1]).click( function(evt) {
@@ -569,6 +569,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					console.log('list clicked');
 					baseMap.$tooltipOnDeployment.tooltip('hide');
 					baseMap.$tooltipOnDeployment = null;
+					baseMap.mapInstance.getControlsBy('id','selectCtrl')[0].unselect( _evt.feature )
 					
 					ids = baseMap.getIDsFromClusterFeature(_evt.feature);
 					baseMap.setActiveDeployments(ids);
@@ -609,7 +610,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 						break;
 					}
 					$($c[i]).data('selected', false);
-					$($c[i]).tooltip('show');			
+					$($c[i]).tooltip('show');
+					$('.tooltip-inner').css('max-width','400px');	
 					// baseMap.$tooltipOnDeployment = $($c[i]);
 					
 				},
@@ -652,10 +654,33 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		
 	};
 	
+	/** 
+	 *
+	 */
+	this.getVisibleDeployments = function() {
+    	// Get the deployment origin layer
+		depLayer = baseMap.mapInstance.getLayersByName(baseMap.depOriginLayerName)[0];
+
+    	var extent = baseMap.mapInstance.getExtent();
+	    visible = [];
+
+	    for( var i = 0; i < depLayer.features.length; i++ ) { 
+	    	var f = depLayer.features[i]; 
+			
+			// No need to check the extent. This is done by the map when updating the features
+	    	if( f.onScreen() ) { 
+	    		visible = visible.concat( baseMap.getIDsFromClusterFeature(f) );
+			} 
+	    }
+		
+		return visible;
+	}
+	
 	/**
 	 * Updates the multiselect so the chosen deployments are enabled and the rest disabled (will not show in drop)
 	 */
 	this.setActiveDeployments = function(deploymentIds) {
+		console.log('setActiveDeployments');
 		var depid = 0, i;
 
         // Disable everything that has not been selected
@@ -681,7 +706,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 */
 	this.showDeploymentSelect = function() {
 		console.log('showDeploymentSelect');
-        $('#deploymentSelect').trigger('chosen:updated');
+        // Remove focus from the selected input box
+		$('input:focus').blur();
 		$('#deploymentSelect').trigger('chosen:open');
 		this.updateChosenDropHeight();
 	}
@@ -745,6 +771,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                             //baseMap.$imginfo.append("<br><br>");
                             baseMap.$imginfo.parent().show();
                             baseMap.$infopane.show(200);
+							$('#mapinfo').css('width', $('#deployment-map').width());
                         }
                     }
 				}
@@ -776,7 +803,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 //                                }
 
         var $thumb = $('<a href="' + imginfo.images[0].web_location + '" title="' + infotxt + '" ><img src="' + imginfo.images[0].thumbnail_location + '"/></a> ');
-        $thumb.tooltip({trigger: "hover", html: true, placement: 'right'});
+        $thumb.tooltip({trigger: "hover", html: true, placement: 'top'});
         $thumb.fancybox();
 		
         return $thumb;
@@ -854,6 +881,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	    		},
 				getfeatureinfo: function (event) 
 				{
+					console.log('getfeatureinfo');
                 	if (event.features.length > 0) {
                     	baseMap.$imginfo.html('');
                     	var fid, $thumb;
@@ -1051,8 +1079,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
                 // TODO: move this code to an independent function
                 // check selected in info panel, otherwise add to info panel
-                $dplinfo = baseMap.$dplinfo.find("input[value='" + id + "']");
-                $dplinfo.prop('checked', true);
+                //$dplinfo = baseMap.$dplinfo.find("input[value='" + id + "']");
+                //$dplinfo.prop('checked', true);
             }
         }
     }
@@ -1072,11 +1100,40 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
     this.addDeploymentSelectNew = function($container, $infocontainer, layername) {
 
         var $dplselect = $('<select multiple id="deploymentSelect" name="deploymentSelect"> </select>');
+        var $btnShowAll = $('<button type="button" id="drop-show-all" class="btn btn-xs btn-group btn-group-xs " title="List all deployments."><i class=" icon-sort-by-attributes-alt"></i> List all</button>'),
+			$btnShowVis = $('<button type="button" id="drop-show-vis" class="btn btn-xs btn-group btn-group-xs " title="List deployments currently in view."><i class="icon-eye-open"></i> List visible</button>'),
+			$btnShowSel = $('<button type="button" id="drop-show-vis" class="btn btn-xs btn-group btn-group-xs " title="Show deployments selected."><i class="icon-thumbs-up"></i> Show selected</button>');
+		$btnShowAll.click( function(evt) {
+			console.log('show all');
+			evt.preventDefault();
+			evt.stopPropagation();
+			baseMap.setActiveDeployments( $('option').map( function(i,e) {return $(e).val();} ) );
+			baseMap.showDeploymentSelect();
+			//TODO: we should actually check at this point to see if we need to update the showVis button
+		});
+		$btnShowVis.click( function(evt) {
+			console.log('show vis');
+			evt.preventDefault();
+			evt.stopPropagation();
+			baseMap.setActiveDeployments( baseMap.getVisibleDeployments() );
+			baseMap.showDeploymentSelect();
+			//TODO: we should actually check at this point to see if we need to update the showAll button
+		});
+		$btnShowSel.click( function(evt) {
+			console.log('show selected');
+			evt.preventDefault();
+			evt.stopPropagation();
+			if( $dplselect.val() !== null ) {
+				baseMap.updateMapBounds("deployment_ids=" + $dplselect.val(), baseMap.deploymentExtentUrl);
+			}
+		});
+		
         addCampaignsToSelect($dplselect);
-        $container.append($dplselect);
+        $container.append($dplselect, $btnShowAll, $btnShowVis, $btnShowSel);
+		$btnShowSel.prop('disabled', true);
 
         $dplselect.chosen({
-            placeholder_text_multiple: "Choose deployments",
+            placeholder_text_multiple: "Choose deployments...",
             search_contains: true, // searches any place in the word. Set to false to only search from beginning of the word
             enable_split_word_search: false, // match the entire text
             no_results_text: "Oops, no deployments found:", // show if no results found
@@ -1095,8 +1152,10 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             if( params.type === 'checked' || params.type === 'unchecked') {
                 baseMap.updateDeploymentFilter();
                 baseMap.showSelectedImages();
+				// Zoom to the extent of the selections
                 if( $dplselect.val() !== null ) {
-                    baseMap.updateMapBounds("deployment_ids=" + $dplselect.val(), baseMap.deploymentExtentUrl);
+                    //baseMap.updateMapBounds("deployment_ids=" + $dplselect.val(), baseMap.deploymentExtentUrl);
+					$btnShowSel.prop('disabled', false);
                 }
                 // No deployments selected
                 else {
@@ -1104,6 +1163,8 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                     baseMap.mapInstance.getControlsBy('id', 'selectCtrl')[0].unselectAll();
                     baseMap.mapInstance.zoomToExtent( baseMap.mapInstance.getLayersByName('Deployment origins')[0].getDataExtent() );
                     baseMap.highlightDeployments();
+					
+					$btnShowSel.prop('disabled', true);
                 }
             }
             // Zoom to selection
@@ -1111,27 +1172,75 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                 baseMap.updateMapBounds("deployment_ids=" + [diveID], baseMap.deploymentExtentUrl);
             }
             else if (params.type === 'highlighted') {
-            	console.log(diveID + ' highlighted');
             	baseMap.highlightDeployments( [diveID] );
             }
             // The dive was de-selected
             else if($dplselect.val() !== null) {
+				console.log('\n\nI dont think this ever happens\n\n');
                 baseMap.updateMapBounds("deployment_ids=" + $dplselect.val(), baseMap.deploymentExtentUrl);
             }
-
+			
+			// if not all deployments visible
+			if( $('#deploymentSelect option:disabled').length === 0  ) {
+				$('#drop-show-all').addClass('active');
+			}
+			// if elements not equal to visible elements
+			currEnabled = $('#deploymentSelect option:enabled').map( function(i,e) {return $(e).val();} ).sort();
+			currVisible = baseMap.getVisibleDeployments().sort();
+			baseMap.currEnabled = currEnabled;
+			baseMap.currVisible = currVisible;
+			equal = true;
+			if( currEnabled.length !== currVisible.length ) {
+				equal = false;
+			}
+			else {
+				for (var i = 0, l=currEnabled.length; i < l; i++) {
+			        // Check if we have nested arrays
+			        if (currEnabled[i] instanceof Array && currVisible[i] instanceof Array) {
+						console.log('nested!');
+			            // TODO: implement as funciton so we can recurse into the nested arrays
+		                equal = false;
+						break;     
+						// if (!currEnabled[i].equals(currVisible[i])) {
+						//  equal = false;
+						// 	break;     
+						// }
+			        }           
+			        else if ( currEnabled[i] != currVisible[i]) { 
+						console.log( currEnabled[i] +'!='+ currVisible[i] )
+			            // Warning - two different object instances will never be equal: {x:20} != {x:20}
+			            equal = false;   
+						break;
+			        }  
+			    }
+			}
+			if( equal ) {
+				$('#drop-show-vis').addClass('active');
+			} 
         });
-		// $dplselect.on( 'chosen:showing_dropdown', function(evt, params) {
-		//             baseMap.updateChosenDropHeight();
-		//         });
-        // $dplselect.on( 'chosen:hiding_dropdown', function(evt, params) {
-        //     baseMap.setActiveDeployments( baseMap.visibleDeployments );
-        //     baseMap.highlightDeployments();
-        // });
+		$dplselect.on( 'chosen:showing_drop', function(evt, params) {
+			console.log('chosen:showing_drop');
+			baseMap.updateChosenDropHeight();
+		});
+        $dplselect.on( 'chosen:hiding_drop', function(evt, params) {
+			console.log('chosen:hiding_drop');
+            // baseMap.setActiveDeployments( baseMap.visibleDeployments );
+            baseMap.highlightDeployments();
+			
+			// disable buttons
+			$('#drop-show-all').removeClass('active');
+			$('#drop-show-vis').removeClass('active');
+			
+	        // Remove focus from the selected input box
+			$('input:focus').blur();
+			
+        });
         $dplselect.on( 'chosen:new_results', function(evt, params) {
-			console.log('chosen:new_results:'+ params)
-            baseMap.updateChosenDropHeight();
+			console.log('chosen:new_results');
+			baseMap.updateChosenDropHeight();
         });
         $dplselect.on( 'chosen:no_results', function(evt, params) {
+			console.log('chosen:no_results');
             baseMap.updateChosenDropHeight();
         });
 
@@ -1153,6 +1262,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                     for (var i = 0; i < cmp.objects.length; i++) {
                         $cmpgrp = $('<optgroup></optgroup>');
                         dplcount = addDeploymentsToSelect($cmpgrp, cmp.objects[i].id);
+						if( dplcount <= 0 ) {
+							continue;
+						}
                         $cmpgrp.attr('label',cmp.objects[i].short_name + ' ('+ dplcount+')');
                         $dplselect.append($cmpgrp);
                     }
@@ -1234,7 +1346,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         var $infopane = $('<div id="'+ panelid+'" class="og-dragpane map-pane-draggable"></div>');
 
         this.$imginfo = this.addPanel($infopane, {id:'img-info',icon:'icon-picture',title:'Nearby images', closeable:true});
-        this.$dplinfo = this.addPanel($infopane, {id: 'dpl-info', icon: 'icon-list', title: 'Deployment list', closeable: true}, 'white-space: nowrap');	
+        //this.$dplinfo = this.addPanel($infopane, {id: 'dpl-info', icon: 'icon-list', title: 'Deployment list', closeable: true}, 'white-space: nowrap');	
         this.$infopane = $infopane;
 
         $container.append($infopane);
@@ -1248,7 +1360,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         // hide panels initially
         this.$infopane.hide();
         this.$imginfo.parent().hide();
-        this.$dplinfo.parent().hide();
+        //this.$dplinfo.parent().hide();
     }
 
 
@@ -1749,6 +1861,5 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		// Show modal
         $('#new-collection-modal').modal('show');
     }
-
 
 }
