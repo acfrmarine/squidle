@@ -1123,14 +1123,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
     this.addDeploymentSelectNew = function($container, $infocontainer, layername) {
 
-        var $dplselect = $('<select multiple id="deploymentSelect" name="deploymentSelect"> </select>');
-		this.$dplselect = dplselect;
-		
-        var $btnShowAll = $('<button type="button" id="drop-show-all" class="btn btn-xs btn-group btn-group-xs " title="List all deployments."><i class=" icon-sort-by-attributes-alt"></i> List all</button>'),
-			$btnShowVis = $('<button type="button" id="drop-show-vis" class="btn btn-xs btn-group btn-group-xs " title="List deployments currently in view."><i class="icon-eye-open"></i> List visible</button>'),
-			$btnShowSel = $('<button type="button" id="drop-show-vis" class="btn btn-xs btn-group btn-group-xs " title="Show deployments selected."><i class="icon-thumbs-up"></i> Show selected</button>');
+        this.$dplselect = $('<select multiple id="deploymentSelect" name="deploymentSelect"> </select>');
+        addCampaignsToSelect(this.$dplselect);
+        
+        var $btnShowAll = $('<button type="button" id="drop-show-all" class="btn btn-xs" title="List all deployments."><i class=" icon-sort-by-attributes-alt"></i> List all</button>'),
+			$btnShowVis = $('<button type="button" id="drop-show-vis" class="btn btn-xs" title="List deployments currently in view."><i class="icon-eye-open"></i> List visible</button>'),
+			$btnShowSel = $('<button type="button" id="drop-show-vis" class="btn btn-xs" title="Show deployments selected."><i class="icon-thumbs-up"></i> Show selected</button>');
 		$btnShowAll.click( function(evt) {
-			console.log('show all');
 			evt.preventDefault();
 			evt.stopPropagation();
 			baseMap.setActiveDeployments( $('option').map( function(i,e) {return $(e).val();} ) );
@@ -1138,7 +1137,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			//TODO: we should actually check at this point to see if we need to update the showVis button
 		});
 		$btnShowVis.click( function(evt) {
-			console.log('show vis');
 			evt.preventDefault();
 			evt.stopPropagation();
 			baseMap.setActiveDeployments( baseMap.getVisibleDeployments() );
@@ -1146,17 +1144,18 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			//TODO: we should actually check at this point to see if we need to update the showAll button
 		});
 		$btnShowSel.click( function(evt) {
-			console.log('show selected');
 			evt.preventDefault();
 			evt.stopPropagation();
 			if( $dplselect.val() !== null ) {
 				baseMap.updateMapBounds("deployment_ids=" + $dplselect.val(), baseMap.deploymentExtentUrl);
 			}
 		});
-		
-        addCampaignsToSelect(this.$dplselect);
-        $container.append(this.$dplselect, $btnShowAll, $btnShowVis, $btnShowSel);
 		$btnShowSel.prop('disabled', true);
+		
+		$divBtns = $('<div class="btn-group btn-group-xs"></div>');
+		$divBtns.append( $btnShowAll, $btnShowVis, $btnShowSel );
+		
+        $container.append(this.$dplselect, $divBtns );
 
         this.$dplselect.chosen({
             placeholder_text_multiple: "Choose deployments...",
@@ -1170,97 +1169,93 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         });
 
 
-        this.$dplselect.on(
-			'change', function (evt, params) {
-	            diveID = params.id;
-	            console.log(params);
+        this.$dplselect.on('change', function (evt, params) {
+            diveID = params.id;
+            console.log(params);
 
-	            // Added/Removed
-	            if( params.type === 'checked' || params.type === 'unchecked') {
-	                baseMap.updateDeploymentFilter();
-	                baseMap.showSelectedImages();
-					// Zoom to the extent of the selections
-	                if( baseMap.$dplselect.val() !== null ) {
-	                    //baseMap.updateMapBounds("deployment_ids=" + $dplselect.val(), baseMap.deploymentExtentUrl);
-						$btnShowSel.prop('disabled', false);
-	                }
-	                // No deployments selected
-	                else {
-	                    console.log('all deployments deselected. zooming all the way out');
-	                    baseMap.mapInstance.getControlsBy('id', 'selectCtrl')[0].unselectAll();
-	                    baseMap.mapInstance.zoomToExtent( baseMap.mapInstance.getLayersByName('Deployment origins')[0].getDataExtent() );
-	                    baseMap.highlightDeployments();
-					
-						$btnShowSel.prop('disabled', true);
-	                }
-	            }
-	            // Zoom to selection
-	            else if( params.type === 'selected' ) {
-	                baseMap.updateMapBounds("deployment_ids=" + [diveID], baseMap.deploymentExtentUrl);
-	            }
-	            else if (params.type === 'highlighted') {
-	            	baseMap.highlightDeployments( [diveID] );
-	            }
-	        },
-		 	'chosen:showing_drop', function(evt, params) {
-			
-				baseMap.updateChosenDropHeight();
-			
-				// if not all deployments visible
-				if( $('#deploymentSelect option:disabled').length === 0  ) {
-					$('#drop-show-all').addClass('active');
-				}
-				// if elements not equal to visible elements
-				currEnabled = $('#deploymentSelect option:enabled').map( function(i,e) {return $(e).val();} ).sort();
-				currVisible = baseMap.getVisibleDeployments().sort();
-				baseMap.currEnabled = currEnabled;
-				baseMap.currVisible = currVisible;
-				equal = true;
-				if( currEnabled.length !== currVisible.length ) {
-					equal = false;
-				}
-				else {
-					// TODO: implement as funciton so we can recurse into the nested arrays
-					for (var i = 0, l=currEnabled.length; i < l; i++) {
-				        // Check if we have nested arrays
-				        if (currEnabled[i] instanceof Array && currVisible[i] instanceof Array) {
-							console.log('UPS nested!');
-			                equal = false;
-							break;     
-							// if (!currEnabled[i].equals(currVisible[i])) {
-							//  equal = false;
-							// 	break;     
-							// }
-				        }           
-				        else if ( currEnabled[i] != currVisible[i]) { 
-							console.log( currEnabled[i] +'!='+ currVisible[i] )
-				            // Warning - two different object instances will never be equal: {x:20} != {x:20}
-				            equal = false;   
-							break;
-				        }  
-				    }
-				}
-				if( equal ) {
-					$('#drop-show-vis').addClass('active');
-				} 
-			},
-			'chosen:hiding_drop', function(evt, params) {
-	            baseMap.highlightDeployments();
-			
-				// disable buttons
-				$('#drop-show-all').removeClass('active');
-				$('#drop-show-vis').removeClass('active');
-			
-		        // Remove focus from the selected input box
-				$('input:focus').blur();
-	        },
-        	'chosen:new_results', function(evt, params) {
-				baseMap.updateChosenDropHeight();
-        	},
-			'chosen:no_results', function(evt, params) {
-				baseMap.updateChosenDropHeight();
-        	}
-		);
+            // Added/Removed
+            if( params.type === 'checked' || params.type === 'unchecked') {
+                baseMap.updateDeploymentFilter();
+                baseMap.showSelectedImages();
+				// Zoom to the extent of the selections
+                if( baseMap.$dplselect.val() !== null ) {
+                    //baseMap.updateMapBounds("deployment_ids=" + $dplselect.val(), baseMap.deploymentExtentUrl);
+					$btnShowSel.prop('disabled', false);
+                }
+                // No deployments selected
+                else {
+                    baseMap.mapInstance.getControlsBy('id', 'selectCtrl')[0].unselectAll();
+                    //baseMap.mapInstance.zoomToExtent( baseMap.mapInstance.getLayersByName('Deployment origins')[0].getDataExtent() );
+                    baseMap.highlightDeployments();
+				
+					$btnShowSel.prop('disabled', true);
+                }
+            }
+            // Zoom to selection
+            else if( params.type === 'selected' ) {
+                baseMap.updateMapBounds("deployment_ids=" + [diveID], baseMap.deploymentExtentUrl);
+            }
+            else if (params.type === 'highlighted') {
+            	baseMap.highlightDeployments( [diveID] );
+            }
+		});
+		 this.$dplselect.on('chosen:showing_drop', function(evt, params) {
+			baseMap.updateChosenDropHeight();
+		
+			// if not all deployments visible
+			if( $('#deploymentSelect option:disabled').length === 0  ) {
+				$('#drop-show-all').addClass('active');
+			}
+			// if elements not equal to visible elements
+			currEnabled = $('#deploymentSelect option:enabled').map( function(i,e) {return $(e).val();} ).sort();
+			currVisible = baseMap.getVisibleDeployments().sort();
+			baseMap.currEnabled = currEnabled;
+			baseMap.currVisible = currVisible;
+			equal = true;
+			if( currEnabled.length !== currVisible.length ) {
+				equal = false;
+			}
+			else {
+				// TODO: implement as funciton so we can recurse into the nested arrays
+				for (var i = 0, l=currEnabled.length; i < l; i++) {
+			        // Check if we have nested arrays
+			        if (currEnabled[i] instanceof Array && currVisible[i] instanceof Array) {
+						console.log('UPS nested!');
+		                equal = false;
+						break;     
+						// if (!currEnabled[i].equals(currVisible[i])) {
+						//  equal = false;
+						// 	break;     
+						// }
+			        }           
+			        else if ( currEnabled[i] != currVisible[i]) { 
+						console.log( currEnabled[i] +'!='+ currVisible[i] )
+			            // Warning - two different object instances will never be equal: {x:20} != {x:20}
+			            equal = false;   
+						break;
+			        }  
+			    }
+			}
+			if( equal ) {
+				$('#drop-show-vis').addClass('active');
+			} 
+		});
+		this.$dplselect.on('chosen:hiding_drop', function(evt, params) {
+            baseMap.highlightDeployments();
+		
+			// disable buttons
+			$('#drop-show-all').removeClass('active');
+			$('#drop-show-vis').removeClass('active');
+		
+	        // Remove focus from the selected input box
+			$('input:focus').blur();
+        });
+    	this.$dplselect.on('chosen:new_results', function(evt, params) {
+			baseMap.updateChosenDropHeight();
+    	});
+		this.$dplselect.on('chosen:no_results', function(evt, params) {
+			baseMap.updateChosenDropHeight();
+    	});
 
     }
 
@@ -1605,34 +1600,34 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 *
 	 */
     this.addBBoxFilter = function ($container, $infocontainer,layername) {
-        var $bboxdraw = $('<button type="button" id="bboxdraw" class="btn btn-xs btn-group btn-group-xs" title="Draw a bounding box around the images you would like to add to your selection."><i class="icon-crop"></i> Create</button>'),
-			$bboxedit = $('<button type="button" id="bboxedit" class="btn btn-xs btn-group btn-group-xs" title="Edit a bounding box by selecting it."><i class="icon-edit"></i> Edit</button>'),
-			$bboxdel  = $('<button type="button" id="bboxdel"  class="btn btn-xs btn-group btn-group-xs" title="Delete a bounding box by selecting it."><i class="icon-remove-sign"></i> Delete</button>'),
+        var $bboxdraw = $('<button type="button" id="bboxdraw" class="btn btn-xs"><i class="icon-crop"></i> Create</button>'),
+			$bboxedit = $('<button type="button" id="bboxedit" class="btn btn-xs"><i class="icon-edit"></i> Edit</button>'),
+			$bboxdel  = $('<button type="button" id="bboxdel"  class="btn btn-xs"><i class="icon-remove-sign"></i> Delete</button>'),
 			$btn = $('<span id="bbox-button" class="btn btn-xs" >Crop filters &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span><br>');
 		// Setup button action callbacks
-        $bboxdraw.click(function (){
-            baseMap.toggleBBoxDraw();
-        });
-        $bboxdraw.tooltip({
+		$bboxdraw.click( bboxButtonsHandler );
+		$bboxedit.click( bboxButtonsHandler );
+		$bboxdel.click( bboxButtonsHandler );
+		$bboxdraw.tooltip({
 			html: true, 
-			placement: 'left', 
-			trigger:'hover'
+			placement: 'top', 
+			trigger:'hover',
+			container: 'body',
+			title: 'Draw a bounding box around the images you would like to add to your selection.'
 		});
-        $bboxedit.click(function (){
-            baseMap.toggleBBoxEdit();
-        });
-        $bboxedit.tooltip({
+		$bboxedit.tooltip({
 			html: true, 
-			placement: 'left', 
-			trigger:'hover'
+			placement: 'top', 
+			trigger:'hover',
+			container: 'body',
+			title: "Edit a bounding box by selecting it."
 		});
-        $bboxdel.click(function (){
-            baseMap.toggleBBoxDel();
-        });
-        $bboxdel.tooltip({
+		$bboxdel.tooltip({
 			html: true, 
-			placement: 'left', 
-			trigger:'hover'
+			placement: 'top', 
+			trigger:'hover',
+			container: 'body',
+			title:"Delete a bounding box by selecting it."
 		});
 		
 		// Create a separate layer to show the drawn bounding boxes
@@ -1650,20 +1645,21 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					baseMap.filters.BBoxes[evt.feature.id] = filterBounds;
 					// Update view
 					baseMap.showSelectedImages();
-					
-					baseMap.toggleBBoxEdit();
+					$bboxedit.click();
 				},
 				'featureselected': function(evt) {
 					// Perform this only when the bbdelete button is selected
 					if( baseMap.mapInstance.getControl('bboxdelCtrl').active ) {
 						// Delete from filter list
 						delete baseMap.filters.BBoxes[evt.feature.id];
+						if( baseMap.filters.BBoxes.length == 0 ) {
+							$btn.hide();
+						}
 						// Delete from layer
 						evt.object.removeFeatures( evt.object.getFeatureById(evt.feature.id) );
 						// Update view
 						baseMap.showSelectedImages();
-						
-						baseMap.toggleBBoxDel();
+						$bboxdel.click();
 					}
 				}
 			});
@@ -1698,7 +1694,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 							baseMap.filters.BBoxes[evt.feature.id] = filterBounds;
 														
 							baseMap.showSelectedImages();
-							baseMap.toggleBBoxDraw();
+							$bboxdraw.click();
 							$btn.show();
 					    }
 					}
@@ -1742,60 +1738,63 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			
         }
 
-		
-        $container.append($("<div style='margin: 10px;'></div>").append( "Crop box tools:<br>", $bboxdraw, $bboxedit, $bboxdel ));
+		$divBtns = $('<div class="btn-group btn-group-xs"></div>'); //data-toggle="buttons-radio"
+		$divBtns.append($bboxdraw, $bboxedit, $bboxdel);
+        $container.append($("<div style='margin: 10px;'></div>").append( "Crop box tools:<br>", $divBtns ));
 		
     }
+	/**
+	 * Handles clicking any of the bounding box buttons
+	 */
+	bboxButtonsHandler = function(evt) {
+		baseMap.evt = evt;
+		
+		enable = !$(evt.target).hasClass('active');
+		disableTarget = $(evt.target.parentNode).find('.active');
+		if( disableTarget.length > 0 ) {
+			// Disable currently active button and its controller
+			disableTarget.removeClass('active');
+			
+			switch( disableTarget[0].id ) {
+			case "bboxdraw":
+	             baseMap.mapInstance.getControl('bboxdrawCtrl').deactivate();
+				break;
+			case "bboxedit":
+				baseMap.mapInstance.getControl('bboxeditCtrl').deactivate();
+				baseMap.mapInstance.getControl('highlightCtrl').activate();
+				break;
+			case "bboxdel":
+				baseMap.mapInstance.getControl('bboxdelCtrl').deactivate();
+				baseMap.mapInstance.getControl('highlightCtrl').activate();
+				break;
+			default:
+				console.log("UPS this should never happen");
+			}
+		}
+		
+		if( enable ) {
+			// Now activate this button
+			$(evt.target).addClass('active');
+			
+			switch( evt.target.id ) {
+			case "bboxdraw":
+	             baseMap.mapInstance.getControl('bboxdrawCtrl').activate();
+				break;
+			case "bboxedit":
+				baseMap.mapInstance.getControl('highlightCtrl').deactivate();
+				baseMap.mapInstance.getControl('bboxeditCtrl').activate();
+				break;
+			case "bboxdel":
+				baseMap.mapInstance.getControl('highlightCtrl').deactivate();
+				baseMap.mapInstance.getControl('bboxdelCtrl').activate();
+				break;
+			default:
+				console.log("UPS this should never happen");
+			}
+		}
 
-	/**
-	 * Toggles the bounding box draw button and deals with the controllers
-	 */
-    this.toggleBBoxDraw = function (forcedeselect) {
-        forcedeselect = (( typeof forcedeselect !== 'undefined') ? forcedeselect : false);
-        if ($('#bboxdraw').hasClass('active') || forcedeselect) {
-			baseMap.mapInstance.getControl('bboxdrawCtrl').deactivate();
-            $('#bboxdraw').removeClass('active');
-        }
-        else {
-			baseMap.mapInstance.getControl('bboxdrawCtrl').activate();
-            $('#bboxdraw').addClass('active');
-        }
-    }
-	/**
-	 * Toggles the bounding box edit button and deals with the controllers
-	 */
-	this.toggleBBoxEdit = function() {
-        if ($('#bboxedit').hasClass('active') ) {
-			baseMap.mapInstance.getControl('bboxeditCtrl').deactivate();
-			baseMap.mapInstance.getControl('highlightCtrl').activate();
-            $('#bboxedit').removeClass('active');
-        }
-        else {
-			// We need to deactivate the highlightCtrl before the bbmod control actually 
-			// 	gets activated. This is probably because it is also a vector layer!?
-			baseMap.mapInstance.getControl('highlightCtrl').deactivate();
-			baseMap.mapInstance.getControl('bboxeditCtrl').activate();
-            $('#bboxedit').addClass('active');
-        }
 	}
-	/**
-	 * Toggles the bounding box delete button and deals with the controllers
-	 */
-	this.toggleBBoxDel = function() {
-        if ($('#bboxdel').hasClass('active')) {
-			baseMap.mapInstance.getControl('bboxdelCtrl').deactivate();
-			baseMap.mapInstance.getControl('highlightCtrl').activate();
-            $('#bboxdel').removeClass('active');
-        }
-        else {
-			// We need to deactivate the highlightCtrl before the bbmod control actually 
-			// 	gets activated. This is probably because it is also a vector layer!?
-			baseMap.mapInstance.getControl('highlightCtrl').deactivate();
-			baseMap.mapInstance.getControl('bboxdelCtrl').activate();
-            $('#bboxdel').addClass('active');
-        }
-	}	
-	
+
 	/**
 	 * Sets up the button and info text in the selection pane
 	 *
