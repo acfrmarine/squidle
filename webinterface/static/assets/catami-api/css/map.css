@@ -75,6 +75,18 @@
 	color: #ff0000;
 }
 
+.tooltip-campaign {
+	font-family: sans-serif;
+	font-size: 12px;
+    font-weight: bold;
+}
+.tooltip-dive {
+	font-family: sans-serif;
+	font-size: 12px;
+    font-weight: lighter;
+	font-style: italic;
+}
+
 .layersDiv, .olControlLayerSwitcher, .olControlOverviewMapElement {
     background-color: #333333 !important;
 }
