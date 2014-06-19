@@ -106,6 +106,7 @@
     left: 70px;*/
 	bottom: 0px;
 	left: 0px;
+	z-index: 1009;
     width: auto;
     height: auto;
 }

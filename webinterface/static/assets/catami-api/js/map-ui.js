@@ -1125,11 +1125,14 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         resultsHeight = $('.chosen-results').height();
         // Hight of the map area
         mapHeight = this.$mapobj.height();
-        // TODO: get the margin of the .chosen-drop from the css instead of coding it here (the 10px)
-        $('.chosen-drop').css('max-height', mapHeight-10+'px');
+		m = $('.chosen-drop').css('margin');
+		m = parseInt(m.substr(0, m.length-2));
+		maxHeight = (mapHeight-2*m)-5;
+		console.log()
+		$('.chosen-drop').css('max-height', maxHeight + 'px');
         // The min height of 50px is for when the results section is empty because there was no matching to the text
         //  search
-        $('.chosen-drop').height( Math.max(Math.min( mapHeight, resultsHeight), 50) );
+        $('.chosen-drop').height( Math.max(Math.min(resultsHeight, maxHeight), 50) );
     }
 
     this.addDeploymentSelectChosen = function($container, $infocontainer, layername) {
@@ -1139,7 +1142,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         
         var $btnListAll = $('<button type="button" id="drop-list-all" class="btn btn-xs" title="List all deployments."><i class=" icon-sort-by-attributes-alt"></i> List all</button>'),
 			$btnListVis = $('<button type="button" id="drop-list-vis" class="btn btn-xs" title="List deployments currently in view."><i class="icon-eye-open"></i> List visible</button>'),
-			$btnShowSel = $('<button type="button" id="drop-show-sel" class="btn btn-xs" title="Show deployments selected."><i class="icon-thumbs-up"></i> Show</button>'),
+			$btnShowSel = $('<button type="button" id="drop-show-sel" class="btn btn-xs" title="Show deployments selected."><i class="icon-zoom-in"></i> Show</button>'),
 			$btnDelSel = $('<button type="button" id="drop-del-sel" class="btn btn-xs" title="Remove selected deployments."><i class="icon-remove-sign"></i> Remove</button>');
 		$btnListAll.click( function(evt) {
 			evt.preventDefault();
@@ -1376,13 +1379,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	this.disableFilters = function() {
 		this.$filterpanel.find('input').prop('disabled',true);
 		this.$filterpanel.find('button').prop('disabled',true);
-		this.$filterpanel.find('.ui-slider').prop('disabled',true).slider('disable');
+		this.$filterpanel.find('.ui-slider').slider('disable');
 	}
 	
 	this.enableFilters = function() {
-		this.$filterpanel.find('input').prop('enable',true);
-		this.$filterpanel.find('button').prop('enable',true);
-		this.$filterpanel.find('.ui-slider').prop('disabled',true).slider('enable');
+		this.$filterpanel.find('input').prop('disabled',false);
+		this.$filterpanel.find('button').prop('disabled',false);
+		this.$filterpanel.find('.ui-slider').slider('enable');
 	}
 
     /**
