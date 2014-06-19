@@ -13,7 +13,7 @@
 }
 
 #map-panel-container {
-    width: 270px;
+    width: 250px;
     overflow-y: hidden;
     overflow-x: scroll;
     float: right;
@@ -124,7 +124,7 @@
 }
 .map-panel .map-panel-content {
     min-height: 50px;
-    max-height: 80px;
+/*    max-height: 80px;*/
     overflow-y: auto;
     overflow-x: auto;
 }

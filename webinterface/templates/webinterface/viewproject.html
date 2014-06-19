@@ -245,19 +245,20 @@
                     // Create panels
 					// TODO: Is this really necessary? I find it confusing and want to click it every time!
                     var $selpanel = map.addPanel($('#map-panel'), {id: 'mapsel', icon: 'icon-plus-sign-alt', title: 'Selection tools', closeable: false});
-                    $selpanel.append('<br>');
                     var $filterpanel = map.addPanel($('#map-panel'), {id: 'mapfilters', icon: 'icon-filter', title: 'Filters', closeable: false}, 'max-height: none; overflow-x: hidden; overflow-y:hidden;');
-                    var $curselpanel = map.addPanel($('#map-panel'), {id: 'mapselected', icon: 'icon-stackexchange', title: 'Current selection', closeable: false});
+                    var $curselpanel = map.addPanel($('#map-panel'), {id: 'mapselected', icon: 'icon-info', title: 'Info', closeable: false});
 
 					// Add selection tools
-					map.addDeploymentSelectNew($selpanel, $curselpanel, depImageLayer);
+					map.addDeploymentSelectChosen($selpanel, $curselpanel, depImageLayer);
 
 					// Add filters
-                    map.addRangeFilter($filterpanel, $curselpanel, filtImageLayer, 'depth', {step: 1, range: [0, 2000], unit: 'm'});
-                    map.addRangeFilter($filterpanel, $curselpanel, filtImageLayer, 'altitude', {step: 0.1, range: [0, 10], unit: 'm'});
-                    map.addDateFilter($filterpanel, $curselpanel, filtImageLayer, 'date_time', {from: '2005-01-01', to: new Date()});
-                    map.addBBoxFilter($filterpanel, $curselpanel, filtImageLayer);
-
+                    map.addRangeFilter($filterpanel, $filterpanel, filtImageLayer, 'depth', {step: 1, range: [0, 2000], unit: 'm'});
+                    map.addRangeFilter($filterpanel, $filterpanel, filtImageLayer, 'altitude', {step: 0.1, range: [0, 10], unit: 'm'});
+                    map.addDateFilter( $filterpanel, $filterpanel, filtImageLayer, 'date_time', {from: '2005-01-01', to: new Date()});
+                    map.addBBoxFilter( $filterpanel, $filterpanel, filtImageLayer);
+					map.$filterpanel = $filterpanel;
+					map.disableFilters();
+					
                     // add current selection info
                     map.addSelectionInfo($curselpanel);
                     map.updateSelectionInfo();
