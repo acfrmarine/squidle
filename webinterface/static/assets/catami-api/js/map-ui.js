@@ -49,6 +49,10 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 	var baseMap = this;
 
+	var visibleDeployments = [];
+	var $tooltipOnDeployment = null;
+
+
 	/**
 	 *
 	 * @param $mapobj
@@ -123,52 +127,96 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 //            }
 //        ));
 
+		OpenLayers.Control.ListenToClick = OpenLayers.Class(OpenLayers.Control, 
+			{
+			    defaultHandlerOptions: {
+			        'single': true,
+			        'pixelTolerance': 0,
+			        'stopSingle': false
+			    },
+
+			    initialize: function(options) {
+			        this.handlerOptions = OpenLayers.Util.extend(
+			            {}, this.defaultHandlerOptions
+			        );
+			        OpenLayers.Control.prototype.initialize.apply(
+			            this, arguments
+			        ); 
+			        this.handler = new OpenLayers.Handler.Click(
+			            this, {
+			                'click': this.onClick
+			            }, this.handlerOptions
+			        );
+			    }, 
+
+			    onClick: function(evt) {
+			        // Remove focus from the selected input box
+					$('input:focus').blur();
+					// Set the visible deps in the drop
+					baseMap.setActiveDeployments( baseMap.getVisibleDeployments() );
+	                baseMap.highlightDeployments();
+					
+					if( !baseMap.ctrl.imgclick.active ) {
+						// Enable the image fetch control
+                        baseMap.ctrl.imgclick.activate();
+					}
+					
+					if( baseMap.$tooltipOnDeployment ) {
+						baseMap.$tooltipOnDeployment.tooltip('hide');
+						baseMap.$tooltipOnDeployment = null;
+						
+						// TODO: Get this working. Ideally we want the highlight control to be deactivated when a tooltip is active
+						//	and reenabled here when closed. However, the dep click select stops working after deactivation :-/
+						//baseMap.mapInstance.getControl('highlightCtrl').activate();
+					}
+
+			    }
+			}
+		);
+		var ctmControl = new OpenLayers.Control.ListenToClick({
+		    handlerOptions: {
+		        'single': true,
+		        'pixelTolerance': 0,
+		        'stopSingle': false
+		    }
+		});
+		this.mapInstance.addControl(ctmControl);
+		ctmControl.activate();
+
 		this.mapInstance.events.on({
-//			"zoomend": function(e) {
-				// This is not necessary as we are dealing with the loading of the image layers through the maxScale 
-				//		option when the layers are created.
-				// console.log( "this.getZoom(): " + baseMap.mapInstance.getZoom() );
-// 				if( baseMap.mapInstance.getZoom() < 9 ) {
-// 					baseMap.mapInstance.getLayersByName('Deployment images')[0].setVisibility(false);
-// 					baseMap.mapInstance.getLayersByName('Selected images')[0].setVisibility(false);
-// 				} else {
-// 					baseMap.mapInstance.getLayersByName('Deployment images')[0].setVisibility(true);
-// 					baseMap.mapInstance.getLayersByName('Selected images')[0].setVisibility(true);
-// 				}
-//			},
-            "moveend" : function(e) {
-                // The below code highlights the deployment origin markers if there is a deployment within this marker
-                //  that has been selected
-                // If no deployemnt has been selected
-                if( $('#deploymentSelect').val() == null  ) {
-                    return;
-                }
-                // Get the deployment origin layer
-                depLayer = baseMap.mapInstance.getLayersByName(baseMap.depOriginLayerName)[0];
-                // Get the select control and clear all features
-                selectCtrl = baseMap.mapInstance.getControlsBy('id', 'selectCtrl')[0];
-                // Get IDs of selected deployments
-                for( dSel = 0; dSel < $('#deploymentSelect').val().length; dSel++ ) {
-                    id = ($('#deploymentSelect').val()[dSel]).toString();
-
-                    // Get the deployment layer feature corresponding to this id
-                    featInd = depLayer.features.map( function(e) {
-                        f = [];
-                        for(i = 0; i < e.cluster.length; i++)
-                            f.push( e.cluster[i].fid.split('.')[1] );
-                        return f;
-                    }).map( function(e) {return e.indexOf(id);} ).map( function(e) { return e >= 0;} ).indexOf( true );
-
-                    console.log(dSel+': id='+id+', featInd='+featInd);
-                    selectCtrl.highlight( depLayer.features[featInd] );
-                }
+			"zoomend": function(evt) {
+				baseMap.addTooltips();
+				
+				if( baseMap.mapInstance.getLayersByName(baseMap.depImageLayerName)[0].inRange && 
+				   !baseMap.ctrl.imgclick.active ) {
+                    baseMap.ctrl.imgclick.activate();
+				} else if( !baseMap.mapInstance.getLayersByName(baseMap.depImageLayerName)[0].inRange &&
+                    baseMap.ctrl.imgclick.active ) {
+                    baseMap.ctrl.imgclick.deactivate();
+				}
+			},
+            "moveend" : function(evt) {
+				baseMap.addTooltips();
+				
+            	visible = baseMap.getVisibleDeployments();
+			    baseMap.visibleDeployments = visible;
+			    
+				baseMap.setActiveDeployments( visible );
+                baseMap.highlightDeployments();
+				
+				// A work-around to avoid having tooltips sticking during zoom
+				$('.tooltip').hide();
+				if( baseMap.$tooltipOnDeployment ) {
+					baseMap.$tooltipOnDeployment = null;
+				}
             }
 		});
+
+
 		this.isInitialised = true;
 	}
 
 	this.setFullHeight = function() {
-		// console.log("Function setFullHeight");
         this.$mapobj.height($(window).height() - this.$mapobj.offset().top);
         this.$mappanel.parent().height($(window).height() - this.$mappanel.parent().offset().top);
         //this.$mapobj.width($(window).width()- this.$mappanel.parent().width());
@@ -180,10 +228,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
      * @param filterArray
      */
     this.updateMapUsingFilter = function (filterArray, layerName) {
-		// console.log("Function updateMapUsingFilter");
-        // console.log("\tApplying map filter to layer: '"+ layerName + "'");
-        // console.log(filterArray);
-        
         var filter_1_1 = new OpenLayers.Format.Filter({
             version: "1.1.0"
         });
@@ -200,11 +244,78 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         layer.params['FILTER'] = new_filter;
 
         layer.redraw();
-		// console.log("END updateMapUsingFilter");
     };
 
+    this.getIDsFromClusterFeature = function(f) {
+    	ids = f.cluster.map( function(e,i) { return e.data.id; } )
+        return ids;
+    }
 
+    this.getCampaignsFromClusterFeature = function(f) {
+    	camps = f.cluster.map( function(e,i) {return e.data.campaign_name} );
+        return camps;
+    }
 
+    this.getDeploymentsFromClusterFeature = function(f) {
+    	deps = f.cluster.map( function(e,i) {return e.data.short_name} );
+        return deps;
+    }
+	
+	/** 
+	 * Given a list of deployments, we find the markers that these correspond to and highlight them
+	 * Deployemnts that have been selected are set to selected state
+	 */
+    this.highlightDeployments = function(deployments) {
+		if( typeof deployments === 'undefined' || deployments === null ) {
+        	deployments = [];
+        }
+		
+        // Get the deployment origin layer
+        depLayer = baseMap.mapInstance.getLayersByName(baseMap.depOriginLayerName)[0];
+        // Get the controls and clear all features
+        selectCtrl = baseMap.mapInstance.getControlsBy('id', 'selectCtrl')[0];
+		highlightCtrl = baseMap.mapInstance.getControlsBy('id', 'highlightCtrl')[0];
+        for( dSel = 0; dSel < depLayer.features.length; dSel++ ) {
+        	selectCtrl.unhighlight( depLayer.features[dSel] );
+			highlightCtrl.unhighlight( depLayer.features[dSel] );
+        }
+		
+		// Get IDs of selected deployments
+		$dplselect = this.$dplselect;
+        if( typeof $dplselect.val !== 'undefined' && $dplselect.val() !== null ) {
+	        for( dSel = 0; dSel < $dplselect.val().length; dSel++ ) {
+	            id = $dplselect.val()[dSel];
+				
+	            // Get the deployment layer feature corresponding to this id
+	            featInd = depLayer.features.map( function(e) {
+	                return baseMap.getIDsFromClusterFeature( e );
+	            }).map( function(e) {
+					return e.indexOf(id);
+				}).map( function(e) { 
+					return e >= 0;
+				}).indexOf( true );
+	            selectCtrl.highlight( depLayer.features[featInd] );
+	        }
+		}
+		
+        if( typeof deployments !== 'undefined' && deployments !== null ) {
+			highlightCtrl.highlightOnly = true;
+			for( dSel = 0; dSel < deployments.length; dSel++ ) {
+	            id = deployments[dSel];
+
+	            // Get the deployment layer feature corresponding to this id
+	            featInd = depLayer.features.map( function(e) {
+	                return baseMap.getIDsFromClusterFeature( e );
+	            }).map( function(e) {
+					return e.indexOf(id);
+				}).map( function(e) { 
+					return e >= 0;
+				}).indexOf( true );
+	            highlightCtrl.highlight( depLayer.features[featInd] );
+	        }        
+			highlightCtrl.highlightOnly = true;
+	    }
+	}
 	/**
 	 * Will take a collectionId and update the collection layer and
 	 * set the map boundaries
@@ -214,7 +325,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * @param layersettings {markersize,markercol,isclickable}
 	 */
 	this.updateMapForCollection = function(clid, layername, layersettings) {
-		console.log("Function updateMapForCollection");
 		// overide default settings with layersettings
 		var settings = {
 			markersize : 5,
@@ -222,8 +332,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			isclickable : false
 		};
 		$.extend(settings, layersettings);
-		//console.log(settings);
-
 		// Create layer if it does not exist
 		if (this.mapInstance.getLayersByName(layername).length == 0) {
 			//this.mapInstance.addLayer(this.layers[layername]);
@@ -263,7 +371,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				infoFormat : "application/vnd.ogc.gml",
 				eventListeners : {
 					nogetfeatureinfo : function(event) {
-						console.log('No queryable layers found');
 					},
 					beforegetfeatureinfo : function(event) {
 						// build CQL_FILTER param list from active info layer CQL_FILTER params
@@ -277,13 +384,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 								filter += lyrCQL;
 							}
 						}
-						console.log(filter);
 						this.vendorParams = {
 							'FILTER' : filter
 						};
 					},
 					getfeatureinfo : function(event) {
-						console.log(event);
 						var imageNames = [];
 						if (event.features.length > 0) {
 							var fid = event.features[0].attributes.id;
@@ -306,7 +411,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * @param imageId
 	 */
 	this.updateMapForSelectedImage = function(imageId, layername) {
-		console.log("Function updateMapForSelectedImage");
 		layername = (( typeof layername !== 'undefined') ? layername : "Current Image");
 		if (this.mapInstance.getLayersByName(layername).length == 0) {
 			//this.layers[layername] = new OpenLayers.Layer.Markers(layername);
@@ -333,8 +437,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * Update the map for a set of deployments
 	 **/
 	this.addDeployments = function(layername) {
-		// console.log("Function showDeployments");
-				
 		// Create the layer if it does not already exist
 		if (this.mapInstance.getLayersByName(layername).length != 0) {
 			console.log("WARNING: We should never end here!");
@@ -364,7 +466,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					}
 				}
 			});
-
 		}
 
 		var deploymentlayer = new OpenLayers.Layer.Vector( layername, {
@@ -374,19 +475,23 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				],
 				protocol: new OpenLayers.Protocol.WFS({
 					url: this.wfsUrl,
-					featureType: "catamidb_deployment"
+					featureType: "deployments"
 					//featureNS : "http://catami"
 				}),
 				styleMap: new OpenLayers.StyleMap({
 					"default":   style("#000000", "#000000", 4),
-//					"select": style("#cccccc", "#000000", 4),
-                    "select":    style("#0000ff", "#ffffff", 4),
+                    "select":    style("#00ff00", "#ffffff", 4),
 					"highlight": style("#000000", "#ffffff", 8, 1)
 				}),
 				projection: baseMap.projection.geographic
 		});
         deploymentlayer.events.on({
-			"featureselected" : zoomToDeployments,
+			"featuresadded" : function(evt) {
+				// console.log('featuresadded');
+			},
+			"featureselected" : function(evt) {
+				// console.log('featureselected');
+			},
             "loadend" : function(evt) {
                 baseMap.mapInstance.zoomToExtent(evt.object.getDataExtent());
 		    }
@@ -401,12 +506,37 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			handlerOptions : {
 				//'delay' : 5000
 			},
-			/*
-			 * could update some information about the highlighted deployments
-			 */
-			eventListeners : {
-				//beforefeaturehighlighted: report,
-				featurehighlighted : showDeploymentInfo
+			callbacks: {
+				over: function(evt) {
+					// We have an active tooltip so don't show this one
+					if( baseMap.$tooltipOnDeployment ) {
+						return;
+					}
+					// Disable the image fetch control
+                    baseMap.ctrl.imgclick.deactivate();
+					
+					// Find the circle that triggered the event
+					circId = evt.geometry.id;
+					if( ($c = getCircle(circId)) !== null ) {
+						$c.data('clicked', false);
+						$c.tooltip('show');
+						$('.tooltip-inner').css('max-width','400px');
+					}
+				},
+				out: function(evt) {
+					// We have another active tooltip
+					if( baseMap.$tooltipOnDeployment ) {
+						return;
+					}
+					// Enable the image fetch control
+                    baseMap.ctrl.imgclick.activate();
+					
+					circId = evt.geometry.id;
+					if( ($c = getCircle(circId)) !== null ) {
+						$c.tooltip('hide');
+					}
+				}
+				
 			}
 		});
 		highlightCtrl.id = "highlightCtrl";
@@ -414,83 +544,287 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		highlightCtrl.activate();
 
 		var selectCtrl = new OpenLayers.Control.SelectFeature(deploymentlayer, {
-            eventListeners : {
-                featurehighlighted : function(event) {
-                    console.log('selectCtrl featurehighlighted');
-                }
-            }
-        });
+			callbacks: {
+				click: function(evt) {
+					// We have an active tooltip. Let's close that one first
+					if( baseMap.$tooltipOnDeployment ) {
+						baseMap.$tooltipOnDeployment.tooltip('hide');
+						baseMap.$tooltipOnDeployment = null;
+					}
+					// TODO: disable the highlight control and reenable when the tooptip is closed.
+					// 	Currently, when reenabled the click selection stops working!
+					//baseMap.mapInstance.getControl('highlightCtrl').deactivate();
+					// Disable the image fetch control
+                    baseMap.ctrl.imgclick.deactivate();
+				
+					// Find the circle that triggered the event
+					circId = evt.geometry.id;
+					if( ($c = getCircle(circId)) === null ) {
+						return;
+					}
+					$c.data('clicked', true);
+					baseMap.$tooltipOnDeployment = $c;
+				
+					$c.tooltip('show');
+					$('.tooltip-inner').css('max-width','400px');
+
+					_evt = evt;
+					$('#tooltip-btn-zoom-'+circId.split('_')[1]).click( function(evt) {
+						baseMap.$tooltipOnDeployment.tooltip('hide');
+						baseMap.$tooltipOnDeployment = null;
+						
+						ids = baseMap.getIDsFromClusterFeature(_evt);
+						baseMap.updateMapBounds("deployment_ids=" + ids, baseMap.deploymentExtentUrl);
+					});
+					$('#tooltip-btn-list-'+circId.split('_')[1]).click( function(evt) {
+						baseMap.$tooltipOnDeployment.tooltip('hide');
+						baseMap.$tooltipOnDeployment = null;
+					
+						ids = baseMap.getIDsFromClusterFeature(_evt);
+						baseMap.setActiveDeployments(ids);
+						baseMap.showDeploymentSelect();
+					});
+					$('#tooltip-btn-sel-'+circId.split('_')[1]).click( function(evt) {
+						baseMap.$tooltipOnDeployment.tooltip('hide');
+						baseMap.$tooltipOnDeployment = null;
+					
+						ids = baseMap.getIDsFromClusterFeature(_evt);
+						baseMap.deploymentSelectAdd( ids );
+						baseMap.showDeploymentSelect();
+					});
+					$('#tooltip-btn-del-'+circId.split('_')[1]).click( function(evt) {
+						baseMap.$tooltipOnDeployment.tooltip('hide');
+						baseMap.$tooltipOnDeployment = null;
+					
+						ids = baseMap.getIDsFromClusterFeature(_evt);
+						baseMap.deploymentSelectDel( ids );
+						baseMap.showDeploymentSelect();
+					});
+				}
+			}
+			//, {
+            // eventListeners : {
+            //     featurehighlighted : function(event) {
+            //         console.log('selectCtrl featurehighlighted');
+            //     }
+            // }
+			//}
+		});
         selectCtrl.id = "selectCtrl";
 		this.mapInstance.addControl(selectCtrl);
 		selectCtrl.activate();
-
-
+		
 	};
-	/**
-	 * Event function for when we hover over a deployment
-	 */
-	function showDeploymentInfo(event) {
-		// console.log("Function showDeploymentInfo");
-
-		if (event.feature.cluster.length == 0) {
-			return;
+	this.addTooltips = function() {
+		// Get the visible circles
+		$circles = this.$mapobj.find('circle');
+		for( iC = 0; iC < $circles.length; iC++ ) {
+			$c = $($circles[iC]);
+			// tooltip already exists no need to destory and recreate
+			if( typeof $c.data('original-title') !== 'undefined' ) {
+				continue
+			}
+			
+			// Id of the circle generating the event
+			circId = $c.attr('id');
+			circIdShort = circId.split('_')[1];
+						
+			// Get deployment info for this circle
+			if( (feature = this.getCircleFeature(circId)) === null ) {
+				console.log('OH OH NO FEATURE');
+				return;
+			}
+			
+			// If no clusters, get the name of this single dive
+			numDeps = feature.cluster.length;
+			if( numDeps === 1 ) {
+				campaigns = false;
+				namesU = this.getDeploymentsFromClusterFeature(feature);
+				depId = this.getIDsFromClusterFeature(feature);
+				$c.data('depId',depId);
+			}
+			// Get the name of the campaigns within the deployment cluster
+			else {
+				campaigns = true;
+				names = this.getCampaignsFromClusterFeature(feature);
+				// Get the unique campaign names
+				namesU = names.filter( function(itm,i,a) {
+					return i==a.indexOf(itm);
+				}).sort();
+				// Get number of deployments for each
+				for(i = 0; i < namesU.length; i++) {
+					depName = namesU[i];
+					sum = 0;
+					inThis = feature.cluster.map( function(e) { return (e.data.campaign_name === depName) ? 1 : 0; } );
+					$.each(inThis,function(){sum+=parseFloat(this) || 0;});
+					if( sum ) {
+						namesU[i] = depName + " ("+ sum + ")";
+					}
+				}
+			}
+			
+			// Create div for the names
+			var $divNames = $('<div id="tooltip-campaign-names-'+circIdShort+'"></div>');
+			if( campaigns ) {
+				$divNames.addClass("tooltip-campaign");
+			}
+			else {
+				$divNames.addClass("tooltip-dive");
+			}
+			$divNames.append( namesU.join('<br>') );
+			// Create buttons
+			var $btnZoom = $('<button type="button" id="tooltip-btn-zoom-'+circIdShort+'" class="btn btn-xs" title="Zoom into deployments."><i class="icon-zoom-in"></i>&nbsp;Zoom</button>');
+			var $btnList = $('<button type="button" id="tooltip-btn-list-'+circIdShort+'" class="btn btn-xs" title="List deployments."><i class="icon-list"></i>&nbsp;List</button>');
+			var $divBtns = $('<div id="tooltip-btns-'+circIdShort+'" class="tooltip-buttons" style="border-top: solid 1px #777777; margin-top: 3px; padding-top: 5px;"></div>');
+			$divBtns.append($btnZoom, $btnList);
+			if( numDeps === 1 ) {
+				// Only create selection button when a single deployments
+				//	As Ari says, we don't want people to be able to select too many deployments easily :P
+				var $btnSel = $('<button type="button" id="tooltip-btn-sel-'+circIdShort+'" class="btn btn-xs" title="Select deployment."><i class="icon-thumbs-up"></i>&nbsp;Select</button>');
+				var $btnDel = $('<button type="button" id="tooltip-btn-del-'+circIdShort+'" class="btn btn-xs" title="Remove deployment."><i class="icon-thumbs-down"></i>&nbsp;Remove</button>');
+				$btnSel.data('depId', depId);
+				$btnDel.data('depId', depId);
+				$divBtns.append($btnSel, $btnDel);
+			}
+			// 
+			$toolHTML = $('<div id="tooltip-'+circIdShort+'"></div>');
+			$toolHTML.append($divNames, $divBtns);
+			
+			$c.data('tool',$toolHTML[0]);
+			$c.tooltip({
+				'html': true,
+				'container': 'body', // TODO: attach to the element itself
+				'placement': 'right',
+				'trigger': 'manual',
+				'title': function() {
+					$c = $(this);
+					
+					circId = $c.attr('id');
+					circIdShort = circId.split('_')[1];
+					
+					clicked = $c.data('clicked');
+					depId = ''+$c.data('depId');
+					$tool = $($c.data('tool'));
+					// If clicked show buttons
+					if( clicked ) { 
+						$tool.find('.tooltip-buttons').css('display','block');
+						
+						showDeselect = false;
+						if( baseMap.$dplselect.val() !== null ) {
+							for( i = 0; i < baseMap.$dplselect.val().length; i++ ) {
+								if( baseMap.$dplselect.val()[i] === depId ) {
+									showDeselect = true;
+									break;
+								}
+							}
+						}
+						if( showDeselect ) {
+							// Hide select, show deselect
+							$($tool.find('#tooltip-btn-sel-'+circIdShort+'')).prop('disabled',true);
+							$($tool.find('#tooltip-btn-del-'+circIdShort+'')).prop('disabled',false);
+						}
+						else {
+							// Hide deselct, show select
+							$($tool.find('#tooltip-btn-sel-'+circIdShort+'')).prop('disabled',false);
+							$($tool.find('#tooltip-btn-del-'+circIdShort+'')).prop('disabled',true);
+						}
+						
+					}
+					else {
+						$tool.find('.tooltip-buttons').css('display','none');
+					}
+					
+					return $tool[0];
+				}
+			});
+			$c.data('clicked', false);
 		}
-		
-		var $depinfo,
-            depid = 0,
-            checked = '',
-            filtdepids = [],
-            selecteddpls = '',
-            otherdpls = '',
-            i;
-
-        baseMap.$dplinfo.html('');
-
-        // add selected deployments
-        for (i = 0; i < baseMap.filters.deployments.length; i++) {
-            $depinfo = getDeploymentCheckbox(baseMap.filters.deployments[i].id, baseMap.filters.deployments[i].name, 'checked');
-            baseMap.$dplinfo.append($depinfo);
-            filtdepids.push(baseMap.filters.deployments[i].id); // create array of selected deployment ids
-        }
-
-        // add other unselected deployments
-        for (i = 0, len = event.feature.cluster.length; i < len; i++) {
-            depid = event.feature.cluster[i].fid.split('.')[1];
-            if ($.inArray(depid, filtdepids) < 0) {
-                //$depinfo = $('<a href="javascript:void(0)">' + event.feature.cluster[i].data.short_name + '</a>');
-                $depinfo = getDeploymentCheckbox(depid, event.feature.cluster[i].data.short_name, '');
-                baseMap.$dplinfo.append($depinfo);
-            }
-		}
-
-	
-        baseMap.$imginfo.parent().hide();
-        baseMap.$dplinfo.parent().show();
-        baseMap.$infopane.show(200);
-
 	}
-
-    function getDeploymentCheckbox (id,name,checked) {
-		// Checkbox, zoom, deployment name
-		var $depinfo   = $('<label class="checkbox"><input type="checkbox" value="' + id + '" '+checked+' ><a id="'+id+'" href="javascript: void(0);"><i class="icon-search"></i></a>&nbsp;' + name + '</label>');
-        
-        $depinfo.find("input").click(function () {
-			if (this.checked) {
-				$('#deploymentSelect').multiselect('select', this.value);
+	/**
+	 * Given a circle id, return the circle element
+	 */
+	function getCircle( circId ) {
+		$c = $('circle');
+		for( i = 0; i < $c.length; i++ ) {
+			if( circId === $c[i].id ) {
+				return $($c[i]);
 			}
-            else {
-				$('#deploymentSelect').multiselect('deselect', this.value);
+		}
+		return null;
+	}
+	/** 
+	 * Given a circle id, get the vector layer features corresponding to this.
+	 */
+	this.getCircleFeature = function( circId ) {
+		depLayer = this.mapInstance.getLayersByName(this.depOriginLayerName)[0];
+		
+		for( i = 0, l = depLayer.features.length; i<l; i++) {
+			if( depLayer.features[i].geometry.id === circId ) {
+				return depLayer.features[i];
 			}
-        });
-		
-		$depinfo.find("a").click( function (event) {
-			var deploymentIds = [this.id];
-			baseMap.updateMapBounds("deployment_ids=" + deploymentIds, baseMap.deploymentExtentUrl);
-		});
-		
-        return $depinfo;
-    }
+		}
+		return null;
+	}
+	
+	/** 
+	 * Looks for deployment layer features that are within the extent
+	 */
+	this.getVisibleDeployments = function() {
+    	// Get the deployment origin layer
+		depLayer = baseMap.mapInstance.getLayersByName(baseMap.depOriginLayerName)[0];
 
+    	var extent = baseMap.mapInstance.getExtent();
+	    visible = [];
+
+	    for( var i = 0; i < depLayer.features.length; i++ ) { 
+	    	var f = depLayer.features[i]; 
+			
+			// No need to check the extent. This is done by the map when updating the features
+	    	if( f.onScreen() ) { 
+	    		visible = visible.concat( baseMap.getIDsFromClusterFeature(f) );
+			} 
+	    }
+		
+		return visible;
+	}
+	
+	/**
+	 * Updates the multiselect so the chosen deployments are enabled and the rest disabled (will not show in drop)
+	 */
+	this.setActiveDeployments = function(deploymentIds) {
+		var depid = 0, i;
+		if( typeof deploymentIds === 'undefined' || deploymentIds === null ) {
+			deploymentIds = [];
+		}
+		
+        // Disable everything that has not been selected
+        $('#deploymentSelect option:not(selected)').each( function() { this.disabled = true; } );
+
+		// enable deployments that are already selected
+		for (i = 0; i < baseMap.filters.deployments.length; i++) {
+			depid = baseMap.filters.deployments[i].id;
+			this.$dplselect.find('option[value="'+depid+'"]').prop('selected', true);
+			this.$dplselect.find('option[value="'+depid+'"]').prop('disabled', false);
+		}
+
+        // enable deployments that are passed in
+        for (i = 0, len = deploymentIds.length; i < len; i++) {
+            this.$dplselect.find('option[value="'+deploymentIds[i]+'"]').prop('disabled', false);
+		}
+		
+		this.$dplselect.trigger('chosen:updated');
+	}
+	/**
+	 * Triggers chosen update command to read from the multiselect, opens chosen and sets the appropriate height
+	 * 	of the drop window
+	 */
+	this.showDeploymentSelect = function() {
+        // Remove focus from the selected input box
+		$('input:focus').blur();
+		this.$dplselect.trigger('chosen:open');
+		this.updateChosenDropHeight();
+	}
+ 
 	/**
 	 * Zoom to a deployment
 	 **/
@@ -508,17 +842,12 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			baseMap.updateMapBounds("deployment_ids=" + deploymentIds, baseMap.deploymentExtentUrl);
 			//(deploymentIds);
 		}
-		// hide the popup if it was visible
-		//this.setFullHeight = ide();
 
-		//var f = event.feature;
-		//console.log(event.feature);
 	}
 
 
 
 	this.showImages = function(layername) {
-		console.log("Function showImages");
 		layername = (( typeof layername !== 'undefined') ? layername : "Images");
 		if (this.mapInstance.getLayersByName(layername).length == 0) {
 			var ImagesLayer = this.mapInstance.addLayer(new OpenLayers.Layer.WMS(layername, this.wmsUrl, {
@@ -541,12 +870,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				hover : false,
 				output : "object",
 				infoFormat : "application/vnd.ogc.gml",
-				maxFeatures : 6,
+				maxFeatures : 9,
 				eventListeners : {
 					getfeatureinfo : function(event) {
-					console.log("showImages:");
-					console.log(event);
-
                         if (event.features.length > 0) {
                             baseMap.$imginfo.html('');
                             var fid, $thumb;
@@ -570,10 +896,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 
     function getImageInfo (id) {
-		// console.log("Function getImageInfo");
         var imginfo = thlist.getImageInfo(id);
-        //console.log(imginfo);
-
         var position = imginfo.position.replace(/.*\(|\)/gi, '').split(' ');
         var parseWebLocation = imginfo.images[0].web_location.split('/');
         var imgName = parseWebLocation[parseWebLocation.length - 1];
@@ -592,10 +915,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 //                                }
 
         var $thumb = $('<a href="' + imginfo.images[0].web_location + '" title="' + infotxt + '" ><img src="' + imginfo.images[0].thumbnail_location + '"/></a> ');
-        $thumb.tooltip({trigger: "hover", html: true, placement: 'right'});
+        $thumb.tooltip({trigger: "hover", html: true, placement: 'top'});
         $thumb.fancybox();
 		
-		// console.log("END getImageInfo");
         return $thumb;
     }
 
@@ -607,10 +929,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * visible: visibility at creation
 	 * color: [optional] color of the markers
 	 */
-	this.addImageLayer = function(layername, minscale, visible, color) {
-		// console.log("Function addImageLayer: " + layername);
-		
+	this.addImageLayer = function(layername, minscale, visible, color, addcontrols) {
 		color = (( typeof color !== 'undefined') ? color : "0000FF");
+        addcontrols = (( typeof addcontrols !== 'undefined') ? addcontrols : false);
 		
 		// add the selection layer if required
 		var imglayer = new OpenLayers.Layer.WMS(
@@ -635,63 +956,117 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             }
 		);
 		imglayer.events.on({
+            // TODO: change to use a different method instead of this
 			"loadstart": function(e) {
 				// show a busy dialog
-				show_busy("Updating selection...");
+				//show_busy("Updating selection...");
 			},
 			"loadend": function(e) {
 				// hide the busy dialog
-				hide_busy();
-			},
-			"visibilitychanged": function(e) {
-				// console.log("visibilitychanged");
-			},
-			"move": function(e) {
-				// console.log("move");
+				//hide_busy();
 			}
 		})
 		imglayer.setVisibility(visible);
-        this.mapInstance.addLayer(imglayer);
-		
-        var showFeatureInfoCtrl = new OpenLayers.Control.WMSGetFeatureInfo(
-		{
-            url: baseMap.wmsUrl,
-            title: 'ClickImg',
-            layers: baseMap.mapInstance.getLayersByName(layername),
-            queryVisible: true,
-            hover: false,
-            output: "object",
-            infoFormat: "application/vnd.ogc.gml",
-            maxFeatures: 9,
-            eventListeners: 
-			{
-	    		nogetfeatureinfo : function(event) 
-				{
-					console.log('No queryable layers found');
-	    		},
-				getfeatureinfo: function (event) 
-				{
-					console.log("getfeatureinfo event");
-                	if (event.features.length > 0) {
-                    	baseMap.$imginfo.html('');
-                    	var fid, $thumb;
-                        for (var i = 0; i < event.features.length; i++) {
-                            fid = event.features[i].attributes.img_id;
-                            $thumb = getImageInfo(fid);
-                            baseMap.$imginfo.append($thumb);
+        baseMap.mapInstance.addLayer(imglayer);
+
+
+        if (addcontrols) {
+//            baseMap.$imgclick = $('<div id="imgclick"></div>');
+//            $('#deployment-map').append(baseMap.$imgclick);
+
+
+            baseMap.ctrl = {
+            imgclick : new OpenLayers.Control.WMSGetFeatureInfo({
+                    url: baseMap.wmsUrl,
+                    title: 'ClickImg',
+                    id: 'showFeatureInfoCtrl',
+                    layers: baseMap.mapInstance.getLayersByName(layername),
+                    queryVisible: true,
+                    hover: false,
+                    output: "object",
+                    infoFormat: "application/vnd.ogc.gml",
+                    maxFeatures: Math.floor((baseMap.$mapobj.width() - 16) / 102),
+                    eventListeners: {
+                        nogetfeatureinfo: function (event) {
+
+                        },
+                        getfeatureinfo: function (event) {
+                            if (event.features.length > 0 && $('.tooltip').length === 0) {
+                                // Calculate the padding necessary
+                                padWidth = ((baseMap.$mapobj.width() - 16) / event.features.length - 102) / 2;
+
+                                baseMap.$imginfo.html('');
+                                var fid, $thumb;
+                                for (var i = 0; i < event.features.length; i++) {
+                                    fid = event.features[i].attributes.img_id;
+                                    $thumb = getImageInfo(fid);
+                                    $thumb.css('padding-left', padWidth);
+                                    $thumb.css('padding-right', padWidth);
+                                    baseMap.$imginfo.append($thumb);
+                                }
+                                baseMap.$imginfo.parent().show();
+                                baseMap.$infopane.show(0);
+                                // the 16px less is because mapobj.padding=0.5em ~14px
+                                baseMap.$infopane.width(baseMap.$mapobj.width() - 16);
+                            }
                         }
-                        baseMap.$imginfo.parent().show();
-                        baseMap.$infopane.show(200);
-                	}
-				}
-        	}
-		});
-		showFeatureInfoCtrl.id = "showFeatureInfoCtrl";
-        this.mapInstance.addControl(showFeatureInfoCtrl);
-        showFeatureInfoCtrl.activate();
-		
-		// console.log("\tCreated new layer: " + layername);
-		// console.log("END addImageLayer");
+                    }
+                }),
+                imghover: new OpenLayers.Control.WMSGetFeatureInfo({
+                    url: baseMap.wmsUrl,
+                    title: 'HoverImg',
+                    id: 'highlightFeatureCtrl',
+                    layers: baseMap.mapInstance.getLayersByName(layername),
+                    queryVisible: true,
+                    hover: true,
+                    //handlerOptions: {'delay': 1000},
+                    output: "object",
+                    infoFormat: "application/vnd.ogc.gml",
+                    maxFeatures: 1,
+                    eventListeners: {
+                        nogetfeatureinfo: function (event) {
+                            console.log('Nothing!');
+                        },
+                        getfeatureinfo: function (event) {
+                            var imgclicklayer = baseMap.mapInstance.getLayersByName('Bounding boxes')[0];
+
+                            if (event.features.length > 0 ) {
+                                console.log('Got a feature!');
+
+                                if (!baseMap.ctrl.imgclick.active)
+                                    baseMap.ctrl.imgclick.activate();
+
+                                var lonlat = new OpenLayers.LonLat(event.features[0].geometry.x, event.features[0].geometry.y)
+                                    .transform(baseMap.projection.geographic, baseMap.projection.mercator);
+
+                                if (baseMap.imgclickfeat){
+                                    baseMap.imgclickfeat.move(lonlat);
+                                    console.log('update');
+                                }
+                                else {
+                                    baseMap.imgclickfeat = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
+                                    imgclicklayer.addFeatures([baseMap.imgclickfeat]);
+                                }
+                            }
+                            else {
+                                console.log('No feature?!');
+                                if (baseMap.ctrl.imgclick.active)
+                                    baseMap.ctrl.imgclick.deactivate();
+                                if (baseMap.imgclickfeat)
+                                    imgclicklayer.removeFeatures(baseMap.imgclickfeat);
+                                baseMap.imgclickfeat = false;
+                            }
+                        }
+                    }
+                }
+            )};
+            this.mapInstance.addControl(baseMap.ctrl.imgclick);
+            this.mapInstance.addControl(baseMap.ctrl.imghover);
+            baseMap.ctrl.imghover.activate();
+
+
+
+        }
 	}
 
 	/**
@@ -701,9 +1076,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * 
 	 */
 	this.showSelectedImages = function() {
-		// console.log("Function showSelectedImages");
-
-		var deployments = [], 
+		var deployments = [],
 			numDeployments = this.filters.deployments.length;
 			
 		if( numDeployments == 0) {
@@ -734,8 +1107,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		
 		// Update buttons
         this.updateSelectionInfo();
-
-		// console.log("END showSelectedImages");
 	};
 
 
@@ -769,7 +1140,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 *
 	 */
     this.getSelectFilters = function () {
-		// console.log("Function getSelectedFilters");
         var filter = [],
 			selectfilters = [];
 
@@ -804,7 +1174,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * Creates a filter based on the ranges set and bounding boxes drawn
 	 */
     this.getRangeFilters = function () {
-		// console.log("Function getRangeFilters");
         var filters = [],
             bboxfilters = [],
             key;
@@ -844,7 +1213,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * Returns the selected filters, if any. Otherwise return an empty list.
 	 */
     this.getFilters = function () {
-		// console.log("Function getFilters");
         var filters = [],
             rangefilters = this.getRangeFilters(),
             selectfilters = this.getSelectFilters();
@@ -861,124 +1229,235 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         return filters;
     }
 
+    this.updateDeploymentFilter = function() {
 
+        this.filters.deployments = [];
 
-
-
-    
-
-	/**
-	 *
-	 */
-    this.addDeploymentSelect = function ($container, $infocontainer, layername) {
-		// console.log("Function addDeploymentSelect: " + layername);
-
-        var $btn = $('<span id="deployment-button" class="btn btn-xs">Deployments filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span><br>');
-
-        // Create a multiple select object, populate it through an AJAX query and append to the container
-        var $dplselect = $('<select multiple id="deploymentSelect" name="deploymentSelect"> </select>');
-        addCampaignsToSelect($dplselect);
-        $container.append($dplselect);
-
-        //$dplselect.jAutochecklist({width: $container.innerWidth(), absolutePosition:true, popupSizeDelta: 150});
-        $dplselect.multiselect({
-            maxHeight: 400,
-            buttonWidth: $container.innerWidth(),
-            enableCaseInsensitiveFiltering: true,
-            buttonText: function (options, select) {
-                if (options.length == 0) return '<i class="icon-th-list"></i> Select deployment(s)';
-                else if (options.length == 1) return '<i class="icon-th-list"></i> '+ options.length +' deployment selected';
-                else return '<i class="icon-th-list"></i> ' + options.length + ' deployments selected';
-            },
-            onChange: function (element, checked) {
-				var id, name, $dplinfo, info = '';
-                baseMap.$dplinfo.find("input").prop('checked',false);  // deselect deployment property
-                baseMap.filters.deployments = [];
-                if ($dplselect.val() != null) {
-                    console.log('selecting deployments');
-                    baseMap.updateMapBounds("deployment_ids=" + $dplselect.val(), baseMap.deploymentExtentUrl);
-
-                    // Loop through selected deployments in the multiselect
-                    for (var i=0 ; i < $dplselect.val().length ; i++) {
-                        id = $dplselect.val()[i];
-                        name = $dplselect.find("option[value='" + id + "']").text();
-                        baseMap.filters.deployments.push(
-                        		{
-                        			id: id,
-                        			name: name
-                        		}
-                        	);
-                        //console.log($dplselect.find("option[value='" + $dplselect.val()[i] + "']").text());
-
-                        // check selected in info panel, otherwise add to info panel
-                        $dplinfo = baseMap.$dplinfo.find("input[value='" + id + "']");
-                        $dplinfo.prop('checked', true);
-//                        if ($dplinfo.length <= 0) $dplinfo.prop('checked', true);
-//                        else baseMap.$dplinfo.prepend(getDeploymentCheckbox(id,name,'checked'));
-                    }
-                    $btn.show();
-
-
-
-
-
-                }
-                else {
-                	$btn.hide();
-
-                    console.log('deselecting all deployments');
-                    map.mapInstance.getControlsBy('id', 'selectCtrl')[0].unselectAll();
-                }
-
-                baseMap.showSelectedImages();
+        if( this.$dplselect.val() !== null ) {
+            // Loop through selected deployments in the multiselect
+            for (var i=0 ; i < this.$dplselect.val().length ; i++) {
+                id = this.$dplselect.val()[i];
+                name = this.$dplselect.find("option[value='" + id + "']").text();
+                this.filters.deployments.push({
+                    id: id,
+                    name: name
+                });
             }
-        });
-
-        // Configure multiselect popout
-        var $popout = $container.find('.multiselect-container');
-        // set height
-        $popout.css({'max-height': baseMap.$mapobj.innerHeight()});
-        // set position
-        $popout.css({position:'absolute',
-            top: Math.max(-$popout.outerHeight()/2 , baseMap.$mapobj.offset().top - $popout.parent().offset().top),
-            left: -$popout.outerWidth(),
-            'z-index': 9999,
-            width: $popout.outerWidth()
-        });
-
-
-        // Setup deployment filter button
-        $btn.hide();
-		$btn.find("a").click(function () {
-			// Remove all selections
-			$dplselect.multiselect('deselect', $dplselect.val());
-        });
-		$btn.tooltip({
-			html: true, 
-			placement: 'left', 
-			trigger:'hover',
-			title: function() {
-				var msg = '';
-				// Show number of deployments and their info
-		        if (baseMap.filters.deployments != null) {
-		            for (var i = 0; i < baseMap.filters.deployments.length; i++) {
-		                msg += baseMap.filters.deployments[i].name + '<br>';
-		            }
-		        }
-				return msg;
-			}
-		});
-		$btn.tooltip("show");
-		$infocontainer.append($btn);
+        }
     }
 
+    this.updateChosenDropHeight = function() {
+        // Hight of the results section
+        resultsHeight = $('.chosen-results').height();
+        // Hight of the map area
+        mapHeight = this.$mapobj.height();
+		m = $('.chosen-drop').css('margin');
+		m = parseInt(m.substr(0, m.length-2));
+		maxHeight = (mapHeight-2*m)-5;
+		console.log()
+		$('.chosen-drop').css('max-height', maxHeight + 'px');
+        // The min height of 50px is for when the results section is empty because there was no matching to the text
+        //  search
+        $('.chosen-drop').height( Math.max(Math.min(resultsHeight, maxHeight), 50) );
+    }
+
+    this.addDeploymentSelectChosen = function($container, $infocontainer, layername) {
+
+        this.$dplselect = $('<select multiple id="deploymentSelect" name="deploymentSelect"> </select>');
+        addCampaignsToSelect(this.$dplselect);
+        
+        var $btnListAll = $('<button type="button" id="drop-list-all" class="btn btn-xs" title="List all deployments."><i class=" icon-sort-by-attributes-alt"></i> List all</button>'),
+			$btnListVis = $('<button type="button" id="drop-list-vis" class="btn btn-xs" title="List deployments currently in view."><i class="icon-eye-open"></i> List visible</button>'),
+			$btnShowSel = $('<button type="button" id="drop-show-sel" class="btn btn-xs" title="Show deployments selected."><i class="icon-zoom-in"></i> Show</button>'),
+			$btnDelSel = $('<button type="button" id="drop-del-sel" class="btn btn-xs" title="Remove selected deployments."><i class="icon-remove-sign"></i> Remove</button>');
+		$btnListAll.click( function(evt) {
+			evt.preventDefault();
+			evt.stopPropagation();
+			baseMap.setActiveDeployments( $('option').map( function(i,e) {return $(e).val();} ) );
+			baseMap.showDeploymentSelect();
+			baseMap.deploymentSelectCheckButtons();
+		});
+		$btnListVis.click( function(evt) {
+			evt.preventDefault();
+			evt.stopPropagation();
+			baseMap.setActiveDeployments( baseMap.getVisibleDeployments().sort() );
+			baseMap.showDeploymentSelect();
+			baseMap.deploymentSelectCheckButtons();
+		});
+		
+		
+		$btnShowSel.click( function(evt) {
+			if( baseMap.$dplselect.val() !== null ) {
+				baseMap.updateMapBounds("deployment_ids=" + baseMap.$dplselect.val(), baseMap.deploymentExtentUrl);
+			}
+		});
+		$btnShowSel.prop('disabled', true);
+		$btnDelSel.click( function(evt) {
+			baseMap.deploymentSelectDel( baseMap.$dplselect.val() );
+		});
+		$btnDelSel.prop('disabled', true);
+		
+		$divListBtns = $('<div class="btn-group btn-group-xs" style=""></div>');
+		$divListBtns.append( $btnListAll, $btnListVis );
+		
+		$divShowBtns = $('<div class="btn-group btn-group-xs"></div>');
+		$divShowBtns.append( $btnShowSel, $btnDelSel );
+		
+		$container.append($("<div style='margin: 10px;'></div>").append( this.$dplselect, $divListBtns ));
+		$container.append($("<div style='margin: 10px;'></div>").append( "Current selections:<br>", $divShowBtns ));
+        
+
+        this.$dplselect.chosen({
+            placeholder_text_multiple: "Choose deployments...",
+            search_contains: true, // searches any place in the word. Set to false to only search from beginning of the word
+            enable_split_word_search: false, // match the entire text
+            no_results_text: "Oops, no deployments found:", // show if no results found
+            display_selected_options: true, // Already selected options should be included (so we can deselect them)
+            display_disabled_options: false, // Hide options that are diabled
+            single_backstroke_delete: false, // first backspace selects, second one deletes
+            width: '100%' // set it here of set the width of the select box above
+        });
+
+
+        this.$dplselect.on('change', function (evt, params) {
+            diveID = params.id;
+            
+            // Added
+            if( params.type === 'checked' ) {
+                baseMap.deploymentSelectAdd( [diveID] );
+            }
+			// Removed
+			else if( params.type === 'unchecked' ) {
+				baseMap.deploymentSelectDel( [diveID] );
+			}
+            // Zoom to selection
+            else if( params.type === 'selected' ) {
+                baseMap.updateMapBounds("deployment_ids=" + [diveID], baseMap.deploymentExtentUrl);
+            }
+			// Highlight on map
+            else if (params.type === 'highlighted') {
+            	baseMap.highlightDeployments( [diveID] );
+            }
+		});
+		 this.$dplselect.on('chosen:showing_drop', function(evt, params) {
+			baseMap.updateChosenDropHeight();
+			baseMap.deploymentSelectCheckButtons();
+		});
+		this.$dplselect.on('chosen:hiding_drop', function(evt, params) {
+            baseMap.highlightDeployments();
+			// disable buttons
+			$('#drop-list-all').removeClass('active');
+			$('#drop-list-vis').removeClass('active');
+	        // Remove focus from the selected input box
+			$('input:focus').blur();
+        });
+    	this.$dplselect.on('chosen:new_results', function(evt, params) {
+			baseMap.updateChosenDropHeight();
+    	});
+		this.$dplselect.on('chosen:no_results', function(evt, params) {
+			baseMap.updateChosenDropHeight();
+    	});
+
+
+
+
+    }
+	/**
+	 * Add deployments to selection
+	 */
+	this.deploymentSelectAdd = function( deployments ) {
+		for( i = 0; i < deployments.length; i++) {
+			if( this.$dplselect.find('option[value="'+deployments[i]+'"]').prop('disabled') ) {
+				this.$dplselect.find('option[value="'+deployments[i]+'"]').prop('disabled', false);
+			}
+			this.$dplselect.find('option[value="'+deployments[i]+'"]').prop('selected', true);
+		}
+		
+		baseMap.updateDeploymentFilter();
+		baseMap.showSelectedImages();
+		baseMap.highlightDeployments();
+		this.$dplselect.trigger('chosen:updated');
+		
+		$('#drop-show-sel').prop('disabled', false);
+		$('#drop-del-sel').prop('disabled', false);
+		this.enableFilters();
+	}
+	/**
+	 * Remove a number of deployments
+	 */
+	this.deploymentSelectDel = function( deployments ) {
+		for( i = 0; i < deployments.length; i++) {
+			this.$dplselect.find('option[value="'+deployments[i]+'"]').prop('selected', false);
+		}
+
+		baseMap.updateDeploymentFilter();
+        baseMap.showSelectedImages();
+		baseMap.highlightDeployments();
+		this.$dplselect.trigger('chosen:updated');
+		
+		// If no deployments are selected
+        if( baseMap.$dplselect.val() === null ) {
+            baseMap.mapInstance.getControlsBy('id', 'selectCtrl')[0].unselectAll();
+            //baseMap.mapInstance.zoomToExtent( baseMap.mapInstance.getLayersByName('Deployment origins')[0].getDataExtent() );
+            baseMap.highlightDeployments();
+		
+			$('#drop-show-sel').prop('disabled', true);
+			$('#drop-del-sel').prop('disabled', true);
+			
+			this.disableFilters();
+        }
+		
+	}
+	this.deploymentSelectCheckButtons = function() {
+		// if not all deployments visible
+		if( $('#deploymentSelect option:disabled').length === 0  ) {
+			$('#drop-list-all').addClass('active');
+		}
+		else {
+			$('#drop-list-all').removeClass('active');
+		}
+		
+		// if elements not equal to visible elements
+		currEnabled = $('#deploymentSelect option:enabled').map( function(i,e) {return $(e).val();} ).sort();
+		currVisible = baseMap.getVisibleDeployments().sort();
+		baseMap.currEnabled = currEnabled;
+		baseMap.currVisible = currVisible;
+		equal = true;
+		if( currEnabled.length !== currVisible.length ) {
+			equal = false;
+		}
+		else {
+			// TODO: implement as funciton so we can recurse into the nested arrays
+			for (var i = 0, l=currEnabled.length; i < l; i++) {
+		        // Check if we have nested arrays
+		        if (currEnabled[i] instanceof Array && currVisible[i] instanceof Array) {
+					console.log('UPS nested!');
+	                equal = false;
+					break;     
+					// if (!currEnabled[i].equals(currVisible[i])) {
+					//  equal = false;
+					// 	break;     
+					// }
+		        }           
+		        else if ( currEnabled[i] != currVisible[i]) { 
+		            // Warning - two different object instances will never be equal: {x:20} != {x:20}
+		            equal = false;   
+					break;
+		        }  
+		    }
+		}
+		if( equal ) {
+			$('#drop-list-vis').addClass('active');
+		}
+		else {
+			$('#drop-list-vis').removeClass('active');
+		}
+	}
     /**
      * Given a multiselect object this AJAX function retrieves the available campains and adds these to the multiselect
      * TODO: how do we add a search icon to the multiselect??
      */
     function addCampaignsToSelect($dplselect) {
-		//console.log("Function addCampainsToSelect");
-		
         $.ajax({
             dataType: "json",
             async: false,
@@ -989,6 +1468,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                     for (var i = 0; i < cmp.objects.length; i++) {
                         $cmpgrp = $('<optgroup></optgroup>');
                         dplcount = addDeploymentsToSelect($cmpgrp, cmp.objects[i].id);
+						if( dplcount <= 0 ) {
+							continue;
+						}
                         $cmpgrp.attr('label',cmp.objects[i].short_name + ' ('+ dplcount+')');
                         $dplselect.append($cmpgrp);
                     }
@@ -1000,8 +1482,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
      * The actual function that appends a deployment to the multiselect object
      */
     function addDeploymentsToSelect ($dplselect, cmpid) {
-		//console.log("Function addDeploymentsToSelect");
-		
         var cmpstr = ( typeof cmpid !== 'undefined') ? '&campaign=' + cmpid : '';
         var dplcount = 0;
         $.ajax({
@@ -1015,15 +1495,25 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
                         dplcount ++;
                     }
                 }
-                else {
-                    $dplselect.append('<OPTION VALUE="" disabled="true">No dpeloyments found</option>');
-                }
+                // else {
+                //     $dplselect.append('<OPTION VALUE="" disabled="true">No dpeloyments found</option>');
+                // }
             }
         });
         return dplcount;
     }
 
-
+	this.disableFilters = function() {
+		this.$filterpanel.find('input').prop('disabled',true);
+		this.$filterpanel.find('button').prop('disabled',true);
+		this.$filterpanel.find('.ui-slider').slider('disable');
+	}
+	
+	this.enableFilters = function() {
+		this.$filterpanel.find('input').prop('disabled',false);
+		this.$filterpanel.find('button').prop('disabled',false);
+		this.$filterpanel.find('.ui-slider').slider('enable');
+	}
 
     /**
      *
@@ -1032,9 +1522,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
      * @returns {*|jQuery|HTMLElement} panel content element
      */
     this.addPanel = function ($container, panelinfo, style) {
-		//console.log("Function addPanel");
-		
-	style = (( typeof style !== 'undefined') ? style : '');
+	    style = (( typeof style !== 'undefined') ? style : '');
         // check if panel exists, otherwise create it
         if ($container.find('#'+ panelinfo.id).length <= 0) {
             var $panel = $('<div id="' + panelinfo.id + '" class="map-panel og-panel"></div>');
@@ -1074,7 +1562,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         var $infopane = $('<div id="'+ panelid+'" class="og-dragpane map-pane-draggable"></div>');
 
         this.$imginfo = this.addPanel($infopane, {id:'img-info',icon:'icon-picture',title:'Nearby images', closeable:true});
-        this.$dplinfo = this.addPanel($infopane, {id: 'dpl-info', icon: 'icon-list', title: 'Deployment list', closeable: true}, 'white-space: nowrap');	
+        //this.$dplinfo = this.addPanel($infopane, {id: 'dpl-info', icon: 'icon-list', title: 'Deployment list', closeable: true}, 'white-space: nowrap');	
         this.$infopane = $infopane;
 
         $container.append($infopane);
@@ -1088,7 +1576,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         // hide panels initially
         this.$infopane.hide();
         this.$imginfo.parent().hide();
-        this.$dplinfo.parent().hide();
+        //this.$dplinfo.parent().hide();
     }
 
 
@@ -1096,15 +1584,13 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * Creates a range filter and adds it to the given container
 	 */
     this.addRangeFilter = function ($container,$infocontainer,layername,feature,params) {
-		//console.log("Function addRangeFilter: "+feature);
-		
         var $slider = $('<div id="'+feature+'-slider"></div>'),
 			infoidMin = feature + '-rangeMin',
             infoidMax = feature + '-rangeMax',
             $infoMin = $('<input type="number" class="form-control input-sm" min="' +params.range[0]+ '" max="'+params.range[1]+'" name="infoMin" id="' + infoidMin + '" value="" size="8">'),
             $infoMax = $('<input type="number" class="form-control input-sm" min="' +params.range[0]+ '" max="'+params.range[1]+'" name="infoMax" id="' + infoidMax + '" value="" size="8">'),
             filtertitle = feature[0].toUpperCase() + feature.substring(1) + ' range: ', // capitalise first letter
-            $btn = $('<span id="'+feature+'-button" class="btn btn-xs" >' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span><br>');
+            $btn = $('<span id="'+feature+'-button" class="btn btn-xs" >' + feature[0].toUpperCase() + feature.substring(1) + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span><br>');
         
 			
 		// create slider
@@ -1175,11 +1661,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			trigger:'hover',
 			title: function() {
 		        var values = $slider.slider("values");
-				var rangeinfo = feature + ": " + values[0] + "-" + values[1];
+				var rangeinfo = feature + ": " + values[0] + "-" + values[1] +'m';
 				return rangeinfo;
 			}
 		});
-		$btn.tooltip("show");
+		//$btn.tooltip("show");
 		
 		// Add to containers
 		var $filtcont = $('<div class="row"></div>').append($('<div class="col-sm-12"></div>').append($('<div class="input-group input-group-sm"></div>').append( 
@@ -1187,7 +1673,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         $container.append($("<div style='margin: 10px;'></div>").append(filtertitle, "<br>", $filtcont, "<br>", $slider));
 		$($slider.data('infoidMin')).val($slider.slider("values", 0));
 		$($slider.data('infoidMax')).val($slider.slider("values", 1));
-		$infocontainer.append($btn);
+		$infocontainer.prepend($btn); //$infocontainer.append($btn);
 
 	}
 	/**
@@ -1196,14 +1682,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * 		as the filter variable in different places. Can we find a nicer event management?
 	 */
 	this.addDateFilter = function ($container,$infocontainer,layername,feature,params) {
-		//console.log("Function addDateFilter");
-
-
         var $fromdate = $('<input type="text" class="form-control input-sm" name="fromdate" placeholder="From date" id="fromdate" size="8">'),
             $todate   = $('<input type="text" class="form-control input-sm" name="todate"   placeholder="To date"   id="todate"   size="8">'),
             filtertitle = "Date range:",
 			infoid = feature,
-			$btn = $('<span id="'+infoid+'-button" class="btn btn-xs" >' + feature + ' filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span><br>');
+			$btn = $('<span id="'+infoid+'-button" class="btn btn-xs" >Date filter &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span>');
 		
         $fromdate.datepicker({
             changeMonth: true,
@@ -1312,7 +1795,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 		var $filtcont = $('<div class="row"></div>').append($('<div class="col-sm-12"></div>').append($('<div class="input-group input-group-sm"></div>').append( 
 			$fromdate, "<span class=input-group-addon>to</span>", $todate)));   
         $container.append($("<div style='margin: 10px;'></div>").append(filtertitle, "<br>", $filtcont));
-		$infocontainer.append($btn);
+		$infocontainer.prepend($btn); //$infocontainer.append($btn);
     }
 	/**
 	 *
@@ -1320,35 +1803,34 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 *
 	 */
     this.addBBoxFilter = function ($container, $infocontainer,layername) {
-		//console.log("Function addBBoxFilter");
-        var $bboxdraw = $('<button type="button" id="bboxdraw" class="btn btn-xs btn-group btn-group-xs" title="Draw a bounding box around the images you would like to add to your selection."><i class="icon-crop"></i> Create</button>'),
-			$bboxedit = $('<button type="button" id="bboxedit" class="btn btn-xs btn-group btn-group-xs" title="Edit a bounding box by selecting it."><i class="icon-edit"></i> Edit</button>'),
-			$bboxdel  = $('<button type="button" id="bboxdel"  class="btn btn-xs btn-group btn-group-xs" title="Delete a bounding box by selecting it."><i class="icon-remove-sign"></i> Delete</button>'),
-			$btn = $('<span id="bbox-button" class="btn btn-xs" >Crop filters &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span><br>');
+        var $bboxdraw = $('<button type="button" id="bboxdraw" class="btn btn-xs"><i class="icon-crop"></i> Create</button>'),
+			$bboxedit = $('<button type="button" id="bboxedit" class="btn btn-xs"><i class="icon-edit"></i> Edit</button>'),
+			$bboxdel  = $('<button type="button" id="bboxdel"  class="btn btn-xs"><i class="icon-remove-sign"></i> Delete</button>'),
+			$btn = $('<span id="bbox-button" class="btn btn-xs" >Crop filters &nbsp;<a href="javascript: void(0);"><i class="icon-remove-sign"></i><a/></span>');
 		// Setup button action callbacks
-        $bboxdraw.click(function (){
-            baseMap.toggleBBoxDraw();
-        });
-        $bboxdraw.tooltip({
+		$bboxdraw.click( bboxButtonsHandler );
+		$bboxedit.click( bboxButtonsHandler );
+		$bboxdel.click( bboxButtonsHandler );
+		$bboxdraw.tooltip({
 			html: true, 
-			placement: 'left', 
-			trigger:'hover'
+			placement: 'top', 
+			trigger:'hover',
+			container: 'body',
+			title: 'Draw a bounding box around the images you would like to add to your selection.'
 		});
-        $bboxedit.click(function (){
-            baseMap.toggleBBoxEdit();
-        });
-        $bboxedit.tooltip({
+		$bboxedit.tooltip({
 			html: true, 
-			placement: 'left', 
-			trigger:'hover'
+			placement: 'top', 
+			trigger:'hover',
+			container: 'body',
+			title: "Edit a bounding box by selecting it."
 		});
-        $bboxdel.click(function (){
-            baseMap.toggleBBoxDel();
-        });
-        $bboxdel.tooltip({
+		$bboxdel.tooltip({
 			html: true, 
-			placement: 'left', 
-			trigger:'hover'
+			placement: 'top', 
+			trigger:'hover',
+			container: 'body',
+			title:"Delete a bounding box by selecting it."
 		});
 		
 		// Create a separate layer to show the drawn bounding boxes
@@ -1366,20 +1848,21 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					baseMap.filters.BBoxes[evt.feature.id] = filterBounds;
 					// Update view
 					baseMap.showSelectedImages();
-					
-					baseMap.toggleBBoxEdit();
+					$bboxedit.click();
 				},
 				'featureselected': function(evt) {
 					// Perform this only when the bbdelete button is selected
 					if( baseMap.mapInstance.getControl('bboxdelCtrl').active ) {
 						// Delete from filter list
 						delete baseMap.filters.BBoxes[evt.feature.id];
+						if( baseMap.filters.BBoxes.length == 0 ) {
+							$btn.hide();
+						}
 						// Delete from layer
 						evt.object.removeFeatures( evt.object.getFeatureById(evt.feature.id) );
 						// Update view
 						baseMap.showSelectedImages();
-						
-						baseMap.toggleBBoxDel();
+						$bboxdel.click();
 					}
 				}
 			});
@@ -1414,7 +1897,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 							baseMap.filters.BBoxes[evt.feature.id] = filterBounds;
 														
 							baseMap.showSelectedImages();
-							baseMap.toggleBBoxDraw();
+							$bboxdraw.click();
 							$btn.show();
 					    }
 					}
@@ -1451,67 +1934,70 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					return msg;
 				}
 			});
-			$btn.tooltip("show");
-			$infocontainer.append($btn);
+			//$btn.tooltip("show");
+			$infocontainer.prepend($btn);
 			
 			baseMap.mapInstance.addControls([bboxdrawCtrl, bboxeditCtrl, bboxdelCtrl]);
 			
         }
 
-		
-        $container.append($("<div style='margin: 10px;'></div>").append( "Crop box tools:<br>", $bboxdraw, $bboxedit, $bboxdel ));
+		$divBtns = $('<div class="btn-group btn-group-xs"></div>'); //data-toggle="buttons-radio"
+		$divBtns.append($bboxdraw, $bboxedit, $bboxdel);
+        $container.append($("<div style='margin: 10px;'></div>").append( "Crop box tools:<br>", $divBtns ));
 		
     }
+	/**
+	 * Handles clicking any of the bounding box buttons
+	 */
+	bboxButtonsHandler = function(evt) {
+		baseMap.evt = evt;
+		
+		enable = !$(evt.target).hasClass('active');
+		disableTarget = $(evt.target.parentNode).find('.active');
+		if( disableTarget.length > 0 ) {
+			// Disable currently active button and its controller
+			disableTarget.removeClass('active');
+			
+			switch( disableTarget[0].id ) {
+			case "bboxdraw":
+	             baseMap.mapInstance.getControl('bboxdrawCtrl').deactivate();
+				break;
+			case "bboxedit":
+				baseMap.mapInstance.getControl('bboxeditCtrl').deactivate();
+				baseMap.mapInstance.getControl('highlightCtrl').activate();
+				break;
+			case "bboxdel":
+				baseMap.mapInstance.getControl('bboxdelCtrl').deactivate();
+				baseMap.mapInstance.getControl('highlightCtrl').activate();
+				break;
+			default:
+				console.log("UPS this should never happen");
+			}
+		}
+		
+		if( enable ) {
+			// Now activate this button
+			$(evt.target).addClass('active');
+			
+			switch( evt.target.id ) {
+			case "bboxdraw":
+	             baseMap.mapInstance.getControl('bboxdrawCtrl').activate();
+				break;
+			case "bboxedit":
+				baseMap.mapInstance.getControl('highlightCtrl').deactivate();
+				baseMap.mapInstance.getControl('bboxeditCtrl').activate();
+				break;
+			case "bboxdel":
+				baseMap.mapInstance.getControl('highlightCtrl').deactivate();
+				baseMap.mapInstance.getControl('bboxdelCtrl').activate();
+				break;
+			default:
+				console.log("UPS this should never happen");
+			}
+		}
 
-	/**
-	 * Toggles the bounding box draw button and deals with the controllers
-	 */
-    this.toggleBBoxDraw = function (forcedeselect) {
-        forcedeselect = (( typeof forcedeselect !== 'undefined') ? forcedeselect : false);
-        if ($('#bboxdraw').hasClass('active') || forcedeselect) {
-			baseMap.mapInstance.getControl('bboxdrawCtrl').deactivate();
-            $('#bboxdraw').removeClass('active');
-        }
-        else {
-			baseMap.mapInstance.getControl('bboxdrawCtrl').activate();
-            $('#bboxdraw').addClass('active');
-        }
-    }
-	/**
-	 * Toggles the bounding box edit button and deals with the controllers
-	 */
-	this.toggleBBoxEdit = function() {
-        if ($('#bboxedit').hasClass('active') ) {
-			baseMap.mapInstance.getControl('bboxeditCtrl').deactivate();
-			baseMap.mapInstance.getControl('highlightCtrl').activate();
-            $('#bboxedit').removeClass('active');
-        }
-        else {
-			// We need to deactivate the highlightCtrl before the bbmod control actually 
-			// 	gets activated. This is probably because it is also a vector layer!?
-			baseMap.mapInstance.getControl('highlightCtrl').deactivate();
-			baseMap.mapInstance.getControl('bboxeditCtrl').activate();
-            $('#bboxedit').addClass('active');
-        }
 	}
-	/**
-	 * Toggles the bounding box delete button and deals with the controllers
-	 */
-	this.toggleBBoxDel = function() {
-        if ($('#bboxdel').hasClass('active')) {
-			baseMap.mapInstance.getControl('bboxdelCtrl').deactivate();
-			baseMap.mapInstance.getControl('highlightCtrl').activate();
-            $('#bboxdel').removeClass('active');
-        }
-        else {
-			// We need to deactivate the highlightCtrl before the bbmod control actually 
-			// 	gets activated. This is probably because it is also a vector layer!?
-			baseMap.mapInstance.getControl('highlightCtrl').deactivate();
-			baseMap.mapInstance.getControl('bboxdelCtrl').activate();
-            $('#bboxdel').addClass('active');
-        }
-	}	
-	
+
 	/**
 	 * Sets up the button and info text in the selection pane
 	 *
@@ -1520,14 +2006,12 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	this.addSelectionInfo = function($container) {
 		baseMap.$selectedpanel = $container;
 		
-		var $createbtn = $('<button id="create-button" class="btn btn-info disabled" style="width:100%; margin-top:10px;"><i class="icon-plus"></i> New Project with selection</button>');
+		var $createbtn = $('<button id="create-button" class="btn btn-info" style="width:100%;"><i class="icon-plus"></i> New Project with selection</button>');
 		$createbtn.click(function () {
             baseMap.openNewCollectionModal()
         });
-		$createbtn.hide();
 		
-		var $infobtn = $('<div id="info-button" class="alert" style="margin-top:10px"></div>');
-		$infobtn.hide();
+		var $infobtn = $('<div id="info-button" class="alert"></div>');
 		
 		baseMap.$selectedpanel.append($infobtn, $createbtn);
 	}
@@ -1536,7 +2020,6 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
      * Updates the selection info area depending on the selections made and whether the user is logged in
      */
     this.updateSelectionInfo = function () {
-		// console.log("Function updateSelectionInfo");
         var showcreatbtn = false;
 
         // Don't continue until the panel has been created
@@ -1554,28 +2037,22 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
             $('#info-button').html("<b>NOTE:</b> you need to be logged in to create a Project");
             $('#info-button').show();
 			
-			$('#create-button').removeClass('disabled');            
-            $('#create-button').hide();
+			$('#create-button').addClass('disabled');
         }
         else if (showcreatbtn && globalstate.isloggedin) {
         	$('#info-button').hide();
         	
             $('#create-button').removeClass('disabled');
-            $('#create-button').show();		        
         }
         else {
             $('#info-button').html("<b>NOTE</b>: no images selected. Use the tools above to add images to your project.");
             $('#info-button').show();
             
-			$('#create-button').removeClass('disabled');
-            $('#create-button').hide();
+			$('#create-button').addClass('disabled');
         }
-        // console.log("END updateSelectionInfo");
     }
 
     this.openNewCollectionModal = function () {
-    	// console.log("Function openNewCollectonModal");
-
 		// prepare clform
 		var key, ids = [];
 		for (var i = 0; i < this.filters.deployments.length; i++) {
@@ -1600,134 +2077,4 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         $('#new-collection-modal').modal('show');
     }
 
-
 }
-
-/*select = new OpenLayers.Layer.Vector("Selection", {styleMap:
-new OpenLayers.Style(OpenLayers.Feature.Vector.style["select"])
-});
-hover = new OpenLayers.Layer.Vector("Hover");
-this.mapInstance.addLayers([hover, select]);
-
-this.controls['box'].events.register("featureselected", this, function(e) {
-select.addFeatures([e.feature]);
-console.log(select);
-});
-this.controls['box'].events.register("featureunselected", this, function(e) {
-select.removeFeatures([e.feature]);
-});
-this.controls['box'].events.register("hoverfeature", this, function(e) {
-hover.addFeatures([e.feature]);
-});
-this.controls['box'].events.register("outfeature", this, function(e) {
-hover.removeFeatures([e.feature]);
-});
-this.controls['polygon'].events.register("selected", this, function(event){
-console.log('Selected event: ');
-console.log(event);
-});*/
-
-/*  Get information about the AUVdeployments when presented as WMS
-deploymentSelection = new OpenLayers.Control.WMSGetFeatureInfo({
-url: this.wmsUrl,
-title: 'Zoom to deployments by clicking',
-layers: [this.layers['AUVdeploymentsWMS']],
-queryVisible: true,
-output: "object",
-infoFormat: "application/vnd.ogc.gml",
-eventListeners: {
-nogetfeatureinfo: function(event) {console.log('No queryable layers found');},
-getfeatureinfo: function(event) {
-// parse the deployment ids
-console.log('Deployment clicked')
-console.log(event)
-var deploymentIds = [];
-for (var i=0, len=event.features.length; i<len; i++) {
-var fid = event.features[i].fid.split(".");
-deploymentIds[i] = fid[1];
-}
-// update the map bounds to zoom into the deployment
-if (deploymentIds.length > 0) {
-baseMap.updateMapForDeployments(deploymentIds);
-}
-}
-}
-});
-this.mapInstance.addControl(deploymentSelection);
-deploymentSelection.activate();*/
-
-// select individual poses by clicking the map
-/*    poseSelectionIMOS = new OpenLayers.Control.WMSGetFeatureInfo({
- url: "http://geoserver.imos.org.au/geoserver/wms",
- title: 'Identify features by clicking',
- layers: [this.layers['IMOSAUVimages']],
- queryVisible: true,
- output: "object",
- infoFormat: "application/vnd.ogc.gml",
- eventListeners: {
- nogetfeatureinfo: function(event) {console.log('No queryable layers found');},
- getfeatureinfo: function(event) {
- console.log('Selected IMOS image pose')
- console.log(event);
- }
- }
- });
- this.mapInstance.addControl(poseSelectionIMOS);
- poseSelectionIMOS.activate();
-
- // select individual poses by clicking the map
- poseSelectionIMOSdeployments = new OpenLayers.Control.WMSGetFeatureInfo({
- url: "http://geoserver.imos.org.au/geoserver/wms",
- title: 'Identify features by clicking',
- layers: [this.layers['IMOSAUVdeployments']],
- queryVisible: true,
- output: "object",
- infoFormat: "application/vnd.ogc.gml",
- eventListeners: {
- nogetfeatureinfo: function(event) {console.log('No queryable layers found');},
- getfeatureinfo: function(event) {
- console.log('Selected IMOS deployment')
- console.log(event);
- }
- }
- });
- this.mapInstance.addControl(poseSelectionIMOSdeployments);
- poseSelectionIMOSdeployments.activate();
- */
-
-/*
- IMOSAUVdeployments : new OpenLayers.Layer.WMS("IMOSAUVdeployments",
- "http://geoserver.imos.org.au/geoserver/wms",
- {
- layers: 'helpers:auv_tracks',
- styles: '',
- projection: baseMap.projection.geographic,
- format: 'image/gif',
- transparent: 'TRUE',
- tiled: 'TRUE',
- //sld: "http://"+this.hostname+"/geoserverDeploymentSimplestyle?colour=FF0000&size=9"
- },
- {
- isBaseLayer: false,
- transitionEffect: 'resize',
- buffer: 0,
- displayOutsideMaxExtent: true
- }),
- IMOSAUVimages : new OpenLayers.Layer.WMS("IMOSAUVimages",
- "http://geoserver.imos.org.au/geoserver/wms",
- {
- layers: 'helpers:auv_images_vw',
- styles: '',
- projection: baseMap.projection.geographic,
- format: 'image/gif',
- transparent: 'TRUE',
- tiled: 'TRUE'
- },
- {
- isBaseLayer: false,
- transitionEffect: 'resize',
- buffer: 0,
- minScale: 150000,
- displayOutsideMaxExtent: true
- }),
- */

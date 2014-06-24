@@ -6,8 +6,12 @@
 	<!-- Add fancyBox main JS and CSS files -->
     <script src="{{ STATIC_URL }}assets/thumbnail-expgrid/js/modernizr.custom.js"></script>
 
+
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL}}assets/chosen_v1.1.0/chosen.css" />
+
 {#    <link rel="stylesheet" type="text/css" href="http://jautochecklist.googlecode.com/svn/release/css/jAutochecklist.min.css?v=1.21"/>#}
     <link rel="stylesheet" href="{{ STATIC_URL }}assets/bootstrap/css/bootstrap-multiselect.css" type="text/css">
+
 
 {% endblock %}
 
@@ -31,11 +35,12 @@
             </ul>
         </li>
     </ul>
-   
+
     <ul id="sign-in-status"  class="nav navbar-nav navbar-right">
 
     </ul>
     <ul class="nav navbar-nav navbar-right">
+        <!--<li title="Bug/Feature report"><a href="#info-modal" data-toggle="modal"><i class="icon-bug"></i></a></li>-->
         <li title="Info/about"><a href="#info-modal" data-toggle="modal"><i class="icon-info-sign"></i></a></li>
         <li title="Help/How to"><a href="#help-modal" data-toggle="modal" ><i class="icon-question-sign"></i></a></li>
     </ul>
@@ -74,6 +79,7 @@
 
 
 
+
 {% block add_script %}
 <script type="text/javascript" src="{{ STATIC_URL }}assets/catami-api/js/images.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}assets/jquery/plugins/serialize-object.js"></script>
@@ -88,12 +94,15 @@
 <script src="{{ STATIC_URL }}assets/image-manipulation/pixastic.custom.js"></script>
 {#<script src="http://jautochecklist.googlecode.com/svn/release/js/jAutochecklist.min.js?v=1.21"></script>#}
 <script type="text/javascript" src="{{ STATIC_URL }}assets/bootstrap/js/bootstrap-multiselect.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL}}assets/chosen_v1.1.0/chosen.jquery.js"></script>
+
 
 <script src="{{ STATIC_URL }}assets/openlayers/OpenLayers.js"></script>
 <script src="{{ STATIC_URL }}assets/OpenLayers/LoadingPanel.js"></script>
 <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
 {#<script src='{{ STATIC_URL }}assets/catami-api/js/Map.js'></script>#}
 <script src='{{ STATIC_URL }}assets/catami-api/js/map-ui.js'></script>
+
 
 <script type="text/javascript">
 
@@ -161,14 +170,21 @@
 	resizefuncs.push( function() {
 		$('#deployment-map').width( $(window).width()-$('#map-panel-container').width() );
 	});
-	
+
 	// Set the location of the under construction alert.
-	// And subscribe to the resize	
+	// And subscribe to the resize
 	$('#alert-construction').css( 'left', $('#deployment-map').width()/2-$('#alert-construction').width()/2 + 'px');
     $('#alert-construction').css( 'visibility', 'visible');
 	resizefuncs.push( function() {
 		$('#alert-construction').css( 'left', $('#deployment-map').width()/2-$('#alert-construction').width()/2 + 'px');
 	});
+
+    // TODO: The subtraction of 10 is due to the top and bottom margins. Get this from the element dynamically
+    $('.chosen-drop').css('max-height', $('#map-panel-container').height()-10+'px');
+    resizefuncs.push(function () {
+        $('.chosen-drop').css('max-height', $('#map-panel-container').height()-10+'px');
+    });
+
 
         // Update current selection text
         if (curstate.clid) {
@@ -213,40 +229,41 @@
                         selImageLayer 	= "Selected images",
 						filtImageLayer	= "Filtered images";
 					var minVisibleScale = 100000;
-					
+
 					map.depImageLayerName = depImageLayer;
 					map.selImageLayerName = selImageLayer;
 					map.filtImageLayerName = filtImageLayer;
-					
+
                     map.addDeployments(depLayer);
-					map.addImageLayer(depImageLayer,  minVisibleScale, true, '666666');
+					map.addImageLayer(depImageLayer,  minVisibleScale, true, '666666', true);
                     map.addImageLayer(selImageLayer,  minVisibleScale/3, false, '0000FF'); // For the sake of performance we show this layer only when zoomed in further
                     map.addImageLayer(filtImageLayer, minVisibleScale, false, '00FF00');
 
-                    
-                    
+
+
                     // Create panels
 					// TODO: Is this really necessary? I find it confusing and want to click it every time!
                     var $selpanel = map.addPanel($('#map-panel'), {id: 'mapsel', icon: 'icon-plus-sign-alt', title: 'Selection tools', closeable: false});
-                    $selpanel.append('<br>');
                     var $filterpanel = map.addPanel($('#map-panel'), {id: 'mapfilters', icon: 'icon-filter', title: 'Filters', closeable: false}, 'max-height: none; overflow-x: hidden; overflow-y:hidden;');
-                    var $curselpanel = map.addPanel($('#map-panel'), {id: 'mapselected', icon: 'icon-stackexchange', title: 'Current selection', closeable: false});
-					
+                    var $curselpanel = map.addPanel($('#map-panel'), {id: 'mapselected', icon: 'icon-info', title: 'Info', closeable: false});
+
 					// Add selection tools
-					map.addDeploymentSelect($selpanel, $curselpanel, depImageLayer);
+					map.addDeploymentSelectChosen($selpanel, $curselpanel, depImageLayer);
 
 					// Add filters
-                    map.addRangeFilter($filterpanel, $curselpanel, filtImageLayer, 'depth', {step: 1, range: [0, 2000], unit: 'm'});
-                    map.addRangeFilter($filterpanel, $curselpanel, filtImageLayer, 'altitude', {step: 0.1, range: [0, 10], unit: 'm'});
-                    map.addDateFilter($filterpanel, $curselpanel, filtImageLayer, 'date_time', {from: '2005-01-01', to: new Date()});
-                    map.addBBoxFilter($filterpanel, $curselpanel, filtImageLayer);
-
+                    map.addRangeFilter($filterpanel, $filterpanel, filtImageLayer, 'depth', {step: 1, range: [0, 2000], unit: 'm'});
+                    map.addRangeFilter($filterpanel, $filterpanel, filtImageLayer, 'altitude', {step: 0.1, range: [0, 10], unit: 'm'});
+                    map.addDateFilter( $filterpanel, $filterpanel, filtImageLayer, 'date_time', {from: '2005-01-01', to: new Date()});
+                    map.addBBoxFilter( $filterpanel, $filterpanel, filtImageLayer);
+					map.$filterpanel = $filterpanel;
+					map.disableFilters();
+					
                     // add current selection info
                     map.addSelectionInfo($curselpanel);
                     map.updateSelectionInfo();
                     curstate.loginfuncs.push(map.updateSelectionInfo);
 
-					
+
                 }
 
                 // Add resize function to ensure map resizes on window resize
