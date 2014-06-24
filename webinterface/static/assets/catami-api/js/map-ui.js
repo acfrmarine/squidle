@@ -103,7 +103,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 
 
         this.mapInstance.addLayer(new OpenLayers.Layer.Google("Google Map", {
-            numZoomLevels: 20
+            numZoomLevels: 25
         }, {minScale: 150000}));
         this.mapInstance.addLayer(new OpenLayers.Layer.Google("Google Satellite", {
             type: google.maps.MapTypeId.SATELLITE,
