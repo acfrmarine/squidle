@@ -236,7 +236,7 @@
 					map.filtImageLayerName = filtImageLayer;
 
                     map.addDeployments(depLayer);
-					map.addImageLayer(depImageLayer,  minVisibleScale, true, '666666');
+					map.addImageLayer(depImageLayer,  minVisibleScale, true, '666666', true);
                     map.addImageLayer(selImageLayer,  minVisibleScale/3, false, '0000FF'); // For the sake of performance we show this layer only when zoomed in further
                     map.addImageLayer(filtImageLayer, minVisibleScale, false, '00FF00');
 

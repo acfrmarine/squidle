@@ -140,22 +140,21 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			        ); 
 			        this.handler = new OpenLayers.Handler.Click(
 			            this, {
-			                'click': this.onClick,
+			                'click': this.onClick
 			            }, this.handlerOptions
 			        );
 			    }, 
 
 			    onClick: function(evt) {
-					console.log('onClick');
 			        // Remove focus from the selected input box
 					$('input:focus').blur();
 					// Set the visible deps in the drop
 					baseMap.setActiveDeployments( baseMap.getVisibleDeployments() );
 	                baseMap.highlightDeployments();
 					
-					if( ! baseMap.mapInstance.getControlsBy('id','showFeatureInfoCtrl')[0].active ) {
+					if( !baseMap.ctrl.imgclick.active ) {
 						// Enable the image fetch control
-						baseMap.mapInstance.getControlsBy('id','showFeatureInfoCtrl')[0].activate();
+                        baseMap.ctrl.imgclick.activate();
 					}
 					
 					if( baseMap.$tooltipOnDeployment ) {
@@ -185,11 +184,11 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 				baseMap.addTooltips();
 				
 				if( baseMap.mapInstance.getLayersByName(baseMap.depImageLayerName)[0].inRange && 
-				   !baseMap.mapInstance.getControlsBy('id','showFeatureInfoCtrl')[0].active ) {
-					baseMap.mapInstance.getControlsBy('id','showFeatureInfoCtrl')[0].activate();
-				} else if( !baseMap.mapInstance.getLayersByName(baseMap.depImageLayerName)[0].inRange && 
-							baseMap.mapInstance.getControlsBy('id','showFeatureInfoCtrl')[0].active ) {
-					baseMap.mapInstance.getControlsBy('id','showFeatureInfoCtrl')[0].deactivate();
+				   !baseMap.ctrl.imgclick.active ) {
+                    baseMap.ctrl.imgclick.activate();
+				} else if( !baseMap.mapInstance.getLayersByName(baseMap.depImageLayerName)[0].inRange &&
+                    baseMap.ctrl.imgclick.active ) {
+                    baseMap.ctrl.imgclick.deactivate();
 				}
 			},
             "moveend" : function(evt) {
@@ -510,7 +509,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 						return;
 					}
 					// Disable the image fetch control
-					baseMap.mapInstance.getControlsBy('id','showFeatureInfoCtrl')[0].deactivate();
+                    baseMap.ctrl.imgclick.deactivate();
 					
 					// Find the circle that triggered the event
 					circId = evt.geometry.id;
@@ -526,7 +525,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 						return;
 					}
 					// Enable the image fetch control
-					baseMap.mapInstance.getControlsBy('id','showFeatureInfoCtrl')[0].activate();
+                    baseMap.ctrl.imgclick.activate();
 					
 					circId = evt.geometry.id;
 					if( ($c = getCircle(circId)) !== null ) {
@@ -552,7 +551,7 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 					// 	Currently, when reenabled the click selection stops working!
 					//baseMap.mapInstance.getControl('highlightCtrl').deactivate();
 					// Disable the image fetch control
-					baseMap.mapInstance.getControlsBy('id','showFeatureInfoCtrl')[0].deactivate();
+                    baseMap.ctrl.imgclick.deactivate();
 				
 					// Find the circle that triggered the event
 					circId = evt.geometry.id;
@@ -926,8 +925,9 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 * visible: visibility at creation
 	 * color: [optional] color of the markers
 	 */
-	this.addImageLayer = function(layername, minscale, visible, color) {
+	this.addImageLayer = function(layername, minscale, visible, color, addcontrols) {
 		color = (( typeof color !== 'undefined') ? color : "0000FF");
+        addcontrols = (( typeof addcontrols !== 'undefined') ? addcontrols : false);
 		
 		// add the selection layer if required
 		var imglayer = new OpenLayers.Layer.WMS(
@@ -963,50 +963,106 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 			}
 		})
 		imglayer.setVisibility(visible);
-        this.mapInstance.addLayer(imglayer);
-		
-        var showFeatureInfoCtrl = new OpenLayers.Control.WMSGetFeatureInfo(
-		{
-            url: baseMap.wmsUrl,
-            title: 'ClickImg',
-            layers: baseMap.mapInstance.getLayersByName(layername),
-            queryVisible: true,
-            hover: false,
-            output: "object",
-            infoFormat: "application/vnd.ogc.gml",
-            maxFeatures: Math.floor((baseMap.$mapobj.width()-16)/102),
-            eventListeners: 
-			{
-	    		nogetfeatureinfo : function(event) 
-				{
-                    
-	    		},
-				getfeatureinfo: function (event) 
-				{
-                	if (event.features.length > 0 && $('.tooltip').length === 0) {
-						// Calculate the padding necessary
-						padWidth = ((baseMap.$mapobj.width()-16)/event.features.length-102)/2;
-						
-                    	baseMap.$imginfo.html('');
-                    	var fid, $thumb;
-                        for (var i = 0; i < event.features.length; i++) {
-                            fid = event.features[i].attributes.img_id;
-                            $thumb = getImageInfo(fid);
-							$thumb.css('padding-left', padWidth);
-							$thumb.css('padding-right', padWidth);
-							baseMap.$imginfo.append($thumb);
+        baseMap.mapInstance.addLayer(imglayer);
+
+
+        if (addcontrols) {
+//            baseMap.$imgclick = $('<div id="imgclick"></div>');
+//            $('#deployment-map').append(baseMap.$imgclick);
+
+
+            baseMap.ctrl = {
+            imgclick : new OpenLayers.Control.WMSGetFeatureInfo({
+                    url: baseMap.wmsUrl,
+                    title: 'ClickImg',
+                    id: 'showFeatureInfoCtrl',
+                    layers: baseMap.mapInstance.getLayersByName(layername),
+                    queryVisible: true,
+                    hover: false,
+                    output: "object",
+                    infoFormat: "application/vnd.ogc.gml",
+                    maxFeatures: Math.floor((baseMap.$mapobj.width() - 16) / 102),
+                    eventListeners: {
+                        nogetfeatureinfo: function (event) {
+
+                        },
+                        getfeatureinfo: function (event) {
+                            if (event.features.length > 0 && $('.tooltip').length === 0) {
+                                // Calculate the padding necessary
+                                padWidth = ((baseMap.$mapobj.width() - 16) / event.features.length - 102) / 2;
+
+                                baseMap.$imginfo.html('');
+                                var fid, $thumb;
+                                for (var i = 0; i < event.features.length; i++) {
+                                    fid = event.features[i].attributes.img_id;
+                                    $thumb = getImageInfo(fid);
+                                    $thumb.css('padding-left', padWidth);
+                                    $thumb.css('padding-right', padWidth);
+                                    baseMap.$imginfo.append($thumb);
+                                }
+                                baseMap.$imginfo.parent().show();
+                                baseMap.$infopane.show(0);
+                                // the 16px less is because mapobj.padding=0.5em ~14px
+                                baseMap.$infopane.width(baseMap.$mapobj.width() - 16);
+                            }
                         }
-                        baseMap.$imginfo.parent().show();
-                        baseMap.$infopane.show(0);
-						// the 16px less is because mapobj.padding=0.5em ~14px
-						baseMap.$infopane.width( baseMap.$mapobj.width()-16 );
-                	}
-				}
-        	}
-		});
-		showFeatureInfoCtrl.id = "showFeatureInfoCtrl";
-        this.mapInstance.addControl(showFeatureInfoCtrl);
-        showFeatureInfoCtrl.activate();
+                    }
+                }),
+                imghover: new OpenLayers.Control.WMSGetFeatureInfo({
+                    url: baseMap.wmsUrl,
+                    title: 'HoverImg',
+                    id: 'highlightFeatureCtrl',
+                    layers: baseMap.mapInstance.getLayersByName(layername),
+                    queryVisible: true,
+                    hover: true,
+                    //handlerOptions: {'delay': 1000},
+                    output: "object",
+                    infoFormat: "application/vnd.ogc.gml",
+                    maxFeatures: 1,
+                    eventListeners: {
+                        nogetfeatureinfo: function (event) {
+                            console.log('Nothing!');
+                        },
+                        getfeatureinfo: function (event) {
+                            var imgclicklayer = baseMap.mapInstance.getLayersByName('Bounding boxes')[0];
+
+                            if (event.features.length > 0 ) {
+                                console.log('Got a feature!');
+
+                                if (!baseMap.ctrl.imgclick.active)
+                                    baseMap.ctrl.imgclick.activate();
+
+                                var lonlat = new OpenLayers.LonLat(event.features[0].geometry.x, event.features[0].geometry.y)
+                                    .transform(baseMap.projection.geographic, baseMap.projection.mercator);
+
+                                if (baseMap.imgclickfeat){
+                                    baseMap.imgclickfeat.move(lonlat);
+                                    console.log('update');
+                                }
+                                else {
+                                    baseMap.imgclickfeat = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Point(lonlat.lon, lonlat.lat));
+                                    imgclicklayer.addFeatures([baseMap.imgclickfeat]);
+                                }
+                            }
+                            else {
+                                console.log('No feature?!');
+                                if (baseMap.ctrl.imgclick.active)
+                                    baseMap.ctrl.imgclick.deactivate();
+                                if (baseMap.imgclickfeat)
+                                    imgclicklayer.removeFeatures(baseMap.imgclickfeat);
+                                baseMap.imgclickfeat = false;
+                            }
+                        }
+                    }
+                }
+            )};
+            this.mapInstance.addControl(baseMap.ctrl.imgclick);
+            this.mapInstance.addControl(baseMap.ctrl.imghover);
+            baseMap.ctrl.imghover.activate();
+
+
+
+        }
 	}
 
 	/**
