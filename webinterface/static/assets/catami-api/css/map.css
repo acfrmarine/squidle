@@ -14,7 +14,8 @@
 
 #map-panel-container {
     width: 250px;
-    overflow: hidden;
+    overflow-y: hidden;
+    overflow-x: scroll;
     float: right;
     background-color: #333333;
     padding: 0px;
@@ -70,6 +71,22 @@
     text-align: center;
 }
 
+#deployment-map .tooltip {
+	color: #ff0000;
+}
+
+.tooltip-campaign {
+	font-family: sans-serif;
+	font-size: 12px;
+    font-weight: bold;
+}
+.tooltip-dive {
+	font-family: sans-serif;
+	font-size: 12px;
+    font-weight: lighter;
+	font-style: italic;
+}
+
 .layersDiv, .olControlLayerSwitcher, .olControlOverviewMapElement {
     background-color: #333333 !important;
 }
@@ -85,19 +102,22 @@
 .map-pane-draggable {
     display: inline-block;
     position: absolute;
-    top: 15px;
-    left: 70px;
+    /*top: 15px;
+    left: 70px;*/
+	bottom: 0px;
+	left: 0px;
+	z-index: 1009;
     width: auto;
     height: auto;
 }
 
 .map-pane-draggable .map-panel-content {
-    max-width: 306px;
+    /*max-width: 306px;*/
     display: inline-block;
 }
 
 .map-panel {
-    margin-bottom: 25px;
+    /*margin-bottom: 25px;*/
 }
 
 .map-panel .navbar {
@@ -105,7 +125,7 @@
 }
 .map-panel .map-panel-content {
     min-height: 50px;
-    max-height: 250px;
+/*    max-height: 80px;*/
     overflow-y: auto;
     overflow-x: auto;
 }
@@ -130,6 +150,7 @@
 
 #mapsel-content {
     overflow: visible;
+    max-height: none;
 }
 
 #map-panel-container {
@@ -141,4 +162,8 @@
     zoom: 1;
     filter: alpha(opacity=80);
     opacity: 0.8;
+}
+
+.tooltip_buttons {
+	visibility: 'visible';
 }
