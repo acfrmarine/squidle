@@ -6,7 +6,7 @@
 	<!-- Add fancyBox main JS and CSS files -->
     <script src="{{ STATIC_URL }}assets/thumbnail-expgrid/js/modernizr.custom.js"></script>
 
-
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL}}assets/css/modals.css" />
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL}}assets/chosen_v1.1.0/chosen.css" />
 
 {#    <link rel="stylesheet" type="text/css" href="http://jautochecklist.googlecode.com/svn/release/css/jAutochecklist.min.css?v=1.21"/>#}
@@ -29,8 +29,8 @@
             <ul class="dropdown-menu">
                 <li><a href="javascript:void(0)" onclick="$('#data-modal').modal('show')"><i class="icon-th-list"></i>
                     Choose a dataset</a></li>
-{#                <li><a href="javascript:void(0)" onclick="$('#dataset-modal').modal('show')"><i class="icon-th-list"></i>#}
-{#                    Temporary test</a></li>#}
+                <li><a href="javascript:void(0)" onclick="$('#dataset-modal').modal('show')"><i class="icon-th-list"></i>
+                    Temporary test</a></li>
                 <li><a href="javascript:void(0)" onclick="window.location.assign('/viewproject')"><i class="icon-plus"></i> Create new Project</a></li>
             </ul>
         </li>
@@ -85,6 +85,7 @@
 <script type="text/javascript" src="{{ STATIC_URL }}assets/jquery/plugins/serialize-object.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}assets/catami-api/js/annotations.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}assets/catami-api/js/collections.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}assets/catami-api/js/squidle.api.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}assets/jquery/plugins/delayed-keyup.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}assets/fancybox/source/jquery.fancybox.js?v=2.1.5"></script>
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}assets/fancybox/source/jquery.fancybox.css?v=2.1.5" media="screen" />
@@ -162,7 +163,8 @@
         update_sign_in(curstate.userid,curstate.username); //initialise sign in variables
         setupAjax(); // setup ajax auth
         createDataModal(curstate); // setup modal windows for data
-        refresh_dataset_modal();
+        //refresh_dataset_modal();
+        create_dataset_modal();
 
 	// This resizes the size of the panel containing the map.
 	// Set it once on ready and then subscribe to resizes

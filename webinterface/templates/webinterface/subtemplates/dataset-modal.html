@@ -3,52 +3,31 @@
         <div class="modal-content">
             <div class="modal-header">
                 <a type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
-                <h4><i class="icon-th-list"></i> Manage datasets</h4>
-                <ul class="breadcrumb" id="dataset-modal-cursel">
-                    <li>Select a dataset below:</li>
-                </ul>
+                <h4><i class="icon-th-list"></i> Datasets</h4>
+{#                <ul class="breadcrumb" id="dataset-modal-cursel">#}
+{#                    <li>Select a dataset below:</li>#}
+{#                </ul>#}
             </div>
             <div class="modal-body">
                 <div class="dataset-modal-container">
-                    <div class="btn-group-vertical">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default">Default sfsdf sdfs dfs dfsdf sdf sdf</button>
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
-                            </ul>
-                        </div>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default">Default sdfsdf sdf sd</button>
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                <span class="caret"></span></button>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
-                            </ul>
-                        </div>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default">Default</button>
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                <span class="caret"></span></button>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
-                            </ul>
-                        </div>
-
-                    </div>
-                    <div id="project-panel" class="dataset-panel"></div>
+                    <div id="project-panel" class="dataset-panel"
+                            data-api-format="<div class='panel-item'><span class='name' >{name}</span></div>"
+                            data-api-resource="collection"
+                            data-api-filter="limit=0&parent__isnull=True&order_by=name"
+                            data-api-detailformat="<div>{creation_info}</div> <div>{description}</div> <i class='badge icon-th-list' title='Dataset type'> Project</i> <i class='badge icon-group' title='Sharing'> {access}</i> <i class='badge icon-user' title='User'> {username}</i> <i class='badge icon-calendar' title='Creation date'> {creation_date}</i>"
+                            ></div>
+                    <div id="subset-panel" class="dataset-panel" style="display: none;"
+                            data-api-format="<div class='panel-item'><span class='name' >{name}</span></div>"
+                            data-api-resource="collection"
+                            data-api-filter="limit=0&order_by=name&parent="
+                            data-api-detailformat="<div>{creation_info}</div> <div>{description}</div> <i class='badge icon-th-list' title='Dataset type'> Subset</i> <i class='badge icon-group' title='Sharing'> {access}</i> <i class='badge icon-user' title='User'> {username}</i> <i class='badge icon-calendar' title='Creation date'> {creation_date}</i>"
+                            ></div>
+                    <div id="annotation-panel" class="dataset-panel" style="display: none;"
+                            data-api-format="<div class='panel-item'><span class='name' >{name}</span></div>"
+                            data-api-resource="point_annotation_set"
+                            data-api-filter="limit=0&order_by=name&collection="
+                            data-api-detailformat="{count} points"
+                            ></div>
 {#                    <div id="workset-panel" class="dataset-panel">workset</div>#}
 {#                    <div id="annotat-panel" class="dataset-panel">annotation</div>#}
                 </div>
@@ -71,42 +50,130 @@
         //$('#workset-pane').show();
         //$('#annotat-pane').show();
     //});
-    function refresh_dataset_modal() {
-        refresh_collections();
-    }
-
-    function refresh_collections() {
-        var cllist = new CollectionAPI({
-            config: {
-                format: '<div id="cl-{id}" class="panel-item"><a href="javascript:void(0)" class="dm-popover badge" onclick="selectCollection({id})" data-content="<small>Created by <b>{username}</b> on <b>{creation_date}</b>.<br>Contains <b>{image_count}</b> images.<br>{creation_info}.<br><em>{description}</em></small>" data-original-title="{type} information">{name}</a></div>'
+    function init_dataset_modal() {
+        load_datasets($("#project-panel"));
+        if (curstate.clid) {
+            load_datasets($("#subset-panel"), curstate.clid);
+            if (curstate.wsid) {
+                load_datasets($("#annotation-panel"), curstate.wsid);
+                if (curstate.asid)
+                    select_dataset($("#"+$("#annotation-panel").data("api-resource")+"-"+curstate.asid));
             }
-        });
-        cllist.getCollectionItems('limit=0&parent__isnull=True&order_by=name', '#project-panel');
+        }
+        resize_dataset_panels();
     }
 
+    function resize_dataset_panels() {
+        var $modal = $("#dataset-modal");
+        var nvisible = $modal.find(".dataset-panel:visible").length;
+        var panelwidth = Math.floor($modal.find(".modal-body").width()/nvisible);
+        var bodyheight = $(window).height() - 250;//$modal.find(".modal-body").offset().top - $modal.find(".modal-footer").outerHeight() - $modal.find(".modal-header").offset().top;
+        var panelheight = bodyheight;
+        $modal.find(".dataset-panel").css({"max-width":panelwidth, "max-height":panelheight, "height":panelheight});
+        //console.log($(window).height());console.log($modal.find(".modal-body").offset().top);console.log($modal.find(".modal-footer").outerHeight());console.log($modal.find(".modal-header").offset().top)
+    }
 
-    function delete_collection(id){
-        $.ajax({
-            url: '/api/dev/collection/'+id+'/?format=json',
-            //dataType: "json",
-            type: 'DELETE',
-            //data: {"id": id},
-            success: function() {
-                show_note('SUCCESS','deleted: '+id);
-            },
-            error: function () {
-                show_note('ERROR', 'error: ' + id);
+    function load_datasets($panel, filter_id, $el) {
+        filter_id = (typeof filter_id !== "undefined") ? filter_id : false;
+
+        // If $el is not defined, try to figure it out from filter id and parent panel
+        if (typeof $el == "undefined") {
+            var $parentpanel = $panel.prev();
+            if (filter_id && $parentpanel.length) {
+                $el = $("#"+$parentpanel.data("api-resource")+"-"+filter_id);
+                //console.log($panel); console.log(filter_id); console.log($el);
             }
+            else {
+                $el = [];
+            }
+        }
+
+        if ($el.length) {
+            select_dataset ($el);
+        }
+
+        if ($panel.length) {
+            $panel.show(0);
+            resize_dataset_panels();
+            $panel.html('');
+            get_data_items ($panel, filter_id);
+        }
+    }
+
+    function select_dataset ($el) {
+        var $panel = $el.parent(".dataset-panel"); // parent panel
+        $el.siblings(".selected").removeClass("selected"); // deselect siblings if they are selected
+        if (! $el.hasClass("selected")) $el.addClass("selected"); // add select class to selected $el
+        if ($el.position().top > $panel.height() || $el.position().top < 0) // check if current selection is out of view
+            $panel.scrollTop($panel.scrollTop() + $el.position().top - $panel.height()/2 + $el.height()/2); // scroll to position
+    }
+
+
+    function get_data_items ($panel, filter_id) {
+        // Load all items
+        var sqapi = $panel.SquidleAPIgetItems(filter_id);
+
+        // Get data object strings
+        var resource = $panel.data("api-resource");
+        var detailformat = $panel.data("api-detailformat");
+
+        $panel.find("div.panel-item").each(function(i,el){
+            var apidata = $(el).data("apidata");
+            var $edit = $("<i class='icon-edit' title='Edit'></i>").click(function(e){edit_dataset(apidata.id,el);e.stopPropagation();});
+            var $delete = $("<i class='icon-trash' title='Delete'></i>").click(function(e){delete_dataset(apidata.id,el);e.stopPropagation();});
+            var $editlinks = $("<span class='paneledit'></span>").append($edit,$delete);
+
+            var $panelinfo = $("<div class='panelinfo'></div>").append( sqapi.formatAPIObj(detailformat,apidata) );
+
+            var $info = $("<i class='icon-info-sign info'></i>").click(function(e){
+                if ($panelinfo.is(":visible")) { $panelinfo.hide() ; $editlinks.hide(); }
+                else { $panelinfo.show() ; $editlinks.show(); }
+                e.stopPropagation();
+            }).attr("title", $panelinfo.text());
+
+            $(el).attr("id",resource+"-"+apidata.id)
+                .prepend($info,"&nbsp;",$editlinks)
+                .append($panelinfo)
+                .click(function(){
+                    var $subpanel = $panel.next(".dataset-panel");
+                    $subpanel.nextAll(".dataset-panel").html("").hide(0);
+                    load_datasets($subpanel, apidata.id, $(el));
+                });
         });
     }
 
+    function delete_dataset(id,el){
+        if (confirm("Are you sure you want to PERMANENTLY DELETE this Dataset including ALL of its Subsets and Annotations?\nThis operation is NOT reversible.") == true) {
+            $.ajax({
+                url: '/api/dev/collection/'+id+'/?format=json',
+                type: 'DELETE',
+                success: function() {
+                    show_note('SUCCESS','Dataset has been deleted...'+id, "success", true);
+                    if ($(el).hasClass("selected")) { // if element is selected, hide child panels
+                        $(el).parent(".dataset-panel").nextAll(".dataset-panel").html("").hide(0);
+                        resize_dataset_panels();
+                    }
+                    $(el).remove();
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    show_note('ERROR', 'Cannot delete dataset: ' + errorThrown, "error", true);
+                }
+            });
+        }
+        return false;
+    }
+
+    function edit_dataset(id,el) {
+        show_note('W.I.P.', 'This has not been implemented yet...', "error", true);
+        return false;
+    }
 
     function create_dataset_modal() {
         $('#dataset-modal').on('hidden.bs.modal', function () {
 
         });
         $('#dataset-modal').on('shown.bs.modal', function () {
-
+            init_dataset_modal();
         });
     }
 </script>
