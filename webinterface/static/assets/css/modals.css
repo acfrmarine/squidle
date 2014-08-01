@@ -7,26 +7,82 @@
     /*padding: 0;*/
 }
 
-#dataset-modal .dataset-modal-container {
-    /*max-height: 400px;*/
+#dataset-modal .dataset-panel-container {
     overflow: hidden;
+    display: block;
+    width: 100%;
+    /*position: relative;*/
+}
+#dataset-modal .dataset-info-container {
+    display: block;
+    width: 100%;
 }
 
-.dataset-panel:nth-of-type(1) {
+#dataset-modal .dataset-info {
+    float: left;
+    overflow: hidden;
+    width: 33%;
+    height: 80px;
+    border-radius: 10px;
+    background-color: #3B3F44;
+    padding: 10px;
+    margin: 0;
+    border: 2px solid #2e3338;
+}
+#dataset-modal .dataset-info .name {
+    font-weight: bold;
+}
+#dataset-modal .dataset-info i {
+    font-size: 9px;
+}
+#dataset-modal .dataset-info .create, #dataset-modal .dataset-info .desc {
+    font-size: 9px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+#dataset-modal .dataset-info a.new-dataset {
+    line-height: 20px;
+    font-size: 10px;
+    text-transform: uppercase;
+    border: 1px solid #cccccc;
+    border-radius: 20px;
+    padding: 3px 8px 2px 8px;
+    margin-left: 20px;
+}
+#dataset-modal .dataset-info a.new-dataset:hover {
+    text-decoration: none;
+    font-weight: bold;
+    background-color: #0081c2;
+}
+#dataset-modal .dataset-info a.new-dataset i {
+    font-size: 16px;
+    line-height: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+#dataset-modal .dataset-panel:nth-of-type(1) {
     margin-left: -2px;
 }
 
-.dataset-panel {
+#dataset-modal .dataset-panel {
     float: left;
     overflow-y: auto;
     overflow-x: hidden;
-    width: 100%;
-    max-width: 1000;
-    /*min-width: 400px;*/
-    padding: 0px 10px 0px 10px;
+    width: 33%;
+    padding: 0 10px 0 10px;
     border-left: 2px solid #252525;
+    position: relative;
 }
-.dataset-panel .panel-item {
+
+#dataset-modal .dataset-empty {
+    padding: 30px 10px 30px 10px;
+    border: 2px dashed #cccccc;
+    border-radius: 10px;
+}
+
+
+#dataset-modal .dataset-panel .panel-item {
     display: block;
     text-align: left;
     border-radius: 10px;
@@ -40,46 +96,46 @@
     cursor: pointer;
 }
 
-.dataset-panel .selected {
+#dataset-modal .dataset-panel .selected {
     background-color: #C4C4C4;
     color: #000000;
 }
 
-.dataset-panel .panel-item i {
+#dataset-modal .dataset-panel .panel-item i {
     line-height: 20px;
 }
-.dataset-panel .panel-item i:hover {
+#dataset-modal .dataset-panel .panel-item i:hover {
     color: #ffffff;
 }
-.dataset-panel .panel-item .panelinfo {
+#dataset-modal .dataset-panel .panel-item .panelinfo {
     display: none;
     font-size: 11px;
     line-height: normal;
 }
-.dataset-panel .panel-item .paneledit {
+#dataset-modal .dataset-panel .panel-item .paneledit {
     float: right;
     display: none;
     margin-top: 5px;
 }
-.dataset-panel .panel-item .paneledit button {
+#dataset-modal .dataset-panel .panel-item .paneledit button {
     width: 20px;
     height: 20px;
     line-height: 20px;
     padding: 0px;
     /*border-radius: 50%;*/
 }
-.dataset-panel .panel-item .paneledit i {
+#dataset-modal .dataset-panel .panel-item .paneledit i {
     padding: 0 5px 0 0;
 }
-.dataset-panel .panel-item .paneledit i:hover {
+#dataset-modal .dataset-panel .panel-item .paneledit i:hover {
     color: #ff0000;
 }
-.dataset-panel .panel-item .panelinfo i {
+#dataset-modal .dataset-panel .panel-item .panelinfo i {
     margin: 5px 0 5px 0;
     font-size: 9px;
 }
 /*
-.dataset-panel i.icon-trash {
+#dataset-modal .dataset-panel i.icon-trash {
     color: red;
 }
 */

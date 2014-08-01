@@ -9,27 +9,46 @@
 {#                </ul>#}
             </div>
             <div class="modal-body">
-                <div class="dataset-modal-container">
+                <div class="dataset-info-container">
+                    <div id="project-info-panel" class="dataset-info"
+                        data-emptymsg="<b>No Project selected:</b> select a Project from the list below, or create a new one by clicking the button to the right."
+                        data-createlink="<a class='pull-right new-dataset' href='javascript:void(0)'>New <i class='icon-plus-sign'></i></a>"
+                        data-format="<div class='panel-item'><span class='name' >Project: {name}</span></div><div class='create'>{creation_info}</div><div class='desc'>{description}</div><i class='badge icon-group' title='Sharing'> {access}</i> <i class='badge icon-user' title='User'> {username}</i> <i class='badge icon-calendar' title='Creation date'> {creation_date}</i>">
+                    </div>
+                    <div id="subset-info-panel" class="dataset-info"
+                        data-emptymsg="<b>No Subset selected:</b> choose a Project, then select a Subset from the list below, or create a new one by clicking the + to the right."
+                        data-createlink="<a class='pull-right new-dataset' href='javascript:void(0)'>New <i class='icon-plus-sign'></i></a>"
+                        data-format="<div class='panel-item'><span class='name' >Subset: {name}</span></div><div class='create'>{creation_info}</div><div class='desc'>{description}</div><i class='badge icon-group' title='Sharing'> {access}</i> <i class='badge icon-user' title='User'> {username}</i> <i class='badge icon-calendar' title='Creation date'> {creation_date}</i>">
+                    </div>
+                    <div id="annotation-info-panel" class="dataset-info"
+                        data-emptymsg="<b>No Annotation Set selected:</b> choose a Project and Subset, then select a Annotation Set from the list below, or create a new one by clicking the + to the right."
+                        data-createlink="<a class='pull-right new-dataset' href='javascript:void(0)'>New <i class='icon-plus-sign'></i></a>"
+                        data-format="<div class='panel-item'><span class='name' >Annotation Set: {name}</span></div><div class='create'>{count} points</div>">
+                    </div>
+                </div>
+                <div class="dataset-panel-container">
                     <div id="project-panel" class="dataset-panel"
                             data-api-format="<div class='panel-item'><span class='name' >{name}</span></div>"
                             data-api-resource="collection"
                             data-api-filter="limit=0&parent__isnull=True&order_by=name"
-                            data-api-detailformat="<div>{creation_info}</div> <div>{description}</div> <i class='badge icon-th-list' title='Dataset type'> Project</i> <i class='badge icon-group' title='Sharing'> {access}</i> <i class='badge icon-user' title='User'> {username}</i> <i class='badge icon-calendar' title='Creation date'> {creation_date}</i>"
+                            data-api-detailformat="<a class='pull-right new-dataset' href='javascript:void(0)'>New <i class='icon-plus-sign'></i></a><div class='create'>{creation_info}</div><div class='desc'>{description}</div><i class='badge icon-th-list' title='Dataset type'> Project</i> <i class='badge icon-group' title='Sharing'> {access}</i> <i class='badge icon-user' title='User'> {username}</i> <i class='badge icon-calendar' title='Creation date'> {creation_date}</i>"
+                            data-emptymsg="<div class='dataset-empty'>There are not Projects to show. Create a Project using the button above.</div>"
+                            data-infopanel-id="#project-info-panel"
                             ></div>
-                    <div id="subset-panel" class="dataset-panel" style="display: none;"
+                    <div id="subset-panel" class="dataset-panel"
                             data-api-format="<div class='panel-item'><span class='name' >{name}</span></div>"
                             data-api-resource="collection"
                             data-api-filter="limit=0&order_by=name&parent="
-                            data-api-detailformat="<div>{creation_info}</div> <div>{description}</div> <i class='badge icon-th-list' title='Dataset type'> Subset</i> <i class='badge icon-group' title='Sharing'> {access}</i> <i class='badge icon-user' title='User'> {username}</i> <i class='badge icon-calendar' title='Creation date'> {creation_date}</i>"
+                            data-api-detailformat="<div class='create'>{creation_info}</div><div class='desc'>{description}</div><i class='badge icon-th-list' title='Dataset type'> Subset</i> <i class='badge icon-group' title='Sharing'> {access}</i> <i class='badge icon-user' title='User'> {username}</i> <i class='badge icon-calendar' title='Creation date'> {creation_date}</i>"
+                            data-infopanel-id="#subset-info-panel"
                             ></div>
-                    <div id="annotation-panel" class="dataset-panel" style="display: none;"
+                    <div id="annotation-panel" class="dataset-panel"
                             data-api-format="<div class='panel-item'><span class='name' >{name}</span></div>"
                             data-api-resource="point_annotation_set"
                             data-api-filter="limit=0&order_by=name&collection="
                             data-api-detailformat="{count} points"
+                            data-infopanel-id="#annotation-info-panel"
                             ></div>
-{#                    <div id="workset-panel" class="dataset-panel">workset</div>#}
-{#                    <div id="annotat-panel" class="dataset-panel">annotation</div>#}
                 </div>
             </div>
             <div class="modal-footer" style="text-align: left">
@@ -45,11 +64,7 @@
 
 
 <script type="text/javascript">
-    //$(document).ready(function () {
-        //$('#project-pane').show();
-        //$('#workset-pane').show();
-        //$('#annotat-pane').show();
-    //});
+
     function init_dataset_modal() {
         load_datasets($("#project-panel"));
         if (curstate.clid) {
@@ -57,7 +72,7 @@
             if (curstate.wsid) {
                 load_datasets($("#annotation-panel"), curstate.wsid);
                 if (curstate.asid)
-                    select_dataset($("#"+$("#annotation-panel").data("api-resource")+"-"+curstate.asid));
+                    highlight_dataset(curstate.asid, $("#annotation-panel") );
             }
         }
         resize_dataset_panels();
@@ -65,48 +80,64 @@
 
     function resize_dataset_panels() {
         var $modal = $("#dataset-modal");
-        var nvisible = $modal.find(".dataset-panel:visible").length;
-        var panelwidth = Math.floor($modal.find(".modal-body").width()/nvisible);
-        var bodyheight = $(window).height() - 250;//$modal.find(".modal-body").offset().top - $modal.find(".modal-footer").outerHeight() - $modal.find(".modal-header").offset().top;
-        var panelheight = bodyheight;
-        $modal.find(".dataset-panel").css({"max-width":panelwidth, "max-height":panelheight, "height":panelheight});
-        //console.log($(window).height());console.log($modal.find(".modal-body").offset().top);console.log($modal.find(".modal-footer").outerHeight());console.log($modal.find(".modal-header").offset().top)
+        //var nvisible = $modal.find(".dataset-panel:visible").length;
+        //var panelwidth = Math.floor($modal.find(".modal-body").width()/nvisible);
+        var panelheight = $(window).height() - 260 - $(".dataset-info").outerHeight();//$modal.find(".modal-body").offset().top - $modal.find(".modal-footer").outerHeight() - $modal.find(".modal-header").offset().top;
+        //$modal.find(".dataset-panel").css({"max-width":panelwidth, "max-height":panelheight, "height":panelheight});
+        $modal.find(".dataset-panel").css({"max-height":panelheight, "height":panelheight});
     }
 
-    function load_datasets($panel, filter_id, $el) {
-        filter_id = (typeof filter_id !== "undefined") ? filter_id : false;
+    function load_datasets($panel, parent_id, $el) {
+        parent_id = (typeof parent_id !== "undefined") ? parent_id : false;
 
         // If $el is not defined, try to figure it out from filter id and parent panel
         if (typeof $el == "undefined") {
             var $parentpanel = $panel.prev();
-            if (filter_id && $parentpanel.length) {
-                $el = $("#"+$parentpanel.data("api-resource")+"-"+filter_id);
-                //console.log($panel); console.log(filter_id); console.log($el);
-            }
-            else {
+            if (parent_id && $parentpanel.length)
+                $el = $("#"+$parentpanel.data("api-resource")+"-"+parent_id);
+            else
                 $el = [];
-            }
         }
 
-        if ($el.length) {
-            select_dataset ($el);
-        }
+        if ($el.length > 0)
+            highlight_dataset ($el);
 
         if ($panel.length) {
-            $panel.show(0);
+            //$panel.show(0);
             resize_dataset_panels();
             $panel.html('');
-            get_data_items ($panel, filter_id);
+            //$panel.html('<div class="selectinfo">lskjf </div>');
+            get_data_items ($panel, parent_id);
         }
     }
 
-    function select_dataset ($el) {
-        var $panel = $el.parent(".dataset-panel"); // parent panel
+    function highlight_dataset ($el_or_id, $panel) {
+
+        // If $el is not defined, try to figure it out from filter id and parent panel
+        if (typeof $el_or_id == "object") {
+            var $el = $el_or_id,
+                $panel = $el.parent(".dataset-panel");
+        }
+        else if (typeof $el_or_id == "number") {
+            $el = $("#"+$panel.data("api-resource")+"-"+$el_or_id);
+        }
+
         $el.siblings(".selected").removeClass("selected"); // deselect siblings if they are selected
         if (! $el.hasClass("selected")) $el.addClass("selected"); // add select class to selected $el
-        if ($el.position().top > $panel.height() || $el.position().top < 0) // check if current selection is out of view
+
+        // Show info
+        //show_dataset_info ($panel);
+        var sqapi = new SquidleAPI();
+        var $infopanel = $($panel.data("infopanel-id"));
+        $infopanel.html(
+            sqapi.formatAPIObj($infopanel.data("createlink") + $infopanel.data("format"), $el.data("apidata"))
+        );
+
+        // If current selection is out of view, scroll it to the centre
+        if ($el.position().top > $panel.height() || $el.position().top < 0)
             $panel.scrollTop($panel.scrollTop() + $el.position().top - $panel.height()/2 + $el.height()/2); // scroll to position
     }
+
 
 
     function get_data_items ($panel, filter_id) {
@@ -116,6 +147,7 @@
         // Get data object strings
         var resource = $panel.data("api-resource");
         var detailformat = $panel.data("api-detailformat");
+        var $selectinfo = $($panel.data("infopanel-id"));
 
         $panel.find("div.panel-item").each(function(i,el){
             var apidata = $(el).data("apidata");
@@ -136,7 +168,11 @@
                 .append($panelinfo)
                 .click(function(){
                     var $subpanel = $panel.next(".dataset-panel");
-                    $subpanel.nextAll(".dataset-panel").html("").hide(0);
+                    $subpanel.nextAll(".dataset-panel").html("");//.hide(0);
+                    $selectinfo.nextAll(".dataset-info").each(function(idp,di_el) {
+                        $(di_el).html($(di_el).data("emptymsg"))
+                    });
+                    $selectinfo.next(".dataset-info").prepend($selectinfo.next(".dataset-info").data("createlink"));
                     load_datasets($subpanel, apidata.id, $(el));
                 });
         });
@@ -150,7 +186,7 @@
                 success: function() {
                     show_note('SUCCESS','Dataset has been deleted...'+id, "success", true);
                     if ($(el).hasClass("selected")) { // if element is selected, hide child panels
-                        $(el).parent(".dataset-panel").nextAll(".dataset-panel").html("").hide(0);
+                        $(el).parent(".dataset-panel").nextAll(".dataset-panel").html("");//.hide(0);
                         resize_dataset_panels();
                     }
                     $(el).remove();
