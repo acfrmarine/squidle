@@ -30,7 +30,7 @@
     border: 2px solid #2e3338;
 }
 #dataset-modal .dataset-info .name {
-    font-weight: bold;
+    /*font-weight: bold;*/
 }
 #dataset-modal .dataset-info i {
     font-size: 9px;

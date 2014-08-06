@@ -26,120 +26,7 @@ Dataset browser modal
 </div>
 
 
-<!-------------------------------------------------------------
-New collection modal
--------------------------------------------------------------->
-<div id="new-collection-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <a type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
-                <h4><i class="icon-plus-sign"></i> Create new Project</h4>
-            </div>
-            <div class="modal-body">
-                <form action="" method="post" id="clform" class="form-horizontal" >
-                    <p>A Project is a dataset containing all the images of interest. This form will create a new project using your selection.</p>
-                    <span id="errors"></span>
-                    {% csrf_token %}
-                    {{ clform|as_bootstrap }}
-                </form>
-            </div>
-            <div class="modal-footer">
 
-                <button type="button"  class="btn btn-default" data-dismiss="modal" onclick="clear_form('#clform');">Cancel</button>
-                <button type="submit" class="btn btn-primary"  onclick="send_collection_form('#clform');">Save</button>
-
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-------------------------------------------------------------
-New workset modal
--------------------------------------------------------------->
-<div id="new-workset-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <a type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
-                <h4><i class="icon-plus-sign"></i> Create new Subset</h4>
-
-            </div>
-            <div class="modal-body">
-                <form action="" method="post" id="wsform" class="form-horizontal" >
-                    <p>A Subset contains images that have been sub-sampled from a Project. Use this form to create a new Subset. Select the method for subsetting the images and the parameters to use.</p>
-                    <span id="errors"></span>
-                    {% csrf_token %}
-                    {{ wsform|as_bootstrap }}
-                </form>
-
-            </div>
-            <div class="modal-footer">
-
-                <button type="button" class="btn btn-primary pull-left" data-dismiss="modal" onclick="$('#new-ulworkset-modal').modal('show');"><i class="icon-upload"></i> Upload list</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="clear_form('#wsform');">Cancel</button>
-                <button type="submit" class="btn btn-primary" onclick="send_workset_form('#wsform');">Save</button>
-
-            </div>
-        </div>
-    </div>
-</div>
-<div id="new-ulworkset-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <a type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
-                <h4><i class="icon-plus-sign"></i> Create new Subset</h4>
-
-            </div>
-            <div class="modal-body">
-                <form action="" method="post" id="ulwsform" class="form-horizontal">
-                    <p>A Subset contains images that have been sub-sampled from a Project. Use this form to create a new
-                        Subset by uploading a list of pre-selected images images. NB: the images need to already be uploaded into the system.</p>
-                    <span id="errors"></span>
-                    {% csrf_token %}
-                    {{ ulwsform|as_bootstrap }}
-                </form>
-
-            </div>
-            <div class="modal-footer">
-
-                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="clear_form('#ulwsform');">Cancel</button>
-                <button type="submit" class="btn btn-primary" onclick="send_workset_imagelist_form('#ulwsform');">Save</button>
-
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-------------------------------------------------------------
-New Annotationset modal
--------------------------------------------------------------->
-<div id="new-annotationset-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4><i class="icon-plus-sign"></i> New Annotation Run</h4>
-            </div>
-            <div class="modal-body">
-                <form method="post" id="asform"  class="form-horizontal">
-                    <p>An Annotation run defines the method of annotation on a Subset. Use this form to create an Annotation run. Select the method for annotation and also the associated parameters.</p>
-                    <span id="errors"></span>
-                    {% csrf_token %}
-                    {{ asform|as_bootstrap }}
-                </form>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="clear_form('#asform');">Cancel</button>
-                <button type="submit" class="btn btn-primary" onclick="send_asform();">Save</button>
-
-            </div>
-        </div>
-    </div>
-</div>
 
 
 
@@ -398,20 +285,6 @@ function openNewWorksetModalWindow() {
     $('#data-modal').modal('hide');
     $('#new-workset-modal').modal('show');
 }
-function send_workset_form(form_id){
-    curstate.clid = modalstate.clid;
-    curstate.asid = 0;
-    show_busy("Busy creating your Subset...");
-    Dajaxice.webinterface.send_workset_form(Dajax.process, {'form':$(form_id).serialize(true),'form_id':form_id});
-}
-
-function send_workset_imagelist_form(form_id) {
-    curstate.clid = modalstate.clid;
-    curstate.asid = 0;
-    $(form_id+" input.btn").attr('disabled', 'disabled');
-    show_busy("Uploading and checking image names...");
-    Dajaxice.webinterface.send_workset_imagelist_form(Dajax.process, {'form': $(form_id).serialize(true), 'form_id': form_id});
-}
 
 function openNewCollectionModalWindow() {
     //modalstate.clid = $('#id_c_id').attr('value');
@@ -421,15 +294,7 @@ function openNewCollectionModalWindow() {
         window.location.assign('/viewproject');
     }
 }
-function send_collection_form(form_id){
-    //$("#new-collection-modal").modal("hide");
-    $(form_id+" input.btn").attr('disabled','disabled');
-    show_busy("Busy creating your Project...");
-    curstate.wsid = 0;
-    curstate.asid = 0;
-	console.log( $(form_id).serialize(true) );
-    Dajaxice.webinterface.send_collection_form(Dajax.process, {'form':$(form_id).serialize(true),'form_id':form_id});
-}
+
 
 function refresh_datasets(field, formid, id, msg, showmodal) {
     hide_busy();
@@ -448,25 +313,7 @@ function refresh_datasets(field, formid, id, msg, showmodal) {
     }
 }
 
-function form_errors(haserror, form_id, description) {
-    var selobj = $(form_id+'>span#errors');
-    var description = ((typeof description !== 'undefined') ?  description : '<b>Error:</b> please correct the inputs highlighted below.');
-    hide_busy();
-    $(form_id+" input.btn").removeAttr('disabled');
-    if (haserror) {
-        selobj.addClass('alert alert-error');
-        selobj.html(description);
-    } else {
-        selobj.removeClass('alert alert-error');
-        selobj.html('');
-    }
-}
-function clear_form (form_id) {
-    form_errors(false, form_id);
-    $(form_id+' input').removeClass('error');
-    $(form_id+' select').removeClass('error');
-    $(form_id)[0].reset();
-}
+
 
 
 function showTagExampleModal(label) {
