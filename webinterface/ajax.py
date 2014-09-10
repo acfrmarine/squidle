@@ -3,7 +3,7 @@ from dajaxice.decorators import dajaxice_register
 from dajaxice.utils import deserialize_form
 from dajax.core import Dajax
 import guardian
-from webinterface.forms import CreateCollectionForm, CreateWorksetForm, CreateWorksetFromImagelist
+from webinterface.forms import dataset_forms, CreateCollectionForm, CreateWorksetForm, CreateWorksetFromImagelist
 from collection.models import Collection, CollectionManager
 
 from django.contrib.auth import authenticate, login, logout
@@ -79,18 +79,38 @@ def signup_form(request, form):
 
     return dajax.json()
 
+
+@dajaxice_register
+def save_new_dataset (request, form_data, form_id):
+    dajax = Dajax()
+
+    form = dataset_forms[form_id](deserialize_form(form_data))
+
+    if form.is_valid():  # All validation rules pass
+        id, msg = form.save(request.user)
+        if id is None: id = "null"
+        dajax.script('update_dataset_form("{}", "success", "{}", {});'.format(form_id, msg, id))
+    else:
+        dajax.script('update_dataset_form("{}", "formerror", "Please correct/complete the fields highlighted in red",null);'.format(form_id))
+        for error in form.errors:
+            dajax.add_css_class('#'+form_id+' #id_%s' % error, 'error')
+
+    return dajax.json()
+
+
 @dajaxice_register
 def send_workset_form(request, form, form_id):
     dajax = Dajax()
     form = CreateWorksetForm(deserialize_form(form))
-
     user = request.user
     #if request.user.is_anonymous():
     #    user = guardian.utils.get_anonymous_user()
 
+    #print form
 
     if form.is_valid():  # All validation rules pass
-        dajax.remove_css_class(form_id+' input', 'error')
+        print "VALID!"
+        #dajax.remove_css_class(form_id+' input', 'error')
         dajax.script('form_errors(false,"{0}");'.format(form_id))
 
         wsid, msg = CollectionManager().create_workset(
@@ -106,16 +126,26 @@ def send_workset_form(request, form, form_id):
         )
 
         if wsid is None: wsid = "null"
-        dajax.script('refresh_datasets("wsid","{0}",{1},"{2}", "#new-annotationset-modal");'.format(form_id,wsid,msg))
-
+        #dajax.script('refresh_datasets("wsid","{0}",{1},"{2}", "#new-annotationset-modal");'.format(form_id,wsid,msg))
+        dajax.script('update_dataset_form({}, "wsid", "{}," {});'.format(form_id, msg, wsid))
     else:
-        dajax.remove_css_class(form_id+' input', 'error')
+        print "NOT VALID!"
+        #print form.errors
+        #dajax.remove_css_class(form_id+' input', 'error')
         #dajax.script('form_errors(true,"{0}");'.format(form_id))
-        dajax.script("form_errors(true,'{0}','{1}');".format(form_id,form.errors))
+        print form_id
+        #dajax.script("form_errors(true,'{}','Please correct the errors in red below');".format(form_id))
+        #dajax.script('update_dataset_form({}, "error", {});'.format(form_id, form.errors))
+        dajax.script('update_dataset_form("{}", "error", "Please correct/complete the fields highlighted in red",0);'.format(form_id))
         for error in form.errors:
-            dajax.add_css_class(form_id+' #id_%s' % error, 'error')
+            dajax.add_css_class('#'+form_id+' #id_%s' % error, 'error')
+
+    print "COMPLETE!"
 
     return dajax.json()
+
+
+
 
 
 @dajaxice_register
@@ -127,7 +157,7 @@ def send_workset_imagelist_form(request, form, form_id):
     #if request.user.is_anonymous():
     #    user = guardian.utils.get_anonymous_user()
 
-
+    print form.cleaned_data.get()
     if form.is_valid():  # All validation rules pass
         dajax.remove_css_class(form_id + ' input', 'error')
         dajax.script('form_errors(false,"{0}");'.format(form_id))

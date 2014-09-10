@@ -15,6 +15,7 @@ from math import pi
 
 import os
 import sys
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -119,12 +120,21 @@ class CollectionManager(models.Manager):
                             bounding_boxes=None,
                             date_time_range=None):
 
-
         """Create a collection using all images in a deployment.
 
         :returns: the created collection.
         """
         try:
+            #print name, deployment_list, depth_range, altitude_range, bounding_boxes, date_time_range
+
+            deployment_list = [int(x) for x in deployment_list.split(',')] if deployment_list else None
+            depth_range = [float(x) for x in depth_range.split(',')] if depth_range else None
+            altitude_range = [float(x) for x in altitude_range.split(',')] if altitude_range else None
+            bounding_boxes = bounding_boxes.split(':') if bounding_boxes else None
+            date_time_range = date_time_range.split(',') if date_time_range else None
+
+            #print name, deployment_list, depth_range, altitude_range, bounding_boxes, date_time_range
+
 
             # check user is logged in
             if user.is_anonymous() or not user.is_authenticated:
@@ -154,12 +164,13 @@ class CollectionManager(models.Manager):
             altitude = measurement_types.get(normalised_name="altitude")
 
             # now add all the images
-            filters = ""
             if deployment_list is not None:
                 #dplinfo = "{} deployments".format(len(deployment_list))
+                #deployment_list = deployment_list.split(",")
+                #for dplid in deployment_list:
+                #    value = int(dplid)
                 for dplid in deployment_list:
-                    value = int(dplid)
-                    deployment = Deployment.objects.get(id=value)
+                    deployment = Deployment.objects.get(id=dplid)
                     images = Image.objects.filter(pose__deployment=deployment)
 
                     #dplinfo += deployment.short_name+" "
@@ -167,29 +178,40 @@ class CollectionManager(models.Manager):
                     #filter depth
                     if depth_range is not None:
                         images = images.filter(pose__depth__range=depth_range)
-                        filters += " | depth: {} to {}m".format(*depth_range)
+                        # filters += ", dep:{}-{}m".format(*depth_range)
+                        # filters["dep"] = depth_range
                     #filter altitude
                     if altitude_range is not None:
                         images = images.filter(pose__scientificposemeasurement__measurement_type=altitude, pose__scientificposemeasurement__value__range=altitude_range)
                         #altinfo = "[altitude:" + altitude_range[0] + "-" + altitude_range[1] + "]"
-                        filters += " | altitude: {} to {}m".format(*altitude_range)
+                        # filters += ", alt:{}-{}m".format(*altitude_range)
+                        # filters["alt"] = altitude_range
                     # filter dates
                     if date_time_range is not None:
                         images = images.filter(pose__date_time__range=date_time_range)
-                        filters += " | date: {} to {}".format(*date_time_range)
+                        # filters += ", date:{}-{}".format(*date_time_range)
+                        # filters["date"] = date_time_range
                     # Bounding boxes
                     if bounding_boxes is not None:
                         for bbox in bounding_boxes:
                             bbox_tpl = tuple([float(x) for x in bbox.split(',')])
                             bboximages = images.filter(pose__position__contained=Polygon.from_bbox(bbox_tpl))
                             collection.images.add(*bboximages)
-                        filters += " | {} bounding box(es)".format(len(bounding_boxes))
+                        # filters += ", #bboxes:{}".format(len(bounding_boxes))
+                        # filters["bbox"] = len(bounding_boxes)
                     else :
                         collection.images.add(*images)
 
-                if filters != "" :
-                    filters = "Filters {}.".format(filters)
-                collection.creation_info = "{} images from {} deployment(s). {}".format(collection.images.count(), len(deployment_list) , filters)
+                # if filters != "" :
+                #     print filters, json.dumps(filters)
+                    # filters = json.dumps(filters)
+                    #filters = "Filters {}.".format(filters)
+                filters = "#imgs: {}, #deployments: {}".format(collection.images.count(), len(deployment_list))
+                filters += ", dep:{}-{}m".format(*depth_range) if depth_range is not None else ""
+                filters += ", alt:{}-{}m".format(*altitude_range) if altitude_range is not None else ""
+                filters += ", date:{}--{}".format(*date_time_range) if date_time_range is not None else ""
+                filters += ", #bboxes:{}".format(len(bounding_boxes)) if bounding_boxes is not None else ""
+                collection.creation_info = filters
 
 
             collection.save()
@@ -224,6 +246,9 @@ class CollectionManager(models.Manager):
         returns: the created workset id (or None if error)
                  a status/error message
         """
+
+        c_id = int(c_id)
+        n = int(n)
 
         try:
             collection = Collection.objects.get(pk=c_id)
@@ -263,6 +288,7 @@ class CollectionManager(models.Manager):
 
             elif method == "upload" :
                 wsimglist = []
+                img_list = [line.strip() for line in img_list.replace(',', '\n').splitlines() if line.strip()]
                 for imgname in img_list:
                     imgstr = os.path.splitext(imgname)[0]
                     print  imgstr

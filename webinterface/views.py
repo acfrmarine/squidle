@@ -26,7 +26,7 @@ from collection.api import CollectionResource
 from collection.models import Collection, CollectionManager
 from annotations.models import PointAnnotation, PointAnnotationSet, AnnotationCode
 
-from webinterface.forms import CreateCollectionForm, CreateWorksetForm, CreateWorksetAndAnnotation, CreateCollectionExploreForm, CreatePointAnnotationSet, CreateWorksetFromImagelist
+from webinterface.forms import dataset_forms, CreateCollectionForm, CreateWorksetForm, CreateWorksetAndAnnotation, CreateCollectionExploreForm, CreatePointAnnotationSet, CreateWorksetFromImagelist
 from userena.forms import AuthenticationForm, SignupForm
 
 from django.db.models import Max
@@ -272,10 +272,10 @@ def project(request):
     imid = request.GET.get("imid", "0") if request.GET.get("imid", "") else 0
 
     # Forms
-    clform = CreateCollectionForm()
-    wsform = CreateWorksetForm(initial={'c_id': clid, 'method': 'random', 'n': 100, 'start_ind': 0, 'stop_ind': 0})
-    ulwsform = CreateWorksetFromImagelist(initial={'c_id': clid})
-    asform = CreatePointAnnotationSet(initial={'count': 50})
+    # clform = CreateCollectionForm()
+    # wsform = CreateWorksetForm(initial={'c_id': clid, 'method': 'random', 'n': 100, 'start_ind': 0, 'stop_ind': 0})
+    # ulwsform = CreateWorksetFromImagelist(initial={'c_id': clid})
+    # asform = CreatePointAnnotationSet(initial={'count': 50})
     aform = AuthenticationForm()
     suform = SignupForm()
 
@@ -285,10 +285,10 @@ def project(request):
                                'wsid': wsid,
                                "asid": asid,
                                "imid": imid,
-                               "clform": clform,
-                               "wsform": wsform,
-                               "ulwsform": ulwsform,
-                               "asform": asform,
+                               "clform": dataset_forms["clform"](),
+                               "wsform": dataset_forms["wsform"](initial={'c_id': clid, 'method': 'random', 'n': 100, 'start_ind': 0, 'stop_ind': 0}),
+                               "ulwsform": dataset_forms["ulwsform"](initial={'c_id': clid}),
+                               "asform": dataset_forms["asform"](initial={'count': 50}),
                                "aform": aform,
                                "suform": suform,
                                "GEOSERVER_URL": settings.GEOSERVER_URL},

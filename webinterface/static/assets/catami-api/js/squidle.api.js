@@ -26,14 +26,14 @@ function SquidleAPI(usrconfig) {
      * @param $outputelement
      * @param format
      */
-    this.getItems = function($outputelement, resource, filter, format) {
+    this.getFormatItems = function($outputelement, resource, filter, format) {
         filter = ((typeof filter !== 'undefined') ? '?' + filter : '');
         format = (typeof format !== 'undefined') ? format : config.format;
 
         var obj, $el, _this=this;
         $outputelement.data('api-ajax', $.ajax({
             dataType: "json",
-            async: false,  // prevent asyncronous mode to allow setting of variables within function
+            async: false,
             url: config.api_baseurl + resource + filter,
             success: function (qs) {
                 if (qs.objects.length > 0) {
@@ -57,6 +57,26 @@ function SquidleAPI(usrconfig) {
         }));
     }
 
+
+    this.getJsItems = function(resource, filter) {
+        var objs = [];
+        $.ajax({
+            dataType: "json",
+            async: false,  // prevent asyncronous mode to allow setting of variables within function
+            url: config.api_baseurl + resource + filter,
+            success: function (qs) {
+                if (qs.objects.length > 0) {
+                    for (var i = 0; i < qs.objects.length; i++) {
+                        objs.push(getAPIObj(resource, qs.objects[i]));
+                    }
+                }
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest);
+            }
+        });
+        return objs;
+    }
 
     /**
      *
@@ -111,7 +131,7 @@ $.fn.SquidleAPIgetItems = function( filters ) {
     if (filters) apifilter += filters;
 
     var sqapi = new SquidleAPI();
-    sqapi.getItems(this , this.data('api-resource') , apifilter , this.data('api-format'));
+    sqapi.getFormatItems(this , this.data('api-resource') , apifilter , this.data('api-format'));
 
     return sqapi;
 }
