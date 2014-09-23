@@ -2003,12 +2003,12 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
 	 *
 	 * $container - The pane to add the button and text to
 	 */
-	this.addSelectionInfo = function($container) {
+	this.addSelectionInfo = function($container,$collectionmodal) {
 		baseMap.$selectedpanel = $container;
 		
 		var $createbtn = $('<button id="create-button" class="btn btn-info" style="width:100%;"><i class="icon-plus"></i> New Project with selection</button>');
 		$createbtn.click(function () {
-            baseMap.openNewCollectionModal()
+            $collectionmodal.modal("show");
         });
 		
 		var $infobtn = $('<div id="info-button" class="alert"></div>');
@@ -2077,4 +2077,23 @@ function BaseMap(geoserverUrl, deploymentExtentUrl, collectionExtentUrl, globals
         $('#new-collection-modal').modal('show');
     }
 
+
+    this.addFiltersToForm = function ($form, filtrangefields, deplfield, bboxfield) {
+		// prepare clform
+		var key, ids = [];
+		for (var i = 0; i < this.filters.deployments.length; i++) {
+			ids.push(this.filters.deployments[i].id)
+		}
+		$form.find("input[name='"+deplfield+"']").val(ids.join(','));
+
+		for (key in this.filters.featranges) {
+			$form.find("input[name='"+filtrangefields[key]+"']").val(this.filters.featranges[key][0] + ',' + this.filters.featranges[key][1]);
+	 	}
+
+		var bboxarr = [];
+		for (key in this.filters.BBoxes) {
+			bboxarr.push([this.filters.BBoxes[key].left, this.filters.BBoxes[key].bottom, this.filters.BBoxes[key].right, this.filters.BBoxes[key].top].join(','));
+        }
+        if (bboxarr.length > 0) $form.find("input[name='"+bboxfield+"']").val(bboxarr.join(':'));
+    }
 }

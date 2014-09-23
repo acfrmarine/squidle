@@ -431,6 +431,7 @@ function send_collection_form(form_id){
     Dajaxice.webinterface.send_collection_form(Dajax.process, {'form':$(form_id).serialize(true),'form_id':form_id});
 }
 
+
 function refresh_datasets(field, formid, id, msg, showmodal) {
     hide_busy();
     $(formid+" input.btn").removeAttr('disabled');

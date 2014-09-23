@@ -17,7 +17,7 @@ import os
 import sys
 
 #thispath = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))  # script directory
-thispath= os.path.abspath(os.path.dirname(__file__)+'/../') # get dir path of one level up
+thispath= os.path.abspath(os.path.dirname(__file__)+'/../')  # get dir path of one level up
 sys.path.insert(0, thispath)
 # sys.path.insert(0, '/home/auv/git/squidle-sandbox')
 

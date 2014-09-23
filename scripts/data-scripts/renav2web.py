@@ -68,10 +68,9 @@ Left Colour, Downward, path.csv, Left Image"""
 
     writer.writeheader()
 
-
-
     for line in reader:
-        if len(line) <= 1:
+
+        if len(line) <= 2:
             continue
 
         # path requirements

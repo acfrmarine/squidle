@@ -146,7 +146,7 @@ class PointAnnotationSetResource(ModelResource):
             'name': ALL,
             'id': 'exact',
         }
-        allowed_methods = ['get', 'post']
+        allowed_methods = ['get', 'post', 'delete']
         authentication = MultiAuthentication(AnonymousGetAuthentication(),
                 SessionAuthentication(),
                 ApiKeyAuthentication())
@@ -223,6 +223,8 @@ class PointAnnotationAuthorization(Authorization):
         raise Unauthorized("Sorry, no deletes.")
 
     def delete_detail(self, object_list, bundle):
+        if user.has_perm('annotations.update_pointannotationset', bundle.obj.annotation_set):
+            return True
         raise Unauthorized("Sorry, no deletes.")
 
 
