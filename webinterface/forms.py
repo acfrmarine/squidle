@@ -1,6 +1,6 @@
 from django import forms
 from annotations.models import POINT_METHODOLOGIES
-from annotations.models import PointAnnotationSet
+from annotations.models import PointAnnotationSet, PointAnnotationSetManager
 from collection.models import Collection, CollectionManager
 
 #class CreateCollectionForm(forms.Form):
@@ -67,20 +67,42 @@ class CreateWorksetForm(forms.Form):
 
 
 
+# class CreatePointAnnotationSet (forms.Form):
+#     collection = forms.IntegerField(widget=forms.HiddenInput())
+#     owner = forms.CharField(widget=forms.HiddenInput())
+#     name = forms.CharField(label=u'Name', widget=forms.TextInput(attrs={'placeholder': 'Enter a descriptive name'}))
+#     methodology = forms.ChoiceField(label=u'Methodology', choices=POINT_METHODOLOGIES, initial=0, help_text=u'The method for positioning the points')
+#     count = forms.IntegerField(label=u'N', min_value=1, help_text=u'Number of points')
+#
+#     # Attach javascript onchange event to select
+#     #methodology.widget.attrs["onchange"] = "if ($(this).val() == 3) $(this.form.id_count).val(9)[0].disabled=true;"\
+#     #"else if ($(this).val() == 1 || $(this).val() == 2) $(this.form.id_count).val(10)[0].disabled=false;"\
+#     #"else  $(this.form.id_count).val(50)[0].disabled=false;"
+#     methodology.widget.attrs["onchange"] = "if ($(this).val() == 3) $(this.form.id_count).val(9);" \
+#                                            "else if ($(this).val() == 1 || $(this).val() == 2) $(this.form.id_count).val(10);" \
+#                                            "else  $(this.form.id_count).val(50);"
+
 class CreatePointAnnotationSet (forms.Form):
-    collection = forms.IntegerField(widget=forms.HiddenInput())
-    owner = forms.CharField(widget=forms.HiddenInput())
+    #user, name, methodology, n, c_id
+    c_id = forms.IntegerField(widget=forms.HiddenInput())
     name = forms.CharField(label=u'Name', widget=forms.TextInput(attrs={'placeholder': 'Enter a descriptive name'}))
     methodology = forms.ChoiceField(label=u'Methodology', choices=POINT_METHODOLOGIES, initial=0, help_text=u'The method for positioning the points')
-    count = forms.IntegerField(label=u'N', min_value=1, help_text=u'Number of points')
+    n = forms.IntegerField(label=u'N', min_value=1, initial=50, help_text=u'Number of points')
 
     # Attach javascript onchange event to select
     #methodology.widget.attrs["onchange"] = "if ($(this).val() == 3) $(this.form.id_count).val(9)[0].disabled=true;"\
     #"else if ($(this).val() == 1 || $(this).val() == 2) $(this.form.id_count).val(10)[0].disabled=false;"\
     #"else  $(this.form.id_count).val(50)[0].disabled=false;"
-    methodology.widget.attrs["onchange"] = "if ($(this).val() == 3) $(this.form.id_count).val(9);" \
-                                           "else if ($(this).val() == 1 || $(this).val() == 2) $(this.form.id_count).val(10);" \
-                                           "else  $(this.form.id_count).val(50);"
+    methodology.widget.attrs["onchange"] = "if ($(this).val() == 3) $(this.form.id_n).attr('disabled','disabled').val('9');" \
+                                           "else if ($(this).val() == 1 || $(this).val() == 2) $(this.form.id_n).removeAttr('disabled').val('10');" \
+                                           "else  $(this.form.id_n).removeAttr('disabled').val('50');"
+    def save (form, user):
+        args = dict()
+        args["user"] = user
+        for key in form.base_fields:                # arguments to func are same as form fields
+            args[key] = form.cleaned_data.get(key)
+        return PointAnnotationSetManager().create_annotation_set(**args)
+
 
 class CreateCollectionExploreForm(forms.Form):
     deployment_ids = forms.CharField()

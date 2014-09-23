@@ -13,7 +13,7 @@
                 <div class="dataset-info-container">
                     <div id="project-info-panel" class="dataset-info"
                         data-emptymsg="<b>No Project selected:</b> select a Project from the list below, or create a new one by clicking the button to the right."
-                        data-createlink="<a class='pull-right new-dataset' href='javascript:void(0)' data-toggle='modal' data-target='#dataset-new-collection'>New <i class='icon-plus-sign'></i></a>"
+                        data-createlink="<a class='pull-right new-dataset' href='javascript:void(0)' onclick='newproject()'>New <i class='icon-plus-sign'></i></a>"
                         data-format="<div class='panel-item'><span class='name' ><b>Project:</b> {name}</span></div><div class='create'>{creation_info}</div><div class='desc'>{description}</div><i class='badge icon-group' title='Sharing'> {access}</i> <i class='badge icon-user' title='User'> {username}</i> <i class='badge icon-calendar' title='Creation date'> {creation_date}</i>">
                     <i class="icon-spinner icon-spin icon-large" style="font-size: 25px; display: block; text-align: center"></i>
                     </div>
@@ -161,7 +161,7 @@ New Annotationset modal
                     {{ asform|as_bootstrap }}
                     <div>
                         <button type="button" class="btn btn-default" data-dismiss="modal" onclick="clear_form(this.form);">Cancel</button>
-                        <button type="submit" class="btn btn-primary" onclick="send_asform();">Save</button>
+                        <button type="submit" class="btn btn-primary" onclick="send_dataset_form(this);">Save</button>
                     </div>
                 </form>
             </div>
@@ -170,6 +170,104 @@ New Annotationset modal
 </div>
 
 
+<!-------------------------------------------------------------
+Sign in modal
+-------------------------------------------------------------->
+<div id="sign-in-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="TaskModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4><i class="icon-user"></i> Signin</h4>
+            </div>
+
+            <div class="modal-body">
+                <form action="" method="post" id="aform" class="form-horizontal" >
+                    <span id="errors"></span>
+                    {% csrf_token %}
+                    {{ aform|as_bootstrap }}
+
+                    <br>
+                    <a class="btn btn-default" aria-hidden="true" data-dismiss="modal" onclick="clear_form(this.form);">Cancel</a>
+                    <a class="btn btn-info" aria-hidden="true" data-dismiss="modal" onclick="$('#sign-up-modal').modal('show');"><i class="icon-plus"></i> Create new account</a>
+                    <input class="btn btn-primary pull-right" type="submit" value="Sign in" onclick="send_signin('aform'); return false;">
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% load i18n %}
+
+
+<div id="sign-up-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="TaskModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4><i class="icon-user"></i> Sign up</h4>
+            </div>
+
+            <div class="modal-body">
+
+                <form action="" method="post" id="suform" class="form-horizontal" >
+                    <span id="errors"></span>
+                    {% csrf_token %}
+                    {{ suform|as_bootstrap }}
+                    <br>
+                    <a class="btn btn-default" aria-hidden="true" data-dismiss="modal" onclick="clear_form(this.form);">Cancel</a>
+                    <input class="btn btn-primary pull-right" type="submit" value="Sign up" onclick="send_signup('suform');return false;">
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="user-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4><i class="icon-user"></i> My account</h4>
+            </div>
+            <div class="modal-body">
+                <br><br><b>NOTE:</b> this modal will contain user information and account tools<br><br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-info">Edit account details</button>
+                <a href="{% url "userena_signout" %}" class="btn btn-danger">Log out!</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-------------------------------------------------------------
+Tag-example browser modal
+-------------------------------------------------------------->
+<div class="modal fade" id="tag-example-modal" tabindex="-1" role="dialog" aria-labelledby="data-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                <h4><i class="icon-tags"></i> Tag examples</h4>
+            </div>
+            <div class="modal-body">
+                <!-- This is populated dynamically through jquery -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Done</button>
+{#                <button type="submit" class="btn btn-primary" onclick="updateDatasets()">Update selection</button>#}
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
 
     var opendatamodal = false;
@@ -177,6 +275,9 @@ New Annotationset modal
     var msfield_desc = {clid:"Project",wsid:"Subset",asid:"Annotationset"}
 
     function init_data_modals(curstate, map) {
+
+        // Force refresh if user logs in
+        curstate.loginfuncs.push(force_refresh_datasets);
 
         // force refresh panels on first load
         $(".dataset-panel").each(
@@ -201,11 +302,11 @@ New Annotationset modal
         });
 
         $("#dataset-new-annotationset").on("show.bs.modal", function() {
-            $(this).find("form input[name='collection']").val('/api/dev/collection/'+$('#subset-panel').data("select_id")+'/');
+            $(this).find("form input[name='c_id']").val(modalstate.wsid);
         });
 
         $("#dataset-new-workset").on("show.bs.modal", function() {
-            $(this).find("form input[name*='c_id']").val($('#project-panel').data("select_id"));  // set c_id field in multiple forms
+            $(this).find("form input[name*='c_id']").val(modalstate.clid);  // set c_id field in multiple forms
         });
 
         $("#dataset-new-collection").on("show.bs.modal", function() {
@@ -222,7 +323,15 @@ New Annotationset modal
         });
     }
 
+    function force_refresh_datasets() {
+        $(".dataset-panel").each(function (i,e) {$(e).data("forcerefresh",true)});
+        //refresh_datasets();
+    }
+
     function refresh_datasets() {
+
+        //$(".dataset-panel").each(function (i,e) {console.log($(e).attr("id"), $(e).data("forcerefresh"))});
+
         resize_dataset_panels();
         if ($("#project-panel").data("forcerefresh")) {
             load_datasets($("#project-panel"));
@@ -233,13 +342,14 @@ New Annotationset modal
                 });
         }
 
-        if (modalstate.clid && (modalstate.clid != $("#project-panel").data("select_id") || $("#subset-panel").data("forcerefresh"))) {
+        if (modalstate.clid && ((modalstate.clid != $("#project-panel").data("select_id")) || $("#subset-panel").data("forcerefresh"))) {
             load_datasets($("#subset-panel"), modalstate.clid, true);
-            if (modalstate.wsid && (modalstate.wsid != $("#subset-panel").data("select_id") || $("#annotation-panel").data("forcerefresh"))) {
-                load_datasets($("#annotation-panel"), modalstate.wsid, true);
-                if (modalstate.asid && (modalstate.asid != $("#annotation-panel").data("select_id")))
-                    highlight_dataset($("#annotation-panel") , modalstate.asid, true);
-            }
+        }
+        if (modalstate.wsid && ((modalstate.wsid != $("#subset-panel").data("select_id")) || $("#annotation-panel").data("forcerefresh"))) {
+            load_datasets($("#annotation-panel"), modalstate.wsid, true);
+        }
+        if (modalstate.asid && (modalstate.asid != $("#annotation-panel").data("select_id"))) {
+            highlight_dataset($("#annotation-panel") , modalstate.asid, true);
         }
     }
 
@@ -323,7 +433,7 @@ New Annotationset modal
         $panel.find("div.panel-item").each(function(i,el){
             var apidata = $(el).data("apidata");
             var $edit = $("<i class='icon-edit' title='Edit'></i>").click(function(e){edit_dataset(apidata.id,el);e.stopPropagation();});
-            var $delete = $("<i class='icon-trash' title='Delete'></i>").click(function(e){delete_dataset(apidata.id,el);e.stopPropagation();});
+            var $delete = $("<i class='icon-trash' title='Delete'></i>").click(function(e){delete_dataset(apidata.id,el, resource);e.stopPropagation();});
             var $editlinks = $("<span class='paneledit'></span>").append($edit,$delete);
 
             var $panelinfo = $("<div class='panelinfo'></div>").append( sqapi.formatAPIObj(detailformat,apidata) );
@@ -350,10 +460,10 @@ New Annotationset modal
         });
     }
 
-    function delete_dataset(id,el){
+    function delete_dataset(id,el,resource){
         if (confirm("Are you sure you want to PERMANENTLY DELETE this Dataset including ALL of its Subsets and Annotations?\nThis operation is NOT reversible.") == true) {
             $.ajax({
-                url: '/api/dev/collection/'+id+'/?format=json',
+                url: '/api/dev/'+resource+'/'+id+'/?format=json',
                 type: 'DELETE',
                 success: function() {
                     show_note('SUCCESS','Dataset has been deleted...'+id, "success", true);
@@ -393,6 +503,7 @@ New Annotationset modal
             },
             {'form_data':$form.serialize(true),'form_id':form_id},
             {'error_callback': function(){
+                hide_busy();
                 form_errors(true,form_id,"There was a server error... Please try again."
             )}}
         );
@@ -451,7 +562,14 @@ New Annotationset modal
         form.reset();
     }
 
-
+    function send_signin(){
+        Dajaxice.webinterface.signin_form(Dajax.process,{'form':$('#aform').serialize(true)});
+        return false;
+    }
+    function send_signup(){
+        Dajaxice.webinterface.signup_form(Dajax.process,{'form':$('#suform').serialize(true)});
+        return false;
+    }
     function update_sign_in(id,username) {
         curstate.userid = id;
         curstate.isloggedin = (id) ? true : false;
@@ -474,6 +592,10 @@ New Annotationset modal
 
         $('#sign-in-modal').modal('hide');
         $('#sign-up-modal').modal('hide');
+    }
+
+    function newproject() {
+        window.location.assign('/viewproject');
     }
 
 </script>

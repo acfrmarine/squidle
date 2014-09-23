@@ -2,6 +2,9 @@
 """
 from django.db import models
 from django.contrib.auth.models import User
+from collection.models import Collection
+from authorization import apply_pointannotationset_permissions
+
 
 
 class AnnotationCode(models.Model):
@@ -157,6 +160,28 @@ class PointAnnotationManager(models.Manager):
             add_point(annotation_set, image, labeller, 0.47896,0.59214)
             add_point(annotation_set, image, labeller, 0.47896,0.50301)
 
+
+
+class PointAnnotationSetManager(models.Manager):
+    def create_annotation_set (self, user, name, methodology, n, c_id):
+        annotation_set = PointAnnotationSet()
+        annotation_set.methodology = int(methodology)
+        annotation_set.collection = Collection.objects.get(pk=int(c_id))
+        annotation_set.count = int(n)
+        annotation_set.name = name
+        annotation_set.owner = user
+
+        # save the collection so we can associate images with it
+        annotation_set.save()
+
+        apply_pointannotationset_permissions(user, annotation_set)
+        #TODO apply permissions
+        #authorization.apply_collection_permissions(user, collection)
+        print annotation_set
+        asid = annotation_set.id
+        msg = "Your Annotation set has been created successfully!"
+        print asid
+        return asid, msg
 
 
 class PointAnnotationSet(AnnotationSet):

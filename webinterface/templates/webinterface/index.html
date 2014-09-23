@@ -146,7 +146,7 @@
         //var banner_height = 0.5;
         //$('#banner-carousel').css('max-height', Math.min($(window).height() * banner_height, $('#banner-carousel .item:first').height()));
         //$("#content").css('min-height', $(window).height() - $('#banner-carousel').height());
-        $('#banner-carousel').css('height', Math.min($(window).height() - $(".section:first").outerHeight(), $('#banner-carousel .item:first').height()));
+        $('#banner-carousel').css('height', Math.min($(window).height() - $(".section:first").outerHeight(), $(window).height()*0.5));
         $(".section-row").css('min-height', $(window).height() - $('#banner-carousel').height());
         $('#info-modal .modal-dialog').width(0.9*$(window).width());
         $('#info-modal .modal-body').css('max-height',0.9*$(window).height() - 60);

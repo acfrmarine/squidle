@@ -27,11 +27,16 @@
         <li title="Data tools for selected dataset" class="icon-text"><a id="data-nav" href="#datatab" data-toggle="tab"><i class="icon-th-list"></i>Data</a></li>
         <li class="dropdown"><a id="datasel" href="#" class="dropdown-toggle" data-toggle="dropdown">No dataset selected <b class="caret"></b></a>
             <ul class="dropdown-menu">
-                <li><a href="javascript:void(0)" onclick="$('#data-modal').modal('show')"><i class="icon-th-list"></i>
-                    Choose a dataset</a></li>
                 <li><a href="javascript:void(0)" onclick="$('#dataset-modal').modal('show')"><i class="icon-th-list"></i>
-                    Temporary test</a></li>
+                    Manage / select datasets</a></li>
                 <li><a href="javascript:void(0)" onclick="window.location.assign('/viewproject')"><i class="icon-plus"></i> Create new Project</a></li>
+{#TODO: needs to update clid and wsid in workset modals before these will work... curently only updates when management modal is opened#}
+                {% if clid %}
+                    <li><a href='javascript:void(0)' data-toggle='modal' data-target='#dataset-new-workset'><i class="icon-plus"></i> Create new Subset in current Project</a></li>
+                {% endif %}
+                {% if wsid %}
+                    <li><a href='javascript:void(0)' data-toggle='modal' data-target='#dataset-new-annotationset'><i class="icon-plus"></i> Create new AnnotationSet in current Subset</a></li>
+                {% endif %}
             </ul>
         </li>
     </ul>
