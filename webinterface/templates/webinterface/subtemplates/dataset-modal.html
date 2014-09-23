@@ -1,112 +1,601 @@
-<div class="modal fade" id="dataset-modal" tabindex="-1" role="dialog" aria-labelledby="dataset-modal-label" aria-hidden="true">
+{% load bootstrap_toolkit %}
+<div class="modal fade" id="dataset-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <a type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
-                <h4><i class="icon-th-list"></i> Manage datasets</h4>
-                <ul class="breadcrumb" id="dataset-modal-cursel">
-                    <li>Select a dataset below:</li>
-                </ul>
+                <h4><i class="icon-th-list"></i> Datasets</h4>
+{#                <ul class="breadcrumb" id="dataset-modal-cursel">#}
+{#                    <li>Select a dataset below:</li>#}
+{#                </ul>#}
             </div>
             <div class="modal-body">
-                <div class="dataset-modal-container">
-                    <div class="btn-group-vertical">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default">Default sfsdf sdfs dfs dfsdf sdf sdf</button>
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
-                            </ul>
-                        </div>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default">Default sdfsdf sdf sd</button>
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                <span class="caret"></span></button>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
-                            </ul>
-                        </div>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default">Default</button>
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                <span class="caret"></span></button>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#">Separated link</a></li>
-                            </ul>
-                        </div>
-
+                <div class="dataset-info-container">
+                    <div id="project-info-panel" class="dataset-info"
+                        data-emptymsg="<b>No Project selected:</b> select a Project from the list below, or create a new one by clicking the button to the right."
+                        data-createlink="<a class='pull-right new-dataset' href='javascript:void(0)' onclick='newproject()'>New <i class='icon-plus-sign'></i></a>"
+                        data-format="<div class='panel-item'><span class='name' ><b>Project:</b> {name}</span></div><div class='create'>{creation_info}</div><div class='desc'>{description}</div><i class='badge icon-group' title='Sharing'> {access}</i> <i class='badge icon-user' title='User'> {username}</i> <i class='badge icon-calendar' title='Creation date'> {creation_date}</i>">
+                    <i class="icon-spinner icon-spin icon-large" style="font-size: 25px; display: block; text-align: center"></i>
                     </div>
-                    <div id="project-panel" class="dataset-panel"></div>
-{#                    <div id="workset-panel" class="dataset-panel">workset</div>#}
-{#                    <div id="annotat-panel" class="dataset-panel">annotation</div>#}
+                    <div id="subset-info-panel" class="dataset-info"
+                        data-emptymsg="<b>No Subset selected:</b> choose a Project, then select a Subset from the list below, or create a new one."
+                        data-createlink="<a class='pull-right new-dataset' href='javascript:void(0)' data-toggle='modal' data-target='#dataset-new-workset'>New <i class='icon-plus-sign'></i></a>"
+                        data-format="<div class='panel-item'><span class='name' ><b>Subset:</b> {name}</span></div><div class='create'>{creation_info}</div><div class='desc'>{description}</div><i class='badge icon-group' title='Sharing'> {access}</i> <i class='badge icon-user' title='User'> {username}</i> <i class='badge icon-calendar' title='Creation date'> {creation_date}</i>">
+                    <i class="icon-spinner icon-spin icon-large" style="font-size: 25px; display: block; text-align: center"></i>
+                    </div>
+                    <div id="annotation-info-panel" class="dataset-info"
+                        data-emptymsg="<b>No Annotation Set selected:</b> choose a Project and Subset, then select a Annotation Set from the list below, or create a new one."
+                        data-createlink="<a class='pull-right new-dataset' href='javascript:void(0)' data-toggle='modal' data-target='#dataset-new-annotationset'>New <i class='icon-plus-sign'></i></a>"
+                        data-format="<div class='panel-item'><span class='name' ><b>Annotation Set:</b> {name}</span></div><div class='create'>{count} points</div>">
+                    <i class="icon-spinner icon-spin icon-large" style="font-size: 25px; display: block; text-align: center"></i>
+                    </div>
+                </div>
+                <div class="dataset-panel-container">
+                    <div id="project-panel" class="dataset-panel"
+                            data-api-format="<div class='panel-item'><span class='name' >{name}</span></div>"
+                            data-api-resource="collection"
+                            data-api-filter="limit=0&parent__isnull=True&order_by=name"
+                            data-api-detailformat="<div class='create'>{creation_info}</div><div class='desc'>{description}</div><i class='badge icon-th-list' title='Dataset type'> Project</i> <i class='badge icon-group' title='Sharing'> {access}</i> <i class='badge icon-user' title='User'> {username}</i> <i class='badge icon-calendar' title='Creation date'> {creation_date}</i>"
+                            data-emptymsg="<div class='dataset-empty'>There are not Projects to show. Create a Project using the button above.</div>"
+                            data-infopanel-id="#project-info-panel"
+                            data-msfield = "clid"
+                            ></div>
+                    <div id="subset-panel" class="dataset-panel"
+                            data-api-format="<div class='panel-item'><span class='name' >{name}</span></div>"
+                            data-api-resource="collection"
+                            data-api-filter="limit=0&order_by=name&parent="
+                            data-api-detailformat="<div class='create'>{creation_info}</div><div class='desc'>{description}</div><i class='badge icon-th-list' title='Dataset type'> Subset</i> <i class='badge icon-group' title='Sharing'> {access}</i> <i class='badge icon-user' title='User'> {username}</i> <i class='badge icon-calendar' title='Creation date'> {creation_date}</i>"
+                            data-infopanel-id="#subset-info-panel"
+                            data-msfield = "wsid"
+                            ></div>
+                    <div id="annotation-panel" class="dataset-panel"
+                            data-api-format="<div class='panel-item'><span class='name' >{name}</span></div>"
+                            data-api-resource="point_annotation_set"
+                            data-api-filter="limit=0&order_by=name&collection="
+                            data-api-detailformat="{count} points"
+                            data-infopanel-id="#annotation-info-panel"
+                            data-msfield = "asid"
+                            ></div>
                 </div>
             </div>
             <div class="modal-footer" style="text-align: left">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button id="data-modal-btn" type="submit" class="btn btn-primary pull-right disabled"
-                        onclick="updateDatasets()">Select dataset
-                </button>
-                <span id="data-modal-msg" class="alert alert-danger pull-right" style="padding: 8px"><b>Warning:</b> no Project selected...</span>
+                <a href="javascript:void(0)" class="btn btn-default" data-dismiss="modal">Cancel</a>
+                <a id="data-modal-btn" href="" class="btn btn-primary pull-right disabled">Select dataset</a>
+                <span id="data-modal-msg" class="alert alert-danger pull-right" style="padding: 8px"><b>NOTE:</b> select / create a dataset...</span>
             </div>
         </div>
     </div>
 </div>
 
 
+<!-------------------------------------------------------------
+New collection modal
+-------------------------------------------------------------->
+<div id="dataset-new-collection" class="modal fade new-dataset" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                <h4><i class="icon-plus-sign"></i> Create new Project</h4>
+            </div>
+            <div class="modal-body">
+                <form action="" method="post" id="clform" class="form-horizontal" data-msfield="wsid">
+                    <p>A Project is a dataset containing all the images of interest. This form will create a new project using your selection.</p>
+                    <span class="errors"></span>
+                    {% csrf_token %}
+                    {{ clform|as_bootstrap }}
+                    <div>
+                        <button type="button"  class="btn btn-default" data-dismiss="modal" onclick="clear_form(this.form);">Cancel</button>
+                        <button type="submit" class="btn btn-primary"  onclick="send_dataset_form(this);">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-------------------------------------------------------------
+New workset modal
+-------------------------------------------------------------->
+<div id="dataset-new-workset" class="modal fade new-dataset" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                <h4><i class="icon-plus-sign"></i> Create new Subset</h4>
+
+            </div>
+            <div class="modal-body">
+
+                <ul class="nav nav-tabs" id="myTab">
+                  <li class="active"><a href="#wsform" role="tab" data-toggle="tab">Create subset</a></li>
+                  <li><a href="#ulwsform" role="tab" data-toggle="tab">Upload image list</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <form action="" method="post" id="wsform" class="form-horizontal tab-pane active" data-msfield="wsid">
+                        <p>A Subset contains images that have been sub-sampled from a Project. Use this form to create a new Subset. Select the method for subsetting the images and the parameters to use.</p>
+                        <span class="errors"></span>
+                        {% csrf_token %}
+                        {{ wsform|as_bootstrap }}
+
+                        <div>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="clear_form(this.form);">Cancel</button>
+                            <button type="submit" class="btn btn-primary" onclick="send_dataset_form(this);">Save</button>
+                        </div>
+                    </form>
+                    <form action="" method="post" id="ulwsform" class="form-horizontal tab-pane" data-msfield="wsid">
+                        <p>A Subset contains images that have been sub-sampled from a Project. Use this form to create a new
+                            Subset by uploading a list of pre-selected images images. NB: the images need to already be uploaded into the system.</p>
+                        <span class="errors"></span>
+                        {% csrf_token %}
+                        {{ ulwsform|as_bootstrap }}
+                        <div>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="clear_form(this.form);">Cancel</button>
+                            <button type="submit" class="btn btn-primary" onclick="send_dataset_form(this);">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-------------------------------------------------------------
+New Annotationset modal
+-------------------------------------------------------------->
+<div id="dataset-new-annotationset" class="modal fade new-dataset" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4><i class="icon-plus-sign"></i> New Annotation Run</h4>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="asform"  class="form-horizontal" data-msfield="asid">
+                    <p>An Annotation run defines the method of annotation on a Subset. Use this form to create an Annotation run. Select the method for annotation and also the associated parameters.</p>
+                    <span class="errors"></span>
+                    {% csrf_token %}
+                    {{ asform|as_bootstrap }}
+                    <div>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" onclick="clear_form(this.form);">Cancel</button>
+                        <button type="submit" class="btn btn-primary" onclick="send_dataset_form(this);">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-------------------------------------------------------------
+Sign in modal
+-------------------------------------------------------------->
+<div id="sign-in-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="TaskModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4><i class="icon-user"></i> Signin</h4>
+            </div>
+
+            <div class="modal-body">
+                <form action="" method="post" id="aform" class="form-horizontal" >
+                    <span id="errors"></span>
+                    {% csrf_token %}
+                    {{ aform|as_bootstrap }}
+
+                    <br>
+                    <a class="btn btn-default" aria-hidden="true" data-dismiss="modal" onclick="clear_form(this.form);">Cancel</a>
+                    <a class="btn btn-info" aria-hidden="true" data-dismiss="modal" onclick="$('#sign-up-modal').modal('show');"><i class="icon-plus"></i> Create new account</a>
+                    <input class="btn btn-primary pull-right" type="submit" value="Sign in" onclick="send_signin('aform'); return false;">
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% load i18n %}
+
+
+<div id="sign-up-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="TaskModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4><i class="icon-user"></i> Sign up</h4>
+            </div>
+
+            <div class="modal-body">
+
+                <form action="" method="post" id="suform" class="form-horizontal" >
+                    <span id="errors"></span>
+                    {% csrf_token %}
+                    {{ suform|as_bootstrap }}
+                    <br>
+                    <a class="btn btn-default" aria-hidden="true" data-dismiss="modal" onclick="clear_form(this.form);">Cancel</a>
+                    <input class="btn btn-primary pull-right" type="submit" value="Sign up" onclick="send_signup('suform');return false;">
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="user-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4><i class="icon-user"></i> My account</h4>
+            </div>
+            <div class="modal-body">
+                <br><br><b>NOTE:</b> this modal will contain user information and account tools<br><br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-info">Edit account details</button>
+                <a href="{% url "userena_signout" %}" class="btn btn-danger">Log out!</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-------------------------------------------------------------
+Tag-example browser modal
+-------------------------------------------------------------->
+<div class="modal fade" id="tag-example-modal" tabindex="-1" role="dialog" aria-labelledby="data-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+                <h4><i class="icon-tags"></i> Tag examples</h4>
+            </div>
+            <div class="modal-body">
+                <!-- This is populated dynamically through jquery -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Done</button>
+{#                <button type="submit" class="btn btn-primary" onclick="updateDatasets()">Update selection</button>#}
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
-    //$(document).ready(function () {
-        //$('#project-pane').show();
-        //$('#workset-pane').show();
-        //$('#annotat-pane').show();
-    //});
-    function refresh_dataset_modal() {
-        refresh_collections();
-    }
 
-    function refresh_collections() {
-        var cllist = new CollectionAPI({
-            config: {
-                format: '<div id="cl-{id}" class="panel-item"><a href="javascript:void(0)" class="dm-popover badge" onclick="selectCollection({id})" data-content="<small>Created by <b>{username}</b> on <b>{creation_date}</b>.<br>Contains <b>{image_count}</b> images.<br>{creation_info}.<br><em>{description}</em></small>" data-original-title="{type} information">{name}</a></div>'
-            }
-        });
-        cllist.getCollectionItems('limit=0&parent__isnull=True&order_by=name', '#project-panel');
-    }
+    var opendatamodal = false;
+    var modalstate = {clid:0,wsid:0,asid:0};
+    var msfield_desc = {clid:"Project",wsid:"Subset",asid:"Annotationset"}
 
+    function init_data_modals(curstate, map) {
 
-    function delete_collection(id){
-        $.ajax({
-            url: '/api/dev/collection/'+id+'/?format=json',
-            //dataType: "json",
-            type: 'DELETE',
-            //data: {"id": id},
-            success: function() {
-                show_note('SUCCESS','deleted: '+id);
-            },
-            error: function () {
-                show_note('ERROR', 'error: ' + id);
-            }
-        });
-    }
+        // Force refresh if user logs in
+        curstate.loginfuncs.push(force_refresh_datasets);
 
+        // force refresh panels on first load
+        $(".dataset-panel").each(
+            function(i,e){$(e).data("forcerefresh",true)}
+        );
 
-    function create_dataset_modal() {
-        $('#dataset-modal').on('hidden.bs.modal', function () {
+        // initialise modal state
+        for (var k in modalstate) modalstate[k] = curstate[k];
 
-        });
+        // refresh datasets when modal shown
         $('#dataset-modal').on('shown.bs.modal', function () {
+            refresh_datasets();
+        });
 
+        // Set the main dataset modal state when clicking the new dataset modals
+        $('.new-dataset').on('show.bs.modal', function () {
+            if ( ! $(this).hasClass("in") ) // this is to deal with a strange bug that fires show event when clicking tabs in already showing modal
+                opendatamodal = $('#dataset-modal').hasClass('in');   // set the previous state
+            if (opendatamodal) $('#dataset-modal').modal('hide'); // hide (if open)
+        }).on('hidden.bs.modal', function () {
+            if (opendatamodal) $('#dataset-modal').modal('show'); // reopen if it was already open
+        });
+
+        $("#dataset-new-annotationset").on("show.bs.modal", function() {
+            $(this).find("form input[name='c_id']").val(modalstate.wsid);
+        });
+
+        $("#dataset-new-workset").on("show.bs.modal", function() {
+            $(this).find("form input[name*='c_id']").val(modalstate.clid);  // set c_id field in multiple forms
+        });
+
+        $("#dataset-new-collection").on("show.bs.modal", function() {
+            map.addFiltersToForm(
+                $(this).find("form"),
+                {
+                    "depth": "depth_range",
+                    "altitude": "altitude_range",
+                    "date_time": "date_time_range"
+                },
+                "deployment_list",
+                "bounding_boxes"
+            );
         });
     }
+
+    function force_refresh_datasets() {
+        $(".dataset-panel").each(function (i,e) {$(e).data("forcerefresh",true)});
+        //refresh_datasets();
+    }
+
+    function refresh_datasets() {
+
+        //$(".dataset-panel").each(function (i,e) {console.log($(e).attr("id"), $(e).data("forcerefresh"))});
+
+        resize_dataset_panels();
+        if ($("#project-panel").data("forcerefresh")) {
+            load_datasets($("#project-panel"));
+            var $infopanel = $(".dataset-info:first");
+            $infopanel.html($infopanel.data("createlink")+$infopanel.data("emptymsg")) // initialise first info panel
+                .nextAll(".dataset-info").each(function(i,el){ // initialise remaining info panels
+                    $(el).html($(el).data("emptymsg"));
+                });
+        }
+
+        if (modalstate.clid && ((modalstate.clid != $("#project-panel").data("select_id")) || $("#subset-panel").data("forcerefresh"))) {
+            load_datasets($("#subset-panel"), modalstate.clid, true);
+        }
+        if (modalstate.wsid && ((modalstate.wsid != $("#subset-panel").data("select_id")) || $("#annotation-panel").data("forcerefresh"))) {
+            load_datasets($("#annotation-panel"), modalstate.wsid, true);
+        }
+        if (modalstate.asid && (modalstate.asid != $("#annotation-panel").data("select_id"))) {
+            highlight_dataset($("#annotation-panel") , modalstate.asid, true);
+        }
+    }
+
+    function resize_dataset_panels() {
+        var $modal = $("#dataset-modal");
+        //var nvisible = $modal.find(".dataset-panel:visible").length;
+        //var panelwidth = Math.floor($modal.find(".modal-body").width()/nvisible);
+        var panelheight = $(window).height() - 260 - $(".dataset-info").outerHeight();//$modal.find(".modal-body").offset().top - $modal.find(".modal-footer").outerHeight() - $modal.find(".modal-header").offset().top;
+        //$modal.find(".dataset-panel").css({"max-width":panelwidth, "max-height":panelheight, "height":panelheight});
+        $modal.find(".dataset-panel").css({"max-height":panelheight, "height":panelheight});
+    }
+
+    function load_datasets($panel, parent_id, keepstate) {
+        if (typeof parent_id == "undefined") parent_id = false;
+        $panel.data("forcerefresh",false);
+        if ($panel.length) {
+            var $parentpanel = $panel.prev();
+            if (parent_id && $parentpanel.length)
+                highlight_dataset ($parentpanel,parent_id, keepstate);
+
+            $panel.html('');
+            get_data_items ($panel, parent_id);
+        }
+    }
+
+    function highlight_dataset ($panel, id, keepstate) {
+        if (typeof keepstate == "undefined") keepstate = false;
+        var $el = $("#"+$panel.data("api-resource")+"-"+id);
+        var $infopanel = $($panel.data("infopanel-id"));
+        var msfield = $panel.data("msfield");
+        var clicklink = [];
+
+        // Check selection change, otherwise reset / update/reset state
+        if (keepstate == false) $panel.nextAll(".dataset-panel").each(function (i, e) {modalstate[$(e).data("msfield")] = 0});
+
+        modalstate[msfield] = id;
+
+        // Check change in selection to update panels
+        //if ($panel.data("select_id") != id) {
+            $panel.data("select_id", id);
+            $el.siblings(".selected").removeClass("selected"); // deselect siblings if they are selected
+            if (!$el.hasClass("selected")) $el.addClass("selected"); // add select class to selected $el
+
+            // Show info
+            //var sqapi = new SquidleAPI();
+            $infopanel.html(
+                    (new SquidleAPI()).formatAPIObj($infopanel.data("createlink") + $infopanel.data("format"), $el.data("apidata"))
+            );
+            $infopanel.nextAll(".dataset-info").each(function (idp, di_el) {
+                $(di_el).html($(di_el).data("emptymsg"))
+            });
+            $infopanel.next(".dataset-info").prepend($infopanel.next(".dataset-info").data("createlink"));
+
+            // If current selection is out of view, scroll it to the centre
+            if ($el.position().top > $panel.height() || $el.position().top < 0)
+                $panel.scrollTop($panel.scrollTop() + $el.position().top - $panel.height() / 2 + $el.height() / 2); // scroll to position
+
+
+            // Handle warning message when selecting datasets
+            $("#dataset-modal #data-modal-msg").hide().html("<b>WARNING</b>: ");
+            for (var k in modalstate) {
+                if (modalstate[k] > 0) clicklink.push(k + "=" + modalstate[k]);
+                else $("#dataset-modal #data-modal-msg").append("No " + msfield_desc[k] + " selected. ").show();
+            }
+            if (clicklink.length > 0) $("#dataset-modal #data-modal-btn").removeClass("disabled").attr("href", "?" + clicklink.join("&") + window.location.hash);
+            else $("#dataset-modal #data-modal-btn").addClass("disabled").attr("href", "");
+        //}
+    }
+
+
+
+    function get_data_items ($panel, filter_id) {
+        // Load all items
+        var sqapi = $panel.SquidleAPIgetItems(filter_id);
+
+        // Get data object strings
+        var resource = $panel.data("api-resource");
+        var detailformat = $panel.data("api-detailformat");
+
+
+        $panel.find("div.panel-item").each(function(i,el){
+            var apidata = $(el).data("apidata");
+            var $edit = $("<i class='icon-edit' title='Edit'></i>").click(function(e){edit_dataset(apidata.id,el);e.stopPropagation();});
+            var $delete = $("<i class='icon-trash' title='Delete'></i>").click(function(e){delete_dataset(apidata.id,el, resource);e.stopPropagation();});
+            var $editlinks = $("<span class='paneledit'></span>").append($edit,$delete);
+
+            var $panelinfo = $("<div class='panelinfo'></div>").append( sqapi.formatAPIObj(detailformat,apidata) );
+
+            var $info = $("<i class='icon-info-sign info'></i>").click(function(e){
+                if ($panelinfo.is(":visible")) { $panelinfo.hide() ; $editlinks.hide(); }
+                else { $panelinfo.show() ; $editlinks.show(); }
+                e.stopPropagation();
+            }).attr("title", $panelinfo.text());
+
+            $(el).attr("id",resource+"-"+apidata.id)
+                .prepend($info,"&nbsp;",$editlinks)
+                .append($panelinfo)
+                .click(function(){
+                    var $subpanel = $panel.next(".dataset-panel");
+                    if ($subpanel.length) {
+                        $subpanel.nextAll(".dataset-panel").html("");//.hide(0);
+                        load_datasets($subpanel, apidata.id);
+                    }
+                    else {
+                        highlight_dataset($panel,apidata.id);
+                    }
+                });
+        });
+    }
+
+    function delete_dataset(id,el,resource){
+        if (confirm("Are you sure you want to PERMANENTLY DELETE this Dataset including ALL of its Subsets and Annotations?\nThis operation is NOT reversible.") == true) {
+            $.ajax({
+                url: '/api/dev/'+resource+'/'+id+'/?format=json',
+                type: 'DELETE',
+                success: function() {
+                    show_note('SUCCESS','Dataset has been deleted...'+id, "success", true);
+                    if ($(el).hasClass("selected")) { // if element is selected, hide child panels
+                        $(el).parent(".dataset-panel").nextAll(".dataset-panel").html("");//.hide(0);
+                        //resize_dataset_panels();
+                    }
+                    $(el).remove();
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    show_note('ERROR', 'Cannot delete dataset: ' + errorThrown, "error", true);
+                }
+            });
+        }
+        return false;
+    }
+
+    function edit_dataset(id,el) {
+        show_note('Edit dataset', 'This has not been implemented yet...', "error", true);
+        return false;
+    }
+
+
+
+    function send_dataset_form(formbtn) {
+        show_busy("Working on your dataset...");
+        var $form = $(formbtn.form),
+            form_id = $form.attr("id");
+
+        $(formbtn).attr("disabled","disabled");
+
+        Dajaxice.webinterface.save_new_dataset(
+            function(data){
+                //console.log(data);
+                Dajax.process(data);
+                //update_dataset_form(form_id, "wsid", message, newid)
+            },
+            {'form_data':$form.serialize(true),'form_id':form_id},
+            {'error_callback': function(){
+                hide_busy();
+                form_errors(true,form_id,"There was a server error... Please try again."
+            )}}
+        );
+
+        return false;
+    }
+
+
+    function update_dataset_form(form_id, action, message, newid) {
+        console.log(form_id, action, message, newid);
+        if (typeof form_id == "object") form_id = form_id.id;
+        hide_busy();
+        if (action == "formerror") {
+            form_errors(true,form_id,message);
+        }
+        else {
+            var $form = $("#"+form_id);
+            var msfield = $form.data("msfield");
+            var $parentmodal = $form.parents(".new-dataset"); // get the modal parent
+            if (newid != null) {
+                clear_form($form[0]);
+                modalstate[msfield] = newid;
+                //get_data_items ($panel, newid)
+                $(".dataset-panel").each(function(i,e){if($(e).data("msfield")==msfield) $(e).data("forcerefresh",true)});
+                opendatamodal = true;
+                $parentmodal.modal("hide");
+                refresh_datasets();
+                show_note('Success',message,'success',true);
+            }
+            else {
+                show_note('Error!',message,'error');
+            }
+        }
+    }
+
+
+    function form_errors(haserror, form_id, description) {
+        //console.log(form_id);
+        var selobj = $("#"+form_id+'>span.errors');
+        if (typeof description == 'undefined') description = "<b>Error:</b> please correct the inputs highlighted below.";
+        $("#"+form_id+" button[type='submit']").removeAttr('disabled');
+        $("#"+form_id+" input").removeClass("error");
+        if (haserror) {
+            selobj.addClass('alert alert-error');
+            selobj.html(description);
+        } else {
+            selobj.removeClass('alert alert-error');
+            selobj.html('');
+        }
+    }
+    function clear_form (form) {
+        var form_id = $(form).attr("id");
+        form_errors(false, form_id);
+        $(form).find('input').removeClass('error');
+        $(form).find('select').removeClass('error');
+        form.reset();
+    }
+
+    function send_signin(){
+        Dajaxice.webinterface.signin_form(Dajax.process,{'form':$('#aform').serialize(true)});
+        return false;
+    }
+    function send_signup(){
+        Dajaxice.webinterface.signup_form(Dajax.process,{'form':$('#suform').serialize(true)});
+        return false;
+    }
+    function update_sign_in(id,username) {
+        curstate.userid = id;
+        curstate.isloggedin = (id) ? true : false;
+        curstate.username = username;
+
+        // execute functions requiring login
+        for (var i=0 ; i< curstate.loginfuncs.length ; i++) {
+            curstate.loginfuncs[i]();
+        }
+
+
+        if (curstate.isloggedin) {
+            $('#sign-in-status').html('<li class="icon-text"><a title="Currently signed in" href="#user-modal" data-toggle="modal"><i class="icon-user"></i>'+username+'</a></li>');
+            //$('#sign-in-status').append('<li class="icon-text"><a title="Sign out!" href="{% url "userena_signout" %}"><i class="icon-ban-circle"></i>Log&nbsp;out</a></li>');
+        }
+        else {
+            $('#sign-in-status').html('<li class="icon-text"><a title="Sign in" href="#sign-in-modal" data-toggle="modal"><i class="icon-user ui-state-error-text"></i>Log&nbsp;in</a></li>');
+        }
+        $('#sign-in-status>li>a').tooltip({trigger:'hover',placement:'bottom'});
+
+        $('#sign-in-modal').modal('hide');
+        $('#sign-up-modal').modal('hide');
+    }
+
+    function newproject() {
+        window.location.assign('/viewproject');
+    }
+
 </script>

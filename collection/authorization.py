@@ -20,7 +20,8 @@ def apply_collection_permissions(user, collection):
     assign('delete_collection', user, collection)
 
     #assign view permissions to the Anonymous user
-    logger.debug("Making campaign public: " + collection.name)
+    #logger.debug("Making campaign public: " + collection.name)
 
-    public_group, created = Group.objects.get_or_create(name='Public')
-    assign('view_collection', public_group, collection)
+    # Allow public group to view collections
+    #public_group, created = Group.objects.get_or_create(name='Public')
+    #assign('view_collection', public_group, collection)

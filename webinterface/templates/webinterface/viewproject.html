@@ -6,7 +6,7 @@
 	<!-- Add fancyBox main JS and CSS files -->
     <script src="{{ STATIC_URL }}assets/thumbnail-expgrid/js/modernizr.custom.js"></script>
 
-
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL}}assets/css/modals.css" />
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL}}assets/chosen_v1.1.0/chosen.css" />
 
 {#    <link rel="stylesheet" type="text/css" href="http://jautochecklist.googlecode.com/svn/release/css/jAutochecklist.min.css?v=1.21"/>#}
@@ -27,11 +27,16 @@
         <li title="Data tools for selected dataset" class="icon-text"><a id="data-nav" href="#datatab" data-toggle="tab"><i class="icon-th-list"></i>Data</a></li>
         <li class="dropdown"><a id="datasel" href="#" class="dropdown-toggle" data-toggle="dropdown">No dataset selected <b class="caret"></b></a>
             <ul class="dropdown-menu">
-                <li><a href="javascript:void(0)" onclick="$('#data-modal').modal('show')"><i class="icon-th-list"></i>
-                    Choose a dataset</a></li>
-{#                <li><a href="javascript:void(0)" onclick="$('#dataset-modal').modal('show')"><i class="icon-th-list"></i>#}
-{#                    Temporary test</a></li>#}
+                <li><a href="javascript:void(0)" onclick="$('#dataset-modal').modal('show')"><i class="icon-th-list"></i>
+                    Manage / select datasets</a></li>
                 <li><a href="javascript:void(0)" onclick="window.location.assign('/viewproject')"><i class="icon-plus"></i> Create new Project</a></li>
+{#TODO: needs to update clid and wsid in workset modals before these will work... curently only updates when management modal is opened#}
+                {% if clid %}
+                    <li><a href='javascript:void(0)' data-toggle='modal' data-target='#dataset-new-workset'><i class="icon-plus"></i> Create new Subset in current Project</a></li>
+                {% endif %}
+                {% if wsid %}
+                    <li><a href='javascript:void(0)' data-toggle='modal' data-target='#dataset-new-annotationset'><i class="icon-plus"></i> Create new AnnotationSet in current Subset</a></li>
+                {% endif %}
             </ul>
         </li>
     </ul>
@@ -72,7 +77,7 @@
 
 
 
-    {% include "webinterface/subtemplates/data-modals.html" %}
+{#    {% include "webinterface/subtemplates/data-modals.html" %}#}
     {% include "webinterface/subtemplates/dataset-modal.html" %}
     {% include "webinterface/subtemplates/help-modal.html" %}
 {% endblock %}
@@ -85,6 +90,7 @@
 <script type="text/javascript" src="{{ STATIC_URL }}assets/jquery/plugins/serialize-object.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}assets/catami-api/js/annotations.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}assets/catami-api/js/collections.js"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}assets/catami-api/js/squidle.api.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}assets/jquery/plugins/delayed-keyup.js"></script>
 <script type="text/javascript" src="{{ STATIC_URL }}assets/fancybox/source/jquery.fancybox.js?v=2.1.5"></script>
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}assets/fancybox/source/jquery.fancybox.css?v=2.1.5" media="screen" />
@@ -125,6 +131,8 @@
     }
 
     var thlist = new ImagesAPI({});
+    var apiobj = new SquidleAPI({});
+
     var clobj = new CollectionAPI({config: {format: '<b>{name}</b><br>Created by <b>{username}</b> on <b>{creation_date}</b>.<br>{creation_info}<br><em>{description}</em>'}});
     var asobj = new AnnotationSetAPI({config:{format: '<b>{name}</b><br>Created by <b>{owner}</b><br>Count: {count}<br>Method: {methodology}'}});
     var thmgrid = new Grid('#og-grid-0',curstate);
@@ -161,36 +169,37 @@
     $(document).ready(function () {
         update_sign_in(curstate.userid,curstate.username); //initialise sign in variables
         setupAjax(); // setup ajax auth
-        createDataModal(curstate); // setup modal windows for data
-        refresh_dataset_modal();
+        //createDataModal(curstate); // setup modal windows for data
+        //refresh_dataset_modal();
+        init_data_modals(curstate, map);
 
-	// This resizes the size of the panel containing the map.
-	// Set it once on ready and then subscribe to resizes
-	$('#deployment-map').width( $(window).width()-$('#map-panel-container').width() );
-	resizefuncs.push( function() {
-		$('#deployment-map').width( $(window).width()-$('#map-panel-container').width() );
-	});
+        // This resizes the size of the panel containing the map.
+        // Set it once on ready and then subscribe to resizes
+        $('#deployment-map').width( $(window).width()-$('#map-panel-container').width() );
+        resizefuncs.push( function() {
+            $('#deployment-map').width( $(window).width()-$('#map-panel-container').width() );
+        });
 
-	// Set the location of the under construction alert.
-	// And subscribe to the resize
-	$('#alert-construction').css( 'left', $('#deployment-map').width()/2-$('#alert-construction').width()/2 + 'px');
-    $('#alert-construction').css( 'visibility', 'visible');
-	resizefuncs.push( function() {
-		$('#alert-construction').css( 'left', $('#deployment-map').width()/2-$('#alert-construction').width()/2 + 'px');
-	});
+        // Set the location of the under construction alert.
+        // And subscribe to the resize
+        $('#alert-construction').css( 'left', $('#deployment-map').width()/2-$('#alert-construction').width()/2 + 'px');
+        $('#alert-construction').css( 'visibility', 'visible');
+        resizefuncs.push( function() {
+            $('#alert-construction').css( 'left', $('#deployment-map').width()/2-$('#alert-construction').width()/2 + 'px');
+        });
 
-    // TODO: The subtraction of 10 is due to the top and bottom margins. Get this from the element dynamically
-    $('.chosen-drop').css('max-height', $('#map-panel-container').height()-10+'px');
-    resizefuncs.push(function () {
+        // TODO: The subtraction of 10 is due to the top and bottom margins. Get this from the element dynamically
         $('.chosen-drop').css('max-height', $('#map-panel-container').height()-10+'px');
-    });
+        resizefuncs.push(function () {
+            $('.chosen-drop').css('max-height', $('#map-panel-container').height()-10+'px');
+        });
 
 
         // Update current selection text
         if (curstate.clid) {
-            $('#datasel').html(clobj.getCollectionInfo(curstate.clid).name);
-            if (curstate.wsid) $('#datasel').append(' <b style="color:red">|</b> ' + clobj.getCollectionInfo(curstate.wsid).name);
-            if (curstate.asid) $('#datasel').append(' <b style="color:red">|</b> ' + asobj.getAnnotationInfo(curstate.asid).name);
+            $('#datasel').html(apiobj.getJsItems("collection","?id="+curstate.clid)[0].name);
+            if (curstate.wsid) $('#datasel').append(' <b style="color:red">|</b> ' + apiobj.getJsItems("collection","?id="+curstate.wsid)[0].name);
+            if (curstate.asid) $('#datasel').append(' <b style="color:red">|</b> ' + apiobj.getJsItems("point_annotation_set","?id="+curstate.asid)[0].name);
             $('#datasel').append(' <b class="caret"></b>');
         }
 
@@ -230,10 +239,10 @@
 						filtImageLayer	= "Filtered images";
 					var minVisibleScale = 100000;
 
-					map.depImageLayerName = depImageLayer;
-					map.selImageLayerName = selImageLayer;
-					map.filtImageLayerName = filtImageLayer;
-
+                    // TODO: This is a mess - needs fixing!
+					map.depImageLayerName = depImageLayer;  // TODO: this is bad
+					map.selImageLayerName = selImageLayer;  // TODO: this is bad
+					map.filtImageLayerName = filtImageLayer;  // TODO: this is bad
                     map.addDeployments(depLayer);
 					map.addImageLayer(depImageLayer,  minVisibleScale, true, '666666', true);
                     map.addImageLayer(selImageLayer,  minVisibleScale/3, false, '0000FF'); // For the sake of performance we show this layer only when zoomed in further
@@ -242,7 +251,6 @@
 
 
                     // Create panels
-					// TODO: Is this really necessary? I find it confusing and want to click it every time!
                     var $selpanel = map.addPanel($('#map-panel'), {id: 'mapsel', icon: 'icon-plus-sign-alt', title: 'Selection tools', closeable: false});
                     var $filterpanel = map.addPanel($('#map-panel'), {id: 'mapfilters', icon: 'icon-filter', title: 'Filters', closeable: false}, 'max-height: none; overflow-x: hidden; overflow-y:hidden;');
                     var $curselpanel = map.addPanel($('#map-panel'), {id: 'mapselected', icon: 'icon-info', title: 'Info', closeable: false});
@@ -255,15 +263,13 @@
                     map.addRangeFilter($filterpanel, $filterpanel, filtImageLayer, 'altitude', {step: 0.1, range: [0, 10], unit: 'm'});
                     map.addDateFilter( $filterpanel, $filterpanel, filtImageLayer, 'date_time', {from: '2005-01-01', to: new Date()});
                     map.addBBoxFilter( $filterpanel, $filterpanel, filtImageLayer);
-					map.$filterpanel = $filterpanel;
+					map.$filterpanel = $filterpanel; // TODO: this is bad
 					map.disableFilters();
 					
                     // add current selection info
-                    map.addSelectionInfo($curselpanel);
+                    map.addSelectionInfo($curselpanel,$("#dataset-new-collection"));
                     map.updateSelectionInfo();
                     curstate.loginfuncs.push(map.updateSelectionInfo);
-
-
                 }
 
                 // Add resize function to ensure map resizes on window resize
