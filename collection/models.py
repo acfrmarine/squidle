@@ -19,8 +19,9 @@ import json
 
 logger = logging.getLogger(__name__)
 
-sys.path.insert(0, '/home/auv/git/squidle/scripts/grts_sampler/python/')
-import GRTSSampler
+#sys.path.insert(0, '/home/auv/git/squidle/scripts/grts_sampler/python/')
+import scripts.grts_sampler.python.GRTSSampler as GRTSSampler
+
 
 class CollectionManager(models.Manager):
     """Manager for collection objects.
