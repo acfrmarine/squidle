@@ -280,12 +280,12 @@ class CollectionManager(models.Manager):
             if method == "random":
                 collection_images, start_ind, stop_ind = self.get_collection_images(collection, start_ind, stop_ind, n)
                 wsimglist = sample(collection_images[start_ind:stop_ind:1], n)
-                workset.creation_info = "{0} random images selected from {1} images starting at image {2}".format(n, stop_ind-start_ind, start_ind+1)
+                workset.creation_info = "{0} random images (selected from {1} images starting at image {2})".format(n, stop_ind-start_ind, start_ind+1)
 
             elif method == "stratified":
                 collection_images, start_ind, stop_ind = self.get_collection_images(collection, start_ind, stop_ind, n)
                 wsimglist = collection_images[start_ind:stop_ind:n]
-                workset.creation_info = "Every {0} image selected from {1} images starting at image {2}".format(self.num2ordstr(n), stop_ind-start_ind, start_ind+1)
+                workset.creation_info = "{} images (every {} image selected from {} images starting at image {})".format(len(wsimglist), self.num2ordstr(n), stop_ind-start_ind, start_ind+1)
 
             elif method == "upload" :
                 wsimglist = []
@@ -319,7 +319,7 @@ class CollectionManager(models.Manager):
                 print inds
 
                 wsimglist = [collection_images[i] for i in inds]
-                workset.creation_info = "{} images selected from {} images using GRTS".format(len(wsimglist), collection_images.count())
+                workset.creation_info = "{} images (selected from {} images using GRTS)".format(len(wsimglist), collection_images.count())
 
 
             else:
