@@ -79,7 +79,7 @@ New collection modal
                 <h4><i class="icon-plus-sign"></i> Create new Project</h4>
             </div>
             <div class="modal-body">
-                <form action="" method="post" id="clform" class="form-horizontal" data-msfield="wsid">
+                <form action="" method="post" id="clform" class="form-horizontal" data-msfield="clid">
                     <p>A Project is a dataset containing all the images of interest. This form will create a new project using your selection.</p>
                     <span class="errors"></span>
                     {% csrf_token %}
@@ -280,9 +280,7 @@ Tag-example browser modal
         curstate.loginfuncs.push(force_refresh_datasets);
 
         // force refresh panels on first load
-        $(".dataset-panel").each(
-            function(i,e){$(e).data("forcerefresh",true)}
-        );
+        force_refresh_datasets()
 
         // initialise modal state
         for (var k in modalstate) modalstate[k] = curstate[k];
@@ -324,15 +322,18 @@ Tag-example browser modal
     }
 
     function force_refresh_datasets() {
-        $(".dataset-panel").each(function (i,e) {$(e).data("forcerefresh",true)});
+        $(".dataset-panel").each(
+                function (i,e) {$(e).data("forcerefresh",true)}
+        );
         //refresh_datasets();
     }
 
     function refresh_datasets() {
-
         //$(".dataset-panel").each(function (i,e) {console.log($(e).attr("id"), $(e).data("forcerefresh"))});
-
+        // Size modal panels
         resize_dataset_panels();
+
+        // Refresh projects panel and add empty info messages
         if ($("#project-panel").data("forcerefresh")) {
             load_datasets($("#project-panel"));
             var $infopanel = $(".dataset-info:first");
@@ -342,13 +343,17 @@ Tag-example browser modal
                 });
         }
 
+        // Check modalstate and update selections
         if (modalstate.clid && ((modalstate.clid != $("#project-panel").data("select_id")) || $("#subset-panel").data("forcerefresh"))) {
+            console.log('Updating collection selection');
             load_datasets($("#subset-panel"), modalstate.clid, true);
         }
         if (modalstate.wsid && ((modalstate.wsid != $("#subset-panel").data("select_id")) || $("#annotation-panel").data("forcerefresh"))) {
+            console.log('Updating subset selection');
             load_datasets($("#annotation-panel"), modalstate.wsid, true);
         }
         if (modalstate.asid && (modalstate.asid != $("#annotation-panel").data("select_id"))) {
+            console.log('Updating annotationset selection');
             highlight_dataset($("#annotation-panel") , modalstate.asid, true);
         }
     }
@@ -367,6 +372,7 @@ Tag-example browser modal
         $panel.data("forcerefresh",false);
         if ($panel.length) {
             var $parentpanel = $panel.prev();
+            //console.log($panel, $parentpanel);
             if (parent_id && $parentpanel.length)
                 highlight_dataset ($parentpanel,parent_id, keepstate);
 
@@ -388,35 +394,33 @@ Tag-example browser modal
         modalstate[msfield] = id;
 
         // Check change in selection to update panels
-        //if ($panel.data("select_id") != id) {
-            $panel.data("select_id", id);
-            $el.siblings(".selected").removeClass("selected"); // deselect siblings if they are selected
-            if (!$el.hasClass("selected")) $el.addClass("selected"); // add select class to selected $el
+        $panel.data("select_id", id);
+        $el.siblings(".selected").removeClass("selected"); // deselect siblings if they are selected
+        if (!$el.hasClass("selected")) $el.addClass("selected"); // add select class to selected $el
 
-            // Show info
-            //var sqapi = new SquidleAPI();
-            $infopanel.html(
-                    (new SquidleAPI()).formatAPIObj($infopanel.data("createlink") + $infopanel.data("format"), $el.data("apidata"))
-            );
-            $infopanel.nextAll(".dataset-info").each(function (idp, di_el) {
-                $(di_el).html($(di_el).data("emptymsg"))
-            });
-            $infopanel.next(".dataset-info").prepend($infopanel.next(".dataset-info").data("createlink"));
+        // Show info
+        //var sqapi = new SquidleAPI();
+        $infopanel.html(
+                (new SquidleAPI()).formatAPIObj($infopanel.data("createlink") + $infopanel.data("format"), $el.data("apidata"))
+        );
+        $infopanel.nextAll(".dataset-info").each(function (idp, di_el) {
+            $(di_el).html($(di_el).data("emptymsg"))
+        });
+        $infopanel.next(".dataset-info").prepend($infopanel.next(".dataset-info").data("createlink"));
 
-            // If current selection is out of view, scroll it to the centre
-            if ($el.position().top > $panel.height() || $el.position().top < 0)
-                $panel.scrollTop($panel.scrollTop() + $el.position().top - $panel.height() / 2 + $el.height() / 2); // scroll to position
+        // If current selection is out of view, scroll it to the centre
+        if ($el.position().top > $panel.height() || $el.position().top < 0)
+            $panel.scrollTop($panel.scrollTop() + $el.position().top - $panel.height() / 2 + $el.height() / 2); // scroll to position
 
 
-            // Handle warning message when selecting datasets
-            $("#dataset-modal #data-modal-msg").hide().html("<b>WARNING</b>: ");
-            for (var k in modalstate) {
-                if (modalstate[k] > 0) clicklink.push(k + "=" + modalstate[k]);
-                else $("#dataset-modal #data-modal-msg").append("No " + msfield_desc[k] + " selected. ").show();
-            }
-            if (clicklink.length > 0) $("#dataset-modal #data-modal-btn").removeClass("disabled").attr("href", "?" + clicklink.join("&") + window.location.hash);
-            else $("#dataset-modal #data-modal-btn").addClass("disabled").attr("href", "");
-        //}
+        // Handle warning message when selecting datasets
+        $("#dataset-modal #data-modal-msg").hide().html("<b>WARNING</b>: ");
+        for (var k in modalstate) {
+            if (modalstate[k] > 0) clicklink.push(k + "=" + modalstate[k]);
+            else $("#dataset-modal #data-modal-msg").append("No " + msfield_desc[k] + " selected. ").show();
+        }
+        if (clicklink.length > 0) $("#dataset-modal #data-modal-btn").removeClass("disabled").attr("href", "?" + clicklink.join("&") + window.location.hash);
+        else $("#dataset-modal #data-modal-btn").addClass("disabled").attr("href", "");
     }
 
 
@@ -513,7 +517,7 @@ Tag-example browser modal
 
 
     function update_dataset_form(form_id, action, message, newid) {
-        console.log(form_id, action, message, newid);
+        //console.log(form_id, action, message, newid);
         if (typeof form_id == "object") form_id = form_id.id;
         hide_busy();
         if (action == "formerror") {
@@ -527,7 +531,15 @@ Tag-example browser modal
                 clear_form($form[0]);
                 modalstate[msfield] = newid;
                 //get_data_items ($panel, newid)
-                $(".dataset-panel").each(function(i,e){if($(e).data("msfield")==msfield) $(e).data("forcerefresh",true)});
+                var clearchildren = false;
+                $(".dataset-panel").each(function(i,e){
+                    if (clearchildren) modalstate[$(e).data("msfield")] = 0;
+                    if($(e).data("msfield")==msfield) {
+                        $(e).data("forcerefresh", true);
+                        clearchildren = true;
+                    }
+                    // clear modal state for children
+                });
                 opendatamodal = true;
                 $parentmodal.modal("hide");
                 refresh_datasets();
