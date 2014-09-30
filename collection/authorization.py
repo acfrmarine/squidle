@@ -25,3 +25,9 @@ def apply_collection_permissions(user, collection):
     # Allow public group to view collections
     #public_group, created = Group.objects.get_or_create(name='Public')
     #assign('view_collection', public_group, collection)
+
+
+def make_publicly_viewable(collection):
+    # Allow public group to view collections
+    public_group, created = Group.objects.get_or_create(name='Public')
+    assign('view_collection', public_group, collection)

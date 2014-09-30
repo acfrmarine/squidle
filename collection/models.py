@@ -259,7 +259,7 @@ class CollectionManager(models.Manager):
                 raise CollectionError("You need to be logged in to create a Workset...")
 
             #check if the user has permission to do this
-            if not user.has_perm('collection.view_collection', collection):
+            if not user.has_perm('collection.add_collection', collection):
                 raise CollectionError("Sorry. You don't have permission to create a Workset in this Project.")
 
 
@@ -280,7 +280,7 @@ class CollectionManager(models.Manager):
             if method == "random":
                 collection_images, start_ind, stop_ind = self.get_collection_images(collection, start_ind, stop_ind, n)
                 wsimglist = sample(collection_images[start_ind:stop_ind:1], n)
-                workset.creation_info = "{0} random images (selected from {1} images starting at image {2})".format(n, stop_ind-start_ind, start_ind+1)
+                workset.creation_info = "{0} images (selected randomly from {1} images starting at image {2})".format(n, stop_ind-start_ind, start_ind+1)
 
             elif method == "stratified":
                 collection_images, start_ind, stop_ind = self.get_collection_images(collection, start_ind, stop_ind, n)
