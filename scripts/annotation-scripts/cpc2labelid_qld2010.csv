@@ -1,0 +1,31 @@
+cpc_code,caab_code,label_id,description
+Kelp,80300902,45,Macroalgae: Large canopy-forming: Brown
+CCA,80300926,66,Macroalgae: Encrusting
+EBA,80300927,69,Macroalgae: Encrusting: Brown
+ERA,80300928,68,Macroalgae: Encrusting: Green
+CBB,80300904,65,Macroalgae: Erect coarse branching: Brown
+CBBp,80300904,65,Macroalgae: Erect coarse branching: Brown
+THAM,80300906,63,Macroalgae: Erect coarse branching: Red
+FBR,80300910,59,Macroalgae: Erect fine branching: Red
+FBRr,80300910,59,Macroalgae: Erect fine branching: Red
+Cmorph,11280000,164,Cnidaria: Colonial anemones: Corallimorphs
+UC,11168000,126,Cnidaria: Corals
+BOBFa,11168911,161,Cnidaria: Corals: Black & Octocorals: Branching (3D): Fleshy: Arborescent
+BOBFm,11168910,160,Cnidaria: Corals: Black & Octocorals: Branching (3D): Fleshy: Mushroom
+SCBra,11290912,141,Cnidaria: Corals: Stony corals: Branching
+SCCory,11290910,139,Cnidaria: Corals: Stony corals: Corymbose
+SCEnc,11290908,137,Cnidaria: Corals: Stony corals: Encrusting
+SCFol,11290907,136,Cnidaria: Corals: Stony corals: Foliose / plate
+SCTab,11290911,128,Cnidaria: Corals: Stony corals: Tabulate
+BFish,37990083,87,Fishes: Bony fishes
+Usg,63600901,30,Seagrasses
+SCrust,10000901,28,Sponges: Crusts
+SErect,10000912,23,Sponges: Erect forms
+SHoll,10000909,20,Sponges: Hollow forms
+SMass,10000903,14,Sponges: Massive forms
+Cob,82001003,255,Substrate: Consolidated (hard): Boulders
+Rock,82001002,253,Substrate: Consolidated (hard): Rock
+CRub,82001009,249,Substrate: Unconsolidated (soft): Pebble / gravel: Biologenic: Coral rubble
+SdC,82001013,241,Substrate: Unconsolidated (soft): Sand / mud (<2mm)
+SdCR,82001013,241,Substrate: Unconsolidated (soft): Sand / mud (<2mm)
+Blur,1,273,Unscorable.
