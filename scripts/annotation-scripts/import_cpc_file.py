@@ -160,20 +160,25 @@ class CPCFileParser:
 
 
 if __name__ == '__main__':
-    cp = CPCFolderParser('example_cpc')
-    cp.load_cpc2caab('cpc2caab_wa2011.csv')
-    cp.load_image_pks_from_database()
-    project = Collection(
-        name=project_name,
-        description=project_description,
-        owner=logged_in_user,
-        is_locked=False,
-        creation_info='#imgs: 0, manually uploaded CPCe annotations'
-    )
-    # project.save()
-    cp.load_data_into_database()
-    # import collection.models
-
-    # TODO: Get point position, image name, label_id for each cpc point in a file
-    # TODO: Aggregate lots of CPC files together into a big dataframe (after adding a folder of cpc files from a user).
-    #TODO: Look up image metadata
+    # cp = CPCFolderParser('example_cpc')
+    # cp.load_cpc2caab('cpc2caab_wa2011.csv')
+    # cp.load_image_pks_from_database()
+    # project = Collection(
+    #     name=project_name,
+    #     description=project_description,
+    #     owner=logged_in_user,
+    #     is_locked=False,
+    #     creation_info='#imgs: 0, manually uploaded CPCe annotations'
+    # )
+    # # project.save()
+    # cp.load_data_into_database()
+    # # import collection.models
+    for g in ['nsw', 'qld2010', 'tas08', 'wa2011']:
+        cpc2caab = pd.read_csv('cpc2caab_{}.csv'.format(g))
+        caab2labelid = pd.read_csv('caab2labelid.csv')
+        caab2labelid.caab_code = caab2labelid.caab_code.astype('str')
+        df = pd.merge(cpc2caab, caab2labelid, on='caab_code', how='left').set_index('cpc_code')
+        df.to_csv('cpc2labelid_{}.csv'.format(g))
+        unmatched = df.loc[df.label_id.isnull()]
+        print(g)
+        print(unmatched)
