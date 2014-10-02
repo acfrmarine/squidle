@@ -6,6 +6,7 @@ d.marrable@ivec.org
 Significantly rewritten Lachlan Toohey 21/2/2013
 
 """
+import os
 from django.contrib.auth.models import Group
 
 from django.contrib.gis.db import models
@@ -227,10 +228,20 @@ class Image(models.Model):
     web_location = models.CharField(max_length=200)
     archive_location = models.CharField(max_length=200)
     objects = models.GeoManager()
+    image_name = models.CharField(max_length=27, default='')
 
     class Meta:
         """Defines Metaparameters of the model."""
         unique_together = (('pose', 'camera'), )
+
+    def _calc_image_name(self):
+        return os.path.splitext(os.path.basename(self.web_location))[0]
+
+    def save(self):
+        self.image_name = self._calc_image_name()
+        super(Image, self).save()
+
+
 
 
 class ScientificMeasurementTypeManager(models.Manager):
