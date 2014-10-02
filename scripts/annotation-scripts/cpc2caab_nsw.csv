@@ -219,7 +219,7 @@ SC,82001001
 SCRO,82001002
 SCCOB,82001004
 SCBOU,82001003
-DC,Dead coral
+DC,11168000
 U,80000000
 ENBU,80000000
 BBU,80000000
@@ -228,16 +228,4 @@ TWS1,ROOT
 TAPE,ROOT
 WAND,ROOT
 SHAD,ROOT
-BL,Bleached
-DE,Dead
-DI,Diseased
-RD,Recently dead
-LES,Lesion
-STD,Storm damage
-SED,Sediment damage
-UB,Urchin barren
-IS,Iceberg scour
-VE,Veneer
-E,Epiphyte
-R,Recruits
 MACS,80000000
