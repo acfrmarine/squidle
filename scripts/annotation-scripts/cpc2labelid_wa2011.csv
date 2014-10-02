@@ -1,0 +1,47 @@
+cpc_code,caab_code,label_id,description
+OthInv,80000000,2,Biota
+Red,80300000,39,Macroalgae
+Brown,80300000,39,Macroalgae
+Green,80300000,39,Macroalgae
+Turf,80300000,39,Macroalgae
+UnFo,80300000,39,Macroalgae
+ARC,80300913,71,Macroalgae: Articulated calcareous: Red
+Canop,80300901,44,Macroalgae: Large canopy-forming
+Eck,80300902,45,Macroalgae: Large canopy-forming: Brown
+Scyt,80300902,45,Macroalgae: Large canopy-forming: Brown
+EnCA,80300926,66,Macroalgae: Encrusting
+EnAO,80300926,66,Macroalgae: Encrusting
+Rhod,80300929,67,Macroalgae: Encrusting: Red
+Sar,80300904,65,Macroalgae: Erect coarse branching: Brown
+Cyst,80300904,65,Macroalgae: Erect coarse branching: Brown
+Caul,80300905,64,Macroalgae: Erect coarse branching: Green
+Fila,80300930,54,Macroalgae: Filamentous / filiform
+Ulva,80300924,42,Macroalgae: Sheet-like / membraneous: Green
+Ascid,35000000,231,Ascidians
+BrO,20000000,165,Bryozoa
+BrOrt,20000000,165,Bryozoa
+BrAde,20000000,165,Bryozoa
+Brenc,20000000,165,Bryozoa
+HydAn,11500000,118,Cnidaria
+Gorg,11168000,126,Cnidaria: Corals
+Plate,11168000,126,Cnidaria: Corals
+BlCor,11168901,143,Cnidaria: Corals: Black & Octocorals
+OCor,11290000,127,Cnidaria: Corals: Stony corals
+EnCo,11290908,137,Cnidaria: Corals: Stony corals: Encrusting
+Mass,11290906,134,Cnidaria: Corals: Stony corals: Massive
+SubM,11290905,129,Cnidaria: Corals: Stony corals: Sub-massive
+Star,25000000,88,Echinoderms
+Urch,25200000,89,Echinoderms: Sea urchins
+Bival,23199000,38,Molluscs: Bivalves
+Turbo,24000000,33,Molluscs: Gastropods
+Amphi,63600901,30,Seagrasses
+Posid,63600901,30,Seagrasses
+Thala,63600901,30,Seagrasses
+Spon,10000000,13,Sponges
+SIR,82001000,239,Substrate
+Bare,82001002,253,Substrate: Consolidated (hard): Rock
+CoRub,82001009,249,Substrate: Unconsolidated (soft): Pebble / gravel: Biologenic: Coral rubble
+Grav,82001006,245,Substrate: Unconsolidated (soft): Pebble / gravel
+Sand,82001013,241,Substrate: Unconsolidated (soft): Sand / mud (<2mm)
+UnIQ,1,273,Unscorable.
+UnID,3,655,Unknown
