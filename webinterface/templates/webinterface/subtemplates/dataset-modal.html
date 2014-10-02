@@ -111,6 +111,7 @@ New workset modal
                 <ul class="nav nav-tabs" id="myTab">
                   <li class="active"><a href="#wsform" role="tab" data-toggle="tab">Create subset</a></li>
                   <li><a href="#ulwsform" role="tab" data-toggle="tab">Upload image list</a></li>
+                    <li><a href="#cpcform" role="tab" data-toggle="tab">Import CPC files</a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -131,6 +132,17 @@ New workset modal
                         <span class="errors"></span>
                         {% csrf_token %}
                         {{ ulwsform|as_bootstrap }}
+                        <div>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="clear_form(this.form);">Cancel</button>
+                            <button type="submit" class="btn btn-primary" onclick="send_dataset_form(this);">Save</button>
+                        </div>
+                    </form>
+                    <form action="" method="post" id="cpcform" class="form-horizontal tab-pane" data-msfield="wsid" enctype="multipart/form-data">
+                        <p>Upload CPC files and create a subset and annotation set automatically.
+                             NB: the images need to already be uploaded into the system.</p>
+                        <span class="errors"></span>
+                        {% csrf_token %}
+                        {{ cpcform|as_bootstrap }}
                         <div>
                             <button type="button" class="btn btn-default" data-dismiss="modal" onclick="clear_form(this.form);">Cancel</button>
                             <button type="submit" class="btn btn-primary" onclick="send_dataset_form(this);">Save</button>

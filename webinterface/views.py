@@ -279,6 +279,8 @@ def project(request):
     aform = AuthenticationForm()
     suform = SignupForm()
 
+    # cpc2labelidfile = request.FILES('cpc2labelidfile')
+
     return render_to_response('webinterface/viewproject.html',
                               #    return render_to_response('webinterface/viewcollectionalternative.html',
                               {'clid': clid,
@@ -288,6 +290,7 @@ def project(request):
                                "clform": dataset_forms["clform"](),
                                "wsform": dataset_forms["wsform"](initial={'c_id': clid, 'method': 'random', 'n': 100, 'start_ind': 0, 'stop_ind': 0}),
                                "ulwsform": dataset_forms["ulwsform"](initial={'c_id': clid}),
+                               "cpcform": dataset_forms["cpcform"](initial={'c_id': clid}),
                                "asform": dataset_forms["asform"](initial={'count': 50}),
                                "aform": aform,
                                "suform": suform,

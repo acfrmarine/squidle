@@ -9,18 +9,20 @@ import logging
 from collection import authorization
 from django.db.utils import IntegrityError
 from django.db.models import Count
-#from django.contrib.gis.geos import Polygon
+# from django.contrib.gis.geos import Polygon
 from django.contrib.gis.geos import *
 from math import pi
 
 import os
 import sys
 import json
+import pandas as pd
 
 logger = logging.getLogger(__name__)
 
 sys.path.insert(0, '/home/auv/git/squidle/scripts/grts_sampler/python/')
 import GRTSSampler
+
 
 class CollectionManager(models.Manager):
     """Manager for collection objects.
@@ -28,8 +30,8 @@ class CollectionManager(models.Manager):
     Has methods to assist in creation collections and worksets.
     """
 
-    #def collection_from_deployment(self, user, deployment):
-    #    """Create a collection using all images in a deployment.
+    # def collection_from_deployment(self, user, deployment):
+    # """Create a collection using all images in a deployment.
     #
     #    :returns: the created collection.
     #    """
@@ -112,13 +114,13 @@ class CollectionManager(models.Manager):
     #
     #    return clid, msg
 
-    def create_collection(  self, user,
-                            name, description,
-                            deployment_list=None,
-                            depth_range=None,
-                            altitude_range=None,
-                            bounding_boxes=None,
-                            date_time_range=None):
+    def create_collection(self, user,
+                          name, description,
+                          deployment_list=None,
+                          depth_range=None,
+                          altitude_range=None,
+                          bounding_boxes=None,
+                          date_time_range=None):
 
         """Create a collection using all images in a deployment.
 
@@ -139,7 +141,6 @@ class CollectionManager(models.Manager):
             # check user is logged in
             if user.is_anonymous() or not user.is_authenticated:
                 raise CollectionError("You need to be logged in to create a Project...")
-
 
             # create and prefill the collection as much as possible
             collection = Collection()
@@ -182,7 +183,8 @@ class CollectionManager(models.Manager):
                         # filters["dep"] = depth_range
                     #filter altitude
                     if altitude_range is not None:
-                        images = images.filter(pose__scientificposemeasurement__measurement_type=altitude, pose__scientificposemeasurement__value__range=altitude_range)
+                        images = images.filter(pose__scientificposemeasurement__measurement_type=altitude,
+                                               pose__scientificposemeasurement__value__range=altitude_range)
                         #altinfo = "[altitude:" + altitude_range[0] + "-" + altitude_range[1] + "]"
                         # filters += ", alt:{}-{}m".format(*altitude_range)
                         # filters["alt"] = altitude_range
@@ -197,22 +199,21 @@ class CollectionManager(models.Manager):
                             bbox_tpl = tuple([float(x) for x in bbox.split(',')])
                             bboximages = images.filter(pose__position__contained=Polygon.from_bbox(bbox_tpl))
                             collection.images.add(*bboximages)
-                        # filters += ", #bboxes:{}".format(len(bounding_boxes))
-                        # filters["bbox"] = len(bounding_boxes)
-                    else :
+                            # filters += ", #bboxes:{}".format(len(bounding_boxes))
+                            # filters["bbox"] = len(bounding_boxes)
+                    else:
                         collection.images.add(*images)
 
-                # if filters != "" :
-                #     print filters, json.dumps(filters)
-                    # filters = json.dumps(filters)
-                    #filters = "Filters {}.".format(filters)
+                        # if filters != "" :
+                        #     print filters, json.dumps(filters)
+                        # filters = json.dumps(filters)
+                        #filters = "Filters {}.".format(filters)
                 filters = "#imgs: {}, #deployments: {}".format(collection.images.count(), len(deployment_list))
                 filters += ", dep:{}-{}m".format(*depth_range) if depth_range is not None else ""
                 filters += ", alt:{}-{}m".format(*altitude_range) if altitude_range is not None else ""
                 filters += ", date:{}--{}".format(*date_time_range) if date_time_range is not None else ""
                 filters += ", #bboxes:{}".format(len(bounding_boxes)) if bounding_boxes is not None else ""
                 collection.creation_info = filters
-
 
             collection.save()
             print collection.creation_info
@@ -240,9 +241,22 @@ class CollectionManager(models.Manager):
 
     # NOTE: it may make sense to create one function for all the
     # different sampling methods instead of a separate one for each.
-    def create_workset(self, user, name, description, ispublic, c_id, method, n=0, start_ind=False, stop_ind=False, img_list=None):
+    def create_workset(self, user, name, description, ispublic, c_id, method, n=0, start_ind=False, stop_ind=False,
+                       img_list=None, cpc2labelid=None):
         """Create a workset (or child collection) from a parent collection
 
+        :param user:
+        :param name:
+        :param description:
+        :param ispublic:
+        :param c_id:
+        :param method:
+        :param n:
+        :param start_ind:
+        :param stop_ind:
+        :param img_list: Either a string with image names (method='upload'), or an uploaded zip or
+                        cpc files (method='cpcimport')
+        :param cpc2labelid: An uploaded csv file mapping cpc code to label_id in squidle.
         returns: the created workset id (or None if error)
                  a status/error message
         """
@@ -261,7 +275,6 @@ class CollectionManager(models.Manager):
             if not user.has_perm('collection.view_collection', collection):
                 raise CollectionError("Sorry. You don't have permission to create a Workset in this Project.")
 
-
             # Create new collection entry
             workset = Collection()
             workset.parent = collection
@@ -273,57 +286,69 @@ class CollectionManager(models.Manager):
             workset.description = description
             workset.is_locked = True
 
-
-
             # subsample collection images and add to workset
             if method == "random":
                 collection_images, start_ind, stop_ind = self.get_collection_images(collection, start_ind, stop_ind, n)
                 wsimglist = sample(collection_images[start_ind:stop_ind:1], n)
-                workset.creation_info = "{0} random images selected from {1} images starting at image {2}".format(n, stop_ind-start_ind, start_ind+1)
+                workset.creation_info = "{0} random images selected from {1} images starting at image {2}".format(n,
+                                                                                                                  stop_ind - start_ind,
+                                                                                                                  start_ind + 1)
 
             elif method == "stratified":
                 collection_images, start_ind, stop_ind = self.get_collection_images(collection, start_ind, stop_ind, n)
                 wsimglist = collection_images[start_ind:stop_ind:n]
-                workset.creation_info = "Every {0} image selected from {1} images starting at image {2}".format(self.num2ordstr(n), stop_ind-start_ind, start_ind+1)
+                workset.creation_info = "Every {0} image selected from {1} images starting at image {2}".format(
+                    self.num2ordstr(n), stop_ind - start_ind, start_ind + 1)
 
-            elif method == "upload" :
-                wsimglist = []
-                img_list = [line.strip() for line in img_list.replace(',', '\n').splitlines() if line.strip()]
-                for imgname in img_list:
-                    imgstr = os.path.splitext(imgname)[0]
-                    print  imgstr
-                    imgcount = Image.objects.filter(web_location__contains=imgstr).count()
-                    #print imgcount
-                    if imgcount < 1:
-                        raise CollectionError("The image '{0}' does not exist. It may not be uploaded yet".format(imgname))
-                    elif imgcount > 1:
-                        raise CollectionError("There are multiple images matching the partial name '{0}'".format(imgname))
-                    else :
-                        img = Image.objects.get(web_location__contains=imgstr)
-                        wsimglist.append(img)
-                        #print img.id
+            elif method in ["upload", "cpcimport"]:
+                #TODO: Update this "upload" case to use the new image_name and query more efficiently
+                if method == "upload":
+                    assert isinstance(img_list, str)
+                    # If it's a string, delimited by newlines and/or commas, separate into a list without file extension
+                    img_list = [line.strip() for line in img_list.replace(',', '\n').splitlines() if line.strip()]
+                    img_list = [os.path.splitext(imname)[0] for imname in img_list]
+                elif method == "cpcimport":
+                    pass
 
-                if len(wsimglist) <= 0:
-                    raise CollectionError("No images could be found matching your list")
-                workset.creation_info = "Uploaded list containing {0} pre-selected images".format(len(wsimglist))
 
-            elif method == "grts" :
+                image_q = Image.objects.filter(image_name__in=list(img_list))
+                dbimages = pd.DataFrame(list(image_q.values_list('pk', 'image_name')), columns=['pk', 'image_name'])
+
+                n_missing = len(img_list) - image_q.count()
+
+                if len(dbimages) != len(set(dbimages.image_name)):  # Duplicate Check
+                    #TODO: Check WHICH images are duplicates, raise appropriate error to take action - e.g. choose.
+                    raise CollectionError("Duplicate images were found with the same name.")
+                elif n_missing == len(img_list):  # No images found check
+                    raise CollectionError(
+                        'None of the requested images were found in the database. Have they been uploaded?')
+                elif n_missing > 0:
+                    #TODO: Count num
+                    raise CollectionError(
+                        "{} requested images were missing in the database. Have they been uploaded?".format(n_missing))
+                wsimglist = list(image_q)
+
+                if method == "upload":
+                    workset.creation_info = "Uploaded list containing {} pre-selected images".format(len(wsimglist))
+                elif method == "cpcimport":
+                    workset.creation_info = "CPC labels apply to {} images".format(len(wsimglist))
+
+            elif method == "grts":
                 collection_images = collection.images.all()
                 collection_poses = collection_images.values_list("pose__position")
                 #collection_latlons = [i[0].coords for i in collection_poses]
                 d2r = pi / 180
-                lat = [i[0].y * d2r  for i in collection_poses]
+                lat = [i[0].y * d2r for i in collection_poses]
                 lon = [i[0].x * d2r for i in collection_poses]
-                inds = list(GRTSSampler.create_grts_sample(lat,lon,n,0.0))
+                inds = list(GRTSSampler.create_grts_sample(lat, lon, n, 0.0))
                 print inds
 
                 wsimglist = [collection_images[i] for i in inds]
-                workset.creation_info = "{} images selected from {} images using GRTS".format(len(wsimglist), collection_images.count())
-
+                workset.creation_info = "{} images selected from {} images using GRTS".format(len(wsimglist),
+                                                                                              collection_images.count())
 
             else:
                 raise CollectionError("Unrecognised method argument for Workset creation")
-
 
             # save the workset so we can associate images with it
             workset.save()
@@ -335,7 +360,7 @@ class CollectionManager(models.Manager):
             authorization.apply_collection_permissions(user, workset)
 
             wsid = workset.id
-            msg="Your Workset has been created successfully!"
+            msg = "Your Workset has been created successfully!"
 
         except CollectionError as e:
             wsid = None
@@ -356,19 +381,20 @@ class CollectionManager(models.Manager):
         return wsid, msg
 
     # get list of collection images
-    def get_collection_images (self, collection, start_ind, stop_ind, n) :
+    def get_collection_images(self, collection, start_ind, stop_ind, n):
         print "get_collection_images"
         collection_images = collection.images.all()
         start_ind = 0 if not start_ind else start_ind - 1
         stop_ind = collection_images.count() if (not stop_ind) or stop_ind > collection_images.count() else stop_ind - 1
         if stop_ind < start_ind:  # check the start and stop indices
             raise CollectionError("The Start index must be less than the Stop index.")
-        if (stop_ind - start_ind) < n: # check that n < number of images
-            raise CollectionError("Not enough images to subsample. The value for 'N' was greater than the total number of images.")
+        if (stop_ind - start_ind) < n:  # check that n < number of images
+            raise CollectionError(
+                "Not enough images to subsample. The value for 'N' was greater than the total number of images.")
         return collection_images, start_ind, stop_ind
 
     # Format number as ordinal string
-    def num2ordstr (self, n) :
+    def num2ordstr(self, n):
         if 10 < n < 14:
             return "%sth" % n
         elif n % 10 == 1:
@@ -380,11 +406,13 @@ class CollectionManager(models.Manager):
         else:
             return "%sth" % n
 
+
 class CollectionError(Exception):
     """Exception raised for errors in the input.
     Attributes:
         msg  -- explanation of the error
     """
+
     def __init__(self, msg):
         self.msg = msg
 
@@ -399,8 +427,8 @@ class Collection(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     owner = models.ForeignKey(User)
-    creation_date = models.DateTimeField()
-    modified_date = models.DateTimeField()
+    creation_date = models.DateTimeField(auto_now_add=True)
+    modified_date = models.DateTimeField(auto_now=True)
     is_locked = models.BooleanField()
     parent = models.ForeignKey('Collection', null=True, blank=True)
     images = models.ManyToManyField(Image, related_name='collections')

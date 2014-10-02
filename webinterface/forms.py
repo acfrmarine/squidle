@@ -27,7 +27,7 @@ class CreateCollectionForm(forms.Form):
         return CollectionManager().create_collection(**args)
 
 
-class CreateWorksetFromImagelist (forms.Form) :
+class CreateWorksetFromImagelist (forms.Form):
     name = forms.CharField(label=u'Name', widget=forms.TextInput(attrs={'placeholder': 'Enter a descriptive name'}))
     description = forms.CharField(label=u'Description', required=False, widget=forms.Textarea(attrs={'rows': 2, 'placeholder': 'Longer description (optional)'}))
     img_list = forms.CharField(label=u'Image List', widget=forms.Textarea(attrs={'rows': 10, 'placeholder': 'List of image names...'}))
@@ -42,6 +42,28 @@ class CreateWorksetFromImagelist (forms.Form) :
         for key in form.base_fields:                # arguments to func are same as form fields
             args[key] = form.cleaned_data.get(key)
         return CollectionManager().create_workset(**args)
+
+
+class CreateWorksetFromCPCImport(forms.Form):
+    name = forms.CharField(label=u'Name', widget=forms.TextInput(attrs={'placeholder': 'Enter a descriptive name'}))
+    description = forms.CharField(label=u'Description', required=False, widget=forms.Textarea(attrs={'rows': 2, 'placeholder': 'Longer description (optional)'}))
+    #TODO: Work out how to turn this into a multi file uploader (otherwise have to use a zip)
+    img_list = forms.FileField()
+    c_id = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
+    ispublic = forms.IntegerField(widget=forms.HiddenInput(), initial="", required=False)
+    cpc2labelidfile = forms.FileField()
+
+    # Method to save input from form
+    def save(self, user):
+        args = dict()
+        args["user"] = user
+        args["method"] = "cpcimport"
+
+        for key in self.base_fields:                # arguments to func are same as form fields
+            args[key] = self.cleaned_data.get(key)
+
+        return CollectionManager().create_workset(**args)
+
 
 class CreateWorksetForm(forms.Form):
     name = forms.CharField(label=u'Name', widget=forms.TextInput(attrs={'placeholder': 'Enter a descriptive name'}))
@@ -146,5 +168,6 @@ dataset_forms = {
     "wsform": CreateWorksetForm,
     "clform": CreateCollectionForm,
     "asform": CreatePointAnnotationSet,
-    "ulwsform": CreateWorksetFromImagelist
+    "ulwsform": CreateWorksetFromImagelist,
+    "cpcform": CreateWorksetFromCPCImport
 }
