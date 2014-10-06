@@ -4,6 +4,8 @@ Created on 25/09/2012
 
 @author: mbew7729
 """
+from libxml2mod import name
+import logging
 import os
 import csv
 
@@ -26,6 +28,8 @@ LABEL = 'cpc_label'
 LABELGROUP = 'cpc_group'
 NOTES = 'notes'
 HEADERLINES = 6
+
+RANDOM_METHODOLOGY = 0
 
 
 class CPCMappingException(ValueError):
@@ -53,6 +57,8 @@ class CPCFolderParser:
                 cp = CPCFileParser(os.path.join(dirpath, filename))
                 df = cp.parse()
                 df_list.append(df)
+        if len(df_list) == 0:
+            raise ValueError('No *.cpc files found in the folder provided.')
         bigdf = pd.concat(df_list, axis=0)
         return bigdf
 
@@ -64,28 +70,22 @@ class CPCFolderParser:
         self.cpc_set = set(self.bigdf.cpc_code)
         return self.cpc_set
 
-    def load_cpc2caab(self, cpc2caab_file):
+    def load_cpc2labelid(self, cpc2labelid_file):
         """
         Read cpc2caab_file and joins the appropriate caab_codes onto the data
         frame
         :param cpc2caab_file: a csv file with two columns: cpc_code and caab_code
         :return: cpc2caabs, a pandas Series of caab codes indexed by cpc_codes
         """
-        cpc2caabs = pd.read_csv(cpc2caab_file)
-
-        # TODO: Here is the best spot to look up the label_id for each caab_code, so we can add that to bigdf as well
-        print cpc2caabs.caab_code
-        # q = annotations.models.Annotations.AnnotationCode.objects.all()
-        # label_id_lookup = pd.DataFrame(list(q.getvalues(['caab_code', 'cpc_code', 'id', 'description'])))
-        # cpc2caabs_merged = pd.merge(cpc2caabs, label_id_lookup, on='caab_code')
-        # assert len(cpc2caabs_merged) == cpc2caabs # i.e. all CPC codes have label_id in the database
-        # cpc2caabs = cpc2caabs_merged
-        #TODO: Check final set of columns is what we want before merging on cpc_code
-
-        self.bigdf = pd.merge(self.bigdf, cpc2caabs, on='cpc_code', how='left')
-        unassigned = set(self.bigdf.cpc_code[self.bigdf.caab_code.isnull()])
-        if len(unassigned) > 0:
-            raise CPCMappingException("Didn't find code mappings for: %s" % unassigned)
+        cpc2labelids = pd.read_csv(cpc2labelid_file)
+        bigdf = pd.merge(self.bigdf, cpc2labelids, on='cpc_code', how='left')
+        annotations_missing_label_ids = bigdf[bigdf.label_id.isnull()]
+        if len(annotations_missing_label_ids) > 0:
+            missing_cpc_codes = set(annotations_missing_label_ids.cpc_code.values)
+            raise CPCMappingException("No CPC map for {} points, with CPC codes: {}".format(len(annotations_missing_label_ids),
+                                                                                            missing_cpc_codes))
+        else:
+            self.bigdf = bigdf
 
     def load_image_pks_from_database(self):
         """
@@ -102,7 +102,53 @@ class CPCFolderParser:
         assert len(dbimages) == len(set(dbimages.image_name))  # Is each of the images from the database unique?
         assert len(dbimages) == len(image_list)  # Did we get a dbimage for every image we're trying to import?
         self.bigdf = pd.merge(self.bigdf, dbimages, on='image_name')
+        self.image_q = image_q
         return image_q
+
+    def populate_database(self, user_id, project_id, subset_name='Imported CPC Data', subset_description='',
+                          annotation_set_name='CPC Imports', methodology=RANDOM_METHODOLOGY):
+        subset = Collection(
+            name=subset_name,
+            description=subset_description,
+            owner_id=user_id,
+            is_locked=False,
+            parent_id=project_id,
+            creation_info="CPC labels apply to {} images".format(self.image_q.count())
+        )
+        subset.save()
+        subset.images.add(*list(self.image_q))
+
+        cpc_counts_per_image = self.bigdf.groupby('image_name').label_number.count()
+        cpc_counts = set(cpc_counts_per_image.values)
+        if len(cpc_counts) > 1:
+            cpc_count = cpc_counts.median()
+            logging.warn('CPC files do not all have the same number of counts per image')
+            raise Exception('Images have a varying number of annotations, including: {}'.format(cpc_counts))
+        else:
+            cpc_count = list(cpc_counts)[0]
+
+        point_annotation_set = annotations.models.PointAnnotationSet(name=annotation_set_name,
+                                                                     owner_id=user_id,
+                                                                     collection=subset,
+                                                                     count=cpc_count,
+                                                                     methodology=methodology)
+        point_annotation_set.save()
+
+        point_annotations = []
+        #TODO: Confirm x and y are the correct way around.
+        for i in range(len(self.bigdf)):
+            point_annotations.append(
+                annotations.models.PointAnnotation(
+                    annotation_set=point_annotation_set,
+                    x=self.bigdf.fraction_from_image_left.iloc[i],
+                    y=self.bigdf.fraction_from_image_top.iloc[i],
+                    level=0,
+                    image_id=self.bigdf.pk.iloc[i],
+                    label_id=self.bigdf.label_id.iloc[i],
+                    labeller_id=user_id
+                )
+            )
+        annotations.models.PointAnnotation.objects.bulk_create(point_annotations)
 
 
 class CPCFileParser:
@@ -160,25 +206,25 @@ class CPCFileParser:
 
 
 if __name__ == '__main__':
-    # cp = CPCFolderParser('example_cpc')
-    # cp.load_cpc2caab('cpc2caab_wa2011.csv')
+    # cp = CPCFolderParser('real_cpc_data_to_import/WA201104')
+    # cp.load_cpc2labelid('cpc2labelid_wa2011.csv')
     # cp.load_image_pks_from_database()
-    # project = Collection(
-    #     name=project_name,
-    #     description=project_description,
-    #     owner=logged_in_user,
-    #     is_locked=False,
-    #     creation_info='#imgs: 0, manually uploaded CPCe annotations'
-    # )
-    # # project.save()
-    # cp.load_data_into_database()
-    # # import collection.models
-    for g in ['nsw', 'qld2010', 'tas08', 'wa2011']:
-        cpc2caab = pd.read_csv('cpc2caab_{}.csv'.format(g))
-        caab2labelid = pd.read_csv('caab2labelid.csv')
-        caab2labelid.caab_code = caab2labelid.caab_code.astype('str')
-        df = pd.merge(cpc2caab, caab2labelid, on='caab_code', how='left').set_index('cpc_code')
-        df.to_csv('cpc2labelid_{}.csv'.format(g))
-        unmatched = df.loc[df.label_id.isnull()]
-        print(g)
-        print(unmatched)
+    # cp.populate_database(user_id=61,
+    #                      project_id=1137,
+    #                      subset_name='cpc import test #1',
+    #                      subset_description='',
+    #                      annotation_set_name='CPC Imports',
+    #                      methodology=RANDOM_METHODOLOGY)
+
+    # Code to generate caab2labelid files. NB: BE CAREFUL RUNNING THIS, most of them require some manual editing
+    # afterwards.
+    # for g in ['nsw', 'qld2010', 'tas08', 'wa2011']:
+g = 'wa2011'
+cpc2caab = pd.read_csv('cpc2caab_{}.csv'.format(g))
+caab2labelid = pd.read_csv('caab2labelid.csv')
+caab2labelid.caab_code = caab2labelid.caab_code.astype('str')
+df = pd.merge(cpc2caab, caab2labelid, on='caab_code', how='left').set_index('cpc_code')
+df.to_csv('cpc2labelid_{}.csv'.format(g))
+unmatched = df.loc[df.label_id.isnull()]
+print(g)
+print(unmatched)
