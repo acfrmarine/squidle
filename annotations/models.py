@@ -225,7 +225,7 @@ LEVELS = (
 class PointAnnotation(Annotation):
     """A Point annotation.
 
-    Contains position within the image (as a percent from top left) and
+    Contains position within the image (as a fraction from top left) and
     the set to which it belongs.
     """
     annotation_set = models.ForeignKey(
