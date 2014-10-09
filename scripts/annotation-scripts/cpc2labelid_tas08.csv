@@ -294,11 +294,11 @@ YSS1,10000904,16,Sponges: Massive forms: Simple
 MOL,23000000,32,Molluscs
 PARA1,11284000,163,Cnidaria: Colonial anemones: Zoanthids
 ZOO1,11284000,163,Cnidaria: Colonial anemones: Zoanthids
-UNIID1,10000917,,
-R2B,10000917,,
-UNID1,10000917,,
-UNID6,10000917,,
-UNID98,10000917,,
+R1B,10000917,658,Sponges: Crusts: Creeping / ramose
+R2B,10000917,658,Sponges: Crusts: Creeping / ramose
+UNID1,10000917,658,Sponges: Crusts: Creeping / ramose
+UNID6,10000917,658,Sponges: Crusts: Creeping / ramose
+UNID98,10000917,658,Sponges: Crusts: Creeping / ramose
 ROCK,82001001,252,Substrate: Consolidated (hard)
 SAND,82001013,241,Substrate: Unconsolidated (soft): Sand / mud (<2mm)
 SAR,80300904,65,Macroalgae: Erect coarse branching: Brown
@@ -348,6 +348,13 @@ UNID50,80300905,64,Macroalgae: Erect coarse branching: Green
 UNID8,12000000,80,Jellies: Ctenophores
 UnkElsmo,37990082,82,Fishes: Elasmobranchs
 UnkFish,37000000,81,Fishes
+FISH,37000000,81,Fishes
 UnkTeleost,37990083,87,Fishes: Bony fishes
 UNS,1,273,Unscorable.
+SLOPE,2,274,Not of interest
+SUB,2,274,Not of interest
+RUG,2,274,Not of interest
+UNID,2,274,Not of interest
+ID,2,274,Not of interest
+SIZE,2,274,Not of interest
 URCH,25200901,90,Echinoderms: Sea urchins: Regular urchins
