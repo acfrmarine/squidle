@@ -6,9 +6,9 @@ Green,80300000,39,Macroalgae
 Turf,80300000,39,Macroalgae
 UnFo,80300000,39,Macroalgae
 Sarg,80300000,39,Macroalgae
-LowAlg,80300000,39,Macroalgae
-HighAlg,80300000,39,Macroalgae
-ModAlg,80300000,39,Macroalgae
+LowAlg,2,274,Not of interest
+HighAlg,2,274,Not of interest
+ModAlg,2,274,Not of interest
 ARC,80300913,71,Macroalgae: Articulated calcareous: Red
 Canop,80300901,44,Macroalgae: Large canopy-forming
 Eck,80300902,45,Macroalgae: Large canopy-forming: Brown
@@ -61,18 +61,18 @@ Posid,63600901,30,Seagrasses
 Thala,63600901,30,Seagrasses
 AMPHI,63600901,30,Seagrasses
 Spon,10000000,13,Sponges
-ModSp,10000000,13,Sponges
-LoSlo,10000000,13,Sponges
-LowSp,10000000,13,Sponges
-HighSp,10000000,13,Sponges
+ModSp,2,274,Not of interest
+LoSlo,2,274,Not of interest
+LowSp,2,274,Not of interest
+HighSp,2,274,Not of interest
 SIR,82001000,239,Substrate
 Bare,82001002,253,Substrate: Consolidated (hard): Rock
-Rock,82001002,253,Substrate: Consolidated (hard): Rock
+Rock,2,274,Not of interest
 CoRub,82001009,249,Substrate: Unconsolidated (soft): Pebble / gravel: Biologenic: Coral rubble
 Grav,82001006,245,Substrate: Unconsolidated (soft): Pebble / gravel
-GRA,82001006,245,Substrate: Unconsolidated (soft): Pebble / gravel
+GRA,2,274,Not of interest
 Sand,82001013,241,Substrate: Unconsolidated (soft): Sand / mud (<2mm)
-Sandy,82001013,241,Substrate: Unconsolidated (soft): Sand / mud (<2mm)
+Sandy,2,274,Not of interest
 UnIQ,1,273,Unscorable.
 UnID,3,655,Unknown
 WAND,2,274,Wand
@@ -96,13 +96,13 @@ Steep,2,274,Not of interest
 ModSlo,2,274,Not of interest
 TAPE,2,274,Not of interest
 4recs,3,655,Unknown
-CSand,82001014,244,Substrate: Unconsolidated (soft): Sand / mud (<2mm): Coarse sand (with shell fragments)
+CSand,2,274,Not of interest
 NoSp,2,274,Not of interest
 NoAlg,2,274,Not of interest
-RIP,82002000,264,Bedforms
-WAVE,82002000,264,Bedforms
+RIP,2,274,Not of interest
+WAVE,2,274,Not of interest
 ObsRf,2,274,Not of interest
-Cob,82001004,254,Substrate: Consolidated (hard): Cobbles
-Boulders,82001003,255,Substrate: Consolidated (hard): Boulders
-BIOTUR,82002005,266,Bedforms: Bioturbated
+Cob,2,274,Not of interest
+Boulders,2,274,Not of interest
+BIOTUR,2,274,Not of interest
 Whip,11168917,144,Cnidaria: Corals: Black & Octocorals: Whip
