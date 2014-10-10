@@ -29,8 +29,9 @@ Rock,82001002,253,Substrate: Consolidated (hard): Rock
 CRub,82001009,249,Substrate: Unconsolidated (soft): Pebble / gravel: Biologenic: Coral rubble
 SdC,82001013,241,Substrate: Unconsolidated (soft): Sand / mud (<2mm)
 SdCR,82001013,241,Substrate: Unconsolidated (soft): Sand / mud (<2mm)
-Blur,ROOT,,
+Blur,1,273,Unscorable.
 FBGc,80300000,39,Macroalgae
 UMA,80300000,39,Macroalgae
 BOFfc,11168913,148,Cnidaria: Corals: Black & Octocorals: Fan (2D): Fern-frond
 East,25102000,92,Echinoderms: Sea stars
+,3,655,Unknown
