@@ -351,10 +351,10 @@ UnkFish,37000000,81,Fishes
 FISH,37000000,81,Fishes
 UnkTeleost,37990083,87,Fishes: Bony fishes
 UNS,1,273,Unscorable.
-SLOPE,2,274,Not of interest
-SUB,2,274,Not of interest
-RUG,2,274,Not of interest
-UNID,2,274,Not of interest
-ID,2,274,Not of interest
-SIZE,2,274,Not of interest
+SLOPE,,DO_NOT_IMPORT,
+SUB,,DO_NOT_IMPORT,
+RUG,,DO_NOT_IMPORT,
+UNID,,DO_NOT_IMPORT,
+ID,,DO_NOT_IMPORT,
+SIZE,,DO_NOT_IMPORT,
 URCH,25200901,90,Echinoderms: Sea urchins: Regular urchins

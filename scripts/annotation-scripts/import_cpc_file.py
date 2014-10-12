@@ -32,8 +32,10 @@ HEADERLINES = 6
 RANDOM_METHODOLOGY = 0
 logging.root.setLevel(logging.DEBUG)
 
+
 class CPCMappingError(ValueError):
     pass
+
 
 class ImagesNotInDatabaseError(Exception):
     """
@@ -42,12 +44,20 @@ class ImagesNotInDatabaseError(Exception):
     pass
 
 
+class DuplicateCPCError(ValueError):
+    """
+    When multiple cpc files referring to the same image are imported, this is probably an error.
+    """
+    pass
+
+
 class CPCFolderParser:
-    def __init__(self, folder_path):
-        self.bigdf = self.parse_files(folder_path)
+    def __init__(self, folder_path, image_name_remapping_file=None):
+        self.bigdf = self.parse_files(folder_path, image_name_remapping_file)
+        self.image_name_remapping_file = image_name_remapping_file
 
     @staticmethod
-    def parse_files(folder_path):
+    def parse_files(folder_path, image_name_remapping_file):
         """
         Given all *.cpc files in the folder_path, return a concatenated data frame with each row as a labelled point:
         fraction_from_image_left: A float [0,1] with distance across the image from the left edge.
@@ -67,6 +77,16 @@ class CPCFolderParser:
             raise ValueError('No *.cpc files found in the folder provided.')
         bigdf = pd.concat(df_list, axis=0)
         logging.info('Found {} cpc points'.format(len(bigdf)))
+
+        if image_name_remapping_file is not None:
+            remap = pd.read_csv(image_name_remapping_file)
+            bigdf = pd.merge(bigdf, remap, left_on='image_name', right_on='mod_image_name', how='left')
+            if np.any(bigdf.auv_image_name.isnull()):
+                logging.error(bigdf[bigdf.auv_image_name.isnull()])
+                raise ValueError('Remap file does not contain all the images referenced by the CPC files!')
+            else:
+                bigdf.pop('image_name')
+                bigdf.rename(columns={'auv_image_name': 'image_name'}, inplace=True)
         return bigdf
 
     def get_cpc_set(self):
@@ -85,6 +105,7 @@ class CPCFolderParser:
         :return: cpc2caabs, a pandas Series of caab codes indexed by cpc_codes
         """
         cpc2labelids = pd.read_csv(cpc2labelid_file).fillna('')
+        cpc2labelids = cpc2labelids[cpc2labelids.label_id != 'DO_NOT_IMPORT']
         bigdf = pd.merge(self.bigdf, cpc2labelids, on='cpc_code', how='left')
         annotations_missing_label_ids = bigdf[bigdf.label_id.isnull()]
         if len(annotations_missing_label_ids) > 0:
@@ -105,12 +126,17 @@ class CPCFolderParser:
         if len(duplicates) > 0:
             logging.warn(duplicates)
             duplicates.to_csv('duplicates.csv')
-            raise ValueError('Tried to import {} image points that have been labelled more than once'.format(len(duplicates)))
+            raise DuplicateCPCError(
+                'Tried to import {} image points that have been labelled more than once'.format(len(duplicates)))
 
         image_list = list(set(self.bigdf.image_name))
         image_q = Image.objects.filter(image_name__in=list(image_list))
         logging.debug(image_q.query)
-        dbimages = pd.DataFrame(list(image_q.values_list('pk', 'image_name')), columns=['pk', 'image_name'])
+        db_image_list = list(image_q.values_list('pk', 'image_name'))
+        if len(db_image_list) > 0:
+            dbimages = pd.DataFrame(db_image_list, columns=['pk', 'image_name'])
+        else:
+            raise ValueError('No images found in database (looking for e.g. {})'.format(image_list[0]))
         n_im = len(dbimages)
         n_unique = len(set(dbimages.image_name))
         if n_im != n_unique:
@@ -123,7 +149,7 @@ class CPCFolderParser:
         if len(missing_images) > 0:
             logging.warn('The following images were not found in the database:')
             logging.warn(missing_images)
-            missing_images.groupby('image_name').aggregate({'pk': lambda pk: pk[0]}).to_csv('missing_images.csv')
+            missing_images.groupby('image_name').aggregate({'pk': lambda pk: pk.iloc[0]}).to_csv('missing_images.csv')
             raise ValueError("{} of the images were not found in the database. Have they been imported?".format(
                 len(image_list) - n_im))
         self.bigdf = bigdf
@@ -232,15 +258,17 @@ class CPCFileParser:
 
 
 if __name__ == '__main__':
-    # cp = CPCFolderParser('real_cpc_data_to_import/CPCe Files_For MichaelBewley')
-    # cp.load_cpc2labelid('cpc2labelid_wa.csv')
+    cp = CPCFolderParser('real_cpc_data_to_import/CPCe Files_For MichaelBewley')
+    cp.load_cpc2labelid('cpc2labelid_wa.csv')
 
-    cp = CPCFolderParser('real_cpc_data_to_import/SEQld_2010')
-    cp.load_cpc2labelid('cpc2labelid_qld2010.csv')
+    # cp = CPCFolderParser('real_cpc_data_to_import/Tas08')
+    # cp.load_cpc2labelid('cpc2labelid_tas08.csv')
 
-    # cp = CPCFolderParser('real_cpc_data_to_import/CPCe Files_For MichaelBewley')
-    # cp.load_cpc2labelid('cpc2labelid_wa.csv')
+    # cp = CPCFolderParser('real_cpc_data_to_import/SEQld_2010', 'real_cpc_data_to_import/SEQld_2010/image_name_mapping.csv')
+    # cp.load_cpc2labelid('cpc2labelid_qld2010.csv')
 
+    # cp = CPCFolderParser('real_cpc_data_to_import/NSW_2010-2012')
+    # cp.load_cpc2labelid('cpc2labelid_nsw.csv')
 
     print('Loaded cpc2labelid file')
     cp.load_image_pks_from_database()
@@ -252,25 +280,29 @@ if __name__ == '__main__':
                          annotation_set_name='CPC Imports',
                          methodology=RANDOM_METHODOLOGY)
     print('Finished populating database')
+    # Add code to authorise appropriate user on project and subset
+
+
     # Code to generate caab2labelid files. NB: BE CAREFUL RUNNING THIS, most of them require some manual editing
     # afterwards.
     # for g in ['nsw', 'qld2010', 'tas08', 'wa2011']:
-# g = 'qld2010'
-# cpc2caab = pd.read_csv('cpc2caab_{}.csv'.format(g))
-# caab2labelid = pd.read_csv('caab2labelid.csv')
-# caab2labelid.caab_code = caab2labelid.caab_code.astype('str')
-# df = pd.merge(cpc2caab, caab2labelid, on='caab_code', how='left').set_index('cpc_code')
-# df.to_csv('cpc2labelid_{}.csv'.format(g), float_format='%.f')
-
-unmatched = df.loc[df.label_id.isnull()]
-print(g)
-print(unmatched)
-
-# m.AnnotationCode(
-#     caab_code=10000917,
-#     cpc_code='SPCC',
-#     point_colour='8F8F8F',
-#     code_name="Sponges: Crusts: Creeping / ramose",
-#     description="",
-#     parent=m.AnnotationCode.objects.get(caab_code=10000901),
-# )
+    # g = 'tas08'
+    # cpc2caab = pd.read_csv('cpc2caab_{}.csv'.format(g))
+    # caab2labelid = pd.read_csv('caab2labelid.csv')
+    # caab2labelid.caab_code = caab2labelid.caab_code.astype('str')
+    # df = pd.merge(cpc2caab, caab2labelid, on='caab_code', how='left').set_index('cpc_code')
+    # df.to_csv('cpc2labelid_{}.csv'.format(g), float_format='%.f')
+    #
+    # unmatched = df.loc[df.label_id.isnull()]
+    # print(g)
+    # print(unmatched)
+    #
+    # import annotations.models as m
+    # new_caab = m.AnnotationCode(
+    # caab_code=10000917,
+    # cpc_code='SPCC',
+    #     point_colour='FFFF33',
+    #     code_name="Sponges: Crusts: Creeping / ramose",
+    #     description="",
+    #     parent=m.AnnotationCode.objects.get(caab_code=10000901),
+    # )

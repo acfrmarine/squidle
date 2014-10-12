@@ -6,9 +6,9 @@ Green,80300000,39,Macroalgae
 Turf,80300000,39,Macroalgae
 UnFo,80300000,39,Macroalgae
 Sarg,80300000,39,Macroalgae
-LowAlg,2,274,Not of interest
-HighAlg,2,274,Not of interest
-ModAlg,2,274,Not of interest
+LowAlg,,DO_NOT_IMPORT,
+HighAlg,,DO_NOT_IMPORT,
+ModAlg,,DO_NOT_IMPORT,
 ARC,80300913,71,Macroalgae: Articulated calcareous: Red
 Canop,80300901,44,Macroalgae: Large canopy-forming
 Eck,80300902,45,Macroalgae: Large canopy-forming: Brown
@@ -61,48 +61,48 @@ Posid,63600901,30,Seagrasses
 Thala,63600901,30,Seagrasses
 AMPHI,63600901,30,Seagrasses
 Spon,10000000,13,Sponges
-ModSp,2,274,Not of interest
-LoSlo,2,274,Not of interest
-LowSp,2,274,Not of interest
-HighSp,2,274,Not of interest
+ModSp,,DO_NOT_IMPORT,
+LoSlo,,DO_NOT_IMPORT,
+LowSp,,DO_NOT_IMPORT,
+HighSp,,DO_NOT_IMPORT,
 SIR,82001000,239,Substrate
 Bare,82001002,253,Substrate: Consolidated (hard): Rock
-Rock,2,274,Not of interest
+Rock,,DO_NOT_IMPORT,
 CoRub,82001009,249,Substrate: Unconsolidated (soft): Pebble / gravel: Biologenic: Coral rubble
 Grav,82001006,245,Substrate: Unconsolidated (soft): Pebble / gravel
-GRA,2,274,Not of interest
+GRA,,DO_NOT_IMPORT,
 Sand,82001013,241,Substrate: Unconsolidated (soft): Sand / mud (<2mm)
-Sandy,2,274,Not of interest
+Sandy,,DO_NOT_IMPORT,
 UnIQ,1,273,Unscorable.
 UnID,3,655,Unknown
 WAND,2,274,Wand
 SHAD,2,274,Shadow
 ,3,655,Unknown
-High,2,274,Not of interest
-RfSd,2,274,Not of interest
-Low,2,274,Not of interest
-AZP,2,274,Not of interest
-3recs,3,655,Unknown
-2recs,3,655,Unknown
-Flat,2,274,Not of interest
-1recs,3,655,Unknown
-5recs,3,655,Unknown
-SGC,2,274,Not of interest
-Mod,2,274,Not of interest
-UnkID,3,655,Unknown
-0recs,2,274,Not of interest
+High,,DO_NOT_IMPORT,
+RfSd,,DO_NOT_IMPORT,
+Low,,DO_NOT_IMPORT,
+AZP,,DO_NOT_IMPORT,
+3recs,,DO_NOT_IMPORT,
+2recs,,DO_NOT_IMPORT,
+Flat,,DO_NOT_IMPORT,
+1recs,,DO_NOT_IMPORT,
+5recs,,DO_NOT_IMPORT,
+SGC,,DO_NOT_IMPORT,
+Mod,,DO_NOT_IMPORT,
+UnkID,,DO_NOT_IMPORT,
+0recs,,DO_NOT_IMPORT,
 none,3,655,Unknown
-Steep,2,274,Not of interest
-ModSlo,2,274,Not of interest
+Steep,,DO_NOT_IMPORT,
+ModSlo,,DO_NOT_IMPORT,
 TAPE,2,274,Not of interest
-4recs,3,655,Unknown
-CSand,2,274,Not of interest
-NoSp,2,274,Not of interest
-NoAlg,2,274,Not of interest
-RIP,2,274,Not of interest
-WAVE,2,274,Not of interest
-ObsRf,2,274,Not of interest
-Cob,2,274,Not of interest
-Boulders,2,274,Not of interest
-BIOTUR,2,274,Not of interest
+4recs,,DO_NOT_IMPORT,
+CSand,,DO_NOT_IMPORT,
+NoSp,,DO_NOT_IMPORT,
+NoAlg,,DO_NOT_IMPORT,
+RIP,,DO_NOT_IMPORT,
+WAVE,,DO_NOT_IMPORT,
+ObsRf,,DO_NOT_IMPORT,
+Cob,,DO_NOT_IMPORT,
+Boulders,,DO_NOT_IMPORT,
+BIOTUR,,DO_NOT_IMPORT,
 Whip,11168917,144,Cnidaria: Corals: Black & Octocorals: Whip
