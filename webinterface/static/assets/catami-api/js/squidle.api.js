@@ -112,7 +112,7 @@ function SquidleAPI(usrconfig) {
                 parent: obj.parent,
                 creation_info: obj.creation_info,
                 creation_date: obj.creation_date.substr(0, 10),
-                access: "Public",//access: (obj.is_public) ? 'Public' : 'Private',
+                access: (obj.is_public) ? 'Public' : 'Private',
                 type: (obj.parent_id) ? 'Workset' : 'Project'
             }
         }
