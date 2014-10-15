@@ -19,8 +19,9 @@ import json
 
 logger = logging.getLogger(__name__)
 
-sys.path.insert(0, '/home/auv/git/squidle/scripts/grts_sampler/python/')
-import GRTSSampler
+#sys.path.insert(0, '/home/auv/git/squidle/scripts/grts_sampler/python/')
+import scripts.grts_sampler.python.GRTSSampler as GRTSSampler
+
 
 class CollectionManager(models.Manager):
     """Manager for collection objects.
@@ -258,7 +259,7 @@ class CollectionManager(models.Manager):
                 raise CollectionError("You need to be logged in to create a Workset...")
 
             #check if the user has permission to do this
-            if not user.has_perm('collection.view_collection', collection):
+            if not user.has_perm('collection.add_collection', collection):
                 raise CollectionError("Sorry. You don't have permission to create a Workset in this Project.")
 
 
@@ -279,12 +280,12 @@ class CollectionManager(models.Manager):
             if method == "random":
                 collection_images, start_ind, stop_ind = self.get_collection_images(collection, start_ind, stop_ind, n)
                 wsimglist = sample(collection_images[start_ind:stop_ind:1], n)
-                workset.creation_info = "{0} random images selected from {1} images starting at image {2}".format(n, stop_ind-start_ind, start_ind+1)
+                workset.creation_info = "{0} images (selected randomly from {1} images starting at image {2})".format(n, stop_ind-start_ind, start_ind+1)
 
             elif method == "stratified":
                 collection_images, start_ind, stop_ind = self.get_collection_images(collection, start_ind, stop_ind, n)
                 wsimglist = collection_images[start_ind:stop_ind:n]
-                workset.creation_info = "Every {0} image selected from {1} images starting at image {2}".format(self.num2ordstr(n), stop_ind-start_ind, start_ind+1)
+                workset.creation_info = "{} images (every {} image selected from {} images starting at image {})".format(len(wsimglist), self.num2ordstr(n), stop_ind-start_ind, start_ind+1)
 
             elif method == "upload" :
                 wsimglist = []
@@ -318,7 +319,7 @@ class CollectionManager(models.Manager):
                 print inds
 
                 wsimglist = [collection_images[i] for i in inds]
-                workset.creation_info = "{} images selected from {} images using GRTS".format(len(wsimglist), collection_images.count())
+                workset.creation_info = "{} images (selected from {} images using GRTS)".format(len(wsimglist), collection_images.count())
 
 
             else:
