@@ -1,4 +1,5 @@
 # Create your views here.
+from django.core.context_processors import csrf
 from django.template import RequestContext
 
 from django.shortcuts import render_to_response, render
@@ -23,14 +24,15 @@ from django.db.models import Max, Min
 import simplejson
 from django.conf import settings
 from collection.api import CollectionResource
-from collection.models import Collection, CollectionManager
+from collection.models import Collection, CollectionManager, CPCFile
 from annotations.models import PointAnnotation, PointAnnotationSet, AnnotationCode
 
-from webinterface.forms import dataset_forms, CreateCollectionForm, CreateWorksetForm, CreateWorksetAndAnnotation, CreateCollectionExploreForm, CreatePointAnnotationSet, CreateWorksetFromImagelist
+from webinterface.forms import dataset_forms, CreateCollectionForm, CreateWorksetForm, CreateWorksetAndAnnotation, CreateCollectionExploreForm, CreatePointAnnotationSet, CreateWorksetFromImagelist, \
+    CreateWorksetFromCPCImport
 from userena.forms import AuthenticationForm, SignupForm
 
 from django.db.models import Max
-
+import zipfile
 import HTMLParser
 
 # DajaxIce
@@ -271,6 +273,8 @@ def project(request):
     asid = request.GET.get("asid", "0") if request.GET.get("asid", "") else 0
     imid = request.GET.get("imid", "0") if request.GET.get("imid", "") else 0
 
+
+
     # Forms
     # clform = CreateCollectionForm()
     # wsform = CreateWorksetForm(initial={'c_id': clid, 'method': 'random', 'n': 100, 'start_ind': 0, 'stop_ind': 0})
@@ -279,7 +283,18 @@ def project(request):
     aform = AuthenticationForm()
     suform = SignupForm()
 
-    # cpc2labelidfile = request.FILES('cpc2labelidfile')
+    if request.method == 'POST':
+        cpcform = CreateWorksetFromCPCImport(request.POST, request.FILES)
+        if cpcform.is_valid():
+            #TODO: Deal with the files
+            request.FILES['cpc_zip']
+            request.FILES['cpc2labelid_csv']
+            # return HttpResponseRedirect('/upload_successful')
+    else:
+        cpcform = CreateWorksetFromCPCImport(initial={'c_id': clid})
+        # context = {'cpcform': cpcform}
+        # context.update(csrf(request))
+        # return render_to_response('upload.html', context)
 
     return render_to_response('webinterface/viewproject.html',
                               #    return render_to_response('webinterface/viewcollectionalternative.html',
@@ -290,12 +305,34 @@ def project(request):
                                "clform": dataset_forms["clform"](),
                                "wsform": dataset_forms["wsform"](initial={'c_id': clid, 'method': 'random', 'n': 100, 'start_ind': 0, 'stop_ind': 0}),
                                "ulwsform": dataset_forms["ulwsform"](initial={'c_id': clid}),
-                               "cpcform": dataset_forms["cpcform"](initial={'c_id': clid}),
+                               "cpcform": cpcform,
                                "asform": dataset_forms["asform"](initial={'count': 50}),
                                "aform": aform,
                                "suform": suform,
                                "GEOSERVER_URL": settings.GEOSERVER_URL},
                               RequestContext(request))
+
+
+def handle_zipped_cpc_files(cpczip):
+    for filename, content in fileiterator(cpczip):
+        tf = CPCFile()
+        tf.content = content
+        tf.filename = filename
+        tf.save()
+
+
+def fileiterator(zipf):
+    with zipfile.ZipFile(zipf, "r", zipfile.ZIP_STORED) as openzip:
+        filelist = openzip.infolist()
+    for f in filelist:
+        yield(f.filename, openzip.read(f))
+
+
+def process(zipf, callback):
+    with zipfile.ZipFile(zipf, "r", zipfile.ZIP_STORED) as openzip:
+        filelist = openzip.infolist()
+    for f in filelist:
+        callback(f.filename, openzip.read(f))
 
 ######################################################################
 ## NEW MAPS ##########################################################

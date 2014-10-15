@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 sys.path.insert(0, '/home/auv/git/squidle/scripts/grts_sampler/python/')
 import GRTSSampler
-
+import cpc
 
 class CollectionManager(models.Manager):
     """Manager for collection objects.
@@ -301,15 +301,16 @@ class CollectionManager(models.Manager):
                     self.num2ordstr(n), stop_ind - start_ind, start_ind + 1)
 
             elif method in ["upload", "cpcimport"]:
-                #TODO: Update this "upload" case to use the new image_name and query more efficiently
+                #TODO: Check for duplicates in the CPC mapping file list
                 if method == "upload":
                     assert isinstance(img_list, str)
                     # If it's a string, delimited by newlines and/or commas, separate into a list without file extension
                     img_list = [line.strip() for line in img_list.replace(',', '\n').splitlines() if line.strip()]
                     img_list = [os.path.splitext(imname)[0] for imname in img_list]
                 elif method == "cpcimport":
-                    pass
-
+                    #TODO: Get the uploaded cpc files as a folder somehow...
+                    parser = cpc.CPCFolderParser('.')
+                    img_list = parser.image_list
 
                 image_q = Image.objects.filter(image_name__in=list(img_list))
                 dbimages = pd.DataFrame(list(image_q.values_list('pk', 'image_name')), columns=['pk', 'image_name'])
@@ -323,7 +324,7 @@ class CollectionManager(models.Manager):
                     raise CollectionError(
                         'None of the requested images were found in the database. Have they been uploaded?')
                 elif n_missing > 0:
-                    #TODO: Count num
+                    #TODO: Give advice on which images are missing
                     raise CollectionError(
                         "{} requested images were missing in the database. Have they been uploaded?".format(n_missing))
                 wsimglist = list(image_q)
@@ -376,6 +377,13 @@ class CollectionManager(models.Manager):
             msg = "An unknown error has occurred during the creation of your Workset..."
             print ("Exception Type: %s" % e.__class__)
             #logger.error(msg)
+
+        if method == "cpcimport":
+            parser.load_cpc2labelid(cpc2labelid_file)
+            dbimages = pd.DataFrame(list(image_q.values_list('pk', 'image_name')), columns=['pk', 'image_name'])
+            bigdf = pd.merge(parser.bigdf, dbimages, on='image_name')
+            #TODO: Create annotation set, store annotations in database
+
 
         #print "Debug (wsid: {0}, msg: {1})".format(wsid, msg)
         return wsid, msg
@@ -446,3 +454,13 @@ class Collection(models.Model):
         if self.is_locked:
             description += u" - locked"
         return description
+
+
+class CPCFile(models.Model):
+    name = models.CharField(max_length=256)
+    content = models.TextField(blank=True)
+
+
+class CPC2LabelidFile(models.Model):
+    name = models.CharField(max_length=256)
+    content = models.TextField(blank=True)

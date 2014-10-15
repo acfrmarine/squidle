@@ -30,7 +30,7 @@ NOTES = 'notes'
 HEADERLINES = 6
 
 RANDOM_METHODOLOGY = 0
-logging.root.setLevel(logging.DEBUG)
+logging.root.setLevel(logging.INFO)
 
 
 class CPCMappingError(ValueError):
@@ -105,8 +105,12 @@ class CPCFolderParser:
         :return: cpc2caabs, a pandas Series of caab codes indexed by cpc_codes
         """
         cpc2labelids = pd.read_csv(cpc2labelid_file).fillna('')
-        cpc2labelids = cpc2labelids[cpc2labelids.label_id != 'DO_NOT_IMPORT']
         bigdf = pd.merge(self.bigdf, cpc2labelids, on='cpc_code', how='left')
+        all_pts = len(bigdf)
+        bigdf = bigdf[bigdf.label_id.astype(str) != 'DO_NOT_IMPORT']
+        if len(bigdf) < all_pts:
+            logging.warn('Discarding {} points (tagged as "DO_NOT_IMPORT"). {} points remaining.'.format(all_pts - len(bigdf), len(bigdf)))
+
         annotations_missing_label_ids = bigdf[bigdf.label_id.isnull()]
         if len(annotations_missing_label_ids) > 0:
             missing_cpc_codes = set(annotations_missing_label_ids.cpc_code.values)
@@ -258,28 +262,28 @@ class CPCFileParser:
 
 
 if __name__ == '__main__':
-    cp = CPCFolderParser('real_cpc_data_to_import/CPCe Files_For MichaelBewley')
-    cp.load_cpc2labelid('cpc2labelid_wa.csv')
+    # cp = CPCFolderParser('real_cpc_data_to_import/WA_2011-2013')
+    # cp.load_cpc2labelid('cpc2labelid_wa.csv')
 
-    # cp = CPCFolderParser('real_cpc_data_to_import/Tas08')
-    # cp.load_cpc2labelid('cpc2labelid_tas08.csv')
+    cp = CPCFolderParser('real_cpc_data_to_import/Tas08')
+    cp.load_cpc2labelid('cpc2labelid_tas08.csv')
 
     # cp = CPCFolderParser('real_cpc_data_to_import/SEQld_2010', 'real_cpc_data_to_import/SEQld_2010/image_name_mapping.csv')
     # cp.load_cpc2labelid('cpc2labelid_qld2010.csv')
-
+    print cp.bigdf
     # cp = CPCFolderParser('real_cpc_data_to_import/NSW_2010-2012')
     # cp.load_cpc2labelid('cpc2labelid_nsw.csv')
 
     print('Loaded cpc2labelid file')
-    cp.load_image_pks_from_database()
-    print('Found linked images in database.')
-    cp.populate_database(user_id=61,
-                         project_id=1137,
-                         subset_name='cpc import test #1',
-                         subset_description='',
-                         annotation_set_name='CPC Imports',
-                         methodology=RANDOM_METHODOLOGY)
-    print('Finished populating database')
+    # cp.load_image_pks_from_database()
+    # print('Found linked images in database.')
+    # cp.populate_database(user_id=61,
+    #                      project_id=1137,
+    #                      subset_name='cpc import test #1',
+    #                      subset_description='',
+    #                      annotation_set_name='CPC Imports',
+    #                      methodology=RANDOM_METHODOLOGY)
+    # print('Finished populating database')
     # Add code to authorise appropriate user on project and subset
 
 
