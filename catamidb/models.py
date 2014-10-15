@@ -11,6 +11,7 @@ from django.contrib.auth.models import Group
 from django.contrib.gis.db import models
 from django.dispatch import receiver
 from guardian.shortcuts import assign
+import os
 from userena.signals import signup_complete
 import logging
 
@@ -226,11 +227,20 @@ class Image(models.Model):
     camera = models.ForeignKey(Camera)
     web_location = models.CharField(max_length=200)
     archive_location = models.CharField(max_length=200)
+
     objects = models.GeoManager()
+    image_name = models.CharField(max_length=27, default='')
 
     class Meta:
         """Defines Metaparameters of the model."""
         unique_together = (('pose', 'camera'), )
+
+    def _calc_image_name(self):
+        return os.path.splitext(os.path.basename(self.web_location))[0]
+
+    def save(self, *args, **kwargs):
+        self.image_name = self._calc_image_name()
+        super(Image, self).save(*args, **kwargs)
 
 
 class ScientificMeasurementTypeManager(models.Manager):
