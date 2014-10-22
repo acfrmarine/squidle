@@ -4,19 +4,26 @@ Created on 25/09/2012
 
 @author: mbew7729
 """
+import os
+import sys
+
+sys.path.append('/home/auv/git/squidle-playground')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "catamiPortal.settings")
+from django.conf import settings
+
+from django.contrib.auth.models import User
 from libxml2mod import name
 import logging
-import os
+
 import csv
 
 import pandas as pd
 import numpy as np
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "catamiPortal.settings")
-from django.conf import settings
 import annotations.models
 from catamidb.models import Image
 from collection.models import Collection
+from collection.authorization import apply_collection_permissions
 
 POINTINDEX = 'point_index'
 CPCFOLDER = 'cpc_folder'
@@ -55,6 +62,7 @@ class CPCFolderParser:
     def __init__(self, folder_path, image_name_remapping_file=None):
         self.bigdf = self.parse_files(folder_path, image_name_remapping_file)
         self.image_name_remapping_file = image_name_remapping_file
+        self.folder_path = folder_path
 
     @staticmethod
     def parse_files(folder_path, image_name_remapping_file):
@@ -109,7 +117,9 @@ class CPCFolderParser:
         all_pts = len(bigdf)
         bigdf = bigdf[bigdf.label_id.astype(str) != 'DO_NOT_IMPORT']
         if len(bigdf) < all_pts:
-            logging.warn('Discarding {} points (tagged as "DO_NOT_IMPORT"). {} points remaining.'.format(all_pts - len(bigdf), len(bigdf)))
+            logging.warn(
+                'Discarding {} points (tagged as "DO_NOT_IMPORT"). {} points remaining.'.format(all_pts - len(bigdf),
+                                                                                                len(bigdf)))
 
         annotations_missing_label_ids = bigdf[bigdf.label_id.isnull()]
         if len(annotations_missing_label_ids) > 0:
@@ -161,33 +171,33 @@ class CPCFolderParser:
         self.image_q = image_q
         return image_q
 
-    def populate_database(self, user_id, project_id, subset_name='Imported CPC Data', subset_description='',
+    def populate_database(self, user, project, subset_name='Imported CPC Data', subset_description='',
                           annotation_set_name='CPC Imports', methodology=RANDOM_METHODOLOGY):
-        subset = Collection(
+        subset = Collection.objects.get_or_create(
             name=subset_name,
             description=subset_description,
-            owner_id=user_id,
-            is_locked=False,
-            parent_id=project_id,
-            creation_info="CPC labels apply to {} images".format(self.image_q.count())
-        )
+            owner=user,
+            parent=project,
+            creation_info="Imported CPC labels",
+            is_locked=False
+        )[0]
         subset.save()
         subset.images.add(*list(self.image_q))
+        apply_collection_permissions(user=user, collection=subset)
 
         cpc_counts_per_image = self.bigdf.groupby('image_name').label_number.count()
-        cpc_counts = set(cpc_counts_per_image.values)
-        if len(cpc_counts) > 1:
-            cpc_count = cpc_counts.median()
-            logging.warn('CPC files do not all have the same number of counts per image')
-            raise Exception('Images have a varying number of annotations, including: {}'.format(cpc_counts))
+        cpc_count_hist = pd.DataFrame(cpc_counts_per_image).groupby(0).count()[0]
+        if len(cpc_count_hist) > 1:
+            cpc_count = cpc_count_hist.argmax()
+            logging.warn('CPC files do not all have the same number of counts per image: {}'.format(cpc_count_hist))
         else:
-            cpc_count = list(cpc_counts)[0]
+            cpc_count = cpc_count_hist.values[0]
 
-        point_annotation_set = annotations.models.PointAnnotationSet(name=annotation_set_name,
-                                                                     owner_id=user_id,
-                                                                     collection=subset,
-                                                                     count=cpc_count,
-                                                                     methodology=methodology)
+        point_annotation_set = annotations.models.PointAnnotationSet.objects.get_or_create(name=annotation_set_name,
+                                                                                           owner=user,
+                                                                                           collection=subset,
+                                                                                           count=cpc_count,
+                                                                                           methodology=methodology)[0]
         point_annotation_set.save()
 
         point_annotations = []
@@ -201,7 +211,7 @@ class CPCFolderParser:
                     level=0,
                     image_id=self.bigdf.pk.iloc[i],
                     label_id=self.bigdf.label_id.iloc[i],
-                    labeller_id=user_id
+                    labeller=user
                 )
             )
         annotations.models.PointAnnotation.objects.bulk_create(point_annotations)
@@ -262,51 +272,69 @@ class CPCFileParser:
 
 
 if __name__ == '__main__':
-    # cp = CPCFolderParser('real_cpc_data_to_import/WA_2011-2013')
-    # cp.load_cpc2labelid('cpc2labelid_wa.csv')
+    user = User.objects.get(id=61)
+    proj = Collection.objects.get_or_create(
+        name='AUSBEN2014',
+        description='Australian',
+        owner=user,
+        creation_info="Imported CPC labels",
+        is_locked=False
+    )[0]
+    proj.save()
+    apply_collection_permissions(user=user, collection=proj)
+
+    parser_list = []
+    cp = CPCFolderParser('real_cpc_data_to_import/SEQld_2010', 'real_cpc_data_to_import/SEQld_2010/image_name_mapping.csv')
+    cp.load_cpc2labelid('cpc2labelid_qld2010.csv')
+    parser_list.append(cp)
+
+    cp = CPCFolderParser('real_cpc_data_to_import/WA_2011-2013')
+    cp.load_cpc2labelid('cpc2labelid_wa.csv')
+    parser_list.append(cp)
 
     cp = CPCFolderParser('real_cpc_data_to_import/Tas08')
     cp.load_cpc2labelid('cpc2labelid_tas08.csv')
+    parser_list.append(cp)
 
-    # cp = CPCFolderParser('real_cpc_data_to_import/SEQld_2010', 'real_cpc_data_to_import/SEQld_2010/image_name_mapping.csv')
-    # cp.load_cpc2labelid('cpc2labelid_qld2010.csv')
-    print cp.bigdf
-    # cp = CPCFolderParser('real_cpc_data_to_import/NSW_2010-2012')
-    # cp.load_cpc2labelid('cpc2labelid_nsw.csv')
+    cp = CPCFolderParser('real_cpc_data_to_import/NSW_2010-2012')
+    cp.load_cpc2labelid('cpc2labelid_nsw.csv')
+    parser_list.append(cp)
 
-    print('Loaded cpc2labelid file')
-    # cp.load_image_pks_from_database()
-    # print('Found linked images in database.')
-    # cp.populate_database(user_id=61,
-    #                      project_id=1137,
-    #                      subset_name='cpc import test #1',
-    #                      subset_description='',
-    #                      annotation_set_name='CPC Imports',
-    #                      methodology=RANDOM_METHODOLOGY)
-    # print('Finished populating database')
-    # Add code to authorise appropriate user on project and subset
+    for cp in parser_list:
+        print('Loaded cpc2labelid file')
+        cp.load_image_pks_from_database()
+        print('Found linked images in database.')
+        campaign_name = os.path.split(cp.folder_path)[-1]
+        cp.populate_database(user=user,
+                             project=proj,
+                             subset_name=campaign_name,
+                             subset_description='',
+                             annotation_set_name=campaign_name,
+                             methodology=RANDOM_METHODOLOGY)
+        print('Finished populating database')
 
 
-    # Code to generate caab2labelid files. NB: BE CAREFUL RUNNING THIS, most of them require some manual editing
-    # afterwards.
-    # for g in ['nsw', 'qld2010', 'tas08', 'wa2011']:
-    # g = 'tas08'
-    # cpc2caab = pd.read_csv('cpc2caab_{}.csv'.format(g))
-    # caab2labelid = pd.read_csv('caab2labelid.csv')
-    # caab2labelid.caab_code = caab2labelid.caab_code.astype('str')
-    # df = pd.merge(cpc2caab, caab2labelid, on='caab_code', how='left').set_index('cpc_code')
-    # df.to_csv('cpc2labelid_{}.csv'.format(g), float_format='%.f')
-    #
-    # unmatched = df.loc[df.label_id.isnull()]
-    # print(g)
-    # print(unmatched)
-    #
-    # import annotations.models as m
-    # new_caab = m.AnnotationCode(
-    # caab_code=10000917,
-    # cpc_code='SPCC',
-    #     point_colour='FFFF33',
-    #     code_name="Sponges: Crusts: Creeping / ramose",
-    #     description="",
-    #     parent=m.AnnotationCode.objects.get(caab_code=10000901),
-    # )
+        # Code to generate caab2labelid files. NB: BE CAREFUL RUNNING THIS, most of them require some manual editing
+        # afterwards.
+        # for g in ['nsw', 'qld2010', 'tas08', 'wa2011']:
+        # g = 'tas08'
+        # cpc2caab = pd.read_csv('cpc2caab_{}.csv'.format(g))
+        # caab2labelid = pd.read_csv('caab2labelid.csv')
+        # caab2labelid.caab_code = caab2labelid.caab_code.astype('str')
+        # df = pd.merge(cpc2caab, caab2labelid, on='caab_code', how='left').set_index('cpc_code')
+        # df.to_csv('cpc2labelid_{}.csv'.format(g), float_format='%.f')
+        #
+        # unmatched = df.loc[df.label_id.isnull()]
+        # print(g)
+        # print(unmatched)
+        #
+        # import annotations.models as m
+        # new_caab = m.AnnotationCode(
+        # id=658,
+        # caab_code=10000917,
+        # cpc_code='SPCC',
+        # point_colour='FFFF33',
+        # code_name="Sponges: Crusts: Creeping / ramose",
+        # description="",
+        #     parent=m.AnnotationCode.objects.get(caab_code=10000901),
+        # )
