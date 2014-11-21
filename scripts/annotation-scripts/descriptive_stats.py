@@ -1,3 +1,5 @@
+from django.contrib.gis.geos import GEOSGeometry
+
 __author__ = 'mbewley'
 import os
 import sys
@@ -9,8 +11,8 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "catamiPortal.settings")
 from django.conf import settings
 
 from collection.models import Collection
-from annotations.models import PointAnnotationSet, PointAnnotation
-from catamidb.models import Deployment, Image
+from annotations.models import PointAnnotationSet, PointAnnotation, AnnotationCode
+from catamidb.models import Deployment, Image, Pose, ScientificPoseMeasurement
 
 dataset = Collection.objects.get(name__exact='AUSBEN2014')
 print dataset
@@ -23,18 +25,43 @@ import pandas as pd
 
 
 def points2df(points):
-    df = pd.DataFrame(list(points.values('image__image_name', 'x', 'y', 'label', 'label__cpc_code',
-                                         'image__pose__depth',
-                                         'image__pose__date_time',
-                                         'image__pose__position',
-                                         'image__pose__deployment__short_name')))
-    df.rename(columns={'image__image_name': 'image_name',
-                       'label__cpc_code': 'code',
-                       'image__pose__depth': 'depth',
-                       'image__pose__date_time': 'date_time',
-                       'image__pose__position': 'position',
-                       'image__pose__deployment__short_name': 'deployment',},
+    df = pd.DataFrame(list(points.values(
+        'id', 'image__id', 'image__image_name', 'x', 'y', 'label', 'label__cpc_code',
+        'image__pose__depth',
+        'image__pose__date_time',
+        'image__pose__position',
+        'image__pose__deployment__short_name',
+        'image__pose__deployment__campaign__short_name')))
+    df.rename(columns={
+        'id': 'kpid',
+        'image__image_name': 'image_name',
+        'label__cpc_code': 'code',
+        'image__pose__depth': 'depth',
+        'image__pose__date_time': 'date_time',
+        'image__pose__position': 'position',
+        'image__pose__deployment__short_name': 'deployment',
+        'image__pose__deployment__campaign__short_name': 'campaign',
+    },
               inplace=True)
+    # Convert position to lat and lon
+    positions = df.position.apply(lambda s: GEOSGeometry(s))
+    df.pop('position')
+    df['latitude'] = positions.apply(lambda p: p[1])
+    df['longitude'] = positions.apply(lambda p: p[0])
+
+    df.set_index('kpid', inplace=True)
+
+    sm = ScientificPoseMeasurement.objects.all()
+    df2 = pd.DataFrame(list(sm.values('pose__image__id', 'measurement_type__display_name', 'value')))
+    df2.rename(columns={
+        'pose__image__id': 'image__id',
+        'measurement_type__display_name': 'measurement_type',
+    },
+               inplace=True)
+    df2 = df2.pivot('image__id', 'measurement_type', 'value')
+    df = df.join(df2, on='image__id')
+
+    df.rename(columns=dict((name, name.lower()) for name in df.columns), inplace=True)
     return df
 
 
@@ -44,47 +71,104 @@ def df2label_counts(df):
     return label_counts
 
 
-
-
 all_points = PointAnnotation.objects.filter(annotation_set__in=ann_sets)
 
 print 'Total number of cpc points:', all_points.count()
 
 all_df = points2df(all_points)
+all_df.to_csv('AUSBEN2014_all.csv')
 
 print(all_df.head(1).T)
 
+squidle_codes = AnnotationCode.objects.all()
 
-TEST_SET_FRAC = 0.15
-compositions = []
-all_labels = all_df.groupby('code').indices.keys()
-total_composition = pd.DataFrame(index=all_labels, columns=['train_freq', 'test_freq']).fillna(0)
+sys.path.append('/home/auv/git')
+import smartpy.classification.hierarchical as h
 
-for deployment, group, in all_df.groupby('deployment'):
-    print deployment
-    image_groups = group.groupby('image_name')
-    images = image_groups.indices.keys()
-    np.random.shuffle(images)
-    sep_ind = int(TEST_SET_FRAC*len(images))
-    train = pd.concat(image_groups.get_group(im) for im in images[sep_ind:])
-    test = pd.concat(image_groups.get_group(im) for im in images[:sep_ind])
-    train_composition = train.groupby('code').code.count()
-    test_composition = test.groupby('code').code.count()
-    composition = pd.concat([train_composition, test_composition],  axis=1)
-    composition.columns = ['train_freq', 'test_freq']
-    composition.sort('train_freq', ascending=False, inplace=True)
-    total_composition = total_composition + composition.loc[all_labels].fillna(0)
-    composition['deployment'] = deployment
-    compositions.append(composition)
+node_dic = {}
 
-compositions = pd.concat(compositions)
-compositions['test_fraction'] = compositions.test_freq / compositions.train_freq.astype('float')
-total_composition['test_fraction'] = total_composition.test_freq / total_composition.train_freq.astype('float')
-total_composition.sort('train_freq', ascending=False, inplace=True)
-print total_composition
+# Create a dictionary of all the nodes, as classificationtreenode objects.
+for sc in squidle_codes:
+    node_dic[sc.id] = h.ClassificationTreeNode(squidle_code=sc)
+
+# Go through the dictionary, setting parent and child nodes
+for code_id, node in node_dic.items():
+    parent_id = node.sq.parent_id
+    if parent_id is not None:
+        parent = node_dic[parent_id]
+        node.parent_node = parent
+        parent.child_nodes.append(node)
+
+# Get the root node, and check it's of the largest tree (catami):
+biggest_root = None
+tmp = 0
+for code_id, node in node_dic.items():
+    aroot = node.get_rootnode()
+    aroot_n = len([n for n in aroot])
+    if aroot_n > tmp:
+        biggest_root = aroot
+        tmp = aroot_n
+aroot.pretty_print_tree()
+#
+# aroot.calculate_node_point_counts(all_points)
+# s = aroot.json_dump_tree()
+# with open('catami.json', 'wb') as f:
+#     f.write(s)
+#
+#
+#
 
 
-    # print image_groups
+
+
+#
+#
+# TEST_SET_FRAC = 0.15
+# compositions = []
+# all_labels = all_df.groupby('code').indices.keys()
+# total_composition = pd.DataFrame(index=all_labels, columns=['train_freq', 'test_freq']).fillna(0)
+#
+# for deployment, group, in all_df.groupby('deployment'):
+# print deployment
+# image_groups = group.groupby('image_name')
+#     images = image_groups.indices.keys()
+#     np.random.shuffle(images)
+#     sep_ind = int(TEST_SET_FRAC*len(images))
+#     train = pd.concat(image_groups.get_group(im) for im in images[sep_ind:])
+#     test = pd.concat(image_groups.get_group(im) for im in images[:sep_ind])
+#     train_composition = train.groupby('code').code.count()
+#     test_composition = test.groupby('code').code.count()
+#     composition = pd.concat([train_composition, test_composition],  axis=1)
+#     composition.columns = ['train_freq', 'test_freq']
+#     composition.sort('train_freq', ascending=False, inplace=True)
+#     total_composition = total_composition + composition.loc[all_labels].fillna(0)
+#     composition['deployment'] = deployment
+#     compositions.append(composition)
+#
+# compositions = pd.concat(compositions)
+# compositions['test_fraction'] = compositions.test_freq / compositions.train_freq.astype('float')
+# total_composition['test_fraction'] = total_composition.test_freq / total_composition.train_freq.astype('float')
+# total_composition.sort('train_freq', ascending=False, inplace=True)
+# print total_composition
+
+
+# Export as per requirements of scientific data paper
+# Produce a triple histogram of each variable, split into 4 overlaid traces, coloured by region. Want:
+
+# Map of deployment locations
+# Top 5 labels (by percentage) for each region
+
+# Histograms:
+# Timestamp
+# Depth
+# Slope
+# Rugosity
+# Salinity
+# Temperature
+# Chlorophyll
+
+
+# print image_groups
 
 
 
