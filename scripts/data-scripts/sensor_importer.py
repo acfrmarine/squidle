@@ -57,8 +57,8 @@ def merge_poses_with_measurements(pose_df, meas_df):
 def populate_scientific_measurements(campaign_name, deployment_startswith, meas_type):
     deployments = cdb_models.Deployment.objects.filter(short_name__startswith=deployment_startswith,
                                                        campaign__short_name__exact=campaign_name)
-    for d in deployments:
-        print cdb_models.Campaign.objects.get(deployment__exact=d), d
+    # for d in deployments:
+    #     print cdb_models.Campaign.objects.get(deployment__exact=d), d
     # raw_input('About to import %s measurements for %d dives - last chance to abort!' % (meas_type.normalised_name,
     #                                                                                     deployments.count()))
     for deployment in deployments:
@@ -66,14 +66,14 @@ def populate_scientific_measurements(campaign_name, deployment_startswith, meas_
         existing_measurements = cdb_models.ScientificPoseMeasurement.objects.filter(pose__in=poses,
                                                                                     measurement_type__exact=meas_type)
         if existing_measurements.count() > 0:
-            logging.warn('Found %d measurements in deployment %s' % (existing_measurements.count(), deployment))
+            logging.info('Found %d measurements already in deployment %s' % (existing_measurements.count(), deployment))
 
             poses = poses.exclude(scientificposemeasurement__in=existing_measurements)
             if poses.count() == 0:
-                logging.warn('Skipping %s, as measurements are present for all poses' % deployment.short_name)
+                logging.info('Skipping %s, as measurements are present for all poses' % deployment.short_name)
                 continue
             else:
-                logging.warn('Continuing, inserting measurements on %d poses' % poses.count())
+                logging.info('Continuing, inserting measurements on %d poses' % poses.count())
 
         df = pd.DataFrame(list(poses.values(
             'id',
@@ -110,6 +110,9 @@ def populate_scientific_measurements(campaign_name, deployment_startswith, meas_
             import datetime
 
             hydro_dirs = filter(lambda s: s.startswith('hydro'), os.listdir(path_base))
+            if len(hydro_dirs) == 0:
+                logging.warn('Skipping %s, as no sensor data could be found' % deployment.short_name)
+                continue
             path = os.path.join(RELEASE, path_base, hydro_dirs[0])
             files = filter(lambda s: s.startswith('ct'), os.listdir(path))
             if len(hydro_dirs) == 1 & len(files) == 1 & os.path.isfile(os.path.join(path, files[0])):
@@ -137,4 +140,8 @@ def populate_scientific_measurements(campaign_name, deployment_startswith, meas_
         cdb_models.ScientificPoseMeasurement.objects.bulk_create(measurements)
 
 
-populate_scientific_measurements(campaign_name='Tasmania 2008', deployment_startswith='r20', meas_type=temperature)
+for campaign in ['Tasmania 2008', 'Port Stevens 2012', 'Western Australia 2011']:
+    for meas_type in [temperature, salinity]:
+        populate_scientific_measurements(campaign_name=campaign,
+                                         deployment_startswith='r20',
+                                         meas_type=meas_type)
