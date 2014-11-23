@@ -128,7 +128,7 @@ feature_extractor = de.LBPSquarePatchExtractor(
     points=(8, 16, 24),
     radii=(1, 2, 3),
     lbp_type='uniform',
-    colour_transform_func=pt.getGray,
+    colour_transform_func=lambda im: im.mean(axis=2),
     channels='rgb'
 )
 
