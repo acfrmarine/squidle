@@ -129,7 +129,7 @@ feature_extractor = de.LBPSquarePatchExtractor(
     radii=(1, 2, 3),
     lbp_type='uniform',
     colour_transform_func=pt.getGray,
-    channels='all'
+    channels='rgb'
 )
 
 features = feature_extractor.calculate_features(all_points[:100])
