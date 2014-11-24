@@ -128,8 +128,7 @@ feature_extractor = de.LBPSquarePatchExtractor(
     points=(8, 16, 24),
     radii=(1, 2, 3),
     lbp_type='uniform',
-    colour_transform_func=lambda im: im.mean(axis=2).reshape(im.shape[0], im.shape[1], np.newaxis),
-    #TODO: Fix current bug - dealing with taking mean reducing number of dimensions by 1.dcx
+    colour_transform_func=lambda im: im.mean(axis=2).reshape(im.shape[0], im.shape[1]),
     channels='rgb'
 )
 
