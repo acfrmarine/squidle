@@ -132,7 +132,7 @@ feature_extractor = de.LBPSquarePatchExtractor(
     channels='rgb'
 )
 
-features = feature_extractor.calculate_features(all_points[:100])
+features = feature_extractor.calculate_features(all_points[:10000])
 features.to_csv('sample_features.csv')
 
 # for node in aroot:
