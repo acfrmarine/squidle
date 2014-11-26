@@ -1,15 +1,22 @@
 from django.contrib.gis.geos import GEOSGeometry
 from os.path import join
 import logging
+from sklearn.grid_search import GridSearchCV
+from sklearn.linear_model import LogisticRegression
+
 
 __author__ = 'mbewley'
 import os
 import sys
-
+import logging
+# logging.root.setLevel(logging.DEBUG)
 import numpy as np
 
 sys.path.append('/home/auv/git/squidle-playground')
+sys.path.append('/home/auv/git')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "catamiPortal.settings")
+from smartpy.classification import classifiers
+from smartpy.featureextraction import descriptors
 from django.conf import settings
 
 from collection.models import Collection
@@ -132,8 +139,41 @@ feature_extractor = de.LBPSquarePatchExtractor(
     channels='rgb'
 )
 
-features = feature_extractor.calculate_features(all_points[:10000])
-features.to_csv('sample_features.csv')
+
+FEATURE_FILE = 'sample_features.csv'
+POINT_DATA = 'AUSBEN2014_all.csv'
+SAVE_DIR = '.'
+NJOBS = -1
+PARAMSELECTFOLDS = 3
+
+# features = feature_extractor.calculate_features(all_points)
+# features.to_csv('sample_features.csv')
+features = pd.read_csv(os.path.join(SAVE_DIR, FEATURE_FILE), index_col=[0,1,2])
+
+
+clf = GridSearchCV(
+    estimator=LogisticRegression(class_weight='auto'),
+    param_grid={'C': 10 ** np.arange(0, 4)},
+    scoring='f1',
+    n_jobs=NJOBS,
+    cv=PARAMSELECTFOLDS,
+    verbose=0)
+# clf = LogisticRegression(C=64, class_weight='auto')
+classifierModel = classifiers.ClassifierModel(sklearn_classifier=clf)
+
+
+point_data = pd.read_csv(os.path.join(SAVE_DIR, POINT_DATA))
+point_data = descriptors.xy2colrow(point_data, im_shape=[1024, 1360])
+point_data.set_index(['image__id', 'row', 'col'], inplace=True)
+
+
+for node in aroot:
+    node.set_save_dir(SAVE_DIR)
+    node.set_feature_file(FEATURE_FILE)
+    node.load_features()
+    node.set_classifier_model(clf)
+    # node.train_classifier(method='inclusive', training_set=)
+
 
 # for node in aroot:
 #     print node.sq.code_name
