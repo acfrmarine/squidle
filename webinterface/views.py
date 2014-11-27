@@ -333,7 +333,7 @@ def download_csv(request):
 
 
         if format=="rawdbdump" :
-            point_annotations = PointAnnotation.objects.filter(annotation_set=annotation).values('image_id',
+            point_annotations = PointAnnotation.objects.filter(annotation_set=annotation).values('image__id',
                                                                                                  'image__web_location',
                                                                                                  'x',
                                                                                                  'y',
@@ -359,7 +359,7 @@ def download_csv(request):
             pts_df.rename(columns=point_renames, inplace=True)
 
             # Group by image and point and aggregate modifiers, then reset indexes
-            pts_df = pts_df.groupby(['image_id', 'id']).aggregate({'modifiers': lambda x: ', '.join(x),
+            pts_df = pts_df.groupby(['image__id', 'id']).aggregate({'modifiers': lambda x: ', '.join(x),
                                                                    'name': lambda x: x.iat[0],
                                                                    'caab': lambda x: x.iat[0],
                                                                    'code': lambda x: x.iat[0],
@@ -367,13 +367,13 @@ def download_csv(request):
                                                                    'x': lambda x: x.iat[0],
                                                                    'y': lambda x: x.iat[0],
                                                                    'web_location': lambda x: x.iat[0],
-            }).delevel(['image_id', 'id'])
+            }).reset_index(['image__id', 'id'])
             pts_df.pop('id')  # remove point ID from output
             out_df = pts_df
             #return render_to_csv_response(point_annotations, filename=filename)
 
         else:
-            point_annotations = PointAnnotation.objects.filter(annotation_set=annotation).values('image_id',
+            point_annotations = PointAnnotation.objects.filter(annotation_set=annotation).values('image__id',
                                                                                                  #'x',
                                                                                                  #'y',
                                                                                                  'id',
@@ -398,17 +398,17 @@ def download_csv(request):
             pts_df.rename(columns=point_renames, inplace=True)
 
             # Group by image and point and aggregate modifiers, then reset indexes
-            pts_df = pts_df.groupby(['image_id', 'id']).aggregate({'modifiers': lambda x: ', '.join(x),
+            pts_df = pts_df.groupby(['image__id', 'id']).aggregate({'modifiers': lambda x: ', '.join(x),
                                                               'name': lambda x: x.iat[0],
                                                               'caab': lambda x: x.iat[0],
                                                               'code': lambda x: x.iat[0],
                                                               'label_id': lambda x: x.iat[0],
-                                                              }).delevel(['image_id', 'id'])
+                                                              }).reset_index(['image__id', 'id'])
             pts_df.pop('id')  # remove point ID from output
 
             # Get counts of common label/modifier combinations and aggregate rows
             rollups = ['name', 'caab', 'code', 'modifiers']
-            agg_pts_df = pts_df.groupby(['image_id'] + rollups).label_id.count().unstack(rollups)
+            agg_pts_df = pts_df.groupby(['image__id'] + rollups).label_id.count().unstack(rollups)
 
             # Sort class columns (transpose columns to rows then re-transpose to rows to columns)
             #agg_pts_df = agg_pts_df.T.sortlevel().T
@@ -442,7 +442,7 @@ def download_csv(request):
             # Create pandas data frame and rename columns
             image_df = pd.DataFrame(list(images))
             image_renames = {
-                'id': 'image_id',
+                'id': 'image__id',
                 'pose__date_time': 'date_time',
                 'pose__depth': 'depth',
                 'pose__position': 'position'
@@ -450,7 +450,7 @@ def download_csv(request):
             image_df.rename(columns=image_renames, inplace=True)
 
             # Set index
-            image_df.set_index('image_id', inplace=True)
+            image_df.set_index('image__id', inplace=True)
 
             # Convert position to lat and lon
             image_df['latitude'] = image_df.position.apply(lambda p: p[1])
@@ -459,8 +459,8 @@ def download_csv(request):
 
             # Join images and point label columns and prepare output
             out_df = image_df.join(agg_pts_df)
-            out_df.delevel('image_id', inplace=True)
-            out_df.set_index(['image_id', 'web_location', 'date_time', 'latitude', 'longitude', 'depth'], inplace=True)
+            out_df.reset_index('image__id', inplace=True)
+            out_df.set_index(['image__id', 'web_location', 'date_time', 'latitude', 'longitude', 'depth'], inplace=True)
             out_df.columns = pd.MultiIndex.from_tuples(out_df.columns, names=rollups)
 
 
@@ -494,7 +494,7 @@ def download_csv(request):
         # Create pandas data frame and rename columns
         image_df = pd.DataFrame(list(images))
         image_renames = {
-            'id': 'image_id',
+            'id': 'image__id',
             'pose__date_time': 'date_time',
             'pose__depth': 'depth',
             'pose__position': 'position'
@@ -502,7 +502,7 @@ def download_csv(request):
         image_df.rename(columns=image_renames, inplace=True)
 
         # Set index
-        image_df.set_index('image_id', inplace=True)
+        image_df.set_index('image__id', inplace=True)
 
         # Convert position to lat and lon
         image_df['latitude'] = image_df.position.apply(lambda p: p[1])
@@ -716,13 +716,13 @@ def image_view(request):
                               RequestContext(request))
 
 
-def image_annotate(request, image_id):
+def image_annotate(request, image__id):
     apistring = request.GET.get("apistring", "")
     offset = request.GET.get("offset", "")
     annotation_id = request.GET.get("asid", "")
 
     return render_to_response('webinterface/imageview.html', #imageannotate.html',
-                              {"image_id": image_id, "offset": offset, "apistring": apistring,
+                              {"image__id": image__id, "offset": offset, "apistring": apistring,
                                "annotation_id": annotation_id},
                               RequestContext(request))
 
