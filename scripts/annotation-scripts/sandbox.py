@@ -1,32 +1,65 @@
+from django.contrib.gis.geos import GEOSGeometry
+from sklearn.grid_search import GridSearchCV
+from sklearn.linear_model import LogisticRegression
+
+
 __author__ = 'mbewley'
+import os
+import sys
+import logging
+# logging.root.setLevel(logging.DEBUG)
+import numpy as np
+
+sys.path.append('/home/auv/git/squidle-playground')
+sys.path.append('/home/auv/git')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "catamiPortal.settings")
+from smartpy.classification import classifiers
+from smartpy.featureextraction import descriptors
+
+from collection.models import Collection
+from annotations.models import PointAnnotationSet, PointAnnotation, AnnotationCode
+
+dataset = Collection.objects.get(name__exact='AUSBEN2014')
+print dataset
+
+subsets = Collection.objects.filter(parent__exact=dataset)
+ann_sets = PointAnnotationSet.objects.filter(collection__in=subsets)
+print ann_sets
 
 import pandas as pd
-import re
-# df = pd.read_csv('cpc2caab_nsw.csv')
-#
-#
-# def descrip2caab(s):
-# m = re.search('\([0-9]*\)', s)
-#     if m:
-#         caab_code = m.group(0).strip('()')
-#         return caab_code
-#
-# caab_codes = df.caab_descrip.apply(lambda s: descrip2caab(s))
-# df['caab_code'] = caab_codes
-# null_inds = df.caab_code.isnull()
-# df.caab_code.loc[null_inds] = df.loc[null_inds].caab_descrip
-# df.pop('caab_descrip')
-# df.set_index('cpc_code', inplace=True)
-# df.to_csv('cpc2caab_nsw.csv')
 
-import pandas as pd
-import psycopg2
 
-conn = psycopg2.connect("dbname='catamidb' user='auv' host='eddy' password='euro!trip'")
-query = "SELECT caab_code, code_name FROM annotations_annotationcode ORDER BY code_name"
-dbcodes = pd.read_sql(query, conn)
-print dbcodes.head()
-for g in ['nsw', 'qld2010', 'tas08', 'wa2011']:
-    df = pd.read_csv('cpc2caab_%s.csv' % g)
-    df = pd.merge(df, dbcodes, on='caab_code').set_index('cpc_code')
-    df.to_csv('cpc_caab_output_%s.csv' % g)
+squidle_codes = AnnotationCode.objects.all()
+
+sys.path.append('/home/auv/git')
+import smartpy.classification.hierarchical as h
+
+node_dic = {}
+
+# Create a dictionary of all the nodes, as classificationtreenode objects.
+for sc in squidle_codes:
+    node_dic[sc.id] = h.ClassificationTreeNode(squidle_code=sc)
+
+# Go through the dictionary, setting parent and child nodes
+for code_id, node in node_dic.items():
+    parent_id = node.parent_id
+    if parent_id is not None:
+        parent = node_dic[parent_id]
+        node.parent_node = parent
+        parent.child_nodes.append(node)
+
+# Get the root node, and check it's of the largest tree (catami):
+biggest_root = None
+tmp = 0
+for code_id, node in node_dic.items():
+    aroot = node.get_rootnode()
+    aroot_n = len([n for n in aroot])
+    if aroot_n > tmp:
+        biggest_root = aroot
+        tmp = aroot_n
+aroot.pretty_print_tree()
+aroot
+
+from sklearn.externals import joblib
+print 'Dumping tree to disk'
+joblib.dump(aroot, 'tree.pkl')

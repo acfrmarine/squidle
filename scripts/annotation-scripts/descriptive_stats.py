@@ -93,9 +93,8 @@ for sc in squidle_codes:
 
 # Go through the dictionary, setting parent and child nodes
 for code_id, node in node_dic.items():
-    parent_id = node.sq.parent_id
-    if parent_id is not None:
-        parent = node_dic[parent_id]
+    if node.parent_id is not None:
+        parent = node_dic[node.parent_id]
         node.parent_node = parent
         parent.child_nodes.append(node)
 
@@ -109,6 +108,9 @@ for code_id, node in node_dic.items():
         biggest_root = aroot
         tmp = aroot_n
 aroot.pretty_print_tree()
+
+
+
 #
 # aroot.calculate_node_point_counts(all_points)
 # s = aroot.json_dump_tree()
