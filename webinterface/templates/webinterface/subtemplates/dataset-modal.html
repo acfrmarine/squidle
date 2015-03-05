@@ -4,7 +4,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <a type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
-                <h4><i class="icon-th-list"></i> Datasets | create or edit datasets</h4>
+                <h4><i class="icon-th-list"></i> Datasets | create, edit or select a dataset to load</h4>
 {#                <ul class="breadcrumb" id="dataset-modal-cursel">#}
 {#                    <li>Select a dataset below:</li>#}
 {#                </ul>#}
@@ -335,8 +335,11 @@ Tag-example browser modal
         $infopanel.next(".dataset-info").prepend($infopanel.next(".dataset-info").data("createlink"));
 
         // If current selection is out of view, scroll it to the centre
-        if ($el.position().top > $panel.height() || $el.position().top < 0)
-            $panel.scrollTop($panel.scrollTop() + $el.position().top - $panel.height() / 2 + $el.height() / 2); // scroll to position
+        setTimeout(function() { // slight delay in order to wait for modal to load
+            //console.log($el, $el.position().top, $panel.height());
+            if ($el.position().top > $panel.height() || $el.position().top < 0)
+                $panel.scrollTop($panel.scrollTop() + $el.position().top - $panel.height() / 2 + $el.height() / 2); // scroll to position
+        }, 500);
 
 
         // Handle warning message when selecting datasets

@@ -674,7 +674,7 @@ function updateTagContainer(containerid) {
 
 function prependInfoMsg(el) {
     if (!curstate.asid)
-        $(el).prepend('<div class="alert alert-danger"><b>WARNING:</b> no Annotation run selected. To select/create an annotation run, click <a href="#data-modal" data-toggle="modal">here</a> or click the "DATA" button on the top bar.</div>');
+        $(el).prepend('<div class="alert alert-danger"><b>WARNING:</b> no Annotationset selected. To select/create an annotation run, click <a href="#dataset-modal" data-toggle="modal">here</a> or use the dropdown menu at the top.</div>');
 }
 
 function setFullHeight(el,parent) {
