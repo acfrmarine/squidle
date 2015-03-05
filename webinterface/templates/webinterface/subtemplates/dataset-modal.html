@@ -170,81 +170,7 @@ New Annotationset modal
 </div>
 
 
-<!-------------------------------------------------------------
-Sign in modal
--------------------------------------------------------------->
-<div id="sign-in-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="TaskModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4><i class="icon-user"></i> Signin</h4>
-            </div>
 
-            <div class="modal-body">
-                <form action="" method="post" id="aform" class="form-horizontal" >
-                    <span id="errors"></span>
-                    {% csrf_token %}
-                    {{ aform|as_bootstrap }}
-
-                    <br>
-                    <a class="btn btn-default" aria-hidden="true" data-dismiss="modal" onclick="clear_form(this.form);">Cancel</a>
-                    <a class="btn btn-info" aria-hidden="true" data-dismiss="modal" onclick="$('#sign-up-modal').modal('show');"><i class="icon-plus"></i> Create new account</a>
-                    <input class="btn btn-primary pull-right" type="submit" value="Sign in" onclick="send_signin('aform'); return false;">
-                </form>
-
-            </div>
-        </div>
-    </div>
-</div>
-
-{% load i18n %}
-
-
-<div id="sign-up-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="TaskModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4><i class="icon-user"></i> Sign up</h4>
-            </div>
-
-            <div class="modal-body">
-
-                <form action="" method="post" id="suform" class="form-horizontal" >
-                    <span id="errors"></span>
-                    {% csrf_token %}
-                    {{ suform|as_bootstrap }}
-                    <br>
-                    <a class="btn btn-default" aria-hidden="true" data-dismiss="modal" onclick="clear_form(this.form);">Cancel</a>
-                    <input class="btn btn-primary pull-right" type="submit" value="Sign up" onclick="send_signup('suform');return false;">
-                </form>
-
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="user-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4><i class="icon-user"></i> My account</h4>
-            </div>
-            <div class="modal-body">
-                <br><br><b>NOTE:</b> this modal will contain user information and account tools<br><br>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-info">Edit account details</button>
-                <a href="{% url "userena_signout" %}" class="btn btn-danger">Log out!</a>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 <!-------------------------------------------------------------
@@ -551,60 +477,6 @@ Tag-example browser modal
         }
     }
 
-
-    function form_errors(haserror, form_id, description) {
-        //console.log(form_id);
-        var selobj = $("#"+form_id+'>span.errors');
-        if (typeof description == 'undefined') description = "<b>Error:</b> please correct the inputs highlighted below.";
-        $("#"+form_id+" button[type='submit']").removeAttr('disabled');
-        $("#"+form_id+" input").removeClass("error");
-        if (haserror) {
-            selobj.addClass('alert alert-error');
-            selobj.html(description);
-        } else {
-            selobj.removeClass('alert alert-error');
-            selobj.html('');
-        }
-    }
-    function clear_form (form) {
-        var form_id = $(form).attr("id");
-        form_errors(false, form_id);
-        $(form).find('input').removeClass('error');
-        $(form).find('select').removeClass('error');
-        form.reset();
-    }
-
-    function send_signin(){
-        Dajaxice.webinterface.signin_form(Dajax.process,{'form':$('#aform').serialize(true)});
-        return false;
-    }
-    function send_signup(){
-        Dajaxice.webinterface.signup_form(Dajax.process,{'form':$('#suform').serialize(true)});
-        return false;
-    }
-    function update_sign_in(id,username) {
-        curstate.userid = id;
-        curstate.isloggedin = (id) ? true : false;
-        curstate.username = username;
-
-        // execute functions requiring login
-        for (var i=0 ; i< curstate.loginfuncs.length ; i++) {
-            curstate.loginfuncs[i]();
-        }
-
-
-        if (curstate.isloggedin) {
-            $('#sign-in-status').html('<li class="icon-text"><a title="Currently signed in" href="#user-modal" data-toggle="modal"><i class="icon-user"></i>'+username+'</a></li>');
-            //$('#sign-in-status').append('<li class="icon-text"><a title="Sign out!" href="{% url "userena_signout" %}"><i class="icon-ban-circle"></i>Log&nbsp;out</a></li>');
-        }
-        else {
-            $('#sign-in-status').html('<li class="icon-text"><a title="Sign in" href="#sign-in-modal" data-toggle="modal"><i class="icon-user ui-state-error-text"></i>Log&nbsp;in</a></li>');
-        }
-        $('#sign-in-status>li>a').tooltip({trigger:'hover',placement:'bottom'});
-
-        $('#sign-in-modal').modal('hide');
-        $('#sign-up-modal').modal('hide');
-    }
 
     function newproject() {
         window.location.assign('/viewproject');

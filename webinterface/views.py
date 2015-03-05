@@ -9,6 +9,8 @@ from guardian.shortcuts import get_objects_for_user
 from waffle.decorators import waffle_switch
 from django.core.urlresolvers import reverse
 import logging
+import os
+import distutils.core
 
 #for the geoserver proxy
 from django.views.decorators.csrf import csrf_exempt
@@ -65,12 +67,7 @@ def get_objects_for_user_wrapper(user, permission_array):
     return get_objects_for_user(user, permission_array)
 
 
-#front page and zones
-def index(request):
-    """@brief returns root catami html
-    """
-    #return HttpResponseRedirect('viewproject')
-    return render_to_response('webinterface/index.html', RequestContext(request))
+
 
 # Info pages
 def faq(request):
@@ -109,6 +106,7 @@ def explore(request):
 def explore_campaign(request, campaign_id):
     return render_to_response('webinterface/explore.html', {},
                               context_instance=RequestContext(request))
+
 
 # Collection pages
 @waffle_switch('Collections')
@@ -263,6 +261,33 @@ def view_project(request):
 
 
 # NEW VIEWS #########################################################
+#front page and zones
+def index(request):
+    """@brief returns root catami html
+    """
+    #return HttpResponseRedirect('viewproject')
+    citizen_project = ""
+    request.session['citizen_project']=citizen_project
+    return citizenscience_index(request, citizen_project)
+
+def citizenscience_index(request, citizen_project):
+    request.session['citizen_project'] = citizen_project
+    citizen_dir = '{}/static/citizenscience_projects/'.format(os.path.dirname(os.path.realpath(__file__)))
+    if not os.path.isdir('{}{}'.format(citizen_dir, citizen_project)):
+        distutils.dir_util.copy_tree('{}template'.format(citizen_dir),'{}{}'.format(citizen_dir, citizen_project))
+    return render_to_response('webinterface/index.html', {
+        "citizen_project": citizen_project,
+        "aform": AuthenticationForm(),
+        "suform": SignupForm()},
+        RequestContext(request))
+
+def citizenscience_getlabels(request):
+    citizen_project = request.GET.get("project")
+    dirpath = os.path.dirname(os.path.realpath(__file__))
+    labels = open('{}/static/citizenscience_projects/{}/labels.json'.format(dirpath,citizen_project))
+    return HttpResponse(labels, mimetype='application/json')
+
+
 def project(request):
     # check for optional get parameters
     # This avoids needing to specify a new url and view for each optional parameter
@@ -271,13 +296,17 @@ def project(request):
     asid = request.GET.get("asid", "0") if request.GET.get("asid", "") else 0
     imid = request.GET.get("imid", "0") if request.GET.get("imid", "") else 0
 
+    if 'citizen_project' in request.session.keys() :
+        citizen_project = request.session['citizen_project']
+    else :
+        citizen_project = ""
     # Forms
     # clform = CreateCollectionForm()
     # wsform = CreateWorksetForm(initial={'c_id': clid, 'method': 'random', 'n': 100, 'start_ind': 0, 'stop_ind': 0})
     # ulwsform = CreateWorksetFromImagelist(initial={'c_id': clid})
     # asform = CreatePointAnnotationSet(initial={'count': 50})
-    aform = AuthenticationForm()
-    suform = SignupForm()
+    # aform = AuthenticationForm()
+    # suform = SignupForm()
 
     return render_to_response('webinterface/viewproject.html',
                               #    return render_to_response('webinterface/viewcollectionalternative.html',
@@ -289,33 +318,11 @@ def project(request):
                                "wsform": dataset_forms["wsform"](initial={'c_id': clid, 'method': 'random', 'n': 100, 'start_ind': 0, 'stop_ind': 0}),
                                "ulwsform": dataset_forms["ulwsform"](initial={'c_id': clid}),
                                "asform": dataset_forms["asform"](initial={'count': 50}),
-                               "aform": aform,
-                               "suform": suform,
+                               "aform": AuthenticationForm(),
+                               "suform": SignupForm(),
+                               "citizen_project": citizen_project,
                                "GEOSERVER_URL": settings.GEOSERVER_URL},
                               RequestContext(request))
-
-######################################################################
-## NEW MAPS ##########################################################
-#def map(request):
-#
-#    # check for optional get parameters
-#    # This avoids needing to specify a new url and view for each optional parameter
-#    clid = request.GET.get("clid", "0") if request.GET.get("clid", "") else 0
-#    wsid = request.GET.get("wsid", "0") if request.GET.get("wsid", "") else 0
-#    asid = request.GET.get("asid", "0") if request.GET.get("asid", "") else 0
-#    imid = request.GET.get("imid", "0") if request.GET.get("imid", "") else 0
-#
-#    return render_to_response('webinterface/viewmap.html',
-#        {'clid': clid,
-#         'wsid': wsid,
-#         "asid": asid,
-#         "imid": imid,
-#         'WMS_URL': settings.WMS_URL,
-#         'WMS_layer_name': settings.WMS_LAYER_NAME},
-#        RequestContext(request))
-
-#####################################################################
-
 
 def download_csv(request):
     #from djqscsv import render_to_csv_response

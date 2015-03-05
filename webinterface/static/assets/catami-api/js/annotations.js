@@ -4,7 +4,8 @@ function AnnotationAPI (usrsettings) {
         api_pts_baseurl: '/api/dev/point_annotation/',
         linkurl: ""
     }
-    if (usrsettings.settings) $.extend(settings, usrsettings.settings);  // override defaults with input arguments
+    if (usrsettings) $.extend(settings, usrsettings);  // override defaults with input arguments
+    //console.log(settings);
 
     var config = {
         theme: 'as-default',
@@ -50,7 +51,8 @@ function AnnotationAPI (usrsettings) {
 
 
     this.getTags = function (filter, outputelement, update_container_fnc) {
-        filter = ((typeof filter !== 'undefined') ? '?' + filter : '');
+        var delim = (settings.api_tag_baseurl.indexOf('?') === -1) ? "?" : "&";
+        filter = ((typeof filter !== 'undefined') ? delim + filter : '');
         var parent = this;
         var list = '';
         //console.log(settings.api_tag_baseurl + filter);

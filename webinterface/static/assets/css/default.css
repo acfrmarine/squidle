@@ -313,12 +313,18 @@ input.error:after, select.error:after{
     font-weight: bold;
 }
 
+/*
 #content .section {
     width: 25%;
     padding: 20px;
     float: left;
     color: #FFF;
     display: block;
+}
+*/
+
+#content .row {
+    padding: 20px;
 }
 
 #content .section i.section-head {
@@ -330,7 +336,7 @@ input.error:after, select.error:after{
     display: block;
 }
 
-#content .section a.well:hover {
+#content .section a.well:hover, #content .section a:hover {
     text-decoration: none;
     background-color: #424242;
 }
@@ -339,6 +345,9 @@ input.error:after, select.error:after{
     display: block;
     position: relative;
     padding-bottom: 40px;
+}
+#content .section .emph {
+    background-color: #815577;
 }
 
 #content .section .section-moreinfo {

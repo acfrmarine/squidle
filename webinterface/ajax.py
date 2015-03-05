@@ -9,6 +9,8 @@ from collection.models import Collection, CollectionManager
 from django.contrib.auth import authenticate, login, logout
 from userena.forms import AuthenticationForm, SignupForm
 from userena import settings as userena_settings
+from django.contrib.auth.models import Group
+
 
 @dajaxice_register
 def signin_form(request, form):
@@ -49,8 +51,12 @@ def signup_form(request, form):
     form = SignupForm(deserialize_form(form))
     form_id = 'suform'
 
+    #print form
+
+
     try:
         dajax.remove_css_class('#'+form_id+' input', 'error')
+        #dajax.script('console.log("TEST")')
         dajax.script('form_errors(false,"{0}");'.format(form_id))
         if not form.is_valid():
             raise Exception('Processing error')
@@ -63,6 +69,15 @@ def signup_form(request, form):
         user = authenticate(identification=identification, password=password)
         if user.is_active:
             print "Authenticated!!!"
+            # Add to public group
+            public_group, created = Group.objects.get_or_create(name='Public')
+            user.groups.add(public_group)
+            # Add to special citizen science group (if session variable exists)
+            if 'citizen_project' in request.session.keys() :
+                group = request.session['citizen_project']
+                print "Adding to GROUP: {}".format(group)
+                special_group, created = Group.objects.get_or_create(name=group)
+                user.groups.add(special_group)
             login(request, user)
             dajax.script('update_sign_in({0},"{1}");'.format(user.id,user.username))
 
@@ -75,7 +90,7 @@ def signup_form(request, form):
         for error in form.errors:
             dajax.add_css_class('#'+form_id+' #id_%s' % error, 'error')
 
-    print dajax.json()
+    #print dajax.json()
 
     return dajax.json()
 

@@ -70,6 +70,9 @@ urlpatterns = patterns(
 
     url(r'^get_extents$','get_extents'),
 
+    url(r'^citizenscience/(?P<citizen_project>\w+)/$', 'citizenscience_index', name='index'),
+    url(r'^citizenscience_labels$','citizenscience_getlabels'),
+
     #####################################################################
 
     #Collection Object Views

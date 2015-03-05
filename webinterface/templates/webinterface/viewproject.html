@@ -24,13 +24,14 @@
         <li title="View Map" class="icon-text"><a id="map-nav" href="#map" data-toggle="tab" ><i class="icon-globe"></i>Map</a></li>
         <li title="View Images for selected dataset" class="icon-text"><a id="image-nav" href="#thm" data-toggle="tab"><i class="icon-picture"></i>Images</a></li>
         <!--<li title="Manage Datasets" class="icon-text"><a href="javascript:void(0)" onclick="$('#data-modal').modal('show')"><i class="icon-th-list"></i>Data</a></li>-->
+        {% if citizen_project == "" %}
         <li title="Data tools for selected dataset" class="icon-text"><a id="data-nav" href="#datatab" data-toggle="tab"><i class="icon-th-list"></i>Data</a></li>
         <li class="dropdown"><a id="datasel" href="#" class="dropdown-toggle" data-toggle="dropdown">No dataset selected <b class="caret"></b></a>
             <ul class="dropdown-menu">
                 <li><a href="javascript:void(0)" onclick="$('#dataset-modal').modal('show')"><i class="icon-th-list"></i>
                     Manage / select datasets</a></li>
                 <li><a href="javascript:void(0)" onclick="window.location.assign('/viewproject')"><i class="icon-plus"></i> Create new Project</a></li>
-{#TODO: needs to update clid and wsid in workset modals before these will work... curently only updates when management modal is opened#}
+                {#TODO: needs to update clid and wsid in workset modals before these will work... curently only updates when management modal is opened#}
                 {% if clid %}
                     <li><a href='javascript:void(0)' data-toggle='modal' data-target='#dataset-new-workset'><i class="icon-plus"></i> Create new Subset in current Project</a></li>
                 {% endif %}
@@ -39,6 +40,9 @@
                 {% endif %}
             </ul>
         </li>
+        {% else %}
+        <li class="dropdown"><a id="datasel" href="#" class="dropdown-toggle" data-toggle="dropdown">PROJECT: {{ citizen_project }}</a></li>
+        {% endif %}
     </ul>
 
     <ul id="sign-in-status"  class="nav navbar-nav navbar-right">
@@ -50,6 +54,7 @@
         <li title="Help/How to"><a href="#help-modal" data-toggle="modal" ><i class="icon-question-sign"></i></a></li>
     </ul>
 </nav>
+
 
 
 <div class="container">
@@ -76,8 +81,7 @@
 
 
 
-
-{#    {% include "webinterface/subtemplates/data-modals.html" %}#}
+    {% include "webinterface/subtemplates/useraccount-modal.html" %}
     {% include "webinterface/subtemplates/dataset-modal.html" %}
     {% include "webinterface/subtemplates/help-modal.html" %}
 {% endblock %}
@@ -122,7 +126,8 @@
         isloggedin: ('{{ user.is_authenticated }}'=='True'),
         userid: ('{{ user.id }}'=='None') ? 0 : {{ user.id }},
         username: '{{ user.username }}',
-        loginfuncs: []   // functions to execute when a user is logged in
+        loginfuncs: [],   // functions to execute when a user is logged in
+        citizen_project: '{{ citizen_project }}'
     }
 
     var filters = {
@@ -132,6 +137,11 @@
 
     var thlist = new ImagesAPI({});
     var apiobj = new SquidleAPI({});
+    var tagsettings = {};
+    if (curstate.citizen_project != '')
+        tagsettings = {api_tag_baseurl: "citizenscience_labels?project="+curstate.citizen_project};
+
+    var taglist = new AnnotationAPI(tagsettings);
 
     var clobj = new CollectionAPI({config: {format: '<b>{name}</b><br>Created by <b>{username}</b> on <b>{creation_date}</b>.<br>{creation_info}<br><em>{description}</em>'}});
     var asobj = new AnnotationSetAPI({config:{format: '<b>{name}</b><br>Created by <b>{owner}</b><br>Count: {count}<br>Method: {methodology}'}});
@@ -160,6 +170,21 @@
         // do stuff on resize
         for (var i= 0;i<resizefuncs.length;i++)
             resizefuncs[i]();
+    });
+
+    // Add function to update the UI once logged in
+    curstate.loginfuncs.push(function(id, username) {
+        curstate.userid = id;
+        curstate.isloggedin = (id) ? true : false;
+        curstate.username = username;
+        if (curstate.isloggedin) {
+            $('#sign-in-status').html('<li class="icon-text"><a title="Currently signed in" href="#user-modal" data-toggle="modal"><i class="icon-user"></i>'+username+'</a></li>');
+            //$('#sign-in-status').append('<li class="icon-text"><a title="Sign out!" href="{% url "userena_signout" %}"><i class="icon-ban-circle"></i>Log&nbsp;out</a></li>');
+        }
+        else {
+            $('#sign-in-status').html('<li class="icon-text"><a title="Sign in" href="#sign-in-modal" data-toggle="modal"><i class="icon-user ui-state-error-text"></i>Log&nbsp;in</a></li>');
+        }
+        $('#sign-in-status>li>a').tooltip({trigger:'hover',placement:'bottom'});
     });
 
 
@@ -334,8 +359,6 @@
 
 
     });
-
-
 
 
     function showLoader() {

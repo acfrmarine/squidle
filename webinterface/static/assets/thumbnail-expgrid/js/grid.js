@@ -311,7 +311,8 @@ function Grid (grid, globalstate) {
                 'Tools',
                 'icon-wrench',
                 [   {icon:'icon-zoom-in', content:'zoom',onshow:initZoom},
-                    {icon:'icon-adjust', content:'tools'}],
+                //    {icon:'icon-adjust', content:'tools'}
+                ],
                 '#btn-imgtools',
                 'og-sidepane',
                 {top:10, left:10},
@@ -335,8 +336,9 @@ function Grid (grid, globalstate) {
                 [   {icon:'icon-align-left', content:'Tag list', onshow:createTaglist},
                     {icon:'icon-th',content:'Tag grid', onshow:createTaggrid},
                     {icon:'icon-picture',content:'Tags in this image', onshow:updateTagTally},
-                    {icon:'icon-sitemap',content:'Graphical tags: not implemented yet'},
-                    {icon:'icon-star', content:'My favorite tags: not implemented yet'}],
+                    //{icon:'icon-sitemap',content:'Graphical tags: not implemented yet'},
+                    //{icon:'icon-star', content:'My favorite tags: not implemented yet'}
+                ],
                 '#btn-imganot',
                 'og-sidepane',
                 {top:100, left:10},
@@ -1171,7 +1173,7 @@ function isScrolledIntoView(elem)
  * Annotation points
  *****************************************************************************/
 
-var taglist = new AnnotationAPI({});
+
 
 
 

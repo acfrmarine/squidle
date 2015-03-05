@@ -118,6 +118,36 @@ function hide_busy() {
 }
 
 
+
+/**********************************************************************
+ * Dealing with FORMS and errors
+ **********************************************************************/
+
+function form_errors(haserror, form_id, description) {
+    //console.log(form_id);
+    var selobj = $("#"+form_id+'>span.errors');
+    if (typeof description == 'undefined') description = "<b>Error:</b> please correct the inputs highlighted below.";
+    $("#"+form_id+" button[type='submit']").removeAttr('disabled');
+    $("#"+form_id+" input").removeClass("error");
+    if (haserror) {
+        //console.log("ERROR:",description);
+        selobj.addClass('alert alert-error');
+        selobj.html(description);
+    } else {
+        selobj.removeClass('alert alert-error');
+        selobj.html('');
+    }
+}
+function clear_form (form) {
+    var form_id = $(form).attr("id");
+    form_errors(false, form_id);
+    $(form).find('input').removeClass('error');
+    $(form).find('select').removeClass('error');
+    form.reset();
+}
+
+
+
 /**********************************************************************
  * Check if an element is scrolled into view
  **********************************************************************/

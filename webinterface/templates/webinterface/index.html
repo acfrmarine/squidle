@@ -49,47 +49,60 @@
 
         </div>
         <div id="sitetitle">
+            {% if citizen_project %}
+            <p>project#: {{ citizen_project }}</p>
+            {% endif %}
             <h1><i class="icon-edit-sign"></i> squidle</h1>
             <p>explore &#8226; annotate &#8226; interpret &#8226; marine imagery</p>
         </div>
     </div>
 
+    {% if citizen_project == "" %}
     <div class="alert alert-danger" style="margin: 0; position: absolute; top:0; left: 0; width: 100%; opacity:0.8; filter:alpha(opacity=80); z-index:999;"><b><i class="icon-cogs"></i>
         UNDER CONSTRUCTION:</b> Please note that this website is currently under construction.
     </div>
-
+    {% endif %}
 
     <div id="content" class="container" style="background-color: #131313; margin: 0; padding: 0;">
-    <div class="section-row">
-        <div class="section">
-            <a class="well" href="{% url "webinterface.views.project" %}">
-                <i class="icon-tags section-head"> Get started!</i>
-                Jump straight to exploring and working with the data using the map and annotation interface.
-                <span class="section-moreinfo"><i class="icon-chevron-sign-right"></i> Click to start</span>
+    <div class="row">
+        <div class="col-sm-3 section">
+            <a class="well" href="#" onclick="showInfoModal('about.html','About the Project')">
+                <i class="icon-info-sign section-head"> About the Project</i>
+                What is this all about? Who is involved? Why should you care?
+                <span class="section-moreinfo"><i class="icon-chevron-sign-right"></i> Click for more</span>
             </a>
         </div>
-        <div class="section">
-            <a class="well" href="#" onclick="showInfoModal('{{ STATIC_URL }}html/howto.html', 'How to...')">
+        <div class="col-sm-3 section">
+            <a class="well" href="#" onclick="showInfoModal('howto.html', 'How to...')">
                 <i class="icon-hand-up section-head"> How to...</i>
                 Tutorials and videos that provide useful tips on how to use the system.
                 <span class="section-moreinfo"><i class="icon-chevron-sign-right"></i> Click for more</span>
             </a>
         </div>
-        <div class="section">
-            <a class="well" href="#" onclick="showInfoModal('{{ STATIC_URL }}html/about-sqidle.html','About squidle')">
-                <i class="icon-info-sign section-head"> About</i>
-                What is squidle, why does it exist and who made it?
+        <div class="col-sm-3 section">
+            <a class="well" href="#" onclick="showInfoModal('what-next.html','What next?')">
+                <i class="icon-magic section-head"> What next?</i>
+                Learn about some of the magic that this project is working towards. Automated tools designed to make life easier.
                 <span class="section-moreinfo"><i class="icon-chevron-sign-right"></i> Click for more</span>
             </a>
+        </div>
+        <div class="col-sm-3 section">
+            {% if user.is_authenticated %}
+            <a class="well emph" href="{% url "webinterface.views.project" %}">
+                <i class="icon-tags section-head"> Get started!</i>
+                Welcome back {{ user.username }}!<br>
+                Jump straight to working with the data using the annotation interface.
+                <span class="section-moreinfo"><i class="icon-chevron-sign-right"></i> Click to start</span>
+            </a>
+            {% else %}
+            <a class="well emph" href="{% url "webinterface.views.project" %}">
+                <i class="icon-tags section-head"> <b>Get started!</b></i>
+                Jump straight to exploring and working with the data using the map and annotation interface.
+                <span class="section-moreinfo"><i class="icon-chevron-sign-right"></i> Click to start</span>
+            </a>
+            {% endif %}
         </div>
 
-        <div class="section">
-            <a class="well" href="#" onclick="showInfoModal('{{ STATIC_URL }}html/machine-learning-intro.html','The Magic!')">
-                <i class="icon-magic section-head"> The Magic</i>
-                Learn about some of the magic that happens under the hood. Machine learning, clustering, classification and data mining designed to make life easier.
-                <span class="section-moreinfo"><i class="icon-chevron-sign-right"></i> Click for more</span>
-            </a>
-        </div>
     </div>
     </div>
 
@@ -120,7 +133,26 @@
 
 
 {% block add_script %}
+<script src="{{ STATIC_URL }}assets/js/default.js"></script>
+{% include "webinterface/subtemplates/useraccount-modal.html" %}
 <script>
+
+    var curstate = {
+        isloggedin: ('{{ user.is_authenticated }}'=='True'),
+        userid: ('{{ user.id }}'=='None') ? 0 : {{ user.id }},
+        username: '{{ user.username }}',
+        loginfuncs: [],   // functions to execute when a user is logged in
+        citizen_project: '{{ citizen_project }}',
+        htmldir: '{{ STATIC_URL }}html/'
+    }
+
+
+    curstate.loginfuncs.push(function(id, username) {
+        alert("LOGGED IN")
+    });
+
+    if (curstate.citizen_project != "") curstate.htmldir = '{{ STATIC_URL }}citizenscience_projects/'+curstate.citizen_project+'/';
+
     $(document).ready(function () {
         $('#banner-carousel .item').rand(1).addClass('active');
         setHeights();
@@ -136,7 +168,7 @@
 
     function showInfoModal(src,title) {
         $('#info-modal .modal-body').html('');
-        $('#info-modal .modal-body').load(src);
+        $('#info-modal .modal-body').load(curstate.htmldir+src);
         $('#info-modal .modal-title').html(title);
         $('#info-modal').modal('show');
     }

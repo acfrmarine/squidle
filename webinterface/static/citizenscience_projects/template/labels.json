@@ -1,0 +1,85 @@
+{"meta": {
+    "limit": 20,
+    "next": "",
+    "offset": 0,
+    "previous": null,
+    "total_count": 7
+}, "objects": [
+    {
+        "caab_code": "11280000",
+        "code_name": "Cnidaria: Colonial anemones: Corallimorphs",
+        "cpc_code": "CNCAC",
+        "description": "No description.",
+        "id": 164,
+        "parent": "/api/dev/annotation_code/162/",
+        "parent_id": 162,
+        "point_colour": "FF0000",
+        "resource_uri": "/api/dev/annotation_code/164/"
+    },
+    {
+        "caab_code": "70000103",
+        "code_name": "Bacterial mats: Grey: Medium cover",
+        "cpc_code": "BMGM",
+        "description": "No description",
+        "id": 286,
+        "parent": "/api/dev/annotation_code/228/",
+        "parent_id": 228,
+        "point_colour": "FFCC00",
+        "resource_uri": "/api/dev/annotation_code/286/"
+    },
+    {
+        "caab_code": "70000902",
+        "code_name": "Bacterial mats: White: Light cover",
+        "cpc_code": "BMWL",
+        "description": "No description.",
+        "id": 275,
+        "parent": "/api/dev/annotation_code/228/",
+        "parent_id": 228,
+        "point_colour": "FFCC00",
+        "resource_uri": "/api/dev/annotation_code/275/"
+    },
+    {
+        "caab_code": "00000003",
+        "code_name": "Unknown",
+        "cpc_code": "UNK",
+        "description": "No description.",
+        "id": 655,
+        "parent": "/api/dev/annotation_code/1/",
+        "parent_id": 1,
+        "point_colour": "CCCCCC",
+        "resource_uri": "/api/dev/annotation_code/655/"
+    },
+    {
+        "caab_code": "81002003",
+        "code_name": "Bioturbation: Waste casts: Round casts",
+        "cpc_code": "BIWR",
+        "description": "No description.",
+        "id": 179,
+        "parent": "/api/dev/annotation_code/175/",
+        "parent_id": 175,
+        "point_colour": "006600",
+        "resource_uri": "/api/dev/annotation_code/179/"
+    },
+    {
+        "caab_code": "81001008",
+        "code_name": "Bioturbation: Dwelling traces: Vertical burrow",
+        "cpc_code": "BIDV",
+        "description": "No description.",
+        "id": 206,
+        "parent": "/api/dev/annotation_code/205/",
+        "parent_id": 205,
+        "point_colour": "006600",
+        "resource_uri": "/api/dev/annotation_code/206/"
+    },
+    {
+        "caab_code": "70000903",
+        "code_name": "Bacterial mats: Orange: Light cover",
+        "cpc_code": "BMORL",
+        "description": "No description.",
+        "id": 276,
+        "parent": "/api/dev/annotation_code/228/",
+        "parent_id": 228,
+        "point_colour": "FFCC00",
+        "resource_uri": "/api/dev/annotation_code/276/"
+    }
+]}
