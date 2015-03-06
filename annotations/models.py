@@ -58,6 +58,8 @@ class Annotation(models.Model):
     image = models.ForeignKey('catamidb.Image')
     label = models.ForeignKey('annotations.AnnotationCode')
     labeller = models.ForeignKey(User)
+    mtime = models.DateTimeField(auto_now=True, null=True)
+    ctime = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         """Defines Metaparameters of the model."""
@@ -176,11 +178,11 @@ class PointAnnotationSetManager(models.Manager):
 
         apply_pointannotationset_permissions(user, annotation_set)
         #TODO apply permissions
-        #authorization.apply_collection_permissions(user, collection)
-        print annotation_set
+        #authorization.apply_pointannotationset_permissions(user, annotation_set)
+        #print annotation_set
         asid = annotation_set.id
         msg = "Your Annotation set has been created successfully!"
-        print asid
+        #print asid
         return asid, msg
 
 
