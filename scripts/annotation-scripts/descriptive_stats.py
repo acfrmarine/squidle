@@ -14,7 +14,8 @@ from collection.models import Collection
 from annotations.models import PointAnnotationSet, PointAnnotation, AnnotationCode
 from catamidb.models import Deployment, Image, Pose, ScientificPoseMeasurement
 
-dataset = Collection.objects.get(name__exact='AUSBEN2014')
+project_name = 'AUSBEN2014_TRAIN'
+dataset = Collection.objects.get(name__exact=project_name)
 print dataset
 
 subsets = Collection.objects.filter(parent__exact=dataset)
@@ -25,6 +26,9 @@ import pandas as pd
 
 
 def points2df(points):
+    if points.count() == 0:
+        return None
+
     df = pd.DataFrame(list(points.values(
         'id', 'image__id', 'image__image_name', 'x', 'y', 'label', 'label__cpc_code',
         'image__pose__depth',
@@ -76,38 +80,39 @@ all_points = PointAnnotation.objects.filter(annotation_set__in=ann_sets)
 print 'Total number of cpc points:', all_points.count()
 
 all_df = points2df(all_points)
-all_df.to_csv('AUSBEN2014_all.csv')
 
-print(all_df.head(1).T)
-
-squidle_codes = AnnotationCode.objects.all()
-
-sys.path.append('/home/auv/git')
-import smartpy.classification.hierarchical as h
-
-node_dic = {}
-
-# Create a dictionary of all the nodes, as classificationtreenode objects.
-for sc in squidle_codes:
-    node_dic[sc.id] = h.ClassificationTreeNode(squidle_code=sc)
-
-# Go through the dictionary, setting parent and child nodes
-for code_id, node in node_dic.items():
-    if node.parent_id is not None:
-        parent = node_dic[node.parent_id]
-        node.parent_node = parent
-        parent.child_nodes.append(node)
-
-# Get the root node, and check it's of the largest tree (catami):
-biggest_root = None
-tmp = 0
-for code_id, node in node_dic.items():
-    aroot = node.get_rootnode()
-    aroot_n = len([n for n in aroot])
-    if aroot_n > tmp:
-        biggest_root = aroot
-        tmp = aroot_n
-aroot.pretty_print_tree()
+all_df.to_csv('{}.csv'.format(project_name))
+#
+# print(all_df.head(1).T)
+#
+# squidle_codes = AnnotationCode.objects.all()
+#
+# sys.path.append('/home/auv/git')
+# import smartpy.classification.hierarchical as h
+#
+# node_dic = {}
+#
+# # Create a dictionary of all the nodes, as classificationtreenode objects.
+# for sc in squidle_codes:
+#     node_dic[sc.id] = h.ClassificationTreeNode(squidle_code=sc)
+#
+# # Go through the dictionary, setting parent and child nodes
+# for code_id, node in node_dic.items():
+#     if node.parent_id is not None:
+#         parent = node_dic[node.parent_id]
+#         node.parent_node = parent
+#         parent.child_nodes.append(node)
+#
+# # Get the root node, and check it's of the largest tree (catami):
+# biggest_root = None
+# tmp = 0
+# for code_id, node in node_dic.items():
+#     aroot = node.get_rootnode()
+#     aroot_n = len([n for n in aroot])
+#     if aroot_n > tmp:
+#         biggest_root = aroot
+#         tmp = aroot_n
+# aroot.pretty_print_tree()
 
 
 

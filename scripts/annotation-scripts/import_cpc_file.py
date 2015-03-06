@@ -6,6 +6,7 @@ Created on 25/09/2012
 """
 import os
 import sys
+from sklearn.cross_validation import train_test_split
 
 sys.path.append('/home/auv/git/squidle-playground')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "catamiPortal.settings")
@@ -117,7 +118,7 @@ class CPCFolderParser:
         all_pts = len(bigdf)
         bigdf = bigdf[bigdf.label_id.astype(str) != 'DO_NOT_IMPORT']
         if len(bigdf) < all_pts:
-            logging.warn(
+            logging.warning(
                 'Discarding {} points (tagged as "DO_NOT_IMPORT"). {} points remaining.'.format(all_pts - len(bigdf),
                                                                                                 len(bigdf)))
 
@@ -161,8 +162,8 @@ class CPCFolderParser:
         bigdf = pd.merge(self.bigdf, dbimages, on='image_name', how='left')
         missing_images = bigdf[bigdf.pk.isnull()]
         if len(missing_images) > 0:
-            logging.warn('The following images were not found in the database:')
-            logging.warn(missing_images)
+            logging.warning('The following images were not found in the database:')
+            logging.warning(missing_images)
             missing_images.groupby('image_name').aggregate({'pk': lambda pk: pk.iloc[0]}).to_csv('missing_images.csv')
             raise ValueError("{} of the images were not found in the database. Have they been imported?".format(
                 len(image_list) - n_im))
@@ -173,25 +174,55 @@ class CPCFolderParser:
 
     def populate_database(self, user, project, subset_name='Imported CPC Data', subset_description='',
                           annotation_set_name='CPC Imports', methodology=RANDOM_METHODOLOGY):
+
+        images = pd.DataFrame(list(self.image_q.values('id', 'image_name'))).set_index('id')
+
+        # Automatically create a test project, and test subset that mirrors the main one, to move the test labels to.
+        project_test = Collection.objects.get_or_create(
+            name='AUSBEN2014_TEST',
+            description='Australian benthic annotation test set',
+            owner=user,
+            creation_info="Imported CPC labels",
+            is_locked=False
+        )[0]
+        project_test.save()
+        apply_collection_permissions(user=user, collection=project_test)
+
+        # The subset of the main project to put these labels (e.g. geographic region)
         subset = Collection.objects.get_or_create(
             name=subset_name,
             description=subset_description,
             owner=user,
-            parent=project,
+            parent=proj,
             creation_info="Imported CPC labels",
             is_locked=False
         )[0]
         subset.save()
-        subset.images.add(*list(self.image_q))
-        apply_collection_permissions(user=user, collection=subset)
 
-        cpc_counts_per_image = self.bigdf.groupby('image_name').label_number.count()
-        cpc_count_hist = pd.DataFrame(cpc_counts_per_image).groupby(0).count()[0]
+        # The equivalent subset, in the test project
+        subset_test = Collection.objects.get_or_create(
+            name=subset_name,
+            description=subset_description,
+            owner=user,
+            parent=project_test,
+            creation_info="Imported CPC labels",
+            is_locked=False
+        )[0]
+        subset_test.save()
+
+        subset.images.add(*images.index)
+        apply_collection_permissions(user=user, collection=subset)
+        apply_collection_permissions(user=user, collection=subset_test)
+
+        img_counts = self.bigdf.image_name.value_counts()
+        cpc_count_hist = img_counts.value_counts()
         if len(cpc_count_hist) > 1:
             cpc_count = cpc_count_hist.argmax()
-            logging.warn('CPC files do not all have the same number of counts per image: {}'.format(cpc_count_hist))
+            logging.warning('CPC files do not all have the same number of counts per image: {}'.format(cpc_count_hist))
+            logging.warning('The following images did not have %d points labelled:' % cpc_count)
+            logging.warning(img_counts[img_counts != cpc_count])
         else:
-            cpc_count = cpc_count_hist.values[0]
+            cpc_count = cpc_count_hist.index[0]
 
         point_annotation_set = annotations.models.PointAnnotationSet.objects.get_or_create(name=annotation_set_name,
                                                                                            owner=user,
@@ -199,21 +230,34 @@ class CPCFolderParser:
                                                                                            count=cpc_count,
                                                                                            methodology=methodology)[0]
         point_annotation_set.save()
+        point_annotation_set_test = \
+            annotations.models.PointAnnotationSet.objects.get_or_create(name=annotation_set_name,
+                                                                        owner=user,
+                                                                        collection=subset_test,
+                                                                        count=cpc_count,
+                                                                        methodology=methodology)[0]
 
+        point_annotation_set_test.save()
+
+        im_bigdf = self.bigdf.set_index('pk')
         point_annotations = []
-        # TODO: Confirm x and y are the correct way around.
-        for i in range(len(self.bigdf)):
+        bigdf_train = im_bigdf.loc[images.index]
+        for idx, row in bigdf_train.iterrows():
             point_annotations.append(
                 annotations.models.PointAnnotation(
                     annotation_set=point_annotation_set,
-                    x=self.bigdf.fraction_from_image_left.iloc[i],
-                    y=self.bigdf.fraction_from_image_top.iloc[i],
+                    x=row.fraction_from_image_left,
+                    y=row.fraction_from_image_top,
                     level=0,
-                    image_id=self.bigdf.pk.iloc[i],
-                    label_id=self.bigdf.label_id.iloc[i],
+                    image_id=idx,
+                    label_id=row.label_id,
                     labeller=user
                 )
             )
+        existing_annotations = annotations.models.PointAnnotation.objects.filter(
+            annotation_set__exact=point_annotation_set)
+        print "already found %d annotations for training set. Will delete and reimport" % existing_annotations.count()
+        existing_annotations.delete()
         annotations.models.PointAnnotation.objects.bulk_create(point_annotations)
 
 
@@ -274,8 +318,8 @@ class CPCFileParser:
 if __name__ == '__main__':
     user = User.objects.get(id=61)
     proj = Collection.objects.get_or_create(
-        name='AUSBEN2014',
-        description='Australian',
+        name='AUSBEN2014_TRAIN',
+        description='Australian benthic annotation training set',
         owner=user,
         creation_info="Imported CPC labels",
         is_locked=False
@@ -284,23 +328,54 @@ if __name__ == '__main__':
     apply_collection_permissions(user=user, collection=proj)
 
     parser_list = []
-    cp = CPCFolderParser('real_cpc_data_to_import/SEQld_2010', 'real_cpc_data_to_import/SEQld_2010/image_name_mapping.csv')
-    cp.load_cpc2labelid('cpc2labelid_qld2010.csv')
-    parser_list.append(cp)
 
-    cp = CPCFolderParser('real_cpc_data_to_import/WA_2011-2013')
-    cp.load_cpc2labelid('cpc2labelid_wa.csv')
-    parser_list.append(cp)
+    # For Tasmanian data, need to fudge it so we copy classes from an excel file, because UNIDxx was only identified as UNID in the original cpc files.
+    cp = CPCFolderParser('real_cpc_data_to_import/public/Tasmania 2008')
+    tas_classes = pd.read_csv('AUV_ScoredData_ByPoints_Long.csv')
+    tas_classes['label_number'] = tas_classes.Point_No.apply(lambda s: s[2:]).astype(int)+4
+    tas_classes['image_name'] = tas_classes.IMAGE_NAME_LEFT.apply(lambda s: os.path.splitext(s)[0])
+    bigdf = pd.merge(cp.bigdf, tas_classes[['image_name', 'label_number', 'Species_Code']],
+                     on=['image_name', 'label_number'], how='left')
+    unid = bigdf.cpc_code == 'UNID'
+    bigdf.loc[unid, 'cpc_code'] = bigdf.loc[unid, 'Species_Code'].fillna('UNID')
+    bigdf.pop('Species_Code')
 
-    cp = CPCFolderParser('real_cpc_data_to_import/Tas08')
+    cp.bigdf = bigdf
     cp.load_cpc2labelid('cpc2labelid_tas08.csv')
     parser_list.append(cp)
 
-    cp = CPCFolderParser('real_cpc_data_to_import/NSW_2010-2012')
+    cp = CPCFolderParser('real_cpc_data_to_import/public/New South Wales 2010')
     cp.load_cpc2labelid('cpc2labelid_nsw.csv')
     parser_list.append(cp)
 
+    cp = CPCFolderParser('real_cpc_data_to_import/public/New South Wales 2012')
+    cp.load_cpc2labelid('cpc2labelid_nsw.csv')
+    parser_list.append(cp)
+
+    cp = CPCFolderParser('real_cpc_data_to_import/public/South East Queensland 2010',
+                         'real_cpc_data_to_import/public/South East Queensland 2010/image_name_mapping.csv')
+    cp.load_cpc2labelid('cpc2labelid_qld2010.csv')
+    parser_list.append(cp)
+
+    cp = CPCFolderParser('real_cpc_data_to_import/public/Western Australia 2011')
+    cp.load_cpc2labelid('cpc2labelid_wa.csv')
+    parser_list.append(cp)
+
+    cp = CPCFolderParser('real_cpc_data_to_import/public/Western Australia 2012')
+    cp.load_cpc2labelid('cpc2labelid_wa.csv')
+    parser_list.append(cp)
+    #TODO: Seems to be a large bunch of images with e.g. 51 or 49 cpc points. Investigate.
+
+    cp = CPCFolderParser('real_cpc_data_to_import/public/Western Australia 2013')
+    cp.load_cpc2labelid('cpc2labelid_wa.csv')
+    parser_list.append(cp)
+
+
+
+
+
     for cp in parser_list:
+        print(cp.folder_path)
         print('Loaded cpc2labelid file')
         cp.load_image_pks_from_database()
         print('Found linked images in database.')
@@ -336,5 +411,5 @@ if __name__ == '__main__':
         # point_colour='FFFF33',
         # code_name="Sponges: Crusts: Creeping / ramose",
         # description="",
-        #     parent=m.AnnotationCode.objects.get(caab_code=10000901),
+        # parent=m.AnnotationCode.objects.get(caab_code=10000901),
         # )
