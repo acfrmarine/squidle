@@ -35,7 +35,7 @@
                             data-api-format="<div class='panel-item'><span class='name' >{name}</span></div>"
                             data-api-resource="collection"
                             data-api-filter="limit=0&parent__isnull=True&order_by=name"
-                            data-api-detailformat="<div class='create'>{creation_info}</div><div class='desc'>{description}</div><i class='badge icon-th-list' title='Dataset type'> Project</i> <i class='badge icon-group' title='Sharing'> {access}</i> <i class='badge icon-user' title='User'> {username}</i> <i class='badge icon-calendar' title='Creation date'> {creation_date}</i>"
+                            data-api-detailformat="<div class='create'>ID: {id}. {creation_info}</div><div class='desc'>{description}</div><i class='badge icon-th-list' title='Dataset type'> Project</i> <i class='badge icon-group' title='Sharing'> {access}</i> <i class='badge icon-user' title='User'> {username}</i> <i class='badge icon-calendar' title='Creation date'> {creation_date}</i>"
                             data-emptymsg="<div class='dataset-empty'>There are not Projects to show. Create a Project using the button above.</div>"
                             data-infopanel-id="#project-info-panel"
                             data-msfield = "clid"
@@ -44,7 +44,7 @@
                             data-api-format="<div class='panel-item'><span class='name' >{name}</span></div>"
                             data-api-resource="collection"
                             data-api-filter="limit=0&order_by=name&parent="
-                            data-api-detailformat="<div class='create'>{creation_info}</div><div class='desc'>{description}</div><i class='badge icon-th-list' title='Dataset type'> Subset</i> <i class='badge icon-group' title='Sharing'> {access}</i> <i class='badge icon-user' title='User'> {username}</i> <i class='badge icon-calendar' title='Creation date'> {creation_date}</i>"
+                            data-api-detailformat="<div class='create'>ID: {id}. {creation_info}</div><div class='desc'>{description}</div><i class='badge icon-th-list' title='Dataset type'> Subset</i> <i class='badge icon-group' title='Sharing'> {access}</i> <i class='badge icon-user' title='User'> {username}</i> <i class='badge icon-calendar' title='Creation date'> {creation_date}</i>"
                             data-infopanel-id="#subset-info-panel"
                             data-msfield = "wsid"
                             ></div>
@@ -52,7 +52,7 @@
                             data-api-format="<div class='panel-item'><span class='name' >{name}</span></div>"
                             data-api-resource="point_annotation_set"
                             data-api-filter="limit=0&order_by=name&collection="
-                            data-api-detailformat="{count} points"
+                            data-api-detailformat="ID: {id}. {count} points"
                             data-infopanel-id="#annotation-info-panel"
                             data-msfield = "asid"
                             ></div>

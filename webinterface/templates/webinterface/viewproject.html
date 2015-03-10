@@ -41,7 +41,11 @@
             </ul>
         </li>
         {% else %}
-        <li class="dropdown"><a id="datasel" href="#" class="dropdown-toggle" data-toggle="dropdown">PROJECT: {{ citizen_project }}</a></li>
+        <li class="dropdown"><a id="datasel" href="#" class="dropdown-toggle" data-toggle="dropdown">PROJECT: {{ citizen_project }}</a>
+        <ul class="dropdown-menu">
+            <li><a href="javascript:void(0)" onclick="window.history.back()"><i class="icon-home"></i> Back to home page</a></li>
+            <li><a href="viewproject" ><i class="icon-refresh"></i> Reload a new dataset</a></li>
+        </ul></li>
         {% endif %}
     </ul>
 
@@ -58,10 +62,12 @@
 
 
 <div class="container">
-	<div id="alert-construction" class="alert alert-danger alert-dismissable" style="position:absolute; top:0; left:0px; z-index:999; visibility: hidden;" >
+	{% if citizen_project == "" %}
+    <div id="alert-construction" class="alert alert-danger alert-dismissable" style="position:absolute; top:0; left:0px; z-index:999; visibility: hidden;" >
 		<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 		<i class="icon-cogs"></i>&nbsp;<b>UNDER CONSTRUCTION:</b> Click <a href="#info-modal" data-toggle="modal" class="alert-link">here</a> for more information.
 	</div>
+    {% endif %}
     <div id="main-tabs"  class="tab-content">
         <div class="tab-pane tab-main" id="map" data-isloaded="">
         	<div id='deployment-map'></div>
@@ -82,7 +88,9 @@
 
 
     {% include "webinterface/subtemplates/useraccount-modal.html" %}
-    {% include "webinterface/subtemplates/dataset-modal.html" %}
+{#    {% if citizen_project == "" %}#}
+        {% include "webinterface/subtemplates/dataset-modal.html" %}
+{#    {% endif %}#}
     {% include "webinterface/subtemplates/help-modal.html" %}
 {% endblock %}
 
@@ -139,7 +147,7 @@
     var apiobj = new SquidleAPI({});
     var tagsettings = {};
     if (curstate.citizen_project != '')
-        tagsettings = {api_tag_baseurl: "citizenscience_labels?project="+curstate.citizen_project};
+        tagsettings = {api_tag_baseurl: "citizenscience_labels"};
 
     var taglist = new AnnotationAPI(tagsettings);
 
@@ -227,6 +235,9 @@
             if (curstate.asid) $('#datasel').append(' <b style="color:red">|</b> ' + apiobj.getJsItems("point_annotation_set","?id="+curstate.asid)[0].name);
             $('#datasel').append(' <b class="caret"></b>');
         }
+
+        if (curstate.citizen_project != "")
+            runTutorial(60);
 
         // Do stuff on showing of map
         $('#map-nav').on('shown.bs.tab', function (e) {
@@ -353,7 +364,8 @@
             if ($(window.location.hash).hasClass('tab-pane')) $('li > a[href="' + window.location.hash + '"]').tab('show');
             //else if ($(window.location.hash).hasClass('modal')) $(window.location.hash).modal('show');
         } else {
-            $('#map-nav').tab('show'); // default to map tab
+            if (curstate.citizen_project == "") $('#map-nav').tab('show'); // default to map tab
+            else  $('#image-nav').tab('show');
         }
 
 
@@ -370,6 +382,80 @@
         $('#nav-icon').removeClass('icon-spin icon-spinner red').addClass('icon-edit-sign');
         thmgrid.$loaderdiv.html('');
     }
+
+
+
+    function runTutorial(retry) {
+        var tuteitems = [
+            {
+                el: $(".annotation-point:nth-of-type(1)"),
+                options: {content: "Click this point to select it. <b>Note the zoom tool on the bottom right helps to magnify the point under your cursor.</b>", placement: "right", html: true}
+            },{
+                el: $("#imganot"),
+                options: {content:"Click a label that best describes what is directly under the point you just clicked.",placement:"left",html:true}
+            },{
+                el: $(".annotation-point:nth-of-type(2)"),
+                options: {content:"Click another point to label",placement:"right",html:true}
+            },{
+                el: $("#imganot"),
+                options: {content:"Choose the label that best describes what is directly under this new point.",placement:"left",html:true}
+            },{
+                el: $(".og-active-thm>.og-annotation-count"),
+                options: {content:"This number indicates how many points you have labeled in the image. Keep labeling points until the number turns green. <b>Label another point to hide this hint.</b>",placement:"right",html:true},
+                clearel: $("body")
+            },{
+                el: $('#btn-nextim'),
+                options: {content: "<b>Congratulations!</b> You have labeled all the points in this image, click the right arrow to move to the next image.", placement: "left", html: true},
+                clearel: $('#btn-nextim'),
+                showfnc: function () {return $('.og-expanded').find('a.thm-link').data("annotation_labelled_count") == $(".annotation-point").length}
+            },{
+                el: $('.og-navbar'),
+                options: {content: "<b>Well done!</b> You are doing well - you are up to your 5th image! Keep this up and you may win the ipad!", placement: "left", html: true},
+                clearel: $("body"),
+                showfnc: function () {return $(".thm").index($(".og-expanded")) >= 4}
+            }
+        ];
+
+        if (tuteitems[0].el.length <= 0 && retry > 0) {
+            setTimeout(function(){runTutorial(retry-1)}, 500);
+            console.log("Not loaded yet... retries left: "+(retry-1))
+        }
+        else
+            showTuteItem(tuteitems, 0);
+    }
+
+    function showTuteItem(tuteitems, i) {
+        var $item = tuteitems[i].el,
+            popupopts = tuteitems[i].options,
+            $clearitem = (tuteitems[i].hasOwnProperty("clearel")) ? tuteitems[i].clearel : $item,
+            showfnc = (tuteitems[i].hasOwnProperty("showfnc")) ? tuteitems[i].showfnc : function(){return true};
+
+        if (showfnc()) {
+            $("body").unbind('click');
+            popupopts.trigger = "manual";
+            popupopts.template = '<div class="popover tutorial" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>';
+            popupopts.title = "Hint " + (i + 1) + "/" + tuteitems.length;
+            $item.popover(popupopts).popover('show');
+            setTimeout(function () {
+                $clearitem.bind('click', function (event) {
+                    $item.popover('destroy');
+                    $(this).unbind(event);
+                    if ((i+1 < tuteitems.length)) {
+                        if (tuteitems[i + 1].hasOwnProperty("showfnc")) {
+                            $("body").bind('click', function (event) {
+                                setTimeout(function(){showTuteItem(tuteitems, i + 1)},1000);
+                            });
+                            //console.log("bind click");
+                        }
+                        showTuteItem(tuteitems, i + 1); // show next item if not last
+                    }
+                });
+            }, 100);
+            //console.log("Show function")
+        }
+        //console.log("Show item: "+i);
+    }
+
 
 </script>
 {% endblock %}

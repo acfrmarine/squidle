@@ -264,8 +264,8 @@ function mouseoutAnPt(thispoint) {
 function setAnnotationPoints() {
     var $mainimg = $('#og-main-img');
     var $activethm = $('.og-active-thm');
-    //showLoader();
-    var pointList = taglist.getAnnotationPoints('image='+curstate.imid+'&annotation_set='+curstate.asid+'&limit=0');
+    //showLoader();x
+    var pointList = taglist.getAnnotationPoints('image='+curstate.imid+'&annotation_set='+curstate.asid+'&limit=0&order_by=-x');
 
     //console.log(pointList);
 
@@ -296,14 +296,17 @@ function setAnnotationPoints() {
 //                position:{x:thispoint.x , y:thispoint.y},
 //                imgposition: {top:top, left:left}});
 
-            var thispointdata = {scored: thispoint.scored,
-                label: thispoint.label,
-                label_name: thispoint.label_name,
-                label_colour: '#' + thispoint.label_colour,
-                resource_uri: thispoint.resource_uri,
-                qualifiers: thispoint.qualifiers,
-                position: {x: thispoint.x, y: thispoint.y},
-                imgposition: {top: top, left: left}};
+            var thispointdata = {
+                    cssid: thispoint.cssid,
+                    scored: thispoint.scored,
+                    label: thispoint.label,
+                    label_name: thispoint.label_name,
+                    label_colour: '#' + thispoint.label_colour,
+                    resource_uri: thispoint.resource_uri,
+                    qualifiers: thispoint.qualifiers,
+                    position: {x: thispoint.x, y: thispoint.y},
+                    imgposition: {top: top, left: left}
+            };
 
             var $anpt = updatePoint(thispointdata);
 
@@ -603,7 +606,7 @@ function createTaglist() {
 
 
     var format = '<a class="annotation-tag" href="javascript:void(0)" onclick="labelSelectedPoints(\'{[resource_uri]}\',\'{[code_name]}\',\'#{[point_colour]}\');" rel="label-popover" '+
-        'data-label="{[resource_uri]}" data-content="<b>CAAB Code:</b> {[caab_code]}<br><b>Short Code:</b> {[cpc_code]}<br>insert image<br>{[description]}" data-original-title="{[code_name]}">{[code_name]}</a><br> ';
+        'data-label="{[resource_uri]}" data-content="<b>CAAB Code:</b> {[caab_code]}<br><b>Short Code:</b> {[cpc_code]}<br>{[description]}" data-original-title="{[code_name]}"><i class="icon-circle" style="color: #{[point_colour]}"></i> {[code_name]}</a><br> ';
     $(containerid).html('<input type="text" id="antag-search" class="input-small" style="width:100%;" placeholder="Search all available labels" autocomplete="off"><div class="antag-taglist"></div>');
 
     taglist.setFormat(format);
@@ -648,7 +651,7 @@ function createTaggrid () {
     //console.log('tag grid');
     var containerid = '#imganot-1';
     var format = '<a class="annotation-tag badge" href="javascript:void(0)" style="background-color:#{[point_colour]}" onclick="labelSelectedPoints(\'{[resource_uri]}\',\'{[code_name]}\',\'#{[point_colour]}\');" rel="label-popover" '+
-        'data-label="{[resource_uri]}" data-content="<b>CAAB Code:</b> {[caab_code]}<br><b>Short Code:</b> {[cpc_code]}<br>insert image<br>{[description]}" data-original-title="{[code_name]}">{[cpc_code]}</a> ';
+        'data-label="{[resource_uri]}" data-content="<b>CAAB Code:</b> {[caab_code]}<br><b>Short Code:</b> {[cpc_code]}<br>{[description]}" data-original-title="{[code_name]}">{[cpc_code]}</a> ';
 
     $(containerid).html('<div class="antag-taglist"></div>');
 

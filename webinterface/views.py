@@ -11,6 +11,10 @@ from django.core.urlresolvers import reverse
 import logging
 import os
 import distutils.core
+import random
+import time
+import datetime
+import json
 
 #for the geoserver proxy
 from django.views.decorators.csrf import csrf_exempt
@@ -26,7 +30,7 @@ import simplejson
 from django.conf import settings
 from collection.api import CollectionResource
 from collection.models import Collection, CollectionManager
-from annotations.models import PointAnnotation, PointAnnotationSet, AnnotationCode
+from annotations.models import PointAnnotation, PointAnnotationSet, AnnotationCode, PointAnnotationSetManager
 
 from webinterface.forms import dataset_forms, CreateCollectionForm, CreateWorksetForm, CreateWorksetAndAnnotation, CreateCollectionExploreForm, CreatePointAnnotationSet, CreateWorksetFromImagelist
 from userena.forms import AuthenticationForm, SignupForm
@@ -262,51 +266,37 @@ def view_project(request):
 
 # NEW VIEWS #########################################################
 #front page and zones
-def index(request):
+def index(request, citizen_project=""):
     """@brief returns root catami html
     """
-    #return HttpResponseRedirect('viewproject')
-    citizen_project = ""
-    request.session['citizen_project']=citizen_project
-    return citizenscience_index(request, citizen_project)
-
-def citizenscience_index(request, citizen_project):
     request.session['citizen_project'] = citizen_project
-    citizen_dir = '{}/static/citizenscience_projects/'.format(os.path.dirname(os.path.realpath(__file__)))
-    if not os.path.isdir('{}{}'.format(citizen_dir, citizen_project)):
-        distutils.dir_util.copy_tree('{}template'.format(citizen_dir),'{}{}'.format(citizen_dir, citizen_project))
+    # Check if citizen science dir exists, and initialise it if it doesn't
     return render_to_response('webinterface/index.html', {
         "citizen_project": citizen_project,
         "aform": AuthenticationForm(),
         "suform": SignupForm()},
         RequestContext(request))
 
-def citizenscience_getlabels(request):
-    citizen_project = request.GET.get("project")
-    dirpath = os.path.dirname(os.path.realpath(__file__))
-    labels = open('{}/static/citizenscience_projects/{}/labels.json'.format(dirpath,citizen_project))
-    return HttpResponse(labels, mimetype='application/json')
 
 
-def project(request):
+
+def project(request, citizen_project = ""):
     # check for optional get parameters
+
     # This avoids needing to specify a new url and view for each optional parameter
     clid = request.GET.get("clid", "0") if request.GET.get("clid", "") else 0
     wsid = request.GET.get("wsid", "0") if request.GET.get("wsid", "") else 0
     asid = request.GET.get("asid", "0") if request.GET.get("asid", "") else 0
     imid = request.GET.get("imid", "0") if request.GET.get("imid", "") else 0
 
-    if 'citizen_project' in request.session.keys() :
-        citizen_project = request.session['citizen_project']
-    else :
-        citizen_project = ""
-    # Forms
-    # clform = CreateCollectionForm()
-    # wsform = CreateWorksetForm(initial={'c_id': clid, 'method': 'random', 'n': 100, 'start_ind': 0, 'stop_ind': 0})
-    # ulwsform = CreateWorksetFromImagelist(initial={'c_id': clid})
-    # asform = CreatePointAnnotationSet(initial={'count': 50})
-    # aform = AuthenticationForm()
-    # suform = SignupForm()
+    # if 'citizen_project' in request.session:
+    #     if request.session['citizen_project'] != "":
+    #         citizen_project = request.session['citizen_project']
+    #         clid, wsid, asid, imid = get_citizen_dataset(citizen_project, request.user)
+    if citizen_project != "":
+        if not clid or not wsid or not asid or not imid:
+            clid, wsid, asid, imid = get_citizen_dataset(citizen_project, request.user)
+
 
     return render_to_response('webinterface/viewproject.html',
                               #    return render_to_response('webinterface/viewcollectionalternative.html',
@@ -323,6 +313,53 @@ def project(request):
                                "citizen_project": citizen_project,
                                "GEOSERVER_URL": settings.GEOSERVER_URL},
                               RequestContext(request))
+
+
+def citizenscience_getlabels(request, citizen_project):
+    #citizen_project = request.GET.get("project")
+    dirpath = os.path.dirname(os.path.realpath(__file__))
+    labels = open('{}/static/citizenscience_projects/{}/labels.json'.format(dirpath,citizen_project))
+    return HttpResponse(labels, mimetype='application/json')
+
+
+def get_annotation_info(request, citizen_project):
+    asprefix = citizen_project
+    annotation_sets = PointAnnotationSet.objects.filter(name__startswith=asprefix)
+    annotations = PointAnnotation.objects.filter(annotation_set=annotation_sets)
+    info = {}
+    info['pointcount'] = annotations.count()
+    info['labelcount'] = annotations.exclude(label=1).count()
+    # TODO: add more interesting stats
+    # imgcount = annotations.fil
+    return HttpResponse(json.dumps(info), content_type="application/json")
+
+def get_citizen_dataset (citizen_project, user):
+    citizen_dir = '{}/static/citizenscience_projects/{}'.format(os.path.dirname(os.path.realpath(__file__)), citizen_project)
+    if not os.path.isdir(citizen_dir):
+        #distutils.dir_util.copy_tree('{}template'.format(citizen_dir),'{}{}'.format(citizen_dir, citizen_project))
+        return HttpResponse("ERROR: the directory '{}' does not exist".format(citizen_project))
+
+    settings = open("{}/project_settings.json".format(citizen_dir))
+    data = json.load(settings)
+    settings.close()
+
+    subsetids = data["subsets"]
+    asmethod = data["annotation"]["methodology"]
+    asnpoints = data["annotation"]["n"]
+    wsid = random.choice(subsetids)
+    workset = Collection.objects.get(pk=wsid)
+    clid = workset.parent.id
+    #if user.is_anonymous:
+    #    return render_to_response('webinterface/index.html', {"citizen_project": citizen_project,"aform": AuthenticationForm(),"suform": SignupForm()},RequestContext(request))
+    #else:
+    asname = "{}.{}.{}".format(citizen_project, user.username,datetime.datetime.fromtimestamp(time.time()).strftime('%Y%m%d%H%M%S'))
+    asid, msg = PointAnnotationSetManager().create_annotation_set(user,asname,asmethod,asnpoints,wsid)
+    imid = workset.images.all().order_by('id')[:1].get().id
+
+    return clid, wsid, asid, imid
+
+# def loggedout (request, citizen_project = ""):
+#     return index(request, citizen_project)
 
 def download_csv(request):
     #from djqscsv import render_to_csv_response

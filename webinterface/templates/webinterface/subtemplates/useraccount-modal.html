@@ -12,6 +12,7 @@ Sign in modal
             </div>
 
             <div class="modal-body">
+                <p>If you already have a user account, please enter your details below. If you need to create a new account, click the "Sign Up" button.</p>
                 <form action="" method="post" id="aform" class="form-horizontal" >
                     <span class="errors"></span>
                     {% csrf_token %}
@@ -19,7 +20,7 @@ Sign in modal
 
                     <br>
                     <a class="btn btn-default" aria-hidden="true" data-dismiss="modal" onclick="clear_form(this.form);">Cancel</a>
-                    <a class="btn btn-info" aria-hidden="true" data-dismiss="modal" onclick="$('#sign-up-modal').modal('show');"><i class="icon-plus"></i> Create new account</a>
+                    <a class="btn btn-info" aria-hidden="true" data-dismiss="modal" onclick="$('#sign-up-modal').modal('show');"><i class="icon-plus"></i> Sign Up!</a>
                     <input class="btn btn-primary pull-right" type="submit" value="Sign in" onclick="send_signin('aform'); return false;">
                 </form>
 
@@ -48,6 +49,7 @@ Sign in modal
                     {{ suform|as_bootstrap }}
                     <br>
                     <a class="btn btn-default" aria-hidden="true" data-dismiss="modal" onclick="clear_form(this.form);">Cancel</a>
+                    <a class="btn btn-info" aria-hidden="true" data-dismiss="modal" onclick="$('#sign-in-modal').modal('show');"><i class="icon-plus"></i> Sign In!</a>
                     <input class="btn btn-primary pull-right" type="submit" value="Sign up" onclick="send_signup('suform');return false;">
                 </form>
 

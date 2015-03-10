@@ -251,6 +251,7 @@ class PointAnnotationResource(ModelResource):
                 ApiKeyAuthentication())
         authorization = PointAnnotationAuthorization()
         always_return_data = True
+        ordering = ['x', 'y']
 
 
 

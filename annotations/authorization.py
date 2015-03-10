@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 # default permissions for collection objects
 def apply_pointannotationset_permissions(user, pointannotationset):
     #assign all permissions view, add, change, delete
-    logger.debug("Applying owner permissions to campaign: " + pointannotationset.name)
+    logger.debug("Applying owner permissions to annotationset: " + pointannotationset.name)
 
     assign('annotations.view_pointannotationset', user, pointannotationset)
     assign('annotations.update_pointannotationset', user, pointannotationset)
