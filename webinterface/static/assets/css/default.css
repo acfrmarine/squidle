@@ -418,3 +418,9 @@ input.error:after, select.error:after{
 .tutorial.bottom .arrow:after {
       border-bottom-color: red;
 }
+
+@media screen and (max-width: 1180px) {
+    .og-navbar .navbar-brand {
+        display: none;
+    }
+}
