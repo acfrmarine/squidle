@@ -437,7 +437,7 @@
             popupopts.trigger = "manual";
             popupopts.template = '<div class="popover tutorial" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>';
             popupopts.title = "Hint " + (i + 1) + "/" + tuteitems.length;
-            popupopts.container = $("#og-main-img");
+            $item.on('remove', function(){$item.popover("destroy")});
             $item.popover(popupopts).popover('show');
             setTimeout(function () {
                 $clearitem.bind('click', function (event) {
