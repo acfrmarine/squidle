@@ -16,7 +16,7 @@
             success: function (data) {
                 console.log(data);
                 //if (data.length > 0)
-                $element.append('<div class="labelcount" title="out of the '+data.pointcount+' points that have been looked at"><i class="icon-tags"></i> '+
+                $element.append('<div class="labelcount" title="from '+data.pointcount+' points in '+data.annotation_sets+' sets"><i class="icon-tags"></i> '+
                         data.labelcount+' labels</div>  ');
 
             },

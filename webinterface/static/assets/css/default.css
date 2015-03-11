@@ -336,7 +336,9 @@ input.error:after, select.error:after{
     display: block;
 }
 
-#content .section a.well:hover, #content .section a:hover {
+#content .section a.well:hover, #content .section a.well:active,
+#content .section a.emph:hover, #content .section a.emph:active
+{
     text-decoration: none;
     background-color: #424242;
 }

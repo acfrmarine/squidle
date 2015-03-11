@@ -333,6 +333,7 @@ def get_annotation_info(request, citizen_project):
     info = {}
     info['pointcount'] = annotations.count()
     info['labelcount'] = annotations.exclude(label=1).count()
+    info['annotation_sets'] = annotation_sets.count()
     # TODO: add more interesting stats
     # imgcount = annotations.fil
     return HttpResponse(json.dumps(info), content_type="application/json")
