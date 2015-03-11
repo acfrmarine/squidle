@@ -43,6 +43,7 @@
         {% else %}
         <li class="dropdown"><a id="datasel" href="#" class="dropdown-toggle" data-toggle="dropdown">PROJECT: {{ citizen_project }}</a>
         <ul class="dropdown-menu">
+            <li><a href="javascript:void(0)" onclick="runTutorial(5)" ><i class="icon-info-sign"></i> Rerun the Tutorial</a></li>
             <li><a href="." ><i class="icon-home"></i> Back to home page</a></li>
             <li><a href="viewproject" ><i class="icon-refresh"></i> Reload a new dataset</a></li>
         </ul></li>
@@ -436,7 +437,7 @@
             $("body").unbind('click');
             popupopts.trigger = "manual";
             popupopts.template = '<div class="popover tutorial" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>';
-            popupopts.title = "Hint " + (i + 1) + "/" + tuteitems.length;
+            popupopts.title = "Tutorial tip " + (i + 1) + "/" + tuteitems.length;
             $item.on('remove', function(){$item.popover("destroy")});
             $item.popover(popupopts).popover('show');
             setTimeout(function () {
