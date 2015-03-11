@@ -62,21 +62,21 @@
     <div id="content" class="container" style="background-color: #131313; margin: 0; padding: 0;">
     <div class="row">
         <div class="col-sm-3 section">
-            <a class="well" href="#" onclick="showInfoModal('about.html','About the Project')">
+            <a class="well" href="#" onclick="showInfoModal(curstate.htmldir+'about.html','About the Project')">
                 <i class="icon-info-sign section-head"> About the Project</i>
                 What is this all about? Who is involved? Why should you care?
                 <span class="section-moreinfo"><i class="icon-chevron-sign-right"></i> Click for more</span>
             </a>
         </div>
         <div class="col-sm-3 section">
-            <a class="well" href="#" onclick="showInfoModal('howto.html', 'How to...')">
+            <a class="well" href="#" onclick="showInfoModal(curstate.htmldir+'howto.html', 'How to...')">
                 <i class="icon-hand-up section-head"> How to...</i>
                 Tutorials and videos that provide useful tips on how to use the system.
                 <span class="section-moreinfo"><i class="icon-chevron-sign-right"></i> Click for more</span>
             </a>
         </div>
         <div class="col-sm-3 section">
-            <a class="well" href="#" onclick="showInfoModal('what-next.html','What next?')">
+            <a class="well" href="#" onclick="showInfoModal(curstate.htmldir+'what-next.html','What next?')">
                 <i class="icon-magic section-head"> What next?</i>
                 Learn about some of the magic that this project is working towards. Automated tools designed to make life easier.
                 <span class="section-moreinfo"><i class="icon-chevron-sign-right"></i> Click for more</span>
@@ -91,7 +91,7 @@
                 <span class="section-moreinfo"><i class="icon-chevron-sign-right"></i> Click to start</span>
             </a>
             {% else %}
-            <a class="well emph" href="#sign-in-modal"  data-toggle="modal">
+            <a class="well emph" href="#sign-up-modal"  data-toggle="modal">
                 <i class="icon-tags section-head"> <b>Get started!</b></i>
                 Click here to log in or sign up and jump straight into labeling seafloor images!
                 <span class="section-moreinfo"><i class="icon-chevron-sign-right"></i> Click to start</span>
@@ -104,33 +104,33 @@
 
 
 
-    <!-- Modal -->
-    <div class="modal fade" id="info-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog" style="width: 840px">
-            <div class="modal-content" >
-                <div class="modal-header">
-                    <a class="pull-right modal-close" href="javascript:void(0)" data-dismiss="modal"><i class="icon-remove-sign"></i></a>
-                    <h1 class="modal-title"></h1>
-                </div>
-                <div class="modal-body" >
 
+
+
+    <div id="signup-complete" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4><i class="icon-user"></i> Success!</h4>
                 </div>
-                <!--
+                <div class="modal-body">
+                    <div class="alert alert-success">You have been successfully signed in. Click "Next" to get started!</div>
+                </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <a href="javascript:void(0)" onclick="location.reload()" class="btn btn-default pull-left" >Cancel</a>
+                    <a href="viewproject" class="btn btn-info">Next</a>
                 </div>
-                -->
             </div>
-            <!-- /.modal-content -->
         </div>
-        <!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+    </div>
 {% endblock %}
 
 
 {% block add_script %}
 <script src="{{ STATIC_URL }}assets/js/default.js"></script>
 {% include "webinterface/subtemplates/useraccount-modal.html" %}
+{% include "webinterface/subtemplates/info-modal.html" %}
 {% if citizen_project == "" %}
     <div class="alert alert-danger" style="margin: 0; position: absolute; top:0; left: 0; width: 100%; opacity:0.8; filter:alpha(opacity=80); z-index:999;"><b><i class="icon-cogs"></i>
         UNDER CONSTRUCTION:</b> Please note that this website is currently under construction.
@@ -149,15 +149,14 @@
         username: '{{ user.username }}',
         loginfuncs: [],   // functions to execute when a user is logged in
         citizen_project: '{{ citizen_project }}',
-        htmldir: '{{ STATIC_URL }}html/'
+        htmldir: ('{{ citizen_project }}' =='') ? '{{ STATIC_URL }}html/' : '{{ STATIC_URL }}citizenscience_projects/{{ citizen_project }}/'
     }
 
 
     curstate.loginfuncs.push(function(id, username) {
-        window.location.replace("viewproject");
+        $("#signup-complete").modal("show");
     });
 
-    if (curstate.citizen_project != "") curstate.htmldir = '{{ STATIC_URL }}citizenscience_projects/'+curstate.citizen_project+'/';
 
     $(document).ready(function () {
         $('#banner-carousel .item').rand(1).addClass('active');
@@ -172,12 +171,7 @@
         setHeights();
     });
 
-    function showInfoModal(src,title) {
-        $('#info-modal .modal-body').html('');
-        $('#info-modal .modal-body').load(curstate.htmldir+src);
-        $('#info-modal .modal-title').html(title);
-        $('#info-modal').modal('show');
-    }
+
 
 
     function setHeights() {

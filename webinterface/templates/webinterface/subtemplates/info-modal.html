@@ -1,0 +1,31 @@
+<!-- Modal -->
+<div class="modal fade" id="info-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 840px">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <a class="pull-right modal-close" href="javascript:void(0)" data-dismiss="modal"><i class="icon-remove-sign"></i></a>
+                <h1 class="modal-title"></h1>
+            </div>
+            <div class="modal-body" >
+
+            </div>
+            <!--
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+            -->
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<script type="text/javascript">
+    function showInfoModal(src,title) {
+        $('#info-modal .modal-body').html('');
+        $('#info-modal .modal-body').load(src);
+        $('#info-modal .modal-title').html(title);
+        $('#info-modal').modal('show');
+    }
+</script>

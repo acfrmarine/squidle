@@ -69,8 +69,8 @@ urlpatterns = patterns(
     url(r'^update_classes$','update_classes_gspread'),
 
     url(r'^get_extents$','get_extents'),
-    # url(r'^loggedout$','loggedout'),
-    # url(r'^citizenscience/(?P<citizen_project>\w+)/loggedout$', 'loggedout'),
+    url(r'^loggedout$','loggedout'),
+    url(r'^citizenscience/(?P<citizen_project>\w+)/loggedout$', 'loggedout'),
 
     url(r'^citizenscience/(?P<citizen_project>\w+)/$', 'index', name='index'),
     url(r'^citizenscience/(?P<citizen_project>\w+)/viewproject$', 'project'),

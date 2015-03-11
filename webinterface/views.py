@@ -33,9 +33,13 @@ from collection.models import Collection, CollectionManager
 from annotations.models import PointAnnotation, PointAnnotationSet, AnnotationCode, PointAnnotationSetManager
 
 from webinterface.forms import dataset_forms, CreateCollectionForm, CreateWorksetForm, CreateWorksetAndAnnotation, CreateCollectionExploreForm, CreatePointAnnotationSet, CreateWorksetFromImagelist
-from userena.forms import AuthenticationForm, SignupForm
+from userena.forms import AuthenticationForm, SignupForm, EditProfileForm
 
 from django.db.models import Max
+
+from guardian.shortcuts import assign
+from django.contrib.auth.models import Group
+from django.contrib.auth import logout
 
 import HTMLParser
 
@@ -269,7 +273,7 @@ def view_project(request):
 def index(request, citizen_project=""):
     """@brief returns root catami html
     """
-    request.session['citizen_project'] = citizen_project
+    #request.session['citizen_project'] = citizen_project
     # Check if citizen science dir exists, and initialise it if it doesn't
     return render_to_response('webinterface/index.html', {
         "citizen_project": citizen_project,
@@ -289,13 +293,12 @@ def project(request, citizen_project = ""):
     asid = request.GET.get("asid", "0") if request.GET.get("asid", "") else 0
     imid = request.GET.get("imid", "0") if request.GET.get("imid", "") else 0
 
-    # if 'citizen_project' in request.session:
-    #     if request.session['citizen_project'] != "":
-    #         citizen_project = request.session['citizen_project']
-    #         clid, wsid, asid, imid = get_citizen_dataset(citizen_project, request.user)
     if citizen_project != "":
-        if not clid or not wsid or not asid or not imid:
-            clid, wsid, asid, imid = get_citizen_dataset(citizen_project, request.user)
+        if request.user.is_anonymous():
+            return index(request, citizen_project)
+        else:
+            if not clid or not wsid or not asid :
+                clid, wsid, asid, imid = get_citizen_dataset(citizen_project, request.user)
 
 
     return render_to_response('webinterface/viewproject.html',
@@ -310,6 +313,7 @@ def project(request, citizen_project = ""):
                                "asform": dataset_forms["asform"](initial={'count': 50}),
                                "aform": AuthenticationForm(),
                                "suform": SignupForm(),
+                               # "profileform": EditProfileForm(),
                                "citizen_project": citizen_project,
                                "GEOSERVER_URL": settings.GEOSERVER_URL},
                               RequestContext(request))
@@ -336,30 +340,37 @@ def get_annotation_info(request, citizen_project):
 def get_citizen_dataset (citizen_project, user):
     citizen_dir = '{}/static/citizenscience_projects/{}'.format(os.path.dirname(os.path.realpath(__file__)), citizen_project)
     if not os.path.isdir(citizen_dir):
-        #distutils.dir_util.copy_tree('{}template'.format(citizen_dir),'{}{}'.format(citizen_dir, citizen_project))
-        return HttpResponse("ERROR: the directory '{}' does not exist".format(citizen_project))
+        return 0, 0, 0, 0
 
+    # Get config params from settings file
     settings = open("{}/project_settings.json".format(citizen_dir))
     data = json.load(settings)
     settings.close()
-
     subsetids = data["subsets"]
     asmethod = data["annotation"]["methodology"]
     asnpoints = data["annotation"]["n"]
     wsid = random.choice(subsetids)
+
+    # Get dataset information and create annotation set
     workset = Collection.objects.get(pk=wsid)
     clid = workset.parent.id
-    #if user.is_anonymous:
-    #    return render_to_response('webinterface/index.html', {"citizen_project": citizen_project,"aform": AuthenticationForm(),"suform": SignupForm()},RequestContext(request))
-    #else:
     asname = "{}.{}.{}".format(citizen_project, user.username,datetime.datetime.fromtimestamp(time.time()).strftime('%Y%m%d%H%M%S'))
     asid, msg = PointAnnotationSetManager().create_annotation_set(user,asname,asmethod,asnpoints,wsid)
     imid = workset.images.all().order_by('id')[:1].get().id
 
+    # Check permissions are all ok
+    if not user.has_perm('view_collection', workset):
+        special_group, created = Group.objects.get_or_create(name=citizen_project)
+        if len(user.groups.filter(name=citizen_project)) <= 0:
+            user.groups.add(special_group)  # add user to special group
+        if len(special_group.groupobjectpermission_set.filter(object_pk=workset.id)) <= 0:
+            assign('view_collection', special_group, workset)  # assign permission to the group for this workset
+
     return clid, wsid, asid, imid
 
-# def loggedout (request, citizen_project = ""):
-#     return index(request, citizen_project)
+def loggedout (request, citizen_project = ""):
+    logout(request)
+    return index(request, citizen_project)
 
 def download_csv(request):
     #from djqscsv import render_to_csv_response

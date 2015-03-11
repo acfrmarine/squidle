@@ -72,12 +72,6 @@ def signup_form(request, form):
             # Add to public group
             public_group, created = Group.objects.get_or_create(name='Public')
             user.groups.add(public_group)
-            # Add to special citizen science group (if session variable exists)
-            if 'citizen_project' in request.session.keys() :
-                group = request.session['citizen_project']
-                print "Adding to GROUP: {}".format(group)
-                special_group, created = Group.objects.get_or_create(name=group)
-                user.groups.add(special_group)
             login(request, user)
             dajax.script('update_sign_in({0},"{1}");'.format(user.id,user.username))
 
@@ -85,7 +79,6 @@ def signup_form(request, form):
         dajax.remove_css_class('#'+form_id+' input', 'error')
         print e
         dajax.script("form_errors(true,'{0}','{1}:<br>{2}');".format(form_id,e.message,form.errors))
-
 
         for error in form.errors:
             dajax.add_css_class('#'+form_id+' #id_%s' % error, 'error')

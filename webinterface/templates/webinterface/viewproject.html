@@ -43,7 +43,7 @@
         {% else %}
         <li class="dropdown"><a id="datasel" href="#" class="dropdown-toggle" data-toggle="dropdown">PROJECT: {{ citizen_project }}</a>
         <ul class="dropdown-menu">
-            <li><a href="javascript:void(0)" onclick="window.history.back()"><i class="icon-home"></i> Back to home page</a></li>
+            <li><a href="." ><i class="icon-home"></i> Back to home page</a></li>
             <li><a href="viewproject" ><i class="icon-refresh"></i> Reload a new dataset</a></li>
         </ul></li>
         {% endif %}
@@ -54,8 +54,8 @@
     </ul>
     <ul class="nav navbar-nav navbar-right">
         <!--<li title="Bug/Feature report"><a href="#info-modal" data-toggle="modal"><i class="icon-bug"></i></a></li>-->
-        <li title="Info/about"><a href="#info-modal" data-toggle="modal"><i class="icon-info-sign"></i></a></li>
-        <li title="Help/How to"><a href="#help-modal" data-toggle="modal" ><i class="icon-question-sign"></i></a></li>
+        <li title="Info/about"><a href="javascript:void(0)" onclick="showInfoModal(curstate.htmldir+'about.html','About the Project')"><i class="icon-info-sign"></i></a></li>
+        <li title="Help/How to"><a href="javascript:void(0)" onclick="showInfoModal(curstate.htmldir+'howto.html','Help/How to')" ><i class="icon-question-sign"></i></a></li>
     </ul>
 </nav>
 
@@ -88,10 +88,11 @@
 
 
     {% include "webinterface/subtemplates/useraccount-modal.html" %}
+    {% include "webinterface/subtemplates/info-modal.html" %}
 {#    {% if citizen_project == "" %}#}
         {% include "webinterface/subtemplates/dataset-modal.html" %}
 {#    {% endif %}#}
-    {% include "webinterface/subtemplates/help-modal.html" %}
+{#    {% include "webinterface/subtemplates/help-modal.html" %}#}
 {% endblock %}
 
 
@@ -135,7 +136,8 @@
         userid: ('{{ user.id }}'=='None') ? 0 : {{ user.id }},
         username: '{{ user.username }}',
         loginfuncs: [],   // functions to execute when a user is logged in
-        citizen_project: '{{ citizen_project }}'
+        citizen_project: '{{ citizen_project }}',
+        htmldir: ('{{ citizen_project }}' =='') ? '{{ STATIC_URL }}html/' : '{{ STATIC_URL }}citizenscience_projects/{{ citizen_project }}/'
     }
 
     var filters = {
@@ -435,6 +437,7 @@
             popupopts.trigger = "manual";
             popupopts.template = '<div class="popover tutorial" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>';
             popupopts.title = "Hint " + (i + 1) + "/" + tuteitems.length;
+            popupopts.container = $("#og-main-img");
             $item.popover(popupopts).popover('show');
             setTimeout(function () {
                 $clearitem.bind('click', function (event) {
