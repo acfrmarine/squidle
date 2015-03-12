@@ -426,3 +426,5 @@ input.error:after, select.error:after{
         display: none;
     }
 }
+/* IE fix */
+@-ms-viewport { width: device-width; }
