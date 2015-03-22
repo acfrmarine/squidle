@@ -395,6 +395,7 @@
 
 
     function runTutorial(retry) {
+        var currentbadgescore = $("#label-info").data("badge")[0];
         var tuteitems = [
             {
                 el: $(".annotation-point:nth-of-type(1)"),
@@ -417,6 +418,11 @@
                 options: {content: "<b>Congratulations!</b> You have labeled all the points in this image, click the right arrow to move to the next image.", placement: "left", html: true},
                 clearel: $('#btn-nextim'),
                 showfnc: function () {return $('.og-expanded').find('a.thm-link').data("annotation_labelled_count") == $(".annotation-point").length}
+            },{
+                el: $('#label-info>a'),
+                options: {content: "<b>Your Status Ranking has increased! Keep labelling to move though the ranks. <b>Label another point to hide this hint.</b>", placement: "bottom", html: true},
+                clearel: $("body"),
+                showfnc: function () {return currentbadgescore != $("#label-info").data("badge")[0]}
             }
             /*
             ,{

@@ -6,14 +6,14 @@ $.fn.update_mylabelstatus = function(updatetime) {
     var $icon = $(this);
     var badges =[
         [0,    "The Newb","#999999"],
-        [9,    "The Unpaid intern","#00cc32"],
+        [9,    "The Unpaid Intern","#00cc32"],
         [27,   "The Intern", "#90ff00"],
-        [81,   "The Undergraduate student","#f8ff00"],
-        [162,  "The Grad student","#ff884b"],
-        [324,  "The Postdoc researcher","#ff3317"],
-        [648,  "The Assistant scientist","#ff001a"],
+        [81,   "The Undergraduate Student","#f8ff00"],
+        [162,  "The Grad Student","#ff884b"],
+        [324,  "The Postdoc Researcher","#ff3317"],
+        [648,  "The Assistant Scientist","#ff001a"],
         [1296, "The Scientist","#ff00e7"],
-        [2592, "Ariel","#7600ff"],
+        [2592, "Nemo","#7600ff"],
         [5184, "Aquaman/Aquagirl","#6f72ff"],
         [10368,"Poseidon","#00daff"]
     ];
@@ -28,8 +28,8 @@ $.fn.update_mylabelstatus = function(updatetime) {
             title:"YOUR STATUS RANKING:",
             html:true,
             content:function(){
-                return "<small>You have labelled "+$(this).data("mylabelcount")+" points so far. That is as many as <b style='color:"+$(this).data("badge")[2]+"'>"+$(this).data("badge")[1]+"!</b>. "
-                    +" Keep labelling to progress through the ranks:<br>"
+                return "<small>You have labelled "+$(this).data("mylabelcount")+" points so far. That is as many as <b style='color:"+$(this).data("badge")[2]+"'>"+$(this).data("badge")[1]+"!</b> "
+                    +" &nbsp;Keep labelling to progress through the ranks:<hr style='margin:5px 0'>"
                     +badgestr+"</small>";
             },
             trigger:"hover"});
