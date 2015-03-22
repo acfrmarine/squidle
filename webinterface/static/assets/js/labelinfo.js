@@ -28,8 +28,8 @@ $.fn.update_mylabelstatus = function(updatetime) {
             title:"Your Labeler's Label",
             html:true,
             content:function(){
-                return "<small>You have labelled "+$(this).data("mylabelcount")+" points so far. That is as many as <b css='color:"+$(this).data("badge")[2]+"'>"+$(this).data("badge")[1]+"</b>!"
-                    +" Keep labelling to progress through the ranks:<br>"
+                return "<small>You have labelled "+$(this).data("mylabelcount")+" points so far. That is as many as <b style='color:"+$(this).data("badge")[2]+"'>"+$(this).data("badge")[1]+"</b>!"
+                    +"<br>Keep labelling to progress through the ranks:<br>"
                     +badgestr+"</small>";
             },
             trigger:"hover"});
