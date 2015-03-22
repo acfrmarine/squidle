@@ -398,7 +398,7 @@ input.error:after, select.error:after{
 }
 
 .tutorial {
-    opacity: 0.8 !important;
+    opacity: 0.9 !important;
 }
 .tutorial, .tutorial .popover-title, .tutorial .popover-content {
     background-color: #FFFFFF;
@@ -412,13 +412,13 @@ input.error:after, select.error:after{
 }
 
 .tutorial.right .arrow:after {
-      border-right-color: red;
+      border-right-color: #ffffff;
 }
 .tutorial.left .arrow:after {
-      border-left-color: red;
+      border-left-color: #ffffff;
 }
 .tutorial.bottom .arrow:after {
-      border-bottom-color: red;
+      border-bottom-color: #ffffff;
 }
 
 @media screen and (max-width: 1180px) {

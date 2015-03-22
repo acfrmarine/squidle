@@ -75,6 +75,8 @@ urlpatterns = patterns(
     url(r'^citizenscience/(?P<citizen_project>\w+)/$', 'index', name='index'),
     url(r'^citizenscience/(?P<citizen_project>\w+)/viewproject$', 'project'),
     url(r'^citizenscience/(?P<citizen_project>\w+)/citizenscience_labels$','citizenscience_getlabels'),
+
+    url(r'^get_annotation_info','get_annotation_info'),
     url(r'^citizenscience/(?P<citizen_project>\w+)/get_annotation_info','get_annotation_info'),
 
 

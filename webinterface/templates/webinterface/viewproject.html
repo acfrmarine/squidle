@@ -47,6 +47,7 @@
             <li><a href="viewproject" ><i class="icon-refresh"></i> Load a new dataset</a></li>
             <li><a href="." ><i class="icon-home"></i> Go back to the Home Page</a></li>
         </ul></li>
+        <li class="icon-text"><a id="label-info" href="javascript:void(0)"></a></li>
         {% endif %}
     </ul>
 
@@ -56,7 +57,7 @@
     <ul class="nav navbar-nav navbar-right">
         <!--<li title="Bug/Feature report"><a href="#info-modal" data-toggle="modal"><i class="icon-bug"></i></a></li>-->
         <li title="Info/about"><a href="javascript:void(0)" onclick="showInfoModal(curstate.htmldir+'about.html','About the Project')"><i class="icon-info-sign"></i></a></li>
-        <li title="Help/How to"><a href="javascript:void(0)" onclick="showInfoModal(curstate.htmldir+'howto.html','Help/How to')" ><i class="icon-question-sign"></i></a></li>
+        <li title="Help/How to"><a href="javascript:void(0)" onclick="showInfoModal(curstate.htmldir+'tutorial.html','Instructions/help')" ><i class="icon-question-sign"></i></a></li>
     </ul>
 </nav>
 
@@ -122,6 +123,8 @@
 <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
 {#<script src='{{ STATIC_URL }}assets/catami-api/js/Map.js'></script>#}
 <script src='{{ STATIC_URL }}assets/catami-api/js/map-ui.js'></script>
+<script src="{{ STATIC_URL }}assets/js/labelinfo.js"></script>
+
 
 
 <script type="text/javascript">
@@ -149,8 +152,10 @@
     var thlist = new ImagesAPI({});
     var apiobj = new SquidleAPI({});
     var tagsettings = {};
-    if (curstate.citizen_project != '')
+    if (curstate.citizen_project != '') {
         tagsettings = {api_tag_baseurl: "citizenscience_labels"};
+        $("#label-info").update_mylabelstatus(10000);
+    }
 
     var taglist = new AnnotationAPI(tagsettings);
 
@@ -240,7 +245,8 @@
         }
 
         if (curstate.citizen_project != "")
-            runTutorial(60);
+            showInfoModal(curstate.htmldir+'tutorial.html','Instructions');
+            //runTutorial(60);
 
         // Do stuff on showing of map
         $('#map-nav').on('shown.bs.tab', function (e) {
@@ -411,12 +417,15 @@
                 options: {content: "<b>Congratulations!</b> You have labeled all the points in this image, click the right arrow to move to the next image.", placement: "left", html: true},
                 clearel: $('#btn-nextim'),
                 showfnc: function () {return $('.og-expanded').find('a.thm-link').data("annotation_labelled_count") == $(".annotation-point").length}
-            },{
+            }
+            /*
+            ,{
                 el: $('.og-navbar'),
                 options: {content: "<b>Well done!</b> You are doing well - you are up to your 5th image! Keep this up and you may win the ipad!", placement: "left", html: true},
                 clearel: $("body"),
                 showfnc: function () {return $(".thm").index($(".og-expanded")) >= 4}
             }
+            */
         ];
 
         if (tuteitems[0].el.length <= 0 && retry > 0) {
@@ -437,7 +446,7 @@
             $("body").unbind('click');
             popupopts.trigger = "manual";
             popupopts.template = '<div class="popover tutorial" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>';
-            popupopts.title = "Tutorial tip " + (i + 1) + "/" + tuteitems.length;
+            popupopts.title = "Tutorial hint " + (i + 1) + "/" + tuteitems.length;
             $item.on('remove', function(){$item.popover("destroy")});
             $item.popover(popupopts).popover('show');
             setTimeout(function () {

@@ -35,10 +35,10 @@ from annotations.models import PointAnnotation, PointAnnotationSet, AnnotationCo
 from webinterface.forms import dataset_forms, CreateCollectionForm, CreateWorksetForm, CreateWorksetAndAnnotation, CreateCollectionExploreForm, CreatePointAnnotationSet, CreateWorksetFromImagelist
 from userena.forms import AuthenticationForm, SignupForm, EditProfileForm
 
-from django.db.models import Max
+from django.db.models import Max, Count
 
 from guardian.shortcuts import assign
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, User
 from django.contrib.auth import logout
 
 import HTMLParser
@@ -326,14 +326,23 @@ def citizenscience_getlabels(request, citizen_project):
     return HttpResponse(labels, mimetype='application/json')
 
 
-def get_annotation_info(request, citizen_project):
+def get_annotation_info(request, citizen_project=""):
     asprefix = citizen_project
     annotation_sets = PointAnnotationSet.objects.filter(name__startswith=asprefix)
     annotations = PointAnnotation.objects.filter(annotation_set=annotation_sets)
+    nlabellers = request.GET.get("nlabellers", "0") if request.GET.get("nlabellers", "") else 0
+
     info = {}
     info['pointcount'] = annotations.count()
     info['labelcount'] = annotations.exclude(label=1).count()
     info['annotation_sets'] = annotation_sets.count()
+    if nlabellers > 0:
+        info['labellerpoints'] = list(User.objects.filter(pointannotation__annotation_set__name__startswith=asprefix).annotate(npoints=Count('pointannotation')).order_by('-npoints')[:nlabellers].values("username","npoints"))
+        info['labellerunlabelled'] = list(User.objects.filter(pointannotation__annotation_set__name__startswith=asprefix,pointannotation__label__id=1).annotate(nunlabelled=Count('pointannotation')).order_by('-nunlabelled')[:nlabellers].values("username","nunlabelled"))
+    if not request.user.is_anonymous():
+        info['mylabelcount'] = PointAnnotation.objects.filter(annotation_set__name__startswith=asprefix,labeller=request.user).exclude(label__id=1).count()
+        info['mypointcount'] = PointAnnotation.objects.filter(annotation_set__name__startswith=asprefix,labeller=request.user).count()
+
     # TODO: add more interesting stats
     # imgcount = annotations.fil
     return HttpResponse(json.dumps(info), content_type="application/json")
