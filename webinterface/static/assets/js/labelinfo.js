@@ -5,7 +5,7 @@ $.fn.update_mylabelstatus = function(updatetime) {
     if (typeof updatetime == "undefined") updatetime = 0;
     var $icon = $(this);
     var badges =[
-        [0,    "The Noob","#999999"],
+        [0,    "The Newb","#999999"],
         [9,    "The Unpaid intern","#00cc32"],
         [27,   "The Intern", "#90ff00"],
         [81,   "The Undergraduate student","#f8ff00"],
@@ -13,8 +13,8 @@ $.fn.update_mylabelstatus = function(updatetime) {
         [324,  "The Postdoc researcher","#ff3317"],
         [648,  "The Assistant scientist","#ff001a"],
         [1296, "The Scientist","#ff00e7"],
-        [2592, "Captain Nemo","#7600ff"],
-        [5184, "Aquaman/woman","#0018ff"],
+        [2592, "Ariel","#7600ff"],
+        [5184, "Aquaman/Aquagirl","#6f72ff"],
         [10368,"Poseidon","#00daff"]
     ];
 
@@ -25,7 +25,7 @@ $.fn.update_mylabelstatus = function(updatetime) {
         .css("color",badges[0][2])
         .popover({
             placement:"bottom",
-            title:"Your Labeler's Label",
+            title:"YOUR STATUS RANKING:",
             html:true,
             content:function(){
                 return "<small>You have labelled "+$(this).data("mylabelcount")+" points so far. That is as many as <b style='color:"+$(this).data("badge")[2]+"'>"+$(this).data("badge")[1]+"!</b>. "
