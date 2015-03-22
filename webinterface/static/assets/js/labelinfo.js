@@ -28,7 +28,7 @@ $.fn.update_mylabelstatus = function(updatetime) {
             title:"Your Labeler's Label",
             html:true,
             content:function(){
-                return "<small>You have labelled "+$(this).data("mylabelcount")+" points so far. That is as many as \""+$(this).data("badge")[1]+"\"!"
+                return "<small>You have labelled "+$(this).data("mylabelcount")+" points so far. That is as many as <b css='color:"+$(this).data("badge")[2]+"'>"+$(this).data("badge")[1]+"</b>!"
                     +" Keep labelling to progress through the ranks:<br>"
                     +badgestr+"</small>";
             },
@@ -58,21 +58,4 @@ function updateMyLabelStatus(updatetime, $icon, badges) {
         }
     });
     if (updatetime > 0) setTimeout(function(){updateMyLabelStatus(updatetime, $icon, badges)},updatetime);
-}
-
-
-function compareStrDesc(b, a) {
-    var ax = [], bx = [];
-
-    a.replace(/(\d+)|(\D+)/g, function(_, $1, $2) { ax.push([$1 || Infinity, $2 || ""]) });
-    b.replace(/(\d+)|(\D+)/g, function(_, $1, $2) { bx.push([$1 || Infinity, $2 || ""]) });
-
-    while(ax.length && bx.length) {
-        var an = ax.shift();
-        var bn = bx.shift();
-        var nn = (an[0] - bn[0]) || an[1].localeCompare(bn[1]);
-        if(nn) return nn;
-    }
-
-    return ax.length - bx.length;
 }
