@@ -421,6 +421,15 @@ input.error:after, select.error:after{
       border-bottom-color: #ffffff;
 }
 
+.popup-exemplars {
+    font-size: 11px;
+}
+.popup-exemplars img {
+    width: 110px;
+    height: 110px;
+    margin: 0 1px 1px 0;
+}
+
 @media screen and (max-width: 1180px) {
     .og-navbar .navbar-brand {
         display: none;

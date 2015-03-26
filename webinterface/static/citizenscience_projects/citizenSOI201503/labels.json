@@ -6,76 +6,65 @@
     "total_count": 7
 }, "objects": [
     {
-        "caab_code": "11280000",
-        "code_name": "Coral: branching",
-        "cpc_code": "BCORAL",
-        "description": "No description.",
-        "id": 164,
-        "parent": "/api/dev/annotation_code/162/",
-        "parent_id": 162,
-        "point_colour": "FF0000",
-        "resource_uri": "/api/dev/annotation_code/164/"
+        "caab_code": "82001005",
+        "code_name": "Sand / rubble",
+        "cpc_code": "SU",
+        "description": "<div class='popup-exemplars'>Sediments and coral rubble, including sand that may be coloured by microalgae or bacterial mats and fragments of dead hard coral up to 6 cm in size.<br><img src='/static/citizenscience_projects/citizenSOI201503/exemplars/SandRubble-01-Thumb.png' /><img src='/static/citizenscience_projects/citizenSOI201503/exemplars/SandRubble-02-Thumb.png' /><img src='/static/citizenscience_projects/citizenSOI201503/exemplars/SandRubble-04-Thumb.png' /></div>",
+        "id": 240,
+        "parent": "/api/dev/annotation_code/239/",
+        "parent_id": 239,
+        "point_colour": "6699FF",
+        "resource_uri": "/api/dev/annotation_code/240/"
     },
     {
-        "caab_code": "70000103",
-        "code_name": "Coral: plate",
-        "cpc_code": "PCORAL",
-        "description": "No description",
-        "id": 286,
-        "parent": "/api/dev/annotation_code/228/",
-        "parent_id": 228,
-        "point_colour": "FFCC00",
-        "resource_uri": "/api/dev/annotation_code/286/"
+        "caab_code": "80300000",
+        "code_name": "Seaweed",
+        "cpc_code": "MA",
+        "description": "<div class='popup-exemplars'>Includes macroalgae such as larger brown algae and the green 'necklace' seaweed Halimeda.<br><img src='/static/citizenscience_projects/citizenSOI201503/exemplars/Macroalgae-01-Thumb.png' /><img src='/static/citizenscience_projects/citizenSOI201503/exemplars/Macroalgae-02-Tumb.png' /><img src='/static/citizenscience_projects/citizenSOI201503/exemplars/Macroalgae-03-Thumb.png' />",
+        "id": 39,
+        "parent": "/api/dev/annotation_code/2/",
+        "parent_id": 2,
+        "point_colour": "99FF33",
+        "resource_uri": "/api/dev/annotation_code/39/"
     },
     {
-        "caab_code": "70000902",
-        "code_name": "Bacterial mats",
-        "cpc_code": "BACT",
-        "description": "No description.",
-        "id": 275,
-        "parent": "/api/dev/annotation_code/228/",
-        "parent_id": 228,
-        "point_colour": "FFCC00",
-        "resource_uri": "/api/dev/annotation_code/275/"
+        "caab_code": "11290918",
+        "code_name": "Plate Coral",
+        "cpc_code": "CSFMF",
+        "description": "<div class='popup-exemplars'>Colony leaf-like in appearance or composed of plates or flattened sheets which may be fused or convoluted to form whorls.<br><img src='/static/citizenscience_projects/citizenSOI201503/exemplars/Plate-01-Thumb.png' /><img src='/static/citizenscience_projects/citizenSOI201503/exemplars/Plate-03-Thumb.png' /><img src='/static/citizenscience_projects/citizenSOI201503/exemplars/Plate-04-Thumb.png' /><img src='/static/citizenscience_projects/citizenSOI201503/exemplars/Plate-06-Thumb.png' /></div>",
+        "id": 297,
+        "parent": "/api/dev/annotation_code/136/",
+        "parent_id": 136,
+        "point_colour": "FF66CC",
+        "resource_uri": "/api/dev/annotation_code/297/"
     },
     {
-        "caab_code": "81002003",
-        "code_name": "Rubble",
-        "cpc_code": "RUB",
-        "description": "No description.",
-        "id": 179,
-        "parent": "/api/dev/annotation_code/175/",
-        "parent_id": 175,
-        "point_colour": "006600",
-        "resource_uri": "/api/dev/annotation_code/179/"
+        "caab_code": "11293000",
+        "code_name": "Branching Coral",
+        "cpc_code": "CSBRP",
+        "description": "<div class='popup-exemplars'>Colonies have both primary and secondary open branching, where branches are generally narrower than they are long.<br><img src='/static/citizenscience_projects/citizenSOI201503/exemplars/Branching-01-Thumb.png' /><img src='/static/citizenscience_projects/citizenSOI201503/exemplars/Branching-02-Thumb.png' /><img src='/static/citizenscience_projects/citizenSOI201503/exemplars/Branching-03-Thumb.png' /><img src='/static/citizenscience_projects/citizenSOI201503/exemplars/Branching-04-Thumb.png' /></div>",
+        "id": 309,
+        "parent": "/api/dev/annotation_code/141/",
+        "parent_id": 141,
+        "point_colour": "FF0066",
+        "resource_uri": "/api/dev/annotation_code/309/"
     },
     {
-        "caab_code": "81001008",
-        "code_name": "Sand",
-        "cpc_code": "SAND",
-        "description": "No description.",
-        "id": 206,
-        "parent": "/api/dev/annotation_code/205/",
-        "parent_id": 205,
-        "point_colour": "006600",
-        "resource_uri": "/api/dev/annotation_code/206/"
-    },
-    {
-        "caab_code": "70000903",
-        "code_name": "Boulder/rock",
-        "cpc_code": "ROCK",
-        "description": "No description.",
-        "id": 276,
-        "parent": "/api/dev/annotation_code/228/",
-        "parent_id": 228,
-        "point_colour": "FFCC00",
-        "resource_uri": "/api/dev/annotation_code/276/"
+        "caab_code": "11290000",
+        "code_name": "Other Coral",
+        "cpc_code": "CS",
+        "description": "<div class='popup-exemplars'>Other types of hard corals including table (tabulate), fingerlike (digitate),  bottlebrush (corymbose), sheet-like (encrusting), ridged or knobbly (sub-massive), smooth massive corals (massive) and mushroom corals.</div>",
+        "id": 127,
+        "parent": "/api/dev/annotation_code/126/",
+        "parent_id": 126,
+        "point_colour": "CC0000",
+        "resource_uri": "/api/dev/annotation_code/127/"
     },
     {
         "caab_code": "00000003",
-        "code_name": "Not sure",
-        "cpc_code": "UNK?",
-        "description": "No description.",
+        "code_name": "Unknown / Other",
+        "cpc_code": "UNK",
+        "description": "<div class='popup-exemplars'>Includes all other biota, including sponges, soft corals, gorgonians. Also includes anything that is unknown or unidentifiable.</div>",
         "id": 655,
         "parent": "/api/dev/annotation_code/1/",
         "parent_id": 1,
@@ -83,3 +72,10 @@
         "resource_uri": "/api/dev/annotation_code/655/"
     }
 ]}
+
+
+
+
+
+
+
