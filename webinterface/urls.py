@@ -72,6 +72,7 @@ urlpatterns = patterns(
     url(r'^loggedout$','loggedout'),
     url(r'^citizenscience/(?P<citizen_project>\w+)/loggedout$', 'loggedout'),
 
+    url(r'^citizenscience$','citizenscience_chooseproject'),
     url(r'^citizenscience/(?P<citizen_project>\w+)/$', 'index', name='index'),
     url(r'^citizenscience/(?P<citizen_project>\w+)/viewproject$', 'project'),
     url(r'^citizenscience/(?P<citizen_project>\w+)/citizenscience_labels$','citizenscience_getlabels'),

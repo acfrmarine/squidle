@@ -319,6 +319,11 @@ def project(request, citizen_project = ""):
                               RequestContext(request))
 
 
+
+def citizenscience_chooseproject (request) :
+    current_project = "citizenSOI201503"
+    return HttpResponseRedirect("citizenscience/{}".format(current_project))
+
 def citizenscience_getlabels(request, citizen_project):
     #citizen_project = request.GET.get("project")
     dirpath = os.path.dirname(os.path.realpath(__file__))
