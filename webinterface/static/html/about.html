@@ -1,51 +1,115 @@
-<h2>The vision</h2>
-<p>
-    In recent years, ecologists and biologists have increasingly relied on digital video and image-based methods to
-    examine and monitor marine habitats. These data streams are routinely collected by underwater platforms including
-    Baited Remote Underwater Video Systems (BRUVS), Autonomous Underwater Vehicles (AUV), Remotely Operated Vehicles
-    (ROV) and Underwater Towed Video (UTV) systems. Transforming visual data into quantitative information for science
-    and policy decisions, requires substantial effort by human experts. However, there is currently no standardised
-    approach for the cataloguing, annotation, classification and analysis of this imagery. Different research groups
-    tend to handle the collected data in different ways, using different sampling techniques, different annotation tools
-    and even referring to the same taxa by different names. This makes comparison across disparate sites difficult,
-    resulting in little data re-use amongst groups. It also presents a significant barrier to asking ‘big picture’
-    questions that could be answered if quantitative data was available in a consistent format in a centralized
-    repository.
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#about" data-toggle="tab">The vision</a></li>
+  <li><a href="#team" data-toggle="tab">Meet the Team</a></li>
+  <li><a href="#funding" data-toggle="tab">Funding</a></li>
+</ul>
+<div id="myTabContent" class="tab-content">
+  <div class="tab-pane well fade active in" id="about">
+    <p>
+        In recent years, ecologists and biologists have increasingly relied on digital video and image-based methods to
+        examine and monitor marine habitats. These data streams are routinely collected by underwater platforms including
+        Baited Remote Underwater Video Systems (BRUVS), Autonomous Underwater Vehicles (AUV), Remotely Operated Vehicles
+        (ROV) and Underwater Towed Video (UTV) systems. Transforming visual data into quantitative information for science
+        and policy decisions, requires substantial effort by human experts. However, there is currently no standardised
+        approach for the cataloguing, annotation, classification and analysis of this imagery. Different research groups
+        tend to handle the collected data in different ways, using different sampling techniques, different annotation tools
+        and even referring to the same taxa by different names. This makes comparison across disparate sites difficult,
+        resulting in little data re-use amongst groups. It also presents a significant barrier to asking ‘big picture’
+        questions that could be answered if quantitative data was available in a consistent format in a centralized
+        repository.
 
+    </p>
+    <p>
+        Squidle is a web-based framework that aims to facilitate the exploration, management and annotation of marine imagery.
+        We are working closely with
+        members of the marine science community to create a streamlined, user-friendly interface that integrates
+        sophisticated map-based data management tools with an advanced annotation system. Users are able to quickly select
+        data using advanced queries (eg: depth, altitude, date, deployment or bounding box), which they can then subsample
+        and annotate using a selection of standardised, agreed upon methods. The interface will be extended to incorporate
+        machine learning tools for automated clustering and supervised classification, which will serve to streamline and
+        enhance data exploration, subsetting and annotation. Data import & export tools will make it easier to import
+        existing labels from commonly used annotation programs (eg CPCe), and also provide reporting tools for summaries and
+        statistics. The project aims to deliver a reliable, advanced and easy-to-use web-based framework that facilitates
+        direct access to survey data in an effort to reduce the latency between collecting and interpreting marine imagery.
+
+    </p>
+  </div>
+
+
+
+  <div class="tab-pane well fade" id="team">
+
+        <p>This website is currently under development by the Marine Robotics group at the Australian Centre
+        for Field Robotics.
+        It is still a work in progress, and at this stage we have mainly been focussing on the
+        annotation interface. The automated tools are still in the pipeline. There may still be a few bugs and todos, so any feedback and comments would
+        be greatly appreciated.</p>
+
+  <h2>Core Development Team</h2>
+      <p>
+    <b><a href="http://www-personal.acfr.usyd.edu.au/ariell.friedman/" target="_blank"> Ariell Friedman</a></b> is the primary architect and software developer.
+    Ariell has a PhD in automated interpretation of benthic imagery and has extensive experience in machine learning, computer vision and active learning.
+    He also has over a decade of experience in web development and user interface design. He has worked closely
+    with members from the marine science community and has experience creating software tools and data products  that
+    assist and facilitate marine science.
 </p>
 <p>
-    Squidle is a web-based framework that aims to facilitate the
-    exploration, management and annotation of marine imagery. We are working closely with
-    members of the marine science community to create a streamlined, user-friendly interface that integrates
-    sophisticated map-based data management tools with an advanced annotation system. Users are able to quickly select
-    data using advanced queries (eg: depth, altitude, date, deployment or bounding box), which they can then subsample
-    and annotate using a selection of standardised, agreed upon methods. The interface will be extended to incorporate
-    machine learning tools for automated clustering and supervised classification, which will serve to streamline and
-    enhance data exploration, subsetting and annotation. Data import & export tools will make it easier to import
-    existing labels from commonly used annotation programs (eg CPCe), and also provide reporting tools for summaries and
-    statistics. The project aims to deliver a reliable, advanced and easy-to-use web-based framework that facilitates
-    direct access to survey data in an effort to reduce the latency between collecting and interpreting marine imagery.
-
-</p>
-
-<h2>Meet the team</h2>
-<h3>Project Manager/Director</h3>
-<p><b>Prof Stefan Williams</b> of the University of Sydney has had over a decade of
+    <b><a href="http://db.acfr.usyd.edu.au/content.php/232.html?personid=115" target="_blank">Stefan Williams</a></b>
+    is the project manager.
+    Stefan has had over a decade of
     experience working with autonomous underwater vehicles and currently runs the Marine Robotics group at the
     Australian Centre for Field Robotics, which operates the IMOS AUV facility. He has extensive experience conducting
     benthic surveys and with the challenges involved in working with benthic image data.
-    Dr. Williams has worked closely with members of the marine science community and has supervised numerous postgraduate
+    He has worked closely with members of the marine science community and has supervised numerous postgraduate
     and postdoctoral research projects in the areas of machine learning.
 </p>
-<h3>Lead Software Developer</h3>
-    <p><b>Dr. Ariell Friedman</b> of the University of Sydney holds a PhD in automated interpretation of benthic imagery.
-    He has extensive experience in machine learning, computer vision and active learning and has over a decade of
-    experience in web development and user interface design. He has worked closely
-    with members from the marine science community and has experience creating software tools and data products  that
-    assist and faclitate marine science.
+<p>
+    <b><a href="http://db.acfr.usyd.edu.au/content.php/232.html?personid=362" target="_blank">Lachlan Toohey</a></b> has
+    been instrumental in much of backend and API development. Lachlan is a PhD student at the Australian Centre for
+    Field Robotics at the University of Sydney, Australia. His research topic concerns algorithms enabling sharing of
+    information between robots to better determine their position in environments where communication is limited.
+</p>
+
+      <h2>Acknowledgements</h2>
+<p>
+    Thanks goes to <b>Oscar Pizarro</b> for the many good ideas and insights throughout the development process.
 </p>
 <p>
-<!--
-<p>Dr. Oscar Pizarro (CI) of the University of Sydney has extensive experience in the design and deployment of underwater camera systems for photo-mapping autonomous underwater vehicles.  He has worked closely with members of the marine science community and has considerable experience working with underwater imagery and dealing with the associated technical challenges of illumination design and compensation, colour correction, data processing and machine learning. Dr. Pizarro will work closely with the prospective research associate towards developing the detailed formulation of the active learning framework and act as the interface with SeaCognition.
+    Also thanks goes to <b>Renata Ferrari, Thomas Bridge,</b> and <b>Ezequiel Marzinelli</b> for user feedback and testing.
 </p>
--->
+
+</div>
+
+
+    <div class="tab-pane well fade" id="funding">
+        <ul>
+            <li>IMOS was established in 2007 and includes participants from all of Australia’s main university and
+            government research organizations involved in marine science research. IMOS is designed to be a
+            fully-integrated, national system, observing at ocean-basin and regional scales, and covering physical,
+            chemical and biological variables.</li>
+
+            <li>IMOS brings together researchers from a variety of institutions and disciplines. Represented within
+            this group are benthic ecologists, geoscientists, computer scientists and engineers from multiple
+            institutions who have come together by the shared understanding that a collaborative approach is
+            essential for effective marine habitat monitoring at a national scale. Collaborators  include the
+            Australian Centre for Field Robotics (ACFR) at Sydney University; the Institute for Marine and
+            Antarctic Studies (IMAS) at the University of Tasmania; the Sydney Institute of Marine Science (SIMS)
+            at the University of New South Wales; the Oceans Institute at the University of Western Australia;
+            CSIRO Marine and Atmospheric Research; and the Australian Institute for Marine Science.</li>
+
+            <li>IMOS is supported by the Department of Industry, Innovation, Climate Change, Science, Research
+            and Tertiary Education; the National Environmental Research Program Marine Biodiversity Hub; the
+            Australian Research Council;  the Department of Sustainability, Environment, Water, Population and Communities;
+            the Australian National Data Service (ANDS); NSW DPI Fisheries; Department of Fisheries WA; Department
+            of Primary Industries, Parks, Water and Environment.</li>
+        </ul>
+
+    </div>
+</div>
+
+
+
+
+
+
+

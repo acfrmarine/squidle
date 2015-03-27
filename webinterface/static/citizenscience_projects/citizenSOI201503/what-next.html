@@ -1,1 +1,110 @@
-TODO: write some intersting stuff about what is yet to come and how the data will be used...
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#wn-vision" data-toggle="tab">The Vision</a></li>
+  <li><a href="#wn-team" data-toggle="tab">Machine Learning</a></li>
+    <li><a href="#wn-funding" data-toggle="tab">Funding</a></li>
+</ul>
+<div id="myTabContent" class="tab-content">
+    <div class="tab-pane well fade active in" id="wn-vision">
+        This citizen science interface is part of a larger project that aims to help scientists label data using
+        advanced tools and sophisticated taxonomic labels. It is intended to standardise and streamline the
+        image annotation process.
+        The problem: in recent years, ecologists and biologists have increasingly relied on digital video and image-based methods to
+        examine and monitor marine habitats. These data streams are routinely collected by underwater platforms including
+        Baited Remote Underwater Video Systems (BRUVS), Autonomous Underwater Vehicles (AUV), Remotely Operated Vehicles
+        (ROV) and Underwater Towed Video (UTV) systems. Transforming visual data into quantitative information for science
+        and policy decisions, requires substantial effort by human experts. However, there is currently no standardised
+        approach for the cataloguing, annotation, classification and analysis of this imagery. Different research groups
+        tend to handle the collected data in different ways, using different sampling techniques, different annotation tools
+        and even referring to the same taxa by different names. This makes comparison across disparate sites difficult,
+        resulting in little data re-use amongst groups. It also presents a significant barrier to asking ‘big picture’
+        questions that could be answered if quantitative data was available in a consistent format in a centralized
+        repository.
+
+        Squidle is a web-based framework that aims to facilitate the exploration, management and annotation of marine imagery.
+        We are working closely with
+        members of the marine science community to create a streamlined, user-friendly interface that integrates
+        sophisticated map-based data management tools with an advanced annotation system.
+    </div>
+
+
+
+    <div class="tab-pane well fade in" id="wn-team">
+        <p>The following explanation gives you an in-depth look at how our automated classification framework system works. The problem: Typically less than 1 − 2 % of the collected images from ocean-bottom (or “benthic”) surveys are interpreted and processed for science purposes. Within those images, usually only a small number of objects in each image are labeled. This results in a very tiny fraction of total amount of collected data being utilized, O(0.00001%).</p>
+        <div class="well img">
+            <img src="/static/images/superpixels/sample-cpc.png" style="height: 250px">
+            <p>
+                Example of annotated image scored using sparse random points.
+            </p>
+        </div>
+        <p>Our framework uses these few and far between, human-identified labeled objects to train a superpixel-based automated classification system. This automated system can then efficiently use the known labeled objects to  search through every pixel, matching patterns and colors, to identify content in every image of an entire survey. By increasing efficiency of understanding data, this framework is a potential breakthrough; uncovering and interpreting information that will revolutionize how we understand aquatic biology, geography and underwater relationships in all manner of undersea sciences.</p>
+        <div class="well img">
+            <img src="/static/images/superpixels/superpixel-pipeline.png" style="width: 80%">
+
+            <p> Flow diagram of the proposed pipeline for sub-image classification of benthic biota.
+                The blue arrows show the ﬂow of unlabelled data and outputs from automated processing steps,
+                and the red arrows show the ﬂow of data that requires manual annotation by a human expert.
+            </p>
+            <img src="/static/images/superpixels/sample-superpixel.png">
+            <p>
+                Example of image classified using the system described here.
+            </p>
+        </div>
+        <p>There are several aspects that can effect a computer’s efficiency of understanding the contents in an image. One major aspect is how large an area within an image (a "patch") the computer is directed to examine. Large patches may have many classes making it more diﬃcult to assign a single, specific class label. Small patches may be diﬃcult to classify as they lack context. In addition, no matter the size of the patch, if there is a complicated pattern or mix of objects, there can be poor results in identification of data. If these data "ingredients" aren’t optimal, the final mix of statistics computed from raw data will not be as correct or useful. Examples of images classified using the superpixel framework are shown below.</p>
+        <div class="well img">
+            <img src="/static/images/superpixels/superpixel-example.png" style="width: 80%">
+
+            <p>
+                Superpixel classification example images. The first row shows the original image examples; the second row shows
+                labels overlaid onto segmented images (with the unlabeled superpixels coloured randomly); and the third row
+                shows the
+                output from the automated classifier.
+            </p>
+        </div>
+        <p>The figures below chart results of computer-generated class estimates against the labeled points identified by humans. The results show strong compatibility between manual label estimates (black circles) and automated estimates (filled circles). Even more compelling is that the results fall along scientifically valid expectations: deeper regions are dominated by sand, while plants and other organisms using the sun for nourishment (the photosynthesising classes) tend to be limited to the photic zone ( < 60m) where sunlight reaches.</p>
+        <div class="well img">
+            <img src="/static/images/superpixels/superpixel-spatial.png" style="width: 95%">
+
+            <p>
+                Spatial layout of percentage cover, estimated by automated superpixel classification for every
+                pixel of all 7733 images in the survey compared to that
+                estimated using 50 point-count of the 75 images that were scored using CPCe.
+            </p>
+        </div>
+        <p>The image below shows example images unlabeled data that our program has determined are similar, without any human guidance or oversight.</p>
+        <div class="well img">
+            <img src="/static/images/superpixels/sample-pc-images.png" style="width: 60%">
+
+            <p>
+                Non-overlapping unscored sample images for each class. Each row
+                shows thumbnails of the 5 images that contain the highest proportion for each class. The figure
+                also presents the range in percent cover across the images that are shown.
+            </p>
+        </div>
+    </div>
+
+
+
+    <div class="tab-pane well fade in" id="wn-funding">
+        <ul>
+            <li>IMOS was established in 2007 and includes participants from all of Australia’s main university and
+            government research organizations involved in marine science research. IMOS is designed to be a
+            fully-integrated, national system, observing at ocean-basin and regional scales, and covering physical,
+            chemical and biological variables.</li>
+
+            <li>IMOS brings together researchers from a variety of institutions and disciplines. Represented within
+            this group are benthic ecologists, geoscientists, computer scientists and engineers from multiple
+            institutions who have come together by the shared understanding that a collaborative approach is
+            essential for effective marine habitat monitoring at a national scale. Collaborators  include the
+            Australian Centre for Field Robotics (ACFR) at Sydney University; the Institute for Marine and
+            Antarctic Studies (IMAS) at the University of Tasmania; the Sydney Institute of Marine Science (SIMS)
+            at the University of New South Wales; the Oceans Institute at the University of Western Australia;
+            CSIRO Marine and Atmospheric Research; and the Australian Institute for Marine Science.</li>
+
+            <li>IMOS is supported by the Department of Industry, Innovation, Climate Change, Science, Research
+            and Tertiary Education; the National Environmental Research Program Marine Biodiversity Hub; the
+            Australian Research Council;  the Department of Sustainability, Environment, Water, Population and Communities;
+            the Australian National Data Service (ANDS); NSW DPI Fisheries; Department of Fisheries WA; Department
+            of Primary Industries, Parks, Water and Environment.</li>
+        </ul>
+    </div>
+</div>
