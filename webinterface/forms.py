@@ -49,7 +49,7 @@ class CreateWorksetForm(forms.Form):
     method = forms.ChoiceField(label=u'Sub-sample', choices=(('random', 'N random images'),('stratified','Every Nth image'),('grts','N images sampled using GRTS')), initial='random', help_text=u'The method used to subsample the images...')
     n = forms.IntegerField(label=u'N', min_value=1, help_text=u'Number of images or spacing between images (depends on sub-sample method)')
     start_ind = forms.IntegerField(label=u'Start Index', min_value=0)
-    #stop_ind = forms.IntegerField(label=u'Stop Index', min_value=0)
+    stop_ind = forms.IntegerField(label=u'Stop Index', min_value=0)
     description = forms.CharField(label=u'Description', required=False, widget=forms.Textarea(attrs={'rows': 3, 'placeholder': 'Longer description (optional)'}))
     #method = forms.CharField(widget=forms.HiddenInput())
     c_id = forms.IntegerField(widget=forms.HiddenInput())
