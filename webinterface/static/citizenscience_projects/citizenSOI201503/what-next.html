@@ -29,14 +29,15 @@
 
 
     <div class="tab-pane well fade in" id="wn-team">
-        <p>The following explanation gives you an in-depth look at how our automated classification framework system works. The problem: Typically less than 1 − 2 % of the collected images from ocean-bottom (or “benthic”) surveys are interpreted and processed for science purposes. Within those images, usually only a small number of objects in each image are labeled. This results in a very tiny fraction of total amount of collected data being utilized, O(0.00001%).</p>
+        <p>The following explanation gives you a brief look at how our automated classification framework system works. The problem: Typically less than 1 − 2 % of the collected images from ocean-bottom (or “benthic”) surveys are interpreted and processed for science purposes. Within those images, usually only a small number of pixels within each image are labeled. This results in a very tiny fraction of total amount of collected data being utilized for science purposes, O(0.00001%).</p>
         <div class="well img">
             <img src="/static/images/superpixels/sample-cpc.png" style="height: 250px">
             <p>
                 Example of annotated image scored using sparse random points.
             </p>
         </div>
-        <p>Our framework uses these few and far between, human-identified labeled objects to train a superpixel-based automated classification system. This automated system can then efficiently use the known labeled objects to  search through every pixel, matching patterns and colors, to identify content in every image of an entire survey. By increasing efficiency of understanding data, this framework is a potential breakthrough; uncovering and interpreting information that will revolutionize how we understand aquatic biology, geography and underwater relationships in all manner of undersea sciences.</p>
+        <p>Our framework uses these few and far between, human-identified labeled pixels to train a superpixel-based automated classification system. This automated system can then efficiently use the known labeled objects to look for patterns matching textures and colors, to identify content in the images.
+            In this way we can extend the labelled results from a few pixels in a tiny fraction of the images to every pixel in every image of an entire survey. By increasing the accuracy of these systems, we can increase our understanding of these undersea habitats.</p>
         <div class="well img">
             <img src="/static/images/superpixels/superpixel-pipeline.png" style="width: 80%">
 
@@ -49,7 +50,7 @@
                 Example of image classified using the system described here.
             </p>
         </div>
-        <p>There are several aspects that can effect a computer’s efficiency of understanding the contents in an image. One major aspect is how large an area within an image (a "patch") the computer is directed to examine. Large patches may have many classes making it more diﬃcult to assign a single, specific class label. Small patches may be diﬃcult to classify as they lack context. In addition, no matter the size of the patch, if there is a complicated pattern or mix of objects, there can be poor results in identification of data. If these data "ingredients" aren’t optimal, the final mix of statistics computed from raw data will not be as correct or useful. Examples of images classified using the superpixel framework are shown below.</p>
+        <p>There are several aspects that can effect a computer’s effectiveness of understanding the contents in an image. One major aspect is how large an area within an image (a "patch") the computer is directed to examine. Large patches may have many classes making it more diﬃcult to assign a single, specific class label. Small patches may be diﬃcult to classify as they lack context. In addition, no matter the size of the patch, if there is a complicated pattern or mix of objects, there can be poor results in identification of data. If these data "ingredients" aren’t optimal, the final mix of statistics computed from raw data will not be as correct or useful. Examples of images classified using the superpixel framework are shown below.</p>
         <div class="well img">
             <img src="/static/images/superpixels/superpixel-example.png" style="width: 80%">
 
@@ -70,7 +71,7 @@
                 estimated using 50 point-count of the 75 images that were scored using CPCe.
             </p>
         </div>
-        <p>The image below shows example images unlabeled data that our program has determined are similar, without any human guidance or oversight.</p>
+        <p>The images below show examples of unlabeled data that this trained system has determined are similar, without any human guidance or oversight.</p>
         <div class="well img">
             <img src="/static/images/superpixels/sample-pc-images.png" style="width: 60%">
 
