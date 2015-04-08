@@ -344,6 +344,34 @@ if __name__ == '__main__':
     cp.load_cpc2labelid('cpc2labelid_tas08.csv')
     parser_list.append(cp)
 
+    cp = CPCFolderParser('real_cpc_data_to_import/public/Tasmania 200903')
+    tas_classes = pd.read_csv('AUV_ScoredData_ByPoints_Long.csv')
+    tas_classes['label_number'] = tas_classes.Point_No.apply(lambda s: s[2:]).astype(int) + 4
+    tas_classes['image_name'] = tas_classes.IMAGE_NAME_LEFT.apply(lambda s: os.path.splitext(s)[0])
+    bigdf = pd.merge(cp.bigdf, tas_classes[['image_name', 'label_number', 'Species_Code']],
+                     on=['image_name', 'label_number'], how='left')
+    unid = bigdf.cpc_code == 'UNID'
+    bigdf.loc[unid, 'cpc_code'] = bigdf.loc[unid, 'Species_Code'].fillna('UNID')
+    bigdf.pop('Species_Code')
+
+    cp.bigdf = bigdf
+    cp.load_cpc2labelid('cpc2labelid_tas08.csv')
+    parser_list.append(cp)
+
+    cp = CPCFolderParser('real_cpc_data_to_import/public/Tasmania 200906')
+    tas_classes = pd.read_csv('AUV_ScoredData_ByPoints_Long.csv')
+    tas_classes['label_number'] = tas_classes.Point_No.apply(lambda s: s[2:]).astype(int) + 4
+    tas_classes['image_name'] = tas_classes.IMAGE_NAME_LEFT.apply(lambda s: os.path.splitext(s)[0])
+    bigdf = pd.merge(cp.bigdf, tas_classes[['image_name', 'label_number', 'Species_Code']],
+                     on=['image_name', 'label_number'], how='left')
+    unid = bigdf.cpc_code == 'UNID'
+    bigdf.loc[unid, 'cpc_code'] = bigdf.loc[unid, 'Species_Code'].fillna('UNID')
+    bigdf.pop('Species_Code')
+
+    cp.bigdf = bigdf
+    cp.load_cpc2labelid('cpc2labelid_tas08.csv')
+    parser_list.append(cp)
+
     cp = CPCFolderParser('real_cpc_data_to_import/public/New South Wales 2010')
     cp.load_cpc2labelid('cpc2labelid_nsw.csv')
     parser_list.append(cp)
@@ -369,10 +397,6 @@ if __name__ == '__main__':
     cp = CPCFolderParser('real_cpc_data_to_import/public/Western Australia 2013')
     cp.load_cpc2labelid('cpc2labelid_wa.csv')
     parser_list.append(cp)
-
-
-
-
 
     for cp in parser_list:
         print(cp.folder_path)

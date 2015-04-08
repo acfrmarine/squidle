@@ -152,6 +152,7 @@ class Camera(object):
         pose_time = pose.date_time
         image_name = columns[self.column]
 
+
         # check that the times match... else move on
         if not row_time == pose_time:
             return None
@@ -305,7 +306,6 @@ class TimeParser(csv.DictReader):
     def create_images(self, pose):
         """Create images for the given pose (if appropriate)."""
         time = pose.date_time
-
         # if we have no cameras... then no images too
         if len(self.cameras) == 0:
             return []
@@ -744,7 +744,6 @@ def deployment_import(deployment, files):
         # go through and get all images
         for p in parsers:
             images.extend(p.create_images(pose))
-
         # now get all pose/image measurements
         for p in parsers:
             p.apply_measurements(pose, images)

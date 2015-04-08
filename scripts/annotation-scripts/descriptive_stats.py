@@ -80,7 +80,9 @@ all_points = PointAnnotation.objects.filter(annotation_set__in=ann_sets)
 print 'Total number of cpc points:', all_points.count()
 
 all_df = points2df(all_points)
+print(all_df.head())
 
+all_df.iloc[:1000, :].to_csv('{}_mini.csv'.format(project_name))
 all_df.to_csv('{}.csv'.format(project_name))
 #
 # print(all_df.head(1).T)
@@ -114,16 +116,6 @@ all_df.to_csv('{}.csv'.format(project_name))
 #         tmp = aroot_n
 # aroot.pretty_print_tree()
 
-
-
-#
-# aroot.calculate_node_point_counts(all_points)
-# s = aroot.json_dump_tree()
-# with open('catami.json', 'wb') as f:
-#     f.write(s)
-#
-#
-#
 
 
 

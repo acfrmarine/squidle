@@ -140,7 +140,7 @@ def populate_scientific_measurements(campaign_name, deployment_startswith, meas_
         cdb_models.ScientificPoseMeasurement.objects.bulk_create(measurements)
 
 
-for campaign in ['Tasmania 2008', 'Port Stevens 2012', 'Western Australia 2011']:
+for campaign in ['Tasmania 200903', 'Tasmania 200906']:
     for meas_type in [temperature, salinity]:
         populate_scientific_measurements(campaign_name=campaign,
                                          deployment_startswith='r20',

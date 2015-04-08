@@ -15,7 +15,6 @@ import numpy as np
 sys.path.append('/home/auv/git/squidle-playground')
 sys.path.append('/home/auv/git')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "catamiPortal.settings")
-from smartpy.classification import classifiers
 from smartpy.featureextraction import descriptors
 from django.conf import settings
 
@@ -23,7 +22,7 @@ from collection.models import Collection
 from annotations.models import PointAnnotationSet, PointAnnotation, AnnotationCode
 from catamidb.models import Deployment, Image, Pose, ScientificPoseMeasurement
 
-dataset = Collection.objects.get(name__exact='AUSBEN2014')
+dataset = Collection.objects.get(name__exact='AUSBEN2014_TRAIN')
 print dataset
 
 subsets = Collection.objects.filter(parent__exact=dataset)
@@ -83,8 +82,6 @@ all_points = PointAnnotation.objects.filter(annotation_set__in=ann_sets)
 print 'Total number of cpc points:', all_points.count()
 
 
-# all_df = points2df(all_points)
-# all_df.to_csv('AUSBEN2014_all.csv')
 
 # print(all_df.head(1).T)
 
@@ -116,10 +113,25 @@ for code_id, node in node_dic.items():
     if aroot_n > tmp:
         biggest_root = aroot
         tmp = aroot_n
-aroot.pretty_print_tree()
 
-import smartpy.featureextraction.patchtransforms as pt
-from smartpy.metadata.general import DataManager
+# Remove root level unknown/noisy data that the human couldn't classify.
+aroot.prune_node(273)
+aroot.prune_node(274)
+aroot.prune_node(655)
+
+logging.root.setLevel(logging.DEBUG)
+from sklearn.externals import joblib
+joblib.dump(aroot, 'tree.pkl')
+aroot.calculate_node_point_counts(all_points)
+
+# Prune any nodes not found at all in the data set.
+aroot.prune()
+aroot.pretty_print_tree()
+print 'Dumped tree to disk'
+
+with open('catami.json', 'wb') as f:
+    f.writelines(aroot.json_dump_tree())
+print 'Wrote tree json to disk'
 
 KPFILENAME = 'kpdata.csv'
 KPCOORDFILENAME = 'kpcoords.csv'
@@ -140,11 +152,5 @@ feature_extractor = de.LBPSquarePatchExtractor(
 )
 
 
-FEATURE_FILE = 'sample_features.csv'
-POINT_DATA = 'AUSBEN2014_all.csv'
-SAVE_DIR = '.'
-NJOBS = -1
-PARAMSELECTFOLDS = 3
-
 features = feature_extractor.calculate_features(all_points)
-features.to_csv('sample_features.csv')
+features.to_csv('features.csv')
