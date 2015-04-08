@@ -9,7 +9,6 @@ __author__ = 'mbewley'
 import os
 import sys
 import logging
-# logging.root.setLevel(logging.DEBUG)
 import numpy as np
 
 sys.path.append('/home/auv/git/squidle-playground')
@@ -119,7 +118,6 @@ aroot.prune_node(273)
 aroot.prune_node(274)
 aroot.prune_node(655)
 
-logging.root.setLevel(logging.DEBUG)
 from sklearn.externals import joblib
 joblib.dump(aroot, 'tree.pkl')
 aroot.calculate_node_point_counts(all_points)
