@@ -119,12 +119,12 @@ aroot.prune_node(274)
 aroot.prune_node(655)
 
 from sklearn.externals import joblib
-joblib.dump(aroot, 'tree.pkl')
 aroot.calculate_node_point_counts(all_points)
 
 # Prune any nodes not found at all in the data set.
 aroot.prune()
 aroot.pretty_print_tree()
+joblib.dump(aroot, 'tree.pkl')
 print 'Dumped tree to disk'
 
 with open('catami.json', 'wb') as f:
