@@ -7,26 +7,15 @@ Retrospectively import the roll, pitch, yaw, temperature, salinity and depth dat
 '''
 import os
 import sys
-import datetime
 
 sys.path.append('/home/auv/git/squidle-playground')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "catamiPortal.settings")
 
 from django.conf import settings
 
-from django.contrib.auth.models import User
-from libxml2mod import name
 import logging
-
-import csv
-
 import pandas as pd
-import numpy as np
-
-import annotations.models
 import catamidb.models as cdb_models
-from collection.models import Collection
-from collection.authorization import apply_collection_permissions
 
 from staging.auvimport import NetCDFParser, TrackParser
 
@@ -48,10 +37,13 @@ def merge_poses_with_measurements(pose_df, meas_df):
     :return:
     """
     # Interpolate the readings to get the reading equivalent at the same time as each pose is recorded.
-    meas_df.drop_duplicates(inplace=True)
-    meas_df_interp = meas_df.reindex(pose_df.index.union(meas_df.index)).interpolate()
-    merge_df = pose_df.join(meas_df_interp)
-    return merge_df
+    if len(meas_df) > 0:
+        meas_df.drop_duplicates(inplace=True)
+        meas_df_interp = meas_df.reindex(pose_df.index.union(meas_df.index)).interpolate()
+        merge_df = pose_df.join(meas_df_interp)
+        return merge_df
+    else:
+        return meas_df
 
 
 def populate_scientific_measurements(campaign_name, deployment_startswith, meas_type):
@@ -105,7 +97,8 @@ def populate_scientific_measurements(campaign_name, deployment_startswith, meas_
                     except IndexError:
                         break
             meas_df = pd.DataFrame(readings)
-            meas_df.set_index('date_time', inplace=True)
+            if len(readings) > 0:
+                meas_df.set_index('date_time', inplace=True)
         else:
             import datetime
 
