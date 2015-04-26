@@ -140,8 +140,14 @@ def populate_scientific_measurements(campaign_name, deployment_startswith, meas_
         cdb_models.ScientificPoseMeasurement.objects.bulk_create(measurements)
 
 
-for campaign in ['Tasmania 200903', 'Tasmania 200906']:
+logging.root.setLevel(logging.INFO)
+for campaign in ['Tasmania 2008', 'Tasmania 200903', 'Tasmania 200906', 
+                 'New South Wales 2010', 'New South Wales 2012',
+                 'South East Queensland 2010',
+                 'Western Australia 2011', 'Western Australia 2012', 'Western Australia 2013']:
+    logging.info(campaign)
     for meas_type in [temperature, salinity]:
+        logging.info(meas_type)
         populate_scientific_measurements(campaign_name=campaign,
                                          deployment_startswith='r20',
                                          meas_type=meas_type)
