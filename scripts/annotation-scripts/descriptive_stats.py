@@ -80,7 +80,13 @@ all_points = PointAnnotation.objects.filter(annotation_set__in=ann_sets)
 print 'Total number of cpc points:', all_points.count()
 
 all_df = points2df(all_points)
-print(all_df.head())
+print('Points per campaign:')
+print(all_df.groupby(['campaign']).count()[0])
+
+
+if len(all_df) != len(all_df[all_df.notnull]):
+    print('No salinity data for the following points:')
+    print(all_df[all_df.salinity.isnull()].groupby(['campaign', 'deployment']).count()[0])
 
 all_df.iloc[:1000, :].to_csv('{}_mini.csv'.format(project_name))
 all_df.to_csv('{}.csv'.format(project_name))

@@ -53,19 +53,20 @@ def populate_scientific_measurements(campaign_name, deployment_startswith, meas_
     #     print cdb_models.Campaign.objects.get(deployment__exact=d), d
     # raw_input('About to import %s measurements for %d dives - last chance to abort!' % (meas_type.normalised_name,
     #                                                                                     deployments.count()))
+    p_ct = re.compile('ct.*\.csv$')
     for deployment in deployments:
         poses = cdb_models.Pose.objects.filter(deployment__exact=deployment)
         existing_measurements = cdb_models.ScientificPoseMeasurement.objects.filter(pose__in=poses,
                                                                                     measurement_type__exact=meas_type)
         if existing_measurements.count() > 0:
-            logging.info('Found %d measurements already in deployment %s' % (existing_measurements.count(), deployment))
+            logging.debug('Found %d measurements already in deployment %s' % (existing_measurements.count(), deployment))
 
             poses = poses.exclude(scientificposemeasurement__in=existing_measurements)
             if poses.count() == 0:
-                logging.info('Skipping %s, as measurements are present for all poses' % deployment.short_name)
+                logging.debug('Skipping %s, as measurements are present for all poses' % deployment.short_name)
                 continue
             else:
-                logging.info('Continuing, inserting measurements on %d poses' % poses.count())
+                logging.info('Continuing, inserting extra measurements on %d poses' % poses.count())
 
         df = pd.DataFrame(list(poses.values(
             'id',
@@ -79,7 +80,7 @@ def populate_scientific_measurements(campaign_name, deployment_startswith, meas_
         path_base = os.path.join(RELEASE, os.path.join(*web_loc.split('/')[:2]))
 
         if not os.path.isdir(path_base):
-            logging.warn('Skipping %s, as release folder not found (%s)' % (deployment.short_name, path_base))
+            logging.warning('Skipping %s, as release folder not found (%s)' % (deployment.short_name, path_base))
             continue
 
         measurements = []
@@ -104,10 +105,10 @@ def populate_scientific_measurements(campaign_name, deployment_startswith, meas_
 
             hydro_dirs = filter(lambda s: s.startswith('hydro'), os.listdir(path_base))
             if len(hydro_dirs) == 0:
-                logging.warn('Skipping %s, as no sensor data could be found' % deployment.short_name)
+                logging.warning('Skipping %s, as no folder of sensor data could be found' % deployment.short_name)
                 continue
             path = os.path.join(RELEASE, path_base, hydro_dirs[0])
-            files = filter(lambda s: s.startswith('ct'), os.listdir(path))
+            files = filter(lambda s: p_ct.match(s), os.listdir(path))
             if len(hydro_dirs) == 1 & len(files) == 1 & os.path.isfile(os.path.join(path, files[0])):
                 oldmeas_df = pd.read_csv(os.path.join(path, files[0]))
                 for idx, row in oldmeas_df.iterrows():
@@ -119,7 +120,10 @@ def populate_scientific_measurements(campaign_name, deployment_startswith, meas_
                 meas_df = oldmeas_df[['date_time', 'salinity', 'temperature']]
                 meas_df = meas_df.set_index('date_time').tz_localize('UTC')
             else:
-                logging.warn('Skipping %s, as no sensor data could be found' % deployment.short_name)
+                logging.warning('Skipping %s, as no sensor data files could be found' % deployment.short_name)
+                logging.warning(hydro_dirs)
+                logging.warning(files)
+                logging.warning(os.path.join(path, files[0]))
                 continue
 
         # Merge measurement df with poses, and make and bulk create models.
