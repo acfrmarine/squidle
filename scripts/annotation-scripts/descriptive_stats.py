@@ -81,10 +81,10 @@ print 'Total number of cpc points:', all_points.count()
 
 all_df = points2df(all_points)
 print('Points per campaign:')
-print(all_df.groupby(['campaign']).count()[0])
+print(all_df.groupby(['campaign']).count())
 
 
-if len(all_df) != len(all_df[all_df.notnull]):
+if not all(all_df.salinity.notnull()):
     print('No salinity data for the following points:')
     print(all_df[all_df.salinity.isnull()].groupby(['campaign', 'deployment']).count()[0])
 

@@ -139,7 +139,7 @@ def populate_scientific_measurements(campaign_name, deployment_startswith, meas_
 
 logging.root.setLevel(logging.INFO)
 for campaign in ['Tasmania 2008', 'Tasmania 200903', 'Tasmania 200906', 
-                 'New South Wales 2010', 'New South Wales 2012',
+                 'Port Stephens 2010', 'Port Stephens 2012', 'Solitary Islands 2012', 'Batemans 2010', 'Batemans 2012',
                  'South East Queensland 2010',
                  'Western Australia 2011', 'Western Australia 2012', 'Western Australia 2013']:
     logging.info(campaign)
