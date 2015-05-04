@@ -1,0 +1,232 @@
+cpc_code,caab_code,label_id,description
+CO,11168000,126,Cnidaria: Corals
+DC,11168000,126,Cnidaria: Corals
+CSC,11290000,127,Cnidaria: Corals: Stony corals
+C1,11290000,127,Cnidaria: Corals: Stony corals
+C2,11290000,127,Cnidaria: Corals: Stony corals
+C3,11290000,127,Cnidaria: Corals: Stony corals
+FAV,11290000,127,Cnidaria: Corals: Stony corals
+FAV1,11290000,127,Cnidaria: Corals: Stony corals
+ACRO,11291901,288,Cnidaria: Corals: Stony corals: Acropora
+ACRO1,11291901,288,Cnidaria: Corals: Stony corals: Acropora
+TAR,11291901,288,Cnidaria: Corals: Stony corals: Acropora
+EAR,11291901,288,Cnidaria: Corals: Stony corals: Acropora
+DAR,11291901,288,Cnidaria: Corals: Stony corals: Acropora
+CAR,11291901,288,Cnidaria: Corals: Stony corals: Acropora
+BAR,11291901,288,Cnidaria: Corals: Stony corals: Acropora
+MON,11291904,289,Cnidaria: Corals: Stony corals: Montipora
+EMON,11291904,289,Cnidaria: Corals: Stony corals: Montipora
+TUR,11320915,290,Manually changed from 54105903 (code given in cpc code file not exist in db)
+TUB,11320914,291,Cnidaria: Corals: Stony corals: Tubastrea/Dendrophyllia
+Blank,1,273,Unscorable.
+TWS1,2,274,Not of Interest
+TAPE,2,274,Not of Interest
+WAND,2,274,Not of Interest
+SHAD,1,273,Unscorable.
+CTAB,11290911,128,Cnidaria: Corals: Stony corals: Tabulate
+TARS,11291114,346,Cnidaria: Corals: Stony corals: Tabulate: Acropora solitaryensis/glauca
+CSM,11290905,129,Cnidaria: Corals: Stony corals: Sub-massive
+SMFA,11290905,129,Cnidaria: Corals: Stony corals: Sub-massive
+SMM,11290905,129,Cnidaria: Corals: Stony corals: Sub-massive
+SMMC,11290905,129,Cnidaria: Corals: Stony corals: Sub-massive
+SMF,11290905,129,Cnidaria: Corals: Stony corals: Sub-massive
+SMCY,11305904,347,Cnidaria: Corals: Stony corals: Sub-massive: Cyphastrea
+SMFE,11305908,348,Cnidaria: Corals: Stony corals: Sub-massive: Favites
+SMGO,11305909,349,Cnidaria: Corals: Stony corals: Sub-massive: Goniastrea
+SMGA,11305055,350,Cnidaria: Corals: Stony corals: Sub-massive: Goniastrea Australensis 
+SMPA,11305916,351,Cnidaria: Corals: Stony corals: Sub-massive: Platygyra
+SMPV,11305093,352,Cnidaria: Corals: Stony corals: Sub-massive:  Plesiastrea Versipora
+SMH,11305919,294,Cnidaria: Corals: Stony corals: Sub-massive: Hydnophora
+SMAA,11307901,354,Cnidaria: Corals: Stony corals: Sub-massive: Acanthastrea
+SMAE,11307003,355,Cnidaria: Corals: Stony corals: Sub-massive: Acanthastrea echinata
+SMAH,11307006,356,Cnidaria: Corals: Stony corals: Sub-massive: Acanthastrea hillae 
+SMAL,11307008,357,Cnidaria: Corals: Stony corals: Sub-massive: Acanthastrea lordhowensis
+SMG,11325902,295,Cnidaria: Corals: Stony corals: Sub-massive: Goniopora/Alveopora
+SMPO,11325903,359,Cnidaria: Corals: Stony corals: Sub-massive: Porites
+SMPH,11325044,360,Cnidaria: Corals: Stony corals: Sub-massive: Porites heronensis 
+SMPS,11302901,361,Cnidaria: Corals: Stony corals: Sub-massive: Psammacora
+SMCO,11296901,303,Cnidaria: Corals: Stony corals: Foliose / plate: Coscinaraea
+FCO,11296901,303,Cnidaria: Corals: Stony corals: Foliose / plate: Coscinaraea
+CMAS,11290906,134,Cnidaria: Corals: Stony corals: Massive
+MMU,11290906,134,Cnidaria: Corals: Stony corals: Massive
+CFOL,11290907,136,Cnidaria: Corals: Stony corals: Foliose / plate
+FPEC,11290907,136,Cnidaria: Corals: Stony corals: Foliose / plate
+FTF,11320007,299,Cnidaria: Corals: Stony corals: Foliose / plate: Turbinaria frondens 
+FTM,11320010,300,Cnidaria: Corals: Stony corals: Foliose / plate: Turbinaria mesenterina 
+FTPA,11320011,371,Cnidaria: Corals: Stony corals: Foliose / plate: Turbinaria patula 
+FTPE,11320012,372,Cnidaria: Corals: Stony corals: Foliose / plate: Turbinaria peltata 
+FEC,11290917,301,Manually changed from 11307913 (Cnidaria: Corals: Stony corals: Foliose / plate: Echynophyllia)
+FMY,11305923,302,Cnidaria: Corals: Stony corals: Foliose / plate: Mycedium
+CEN,11290908,137,Cnidaria: Corals: Stony corals: Encrusting
+EMU,11290908,137,Cnidaria: Corals: Stony corals: Encrusting
+EISO,11291905,378,Cnidaria: Corals: Stony corals: Encrusting: Isopora
+EPAV,11297905,380,Cnidaria: Corals: Stony corals: Encrusting: Pavona 
+ETR,11320013,305,Cnidaria: Corals: Stony corals: Encrusting: Turbinaria radicalis 
+ETS,11320015,306,Cnidaria: Corals: Stony corals: Encrusting: Turbinaria  stellulata 
+CDIG,11290909,138,Cnidaria: Corals: Stony corals: Digitate
+CCOR,11290910,139,Cnidaria: Corals: Stony corals: Corymbose
+CBR,11290912,141,Cnidaria: Corals: Stony corals: Branching
+BARR,11291103,388,Cnidaria: Corals: Stony corals: Branching: Acropora robusta 
+BPOC,11293000,309,Cnidaria: Corals: Stony corals: Branching: Pocilloporidae 
+BPO,11293901,390,Cnidaria: Corals: Stony corals: Branching: Pocillopora
+BPD,11293003,391,Cnidaria: Corals: Stony corals: Branching: Pocillopora damicornis 
+BPA,11293020,392,Cnidaria: Corals: Stony corals: Branching: Pocillopora aliciae
+BSH,11293016,393,Cnidaria: Corals: Stony corals: Branching: Seriatopora  hystrix 
+BSTY,11293903,394,Cnidaria: Corals: Stony corals: Branching: Stylophora
+CSO,11290901,131,Cnidaria: Corals: Stony corals: Solitary / mushroom
+CSOFL,11290902,132,Cnidaria: Corals: Stony corals: Solitary / mushroom: Free-living
+CSOA,11290903,133,Cnidaria: Corals: Stony corals: Solitary / mushroom: Attached
+OCT,11168901,143,Cnidaria: Corals: Black & Octocorals
+OW,11168917,144,Cnidaria: Corals: Black & Octocorals: Whip
+OQ,11168918,145,Cnidaria: Corals: Black & Octocorals: Quill (seapen)
+OF,11168912,146,Cnidaria: Corals: Black & Octocorals: Fan (2D)
+OFR,11168916,147,Cnidaria: Corals: Black & Octocorals: Fan (2D): Rigid
+OFF,11168913,148,Cnidaria: Corals: Black & Octocorals: Fan (2D): Fern-frond
+OFFS,11168914,149,Cnidaria: Corals: Black & Octocorals: Fan (2D): Fern-frond: Simple
+OFFC,11168915,150,Cnidaria: Corals: Black & Octocorals: Fan (2D): Fern-frond: Complex
+OE,11168919,151,Cnidaria: Corals: Black & Octocorals: Encrusting
+OM,11168920,310,Cnidaria: Corals: Black & Octocorals: Massive 
+OB,11168902,152,Cnidaria: Corals: Black & Octocorals: Branching (3D)
+OBN,11168903,153,Cnidaria: Corals: Black & Octocorals: Branching (3D): Non-fleshy
+OBNB,11168908,154,Cnidaria: Corals: Black & Octocorals: Branching (3D): Non-fleshy: Bushy
+OBNBB,11168905,155,Cnidaria: Corals: Black & Octocorals: Branching (3D): Non-fleshy: Bottle-brush
+OBNBS,11168906,156,Cnidaria: Corals: Black & Octocorals: Branching (3D): Non-fleshy: Bottle-brush: Simple
+OBNBC,11168907,157,Cnidaria: Corals: Black & Octocorals: Branching (3D): Non-fleshy: Bottle-brush: Complex
+OBNA,11168904,158,Cnidaria: Corals: Black & Octocorals: Branching (3D): Non-fleshy: Arborescent
+OBF,11168909,159,Cnidaria: Corals: Black & Octocorals: Branching (3D): Fleshy
+OBFM,11168910,160,Cnidaria: Corals: Black & Octocorals: Branching (3D): Fleshy: Mushroom
+OBFA,11168911,161,Cnidaria: Corals: Black & Octocorals: Branching (3D): Fleshy: Arborescent
+TUA,11164000,119,Cnidaria: Tube anemones
+TRA,11229000,120,Cnidaria: True anemones
+TRAO,11229903,121,Cnidaria: True anemones: Other anemones
+TRAFO,11229902,122,Cnidaria: True anemones: Fourlobed
+TRAFL,11229901,123,Cnidaria: True anemones: Flytrap
+HYDD,11001000,124,Cnidaria: Hydroids
+HYDCO,11077000,125,Cnidaria: Hydrocorals
+CA,11500901,162,Cnidaria: Colonial anemones
+CAZ,11284000,163,Cnidaria: Colonial anemones: Zoanthids
+CACO,11280000,164,Cnidaria: Colonial anemones: Corallimorphs
+S,10000000,13,Sponges
+SPS1,10000000,13,Sponges
+SPS2,10000000,13,Sponges
+SM,10000903,14,Sponges: Massive forms
+SMST,10000903,14,Sponges: Massive forms
+SMB,10000903,14,Sponges: Massive forms
+SMC,10000903,14,Sponges: Massive forms
+SMSI,10000904,16,Sponges: Massive forms: Simple
+SMRA,10000905,17,Sponges: Massive forms: Radially organised
+SH,10000909,20,Sponges: Hollow forms
+SHCA,10000910,22,Sponges: Hollow forms: Cups and alikes
+SHTC,10000911,21,Sponges: Hollow forms: Tubes and chimneys
+SE,10000912,23,Sponges: Erect forms
+SES,10000916,24,Sponges: Erect forms: Simple
+SEP,10000914,25,Sponges: Erect forms: Palmate
+SEL,10000913,26,Sponges: Erect forms: Laminar
+SEB,10000915,27,Sponges: Erect forms: Branching
+SCR,10000901,28,Sponges: Crusts
+MA,80300000,39,Macroalgae
+MA2,80300000,39,Macroalgae
+MA1,80300000,39,Macroalgae
+MATA,80300000,39,Macroalgae
+MAM,80300922,40,Macroalgae: Sheet-like / membraneous
+MAMR,80300925,41,Macroalgae: Sheet-like / membraneous: Red
+MAMG,80300924,42,Macroalgae: Sheet-like / membraneous: Green
+MAMB,80300923,43,Macroalgae: Sheet-like / membraneous: Brown
+MALC,80300901,44,Macroalgae: Large canopy-forming
+MALCB,80300902,45,Macroalgae: Large canopy-forming: Brown
+ECKL,54080001,400,Macroalgae: Large canopy-forming: Ecklonia radiata 
+MALA,80300918,46,Macroalgae: Laminate
+MALAR,80300921,47,Macroalgae: Laminate: Red
+MALAG,80300920,48,Macroalgae: Laminate: Green
+MALAB,80300919,49,Macroalgae: Laminate: Brown
+MAG,80300914,50,Macroalgae: Globose / saccate
+MAGR,80300917,51,Macroalgae: Globose / saccate: Red
+MAGG,80300916,52,Macroalgae: Globose / saccate: Green
+MAGB,80300915,53,Macroalgae: Globose / saccate: Brown
+MAF,80300930,54,Macroalgae: Filamentous / filiform
+MAFR,80300933,55,Macroalgae: Filamentous / filiform: Red
+MAFG,80300932,56,Macroalgae: Filamentous / filiform: Green
+MAFB,80300931,57,Macroalgae: Filamentous / filiform: Brown
+MAEF,80300907,58,Macroalgae: Erect fine branching
+MAEFR,80300910,59,Macroalgae: Erect fine branching: Red
+MAEFG,80300909,60,Macroalgae: Erect fine branching: Green
+MAEFB,80300908,61,Macroalgae: Erect fine branching: Brown
+MAEC,80300903,62,Macroalgae: Erect coarse branching
+MAECR,80300906,63,Macroalgae: Erect coarse branching: Red
+MAECG,80300905,64,Macroalgae: Erect coarse branching: Green
+MAECB,80300904,65,Macroalgae: Erect coarse branching: Brown
+MAEN,80300926,66,Macroalgae: Encrusting
+MAENC,80300929,67,Macroalgae: Encrusting: Red
+MAENR,80300929,67,Macroalgae: Encrusting: Red
+MAENG,80300928,68,Macroalgae: Encrusting: Green
+MAENB,80300927,69,Macroalgae: Encrusting: Brown
+MAAC,80300911,70,Macroalgae: Articulated calcareous
+MAACR,80300913,71,Macroalgae: Articulated calcareous: Red
+MAACG,80300912,72,Macroalgae: Articulated calcareous: Green
+BRYO,20000000,165,Bryozoa
+BS,20000905,166,Bryozoa: Soft
+BSF,20000907,167,Bryozoa: Soft: Foliaceous
+BSD,20000906,168,Bryozoa: Soft: Dendroid
+BH,20000901,169,Bryozoa: Hard
+BHM,20000904,170,Bryozoa: Hard: Massive
+BHF,20000903,171,Bryozoa: Hard: Fenestrate
+BHE,20000902,172,Bryozoa: Hard: Encrusting
+AS,35000000,231,Ascidians
+ASU,35000901,232,Ascidians: Unstalked
+ASUS,35000902,233,Ascidians: Unstalked: Solitary
+ASUC,35000903,234,Ascidians: Unstalked: Colonial
+ASS,35000904,235,Ascidians: Stalked
+ASSS,35000905,236,Ascidians: Stalked: Solitary
+ASSC,35000906,237,Ascidians: Stalked: Colonial
+ECHI,25000000,88,Echinoderms
+EUR,25200000,89,Echinoderms: Sea urchins
+EURR,25200901,90,Echinoderms: Sea urchins: Regular urchins
+CROD,25211001,402,Echinoderms: Sea urchins: Regular urchins: Centrostephanus rodgersii
+EURI,25200902,91,Echinoderms: Sea urchins: Irregular urchins
+ESS,25102000,92,Echinoderms: Sea stars
+ESC,25400000,93,Echinoderms: Sea cucumbers
+ESCP,25400902,94,Echinoderms: Sea cucumbers: Pelagic / swimming
+ESCB,25400901,95,Echinoderms: Sea cucumbers: Benthic
+EO,25160000,96,Echinoderms: Ophiuroids
+EOBRI,25160901,97,Echinoderms: Ophiuroids: Brittle / snake stars
+EOBS,25160902,98,Echinoderms: Ophiuroids: Basket stars
+EFS,25001000,99,Echinoderms: Feather stars
+EFSU,25001902,100,Echinoderms: Feather stars: Unstalked crinoids
+EFSS,25001901,101,Echinoderms: Feather stars: Stalked crinoids
+MO,23000000,32,Molluscs
+MOG,24000000,33,Molluscs: Gastropods
+MOCH,23100000,34,Molluscs: Chitons
+MOB,23199000,38,Molluscs: Bivalves
+CRU,27000000,102,Crustacea
+CRB,27500000,115,Crustacea: Barnacles
+CRBS,27500901,116,Crustacea: Barnacles: Stalked
+CRBA,27500902,117,Crustacea: Barnacles: Acorn
+WO,80600901,3,Worms
+WP,22000000,4,Worms: Polychaetes
+WPTW,22000901,5,Worms: Polychaetes: Tube worms
+WPOP,22000902,6,Worms: Polychaetes: Other polychaetes
+WPE,15400000,7,Worms: Penisworms
+WF,13000000,8,Worms: Flatworms
+WES,80600902,9,Worms: Echiura / Sipuncula
+WESS,17000000,10,Worms: Echiura / Sipuncula: Sipuncula
+WESE,17020000,11,Worms: Echiura / Sipuncula: Echiura
+WAW,36110000,12,Worms: Acorn worms
+SEA,63600901,30,Seagrasses
+BRAC,19100000,173,Brachiopods
+BAM,72000901,228,Bacterial mats
+BAMO,72000902,229,Bacterial mats: Other
+BAMC,70000901,230,Bacterial mats: Cyanobacteria
+SUB,82001000,239,Substrate
+SUN,82001005,240,Substrate: Unconsolidated (soft)
+SUSA,82001005,240,Substrate: Unconsolidated (soft)
+SUPG,82001006,245,Substrate: Unconsolidated (soft): Pebble / gravel
+SC,82001001,252,Substrate: Consolidated (hard)
+SCRO,82001002,253,Substrate: Consolidated (hard): Rock
+SCCOB,82001004,254,Substrate: Consolidated (hard): Cobbles
+SCBOU,82001003,255,Substrate: Consolidated (hard): Boulders
+U,80000000,2,Biota
+ENBU,80000000,2,Biota
+BBU,80000000,2,Biota
+MBU,80000000,2,Biota
+MACS,80000000,2,Biota
+,3,655,Unknown
