@@ -929,21 +929,28 @@ function Grid (grid, globalstate) {
         var point_offset_top = $point.offset().top+$point.height()/2 - $grid.offset().top,
             point_offset_left = $point.offset().left+$point.width()/2,
             $modifier_item = $('<li><a href="javascript:void(0)">Add modifier</a></li>'),
-            $comment_item = $('<li><a href="javascript:void(0)">Add comment</a></li>'),
+            $delete_item = $('<li><a href="javascript:void(0)">Delete point</a></li>'),
             $select_label = $('<li><a href="javascript:void(0)">'+select_action+'</a></li>');
 
-        var $menu = $('<div class="og-contextmenu" style="top:'+point_offset_top+'px;left:'+point_offset_left+'px;"></div>').append($('<ul class="nav nav-stacked"></ul>').append($select_label,$modifier_item,$comment_item));
+        var $menu = $('<div class="og-contextmenu" style="top:'+point_offset_top+'px;left:'+point_offset_left+'px;"></div>').append($('<ul class="nav nav-stacked"></ul>').append($select_label,$modifier_item,$delete_item));
 
         $modifier_item.click(function() {
             showPointModifiers($point,$menu);
         });
-        $comment_item.click(function() {
-            show_note('Not implemented yet','This feature has not been implemented yet. Please stand by.','error',true);
+        $delete_item.click(function() {
+            console.log($point);
+            $.ajax({
+              type: "DELETE",
+              url: $point.data("resource_uri"),
+              success: function(){
+                  $point.remove();
+              }
+            });
             $menu.remove();
         });
 
         $select_label.click(function() {
-            $('.annotation-point[data-title="' + $point.attr('data-title') + '"]').each(function(i, el) {
+            $('.annotation-point[data-label_name="' + $point.data('label_name') + '"]').each(function(i, el) {
                 selectAnnotationPoint(el, select);
             });
             $menu.remove();
@@ -1081,6 +1088,8 @@ function Grid (grid, globalstate) {
                 }
             }
 
+            //console.log(pageX, pageY, e.type, dp.data('draw'));
+
             if ( e.type === 'mousedown' && e.which == 1) { // if mouse down (with left click) start draw
                 // If ".drawnBox.last" doesn't exist, create it.
                 if ( dpLast.length < 1 ) dpLast = $('<div class="drawnBox"></div>');
@@ -1088,6 +1097,7 @@ function Grid (grid, globalstate) {
                 e.preventDefault();
                 dp.data('draw',true);
                 dpLast.data({ "pageX": pageX, "pageY": pageY });
+                dpLast.data({ "initX": pageX, "initY": pageY });
                 dpLast.removeClass('hide');
 
             }
@@ -1106,9 +1116,53 @@ function Grid (grid, globalstate) {
                         && aptop < bbbottom
                         && aptop > bbtop) selectAnnotationPoint(this);
                 });
+
+                // if mouse up and no movement, add point
+                //console.log(dpLast.data("initX") , pageX , dpLast.data("initY") , pageY);
+                if (dpLast.data("initX") == pageX && dpLast.data("initY") == pageY && $(e.target).attr('id')=='og-main-img') {
+                    var $mainimg = $('#og-main-img'),
+                        imgwidth = $mainimg.width(),
+                        imgheight = $mainimg.height(),
+                        imgoffsettop = $mainimg.offset().top-$mainimg.parent().offset().top,
+                        imgoffsetleft = $mainimg.offset().left-$mainimg.parent().offset().left,
+                        imgoffsetcnttop = $mainimg.offset().top-$mainimg.parent().parent().offset().top,
+                        imgoffsetcntleft = $mainimg.offset().left-$mainimg.parent().parent().offset().left;
+                    var postdata = {
+                        "annotation_set_id": globalstate.asid,
+                        "image_id": globalstate.imid,
+                        "label_id": 1,
+                        "level":0,
+                        "y": (pageY-imgoffsettop-imgoffsetcnttop)/imgheight,
+                        "x": (pageX-imgoffsetleft-imgoffsetcntleft)/imgwidth
+                    };
+                    //console.log("ADD POINT!!!!", postdata);
+                    $.ajax({
+                      type: "POST",
+                      url: "/api/dev/point_annotation/",
+                      dataType: "json",
+                      contentType: 'application/json',
+                      data: JSON.stringify(postdata),
+                      success: function(data) {
+                          console.log(data);
+                          var thispointdata = getPtObj(data);
+                          var top = Math.round(imgoffsettop+thispointdata.y*imgheight),
+                              left = Math.round(imgoffsetleft+thispointdata.x*imgwidth);
+                          thispointdata.label_colour = '#' + thispointdata.label_colour;
+                          thispointdata.position = {x: thispointdata.x, y: thispointdata.y};
+                          thispointdata.imgposition = {top: top, left: left};
+                          var $anpt = updatePoint(thispointdata);
+                          $mainimg.after($anpt);
+                      }
+                    });
+                }
+
                 dp.data('draw',false);
                 dpLast.remove();
+
             }
+//            else if (e.type === 'mouseup' && (dpLast.data("initX") == pageX && dpLast.data("initY") == pageY)) {
+//                console.log("ADD POINT!!!!");
+//            }
         }
 
         // update zoom if over image or annotation point and zoom panel is visible

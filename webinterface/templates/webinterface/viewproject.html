@@ -164,7 +164,7 @@
     var thmgrid = new Grid('#og-grid-0',curstate);
     var map = new BaseMap('{{ GEOSERVER_URL }}', '{% url "webinterface.views.get_multiple_deployment_extent" %}', '{% url "webinterface.views.get_collection_extent" %}', curstate);
 
-
+    console.log(asobj, taglist)
 
     // scrolling can generate a lot of events and cause a performance hit
     // buffer to process one event per some interval of time.

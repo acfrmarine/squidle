@@ -19,6 +19,7 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 from collection.models import Collection
 from catamidb.models import Image
+from annotations.models import PointAnnotationSet, PointAnnotation, AnnotationCode
 
 from . import models 
 from catamidb.api import AnonymousGetAuthentication, get_real_user_object
@@ -132,6 +133,9 @@ class PointAnnotationSetAuthorization(Authorization):
         raise Unauthorized("Sorry, no deletes.")
 
     def delete_detail(self, object_list, bundle):
+        user = get_real_user_object(bundle.request.user)
+        if user.has_perm('annotations.update_pointannotationset', bundle.obj.annotation_set):
+            return True
         raise Unauthorized("Sorry, no deletes.")
 
 class PointAnnotationSetResource(ModelResource):
@@ -205,7 +209,8 @@ class PointAnnotationAuthorization(Authorization):
 
     def create_detail(self, object_list, bundle):
         # get real user
-        raise Unauthorized("Sorry, no creates.")
+        # raise Unauthorized("Sorry, no creates.")
+        return True
 
     def update_list(self, object_list, bundle):
         raise Unauthorized("Sorry, no updates.")
@@ -223,8 +228,11 @@ class PointAnnotationAuthorization(Authorization):
         raise Unauthorized("Sorry, no deletes.")
 
     def delete_detail(self, object_list, bundle):
+        user = get_real_user_object(bundle.request.user)
         if user.has_perm('annotations.update_pointannotationset', bundle.obj.annotation_set):
-            return True
+            # only allow deletes if correct user and correct methodology
+            if bundle.obj.annotation_set.methodology == 4:
+                return True
         raise Unauthorized("Sorry, no deletes.")
 
 
@@ -245,7 +253,7 @@ class PointAnnotationResource(ModelResource):
             'annotation_set': ALL_WITH_RELATIONS,
             'level': ALL,
         }
-        allowed_methods = ['get', 'patch']
+        allowed_methods = ['get', 'patch', 'post', 'delete']
         authentication = MultiAuthentication(AnonymousGetAuthentication(),
                 SessionAuthentication(),
                 ApiKeyAuthentication())
@@ -254,7 +262,35 @@ class PointAnnotationResource(ModelResource):
         ordering = ['x', 'y']
 
 
+    def obj_create(self, bundle, **kwargs):
+        """
+        A ORM-specific implementation of ``obj_create``.
+        """
+        # bundle.obj = self._meta.object_class()
 
+        print "\n\n\nCREATE NEW ANNOTATION POINT!!!\n\n\n"
+
+        annotation_set = PointAnnotationSet.objects.get(id=bundle.data['annotation_set_id'])
+
+        if annotation_set.methodology == 4:
+            image = Image.objects.get(id=bundle.data['image_id'])
+            labeller = get_real_user_object(bundle.request.user)
+            label = AnnotationCode.objects.get(id=bundle.data['label_id'])
+
+            setattr(bundle.obj, "annotation_set", annotation_set)
+            setattr(bundle.obj, "image", image)
+            setattr(bundle.obj, "labeller", labeller)
+            setattr(bundle.obj, "label", label)
+            setattr(bundle.obj, "level", bundle.data['level'])
+            setattr(bundle.obj, "x", bundle.data['x'])
+            setattr(bundle.obj, "y", bundle.data['y'])
+
+            bundle.obj.save()
+
+
+        print "\n\n\nDONE!!!\n\n\n"
+
+        return bundle
 
     def obj_get_list(self, bundle, **kwargs):
         """Overrides the given method from ModelResource.

@@ -15,6 +15,13 @@
     margin-top: -5px;
 }
 
+#imageFrame .tooltip .badge {
+    font-size: 9px;
+    padding: 2px 4px;
+    color: white;
+    background-color: #444444;
+}
+
 #imageFrame #image {
     display: block;
     position: relative;

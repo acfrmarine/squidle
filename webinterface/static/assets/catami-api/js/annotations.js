@@ -3,14 +3,14 @@ function AnnotationAPI (usrsettings) {
         api_tag_baseurl: '/api/dev/annotation_code/',
         api_pts_baseurl: '/api/dev/point_annotation/',
         linkurl: ""
-    }
+    };
     if (usrsettings) $.extend(settings, usrsettings);  // override defaults with input arguments
     //console.log(settings);
 
     var config = {
         theme: 'as-default',
         format: ''
-    }
+    };
     if (usrsettings.config) $.extend(config, usrsettings.config);  // override defaults with input arguments
     //if (!config.format) getFormat(config.theme);
 
@@ -27,7 +27,7 @@ function AnnotationAPI (usrsettings) {
         total_count: '',
         start: '',
         end: ''
-    }
+    };
 
     // Initialise meta info
     this.meta_pts = {
@@ -38,16 +38,16 @@ function AnnotationAPI (usrsettings) {
         total_count: '',
         start: '',
         end: ''
-    }
+    };
 
     this.setFormat = function(format) {
         config.format = format;
-    }
+    };
 
     this.clearTags = function (outputelement) {
         if (typeof(ajaxobj)=='object') ajaxobj.abort(); // cancel previous request (in case it is still loading to prevent asynchronous munging of data)
         $(outputelement).html('');
-    }
+    };
 
 
     this.getTags = function (filter, outputelement, update_container_fnc) {
@@ -84,13 +84,13 @@ function AnnotationAPI (usrsettings) {
 //            $(outputelement).append(list);
         }
         //return list;
-    }
+    };
 
 
     this.getNewTags = function (filter, outputelement, update_container_fnc) {
         this.clearTags(outputelement);
         this.getTags(filter, outputelement, update_container_fnc);
-    }
+    };
 
 
     this.getTagInfo = function (uri) {
@@ -104,7 +104,7 @@ function AnnotationAPI (usrsettings) {
             }
         });
         return taginfo;
-    }
+    };
 
     this.getAnnotationPoints = function (filter) {
         filter = ((typeof filter !== 'undefined') ? '?' + filter : '');
@@ -136,7 +136,8 @@ function AnnotationAPI (usrsettings) {
             }
         });
         return list;
-    }
+    };
+
 
 
 
@@ -160,25 +161,7 @@ function AnnotationAPI (usrsettings) {
         };
     }
 
-    function getPtObj(obj) {
 
-        var unlabeled = '/api/dev/annotation_code/1/';
-        return {
-            id: obj.id,
-            annotation_set: obj.annotation_set,
-            image: obj.image,
-            label: obj.label,
-            label_name: obj.label_name,
-            label_colour:obj.label_colour,
-            level: obj.level,
-            qualifiers: obj.qualifier_names,
-            x: obj.x,
-            y: obj.y,
-            resource_uri: obj.resource_uri,
-            cssid: 'ap-'+obj.id,
-            scored: (obj.label !== unlabeled) ? true : false
-        }
-    }
 
     /**
      *
@@ -192,6 +175,28 @@ function AnnotationAPI (usrsettings) {
                 ? obj[string]
                 : match;
         });
+    }
+}
+
+
+
+function getPtObj(obj) {
+
+    var unlabeled = '/api/dev/annotation_code/1/';
+    return {
+        id: obj.id,
+        annotation_set: obj.annotation_set,
+        image: obj.image,
+        label: obj.label,
+        label_name: obj.label_name,
+        label_colour:obj.label_colour,
+        level: obj.level,
+        qualifiers: obj.qualifier_names,
+        x: obj.x,
+        y: obj.y,
+        resource_uri: obj.resource_uri,
+        cssid: 'ap-'+obj.id,
+        scored: (obj.label !== unlabeled) ? true : false
     }
 }
 
@@ -364,7 +369,7 @@ function updatePoint(thispoint) {
             title: function () {
                 var title = $(this).data('label_name'); // add label name
                 $.each($(this).data('qualifiers'), function (i, l) { // add list of modifiers
-                    title += "<br>-" + l;
+                    title += "<small class='badge'>" + l + "</small>";
                 });
                 return title;
             }
@@ -376,6 +381,10 @@ function updatePoint(thispoint) {
 
     return $anpt;
 }
+
+
+
+
 
 function showImgLoader() {
     //if (!$('.og-loading').data().hasOwnProperty('active')) $('.og-loading').data().active=0;

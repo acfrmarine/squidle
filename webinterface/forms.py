@@ -87,7 +87,7 @@ class CreatePointAnnotationSet (forms.Form):
     c_id = forms.IntegerField(widget=forms.HiddenInput())
     name = forms.CharField(label=u'Name', widget=forms.TextInput(attrs={'placeholder': 'Enter a descriptive name'}))
     methodology = forms.ChoiceField(label=u'Methodology', choices=POINT_METHODOLOGIES, initial=0, help_text=u'The method for positioning the points')
-    n = forms.IntegerField(label=u'N', min_value=1, initial=50, help_text=u'Number of points')
+    n = forms.IntegerField(label=u'N', min_value=0, initial=50, help_text=u'Number of points')
 
     # Attach javascript onchange event to select
     #methodology.widget.attrs["onchange"] = "if ($(this).val() == 3) $(this.form.id_count).val(9)[0].disabled=true;"\

@@ -449,6 +449,13 @@
 
 }
 
+.og-fullimg .tooltip .badge {
+    font-size: 9px;
+    padding: 2px 4px;
+    color: white;
+    background-color: #444444;
+}
+
 /*
 .og-fullimg .annotation-point .tooltip-inner {
     max-width: 350px;

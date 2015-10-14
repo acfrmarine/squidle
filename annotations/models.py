@@ -76,6 +76,7 @@ POINT_METHODOLOGIES = (
     (1, 'Regular grid (N points across)'),
     (2, 'Regular grid (N points down)'),
     (3, 'Spectrometer FOV patch (9 points)'),
+    (4, 'Point click AND N Random points')
 )
 
 
@@ -110,7 +111,8 @@ def add_point(annotation_set, image, labeller, x, y):
     ann.label = AnnotationCode.objects.get(id=1) # not considered
     ann.level = 0 # not considered
 
-    ann.save()
+    ann.save() #test
+
 
 class PointAnnotationManager(models.Manager):
     """Manager for PointAnnotationSet.
@@ -161,6 +163,16 @@ class PointAnnotationManager(models.Manager):
             add_point(annotation_set, image, labeller, 0.54607,0.50301)
             add_point(annotation_set, image, labeller, 0.47896,0.59214)
             add_point(annotation_set, image, labeller, 0.47896,0.50301)
+
+        elif annotation_set.methodology == 4: # random
+            # Random + click select
+            #random_point(annotation_set, image, labeller)
+            import random
+
+            for i in xrange(annotation_set.count):
+                x = random.random()
+                y = random.random()
+                add_point(annotation_set, image, labeller, x, y)
 
 
 

@@ -597,16 +597,25 @@ def download_csv(request):
 # This view imports classes from a google spreadsheet
 # TODO: robustify and make better!!!
 def update_classes_gspread(request):
+    import json
     import gspread
+    from oauth2client.client import SignedJwtAssertionCredentials
+
     from annotations.models import AnnotationCode
 
-    guser = request.POST.get('guser')
-    gpass = request.POST.get('gpass')
+    # guser = request.GET.get('guser')
+    # gpass = request.GET.get('gpass')
     action = request.GET.get('action')
     field = request.GET.get('field')
 
-    gc = gspread.login(guser, gpass) # Login with your Google account
-    ss = gc.open("squidle classes") # Open a worksheet from spreadsheet with one shot
+    json_key = json.load(open('{}/gspread-secret.json'.format(os.path.dirname(os.path.realpath(__file__)))))
+    scope = ['https://spreadsheets.google.com/feeds']
+    credentials = SignedJwtAssertionCredentials(json_key['client_email'], json_key['private_key'].encode(), scope)
+
+    gc = gspread.authorize(credentials)
+    # gc = gspread.login(guser, gpass) # Login with your Google account
+    # ss = gc.open("squidle classes") # Open a worksheet from spreadsheet with one shot
+    ss = gc.open_by_key('1Sa7fgVMaJBWqRKZaEfDZRF4wL9cMBhTc69Uwwz2-QNU') # open "squidle classes" spreadsheet
 
     response = HttpResponse()
     if action == "import":
@@ -663,10 +672,9 @@ def update_classes_gspread(request):
 
     elif action == "export":
         wks = ss.worksheet("Existing classes (read-only)")
-        allclasses = AnnotationCode.objects.all().order_by('code_name').values_list('id', 'caab_code', 'code_name',
-                                                                                    'description', 'cpc_code',
-                                                                                    'point_colour', 'parent_id',
-                                                                                    'parent__caab_code')
+        allclasses = AnnotationCode.objects.all().order_by('code_name').values_list('id', 'caab_code', 'parent__caab_code', 'code_name',
+                                                                                    'cpc_code',
+                                                                                    'point_colour', 'parent_id')
         # Select a cell range
         cell_list = wks.range('A{}:H{}'.format(2, len(allclasses) + 1))
         flat_list = [val for subl in allclasses for val in subl] # flatten class list to enable batch updating
