@@ -1125,8 +1125,8 @@ function Grid (grid, globalstate) {
                         imgheight = $mainimg.height(),
                         imgoffsettop = $mainimg.offset().top-$mainimg.parent().offset().top,
                         imgoffsetleft = $mainimg.offset().left-$mainimg.parent().offset().left,
-                        imgoffsetcnttop = $mainimg.offset().top-$mainimg.parent().parent().offset().top,
-                        imgoffsetcntleft = $mainimg.offset().left-$mainimg.parent().parent().offset().left;
+                        imgoffsetcnttop = $mainimg.parent().offset().top-$mainimg.parent().parent().offset().top,
+                        imgoffsetcntleft = $mainimg.parent().offset().left-$mainimg.parent().parent().offset().left;
                     var postdata = {
                         "annotation_set_id": globalstate.asid,
                         "image_id": globalstate.imid,
