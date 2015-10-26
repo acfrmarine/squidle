@@ -134,6 +134,7 @@
 {% if citizen_project == "" %}
 {#    <div class="alert alert-danger" style="margin: 0; position: absolute; top:0; left: 0; width: 100%; opacity:0.8; filter:alpha(opacity=80); z-index:999;"><b><i class="icon-cogs"></i>#}
 {#        UNDER CONSTRUCTION:</b> Please note that this website is currently under construction.#}
+    {% include "webinterface/subtemplates/dataset-link.html" %}
 {#    </div>#}
 {% else %}
     {% include "webinterface/subtemplates/citizen-science-info.html" %}

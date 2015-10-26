@@ -387,6 +387,11 @@ def loggedout (request, citizen_project = ""):
     logout(request)
     return index(request, citizen_project)
 
+
+def benthoz (request):
+    return render_to_response('webinterface/BENTHOZ-2015.html', RequestContext(request))
+
+
 def download_csv(request):
     #from djqscsv import render_to_csv_response
     import pandas as pd

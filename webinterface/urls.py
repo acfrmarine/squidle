@@ -79,6 +79,7 @@ urlpatterns = patterns(
 
     url(r'^get_annotation_info','get_annotation_info'),
     url(r'^citizenscience/(?P<citizen_project>\w+)/get_annotation_info','get_annotation_info'),
+    url(r'^benthoz2015$', 'benthoz'),
 
 
     #####################################################################
