@@ -7,6 +7,7 @@
         <li class="dropdown"><a id="datasel" href="#" class="dropdown-toggle" data-toggle="dropdown">BENTHOZ-2015 Dataset</a>
         <ul class="dropdown-menu">
             <li><a href="/" ><i class="icon-home"></i> Back to home page</a></li>
+            <li><a target="_blank" href="http://www.nature.com/articles/sdata201557"><i class="icon-th-list"></i> Official scientific data page</a></li>
         </ul></li>
     </ul>
 </nav>
@@ -14,58 +15,87 @@
 <div class="container">
 
 <div class="well" style="width: 75%; text-align: left; margin-top:20px; margin-left: auto; margin-right: auto; color: #ccc">
-    <h2>BENTHOZ-2015 Dataset</h2>
+    <h2><i class="icon-th-list"></i> BENTHOZ-2015 Dataset</h2>
     <p>
-        BENTHOZ-2015 has been published as an open data set with the Scientific Data journal of the Nature Publishing
+        BENTHOZ-2015 has been published as an open data set with the <a target="_blank" style="color: #fff; font-weight: bold" href="http://www.nature.com/sdata/">Scientific Data journal</a> of the Nature Publishing
         Group. Scientific Data is an open-access, peer-reviewed publication for descriptions of scientifically valuable
         datasets. The data descriptor that documents details and methods used to collect the data can be found here*,
         with instructions for citation. BENTHOZ-2015 is comprised of over 400,000 point labels from four Australian
         research groups mapped to more than 100 classes on the CATAMI classification scheme. The intention is to
-        provide a standard data set for research in robotics, computer vision, and marine science. The data set is
-        released under a creative commons license, with the intention of providing the raw data to researchers to
+        provide a standard data set for research in robotics, computer vision, and marine science. The <a target="_blank" style="color: #fff; font-weight: bold" href="http://www.nature.com/articles/sdata201557">data set is
+        released</a> under a creative commons license, with the intention of providing the raw data to researchers to
         maximise reuse.
     </p>
-    <p>Checkout the data below.</p>
-    <div style="padding: 45px"><table class="table table-striped table-hover ">
+    <p>BENTHOZ-2015 data from each AUV campaign can be explored visually using the links below. A summary of point
+        scores per image in the standard Squidle format as well as a list of images is also available below. The raw
+        point scores can be downloaded as a csv file on the <a target="_blank" style="color: #fff; font-weight: bold" href="http://www.nature.com/articles/sdata201557">scientific data page</a>. In order to download the
+        images for the entire data set for offline use, download an image list and use the image downloader tool provided below.</p>
+    <div style="padding: 45px">
+        <h3><i class="icon-download"></i> Download / explore dataset</h3>
+
+        <table class="table table-striped table-hover ">
         <tbody>
+         <tr><td><b>ENTIRE DATASET</b></td>
+             <td colspan="2" align="right">Download: <a class="btn btn-primary btn-sm" href="{{ STATIC_URL }}files/datasets/benthoz-2015/BENTHOZ-2015-annotations.zip">ALL ANNOTATIONS (ZIP)</a> <a class="btn btn-primary btn-sm" href="{{ STATIC_URL }}files/datasets/benthoz-2015/BENTHOZ-2015-imagelist.csv">FULL IMAGE LIST</a></td>
+        </tr>
+
          <tr><td>New South Wales 2010</td>
-            <td align="right"><a class="btn btn-primary" href="download_csv?format=allclasses&asid=1108">Download annotations</a>
-            <a class="btn btn-primary" href="viewproject?clid=1263&wsid=1271&asid=1108#thm">Browse dataset</a></td>
+            <td align="right">Download: <a class="btn btn-primary btn-sm" href="download_csv?format=allclasses&asid=1108">Annotations</a> <a class="btn btn-primary btn-sm" href="download_csv?clid=1271">Image list</a></td><td align="right">
+            Explore: <a class="btn btn-primary btn-sm" href="viewproject?clid=1263&wsid=1271&asid=1108#thm">Dataset</a></td>
         </tr>
         <tr><td>New South Wales 2012</td>
-            <td align="right"><a class="btn btn-primary" href="download_csv?format=allclasses&asid=1110">Download annotations</a>
-            <a class="btn btn-primary" href="viewproject?clid=1263&wsid=1273&asid=1110#thm">Browse dataset</a></td>
+            <td align="right">Download: <a class="btn btn-primary btn-sm" href="download_csv?format=allclasses&asid=1110">Annotations</a> <a class="btn btn-primary btn-sm" href="download_csv?clid=1273">Image list</a></td><td align="right">
+            Explore: <a class="btn btn-primary btn-sm" href="viewproject?clid=1263&wsid=1273&asid=1110#thm">Dataset</a></td>
         </tr>
         <tr><td>South East Queensland 2010</td>
-            <td align="right"><a class="btn btn-primary" href="download_csv?format=allclasses&asid=1112">Download annotations</a>
-            <a class="btn btn-primary" href="viewproject?viewproject?clid=1263&wsid=1276&asid=1112#thm">Browse dataset</a></td>
+            <td align="right">Download: <a class="btn btn-primary btn-sm" href="download_csv?format=allclasses&asid=1112">Annotations</a> <a class="btn btn-primary btn-sm" href="download_csv?clid=1276">Image list</a></td><td align="right">
+            Explore: <a class="btn btn-primary btn-sm" href="viewproject?viewproject?clid=1263&wsid=1276&asid=1112#thm">Dataset</a></td>
         </tr>
         <tr><td>Tasmania 2008</td>
-            <td align="right"><a class="btn btn-primary" href="download_csv?format=allclasses&asid=1102">Download annotations</a>
-            <a class="btn btn-primary" href="viewproject?clid=1263&wsid=1265&asid=1102#thm">Browse dataset</a></td>
+            <td align="right">Download: <a class="btn btn-primary btn-sm" href="download_csv?format=allclasses&asid=1102">Annotations</a> <a class="btn btn-primary btn-sm" href="download_csv?clid=1265">Image list</a></td><td align="right">
+            Explore: <a class="btn btn-primary btn-sm" href="viewproject?clid=1263&wsid=1265&asid=1102#thm">Dataset</a></td>
         </tr>
         <tr><td>Tasmania 200903</td>
-            <td align="right"><a class="btn btn-primary" href="download_csv?format=allclasses&asid=1104">Download annotations</a>
-            <a class="btn btn-primary" href="viewproject?clid=1263&wsid=1267&asid=1104#thm">Browse dataset</a></td>
+            <td align="right">Download: <a class="btn btn-primary btn-sm" href="download_csv?format=allclasses&asid=1104">Annotations</a> <a class="btn btn-primary btn-sm" href="download_csv?clid=1267">Image list</a></td><td align="right">
+            Explore: <a class="btn btn-primary btn-sm" href="viewproject?clid=1263&wsid=1267&asid=1104#thm">Dataset</a></td>
         </tr>
         <tr><td>Tasmania 200906</td>
-            <td align="right"><a class="btn btn-primary" href="download_csv?format=allclasses&asid=1106">Download annotations</a>
-            <a class="btn btn-primary" href="viewproject?clid=1263&wsid=1269&asid=1106#thm">Browse dataset</a></td>
+            <td align="right">Download: <a class="btn btn-primary btn-sm" href="download_csv?format=allclasses&asid=1106">Annotations</a> <a class="btn btn-primary btn-sm" href="download_csv?clid=1269">Image list</a></td><td align="right">
+           Explore:  <a class="btn btn-primary btn-sm" href="viewproject?clid=1263&wsid=1269&asid=1106#thm">Dataset</a></td>
         </tr>
         <tr><td>Western Australia 2011</td>
-            <td align="right"><a class="btn btn-primary" href="download_csv?format=allclasses&asid=1114">Download annotations</a>
-            <a class="btn btn-primary" href="viewproject?clid=1263&wsid=1279&asid=1114#thm">Browse dataset</a></td>
+            <td align="right">Download: <a class="btn btn-primary btn-sm" href="download_csv?format=allclasses&asid=1114">Annotations</a> <a class="btn btn-primary btn-sm" href="download_csv?clid=1279">Image list</a></td><td align="right">
+            Explore: <a class="btn btn-primary btn-sm" href="viewproject?clid=1263&wsid=1279&asid=1114#thm">Dataset</a></td>
         </tr>
         <tr><td>Western Australia 2012</td>
-            <td align="right"><a class="btn btn-primary" href="download_csv?format=allclasses&asid=1117">Download annotations</a>
-            <a class="btn btn-primary" href="viewproject?clid=1263&wsid=1281&asid=1117#thm">Browse dataset</a></td>
+            <td align="right">Download: <a class="btn btn-primary btn-sm" href="download_csv?format=allclasses&asid=1117">Annotations</a> <a class="btn btn-primary btn-sm" href="download_csv?clid=1281">Image list</a></td><td align="right">
+            Explore: <a class="btn btn-primary btn-sm" href="viewproject?clid=1263&wsid=1281&asid=1117#thm">Dataset</a></td>
         </tr>
         <tr><td>Western Australia 2013</td>
-            <td align="right"><a class="btn btn-primary" href="download_csv?format=allclasses&asid=1119">Download annotations</a>
-            <a class="btn btn-primary" href="viewproject?clid=1263&wsid=1283&asid=1119#thm">Browse dataset</a></td>
+            <td align="right">Download: <a class="btn btn-primary btn-sm" href="download_csv?format=allclasses&asid=1119">Annotations</a> <a class="btn btn-primary btn-sm" href="download_csv?clid=1283">Image list</a></td><td align="right">
+            Explore: <a class="btn btn-primary btn-sm" href="viewproject?clid=1263&wsid=1283&asid=1119#thm">Dataset</a></td>
         </tr>
     </tbody>
     </table>
+    <h3 style="padding-top: 10px;" ><i class="icon-download"></i> Download images:</h3>
+        <script type="text/javascript"
+                        src="{{ STATIC_URL }}files/image_downloader/SquidleDownloaderEmbed.js"></script>
+                <script id="jwEmbed" type="text/javascript">
+                    var updateURL = "/static/files/image_downloader/"
+                    var onlineURL = updateURL + jwGetDetectedFilename(true, null);
+                    var offlineURL = updateURL + jwGetDetectedFilename(false, null);
+                    document.write("<a class='btn btn-default' href = '" + onlineURL + "'>DOWNLOAD for your OS</a>");
+                </script>
+                <small>
+                <br>Or select one of these: <a href="{{ STATIC_URL }}files/image_downloader/SquidleDownloader-macos32-offline.dmg">OSX 32</a>
+                | <a href="{{ STATIC_URL }}files/image_downloader/SquidleDownloader-macos64-offline.dmg">OSX 64</a>
+                | <a href="{{ STATIC_URL }}files/image_downloader/SquidleDownloader-linux32-offline.tar">Linux 32</a>
+                | <a href="{{ STATIC_URL }}files/image_downloader/SquidleDownloader-linux64-offline.tar">Linux 64</a>
+                | <a href="{{ STATIC_URL }}files/image_downloader/SquidleDownloader-windows32-offline.exe">Windows 32</a>
+                | <a href="{{ STATIC_URL }}files/image_downloader/SquidleDownloader-windows64-offline.exe">Windows 64</a>
+                    </small>
+                <br>
+                <span class="help-inline">Using this downloader tool and one of the CSV image lists above, you can download the images.</span>
         </div>
 </div>
 </div>
