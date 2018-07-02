@@ -1,3 +1,8 @@
+
+NOTE: THIS CODE IS OLD, OUT OF DATE AND NO LONGER MAINTAINED. THERE IS A NEW AND IMPROVED VERSION OF A COMPLETELY REDESIGNED SYSTEM HOSTED HERE: http://squidle.greybits.com.au/
+=======================================================
+
+
 Squidle
 ======
 
